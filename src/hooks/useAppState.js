@@ -80,7 +80,7 @@ export function useAppState() {
   // NORMATIVO: Ley 1581/2012 - aceptación política de privacidad
   const [privacidadAceptada, setPrivacidadAceptada] = useState(() => {
     try {
-      return !!JSON.parse(_ls.getItem("siso_privacidad_aceptada") || "false");
+      const raw = _ls.getItem("siso_privacidad_aceptada"); if (!raw) return false; const parsed = JSON.parse(raw); if (typeof parsed === 'boolean') return parsed; if (typeof parsed === 'string') return parsed === 'true'; if (typeof parsed === 'object' && parsed !== null) return true; return false;
     } catch {
       return false;
     }
@@ -920,7 +920,7 @@ export function useAppState() {
         const init = initialUsers.find((i) => i.user === u.user);
         // Recuperar passHash vacío
         if (!u.passHash && init) {
-          return { ...u, passHash: init.passHash, mustChangePassword: init.mustChangePassword ?? true };
+          return { ...u, passHash: init.passHash, mustChangePassword: init.mustChangePassword ?? false };
         }
         // Migración: si doctorData.nombre está vacío, rellenar desde initialUsers (primera carga)
         if (init && init.doctorData?.nombre && !u.doctorData?.nombre) {
@@ -2057,11 +2057,12 @@ JSON REQUERIDO (sin markdown, sin texto adicional):
             }
           });
           // ══ B-07: Si primer login, forzar cambio de contraseña ══
-          if (foundConSesion.mustChangePassword) {
+          setTimeout(() => { if (foundConSesion.mustChangePassword) {
             goTo("changePassword");
           } else {
             goTo("dashboard");
           }
+                                  }, 80);
         } else {
           // ══ B-05: Rate limiting mejorado - 15 min, persistente, con audit log ══
           setLoginAttempts((prev) => {
