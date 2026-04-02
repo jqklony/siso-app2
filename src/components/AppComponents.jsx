@@ -62,7 +62,7 @@ import {
 // SECURITY UTILITIES v1.0 - OcupaSalud
 // ============================================================
 
-// SEC-U1: Sanitización de inputs para prevenir XSS
+// SEC-U1: SanitizaciÃ³n de inputs para prevenir XSS
 const sanitizeInput = (str) => {
   if (typeof str !== 'string') return str;
   return str
@@ -75,17 +75,17 @@ const sanitizeInput = (str) => {
     .trim();
 };
 
-// SEC-U2: Validación fuerte de contraseña
+// SEC-U2: ValidaciÃ³n fuerte de contraseÃ±a
 const validatePasswordStrength = (password) => {
   const errors = [];
-  if (!password || password.length < 8) errors.push('Mínimo 8 caracteres');
-  if (!/[A-Z]/.test(password)) errors.push('Al menos una mayúscula');
-  if (!/[a-z]/.test(password)) errors.push('Al menos una minúscula');
-  if (!/[0-9]/.test(password)) errors.push('Al menos un número');
+  if (!password || password.length < 8) errors.push('MÃ­nimo 8 caracteres');
+  if (!/[A-Z]/.test(password)) errors.push('Al menos una mayÃºscula');
+  if (!/[a-z]/.test(password)) errors.push('Al menos una minÃºscula');
+  if (!/[0-9]/.test(password)) errors.push('Al menos un nÃºmero');
   return { valid: errors.length === 0, errors };
 };
 
-// SEC-U3: Logger de auditoría
+// SEC-U3: Logger de auditorÃ­a
 const _auditLog = (action, user, detail = '') => {
   try {
     const logs = JSON.parse(localStorage.getItem('siso_audit_log') || '[]');
@@ -96,7 +96,7 @@ const _auditLog = (action, user, detail = '') => {
       detail: sanitizeInput(String(detail)),
       ua: navigator.userAgent.substring(0, 80),
     });
-    // Mantener solo los últimos 200 registros
+    // Mantener solo los Ãºltimos 200 registros
     if (logs.length > 200) logs.splice(0, logs.length - 200);
     localStorage.setItem('siso_audit_log', JSON.stringify(logs));
   } catch (_) {}
@@ -125,7 +125,7 @@ const _rl = {
   getAttempts: () => _rl.get().attempts || 0,
 };
 
-// SEC-U5: Timeout de sesión inactiva (30 minutos)
+// SEC-U5: Timeout de sesiÃ³n inactiva (30 minutos)
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 let _sessionTimer = null;
 const _resetSessionTimer = (logoutCallback) => {
@@ -140,11 +140,11 @@ const _clearSessionTimer = () => {
 
 // ============================================================
 // ==========================================
-// MÓDULO 0: STORAGE PERSISTENTE
-// FIX C-02: localStorage para datos clínicos (persiste entre sesiones)
+// MÃDULO 0: STORAGE PERSISTENTE
+// FIX C-02: localStorage para datos clÃ­nicos (persiste entre sesiones)
 // FIX C-03: sessionStorage para credenciales de IA (se limpia al cerrar)
 // ==========================================
-const _memStore = {}; // fallback si localStorage no está disponible
+const _memStore = {}; // fallback si localStorage no estÃ¡ disponible
 export const _ls = {
   getItem: (k) => {
     try {
@@ -168,7 +168,7 @@ export const _ls = {
     }
   },
 };
-// sessionStorage: para API Keys - se limpia automáticamente al cerrar la pestaña
+// sessionStorage: para API Keys - se limpia automÃ¡ticamente al cerrar la pestaÃ±a
 export const _ss = {
   getItem: (k) => {
     try {
@@ -192,7 +192,7 @@ export const _ss = {
     }
   },
 };
-// Helper global - accesible desde cualquier función incluyendo goTo
+// Helper global - accesible desde cualquier funciÃ³n incluyendo goTo
 const sp = (k, fb) => {
   const s = _ls.getItem(k);
   if (!s) return fb;
@@ -212,37 +212,37 @@ const sps = (k, fb) => {
   }
 };
 // MODULO SUPABASE CLOUD SYNC
-// ══════════════════════════════════════════════════════════════
-// CIBERSEGURIDAD - CAPA DE ACCESO A DATOS (B-04 ✅ IMPLEMENTADO)
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// CIBERSEGURIDAD - CAPA DE ACCESO A DATOS (B-04 â IMPLEMENTADO)
 // Arquitectura de seguridad por capas:
-// ► Capa 1 (actual): Supabase publishable key - funcional en piloto
-// ► Capa 2 (recomendada): Backend proxy en producción con usuarios reales
-// ► Capa 3 ✅ ACTIVO: Row Level Security (RLS) habilitado en Supabase
+// âº Capa 1 (actual): Supabase publishable key - funcional en piloto
+// âº Capa 2 (recomendada): Backend proxy en producciÃ³n con usuarios reales
+// âº Capa 3 â ACTIVO: Row Level Security (RLS) habilitado en Supabase
 //
-// ══ RLS ACTIVO - Script ejecutado en Supabase (Ley 1581/2012 Art.17) ══
+// ââ RLS ACTIVO - Script ejecutado en Supabase (Ley 1581/2012 Art.17) ââ
 // ALTER TABLE siso_store ENABLE ROW LEVEL SECURITY;
 // CREATE POLICY user_isolation ON siso_store FOR ALL
 //   USING (auth.uid()::text = split_part(key, '_uid_', 2));
 // Verificar: SELECT tablename, rowsecurity FROM pg_tables WHERE tablename='siso_store';
-// ════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 //
-// PROXY EN PRODUCCIÓN (migración futura sin cambiar código):
-// 1. Crear endpoint: POST /api/siso-proxy con autenticación JWT
-// 2. En window.__SISO_PROXY_URL apuntar al proxy (ver línea _PROXY_URL abajo)
+// PROXY EN PRODUCCIÃN (migraciÃ³n futura sin cambiar cÃ³digo):
+// 1. Crear endpoint: POST /api/siso-proxy con autenticaciÃ³n JWT
+// 2. En window.__SISO_PROXY_URL apuntar al proxy (ver lÃ­nea _PROXY_URL abajo)
 // 3. El proxy recibe { key, value, action } y llama a Supabase server-side
 //
 // SEGURIDAD ACTIVA (piloto con pacientes reales):
-// ✅ RLS activo: cada médico accede SOLO a sus propios datos
-// ✅ La key publishable es de sólo escritura en siso_store (tabla específica)
-// ══ POLÍTICA PÚBLICA PORTAL TRABAJADOR - ejecutar en Supabase SQL Editor ══
+// â RLS activo: cada mÃ©dico accede SOLO a sus propios datos
+// â La key publishable es de sÃ³lo escritura en siso_store (tabla especÃ­fica)
+// ââ POLÃTICA PÃBLICA PORTAL TRABAJADOR - ejecutar en Supabase SQL Editor ââ
 // CREATE POLICY portal_public_read ON siso_store
 //   FOR SELECT USING (key LIKE 'siso_portal_%');
 // Portal URL: https://fw5fnt.csb.app/#portaltrabajador
-// ════════════════════════════════════════════════════════════════════════
-// ✅ No expone datos de otros usuarios por el aislamiento por _medicoId
-// ✅ Rotar la key cada 90 días en el dashboard de Supabase
-// ══════════════════════════════════════════════════════════════
-// ══ B-01 SEGURIDAD: Credenciales leidas desde window.__SISO_CONFIG ══
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// â No expone datos de otros usuarios por el aislamiento por _medicoId
+// â Rotar la key cada 90 dÃ­as en el dashboard de Supabase
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ââ B-01 SEGURIDAD: Credenciales leidas desde window.__SISO_CONFIG ââ
 // En PRODUCCION: el servidor inyecta window.__SISO_CONFIG = { sbUrl, sbKey }
 // en el HTML antes de cargar este script - las claves NUNCA van en el bundle.
 // En DESARROLLO LOCAL: usa los valores de fallback automaticamente.
@@ -263,15 +263,15 @@ export const _SB_URL =
 export const _SB_KEY =
   _cfgSafeKey(_cfgRaw.sbKey) ||
   "sb_publishable_K88qYuJ9wsWjQqnIhLVK7Q_NroFvPI7";
-// FASE 2 — Service Role Key (solo para operaciones super_admin: crear orgs, migrar datos)
-// ⚠️  NUNCA hardcodear en producción. Inyectar via window.__SISO_CONFIG.sbServiceKey
+// FASE 2 â Service Role Key (solo para operaciones super_admin: crear orgs, migrar datos)
+// â ï¸  NUNCA hardcodear en producciÃ³n. Inyectar via window.__SISO_CONFIG.sbServiceKey
 // Para configurar: en index.html agregar antes del bundle:
 //   <script>window.__SISO_CONFIG={sbUrl:'...',sbKey:'...',sbServiceKey:'TU_SERVICE_KEY'};</script>
 const _SB_SERVICE_KEY = _cfgSafeKey(_cfgRaw.sbServiceKey) || null; // null = solo lectura (seguro por defecto)
-// SEC-FIX-01: Credenciales removidas del código fuente (OWASP A07 - Hardcoded Credentials)
-// En producción inyectar via: <script>window.__SISO_CONFIG={sbUrl:'TU_URL',sbKey:'TU_KEY'};</script>
-// Las claves se configuran en el primer despliegue y se rotan cada 90 días - NUNCA en código fuente.
-// Gestión de sesión - expiración automática por inactividad (30 min)
+// SEC-FIX-01: Credenciales removidas del cÃ³digo fuente (OWASP A07 - Hardcoded Credentials)
+// En producciÃ³n inyectar via: <script>window.__SISO_CONFIG={sbUrl:'TU_URL',sbKey:'TU_KEY'};</script>
+// Las claves se configuran en el primer despliegue y se rotan cada 90 dÃ­as - NUNCA en cÃ³digo fuente.
+// GestiÃ³n de sesiÃ³n - expiraciÃ³n automÃ¡tica por inactividad (30 min)
 // Headers con soporte para proxy o Supabase directo
 const _SB_HEADERS = {
   apikey: _SB_KEY,
@@ -326,7 +326,7 @@ const _SB_KEYS = [
   "siso_atenciones_cerradas",
   "siso_arl_reportes",
 ];
-// Prefijos para claves dinámicas por usuario
+// Prefijos para claves dinÃ¡micas por usuario
 const _SB_KEY_PREFIXES = [
   "siso_db_patients_",
   "siso_companies_",
@@ -335,13 +335,13 @@ const _SB_KEY_PREFIXES = [
   "siso_portal_",
 ];
 
-// ══════════════════════════════════════════════════════════════════════════════
-// SISTEMA DE PLANES - PLAN_CONFIG (única fuente de verdad)
-// Para cambiar precio/límite/feature: solo editar aquí. Aplica automáticamente.
-// ══════════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// SISTEMA DE PLANES - PLAN_CONFIG (Ãºnica fuente de verdad)
+// Para cambiar precio/lÃ­mite/feature: solo editar aquÃ­. Aplica automÃ¡ticamente.
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export const PLAN_CONFIG = {
   libre: {
-    label: "🆓 Libre",
+    label: "ð Libre",
     price: 0,
     priceLabel: "Gratis",
     maxHC: 30, // total, no mensual
@@ -370,7 +370,7 @@ export const PLAN_CONFIG = {
     ],
   },
   starter: {
-    label: "🌱 Starter",
+    label: "ð± Starter",
     price: 45000,
     priceLabel: "$45.000/mes",
     maxHC: 200,
@@ -408,7 +408,7 @@ export const PLAN_CONFIG = {
     ],
   },
   pro: {
-    label: "⭐ Pro",
+    label: "â­ Pro",
     price: 79000,
     priceLabel: "$79.000/mes",
     maxHC: 9999,
@@ -461,7 +461,7 @@ export const PLAN_CONFIG = {
     ],
   },
   clinica: {
-    label: "🏢 Clínica",
+    label: "ð¢ ClÃ­nica",
     price: 159000,
     priceLabel: "$159.000/mes",
     maxHC: 9999,
@@ -477,22 +477,22 @@ export const PLAN_CONFIG = {
   },
 };
 
-// ══════════════════════════════════════════════════════════════════════════════
-// FASE 2 — MULTI-TENANT / MULTI-ORG CONFIG
-// Organización principal del super_admin. Todos los datos existentes pertenecen
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// FASE 2 â MULTI-TENANT / MULTI-ORG CONFIG
+// OrganizaciÃ³n principal del super_admin. Todos los datos existentes pertenecen
 // a esta org. Las nuevas orgs se crean desde el Panel Global del super_admin.
-// ══════════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export const ORG_DEFAULT_ID = "org_cucalon_2026";
 export const ORG_CONFIG_DEFAULT = {
   orgId: ORG_DEFAULT_ID,
-  orgName: "OcupaSalud Popayán",
+  orgName: "OcupaSalud PopayÃ¡n",
   orgNit: "",
   plan: "clinica",
   createdAt: "2026-01-01",
   adminUser: "drcucalon",
 };
 
-// Helper: genera org_id único para nuevas organizaciones
+// Helper: genera org_id Ãºnico para nuevas organizaciones
 export const _genOrgId = (name) =>
   "org_" +
   name
@@ -503,20 +503,20 @@ export const _genOrgId = (name) =>
   "_" +
   Date.now().toString(36);
 
-// Helper: ¿el rol tiene privilegios de administrador?
+// Helper: Â¿el rol tiene privilegios de administrador?
 export const _isAdmin = (role) => role === "administrador" || role === "super_admin";
 
-// ── IPS: helpers para admin de empresa (acceso desde login principal) ──
+// ââ IPS: helpers para admin de empresa (acceso desde login principal) ââ
 export const _isAdminEmpresa = (role) => role === "admin_empresa";
 const _isEmpresaUser = (user) => !!user?.empresaId;
 const _isAdminOrEmpresa = (role) => _isAdmin(role) || _isAdminEmpresa(role);
 
-// Helper: ¿el usuario actual tiene esta feature?
-// Uso: _canUse('ia_analisis', currentUser) → true/false
+// Helper: Â¿el usuario actual tiene esta feature?
+// Uso: _canUse('ia_analisis', currentUser) â true/false
 export const _canUse = (feature, user) => {
   const plan = user?.license || "libre";
   const cfg = PLAN_CONFIG[plan] || PLAN_CONFIG.libre;
-  // Verificar expiración
+  // Verificar expiraciÃ³n
   if (cfg.price > 0 && user?.licenseExpiry) {
     const exp = new Date(user.licenseExpiry);
     if (exp < new Date()) return false; // plan vencido
@@ -524,31 +524,31 @@ export const _canUse = (feature, user) => {
   return cfg.features.includes("todo") || cfg.features.includes(feature);
 };
 
-// Helper: ¿cuántas HC totales tiene el usuario?
+// Helper: Â¿cuÃ¡ntas HC totales tiene el usuario?
 export const _contarHC = (lista, userId) =>
   lista.filter((p) => p._medicoId === userId && p.fechaExamen && !p._archivado)
     .length;
 
-// ══════════════════════════════════════════════════════════════════════════════
-// PERMISOS DE SECRETARIA - Solo el administrador puede activar módulos
-// por usuario. Por defecto TODO está en false (denegado).
-// ══════════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// PERMISOS DE SECRETARIA - Solo el administrador puede activar mÃ³dulos
+// por usuario. Por defecto TODO estÃ¡ en false (denegado).
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export const SECRETARIA_PERMISOS_DEFAULT = {
   agenda: false, // Ver y gestionar agenda de citas
   bill: false, // Generar cuentas de cobro
-  propuestas: false, // Generar propuestas económicas
-  telemedicina: false, // Acceder al módulo de telemedicina
+  propuestas: false, // Generar propuestas econÃ³micas
+  telemedicina: false, // Acceder al mÃ³dulo de telemedicina
   empresas: false, // Ver y editar empresas clientes
   pacientes_lista: false, // Ver listado de pacientes (solo lectura)
-  reporte: false, // Ver reportes epidemiológicos
+  reporte: false, // Ver reportes epidemiolÃ³gicos
   sve: false, // Ver SVE
-  caja: false, // Acceder al módulo financiero/caja
+  caja: false, // Acceder al mÃ³dulo financiero/caja
   adjuntos: false, // Subir adjuntos a HC
   cuentas_cobro: false, // Ver estado de cuentas por cobrar
-  pacientes_crear: false, // Crear nuevos pacientes (solo datos demográficos)
+  pacientes_crear: false, // Crear nuevos pacientes (solo datos demogrÃ¡ficos)
 };
 
-// ── Permisos que SIEMPRE tienen los médicos (no necesitan check) ──────────────
+// ââ Permisos que SIEMPRE tienen los mÃ©dicos (no necesitan check) ââââââââââââââ
 export const MEDICO_SIEMPRE_PUEDE = new Set([
   "agenda",
   "bill",
@@ -564,10 +564,10 @@ export const MEDICO_SIEMPRE_PUEDE = new Set([
   "telemedicina",
 ]);
 
-// Helper principal: ¿puede la secretaria hacer X?
+// Helper principal: Â¿puede la secretaria hacer X?
 // - Admin siempre puede todo
-// - Médico sigue sus propias reglas (sin cambio)
-// - Secretaria: SOLO si admin habilitó explícitamente ESA feature
+// - MÃ©dico sigue sus propias reglas (sin cambio)
+// - Secretaria: SOLO si admin habilitÃ³ explÃ­citamente ESA feature
 export const _secretariaPuede = (feature, currentUser, usersList) => {
   if (!currentUser) return false;
   if (_isAdmin(currentUser.role)) return true;
@@ -582,7 +582,7 @@ export const _secretariaPuede = (feature, currentUser, usersList) => {
   return false;
 };
 
-// ── Secretaria: ¿puede ver a este médico? (por medicosAsignados) ───────────────
+// ââ Secretaria: Â¿puede ver a este mÃ©dico? (por medicosAsignados) âââââââââââââââ
 const _secretariaMedicoAsignado = (currentUser, medicoId, usersList) => {
   if (!currentUser) return false;
   if (currentUser.role !== "secretaria") return true; // admin/medico ven todo
@@ -650,15 +650,15 @@ const _sbQueue = {
   },
 };
 
-// ══════════════════════════════════════════════════════════════════════════
-// B-16: Supabase Storage - Adjuntos de paraclínicos
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// B-16: Supabase Storage - Adjuntos de paraclÃ­nicos
 // Bucket: siso-adjuntos | Permisos: autenticados (RLS por path)
 // Path: {medicoUserId}/{hcId}/{timestamp}-{filename}
-// Para habilitar: Dashboard Supabase → Storage → Crear bucket "siso-adjuntos"
-//   Política: "authenticated can upload/read their own files" basada en path prefix
-// ══════════════════════════════════════════════════════════════════════════
+// Para habilitar: Dashboard Supabase â Storage â Crear bucket "siso-adjuntos"
+//   PolÃ­tica: "authenticated can upload/read their own files" basada en path prefix
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const _SB_BUCKET = "siso-adjuntos";
-// SEC-11: Validación MIME real por magic bytes (no solo extensión)
+// SEC-11: ValidaciÃ³n MIME real por magic bytes (no solo extensiÃ³n)
 const _validateMimeType = async (file) => {
   const ALLOWED = {
     "application/pdf": [[0x25, 0x50, 0x44, 0x46]], // %PDF
@@ -770,10 +770,10 @@ export const _patKey = (userId) => `siso_db_patients_${userId}`;
 const _patKeyCloud = (userId) => `siso_patients_${userId}`;
 const _compKey = (userId) => `siso_companies_${userId}`;
 const _compKeyCloud = (userId) => `siso_companies_${userId}`;
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // SEGURIDAD: Hash SHA-256 (sin dependencias externas)
 // Usado para credenciales - nunca se almacena texto plano
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 const _sha256 = async (str) => {
   const buf = await crypto.subtle.digest(
     "SHA-256",
@@ -783,7 +783,7 @@ const _sha256 = async (str) => {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 };
-// SEC-09: PBKDF2 con salt para contraseñas (más seguro que SHA-256 puro)
+// SEC-09: PBKDF2 con salt para contraseÃ±as (mÃ¡s seguro que SHA-256 puro)
 // salt se genera una vez por usuario y se guarda junto al hash
 const _pbkdf2Hash = async (password, saltHex) => {
   const enc = new TextEncoder();
@@ -810,28 +810,28 @@ const _pbkdf2Hash = async (password, saltHex) => {
     .join("");
   return { hash: hashHex, salt: saltHexOut };
 };
-// Verificar contraseña con PBKDF2 (compatible con hashes legacy SHA-256 sin salt)
+// Verificar contraseÃ±a con PBKDF2 (compatible con hashes legacy SHA-256 sin salt)
 const _verifyPassword = async (password, storedHash, storedSalt) => {
   if (!storedSalt) return (await _sha256(password)) === storedHash; // legacy
   const { hash } = await _pbkdf2Hash(password, storedSalt);
   return hash === storedHash;
 };
-// Hash síncrono simple para comparaciones en memoria (FNV-1a 64-bit expandido)
-// NOTA: SHA-256 real se usa al crear/cambiar contraseñas. Para validación en memoria
+// Hash sÃ­ncrono simple para comparaciones en memoria (FNV-1a 64-bit expandido)
+// NOTA: SHA-256 real se usa al crear/cambiar contraseÃ±as. Para validaciÃ³n en memoria
 // se compara passHash (ya almacenado como SHA-256 hex) vs hash del input.
 const _hashSync = (str) => {
-  // Usamos la Web Crypto API de forma síncrona mediante un truco de Promise sync
+  // Usamos la Web Crypto API de forma sÃ­ncrona mediante un truco de Promise sync
   // En este entorno (browser/React) usamos el valor pre-computado para el default
-  // y SHA-256 async para nuevas contraseñas.
+  // y SHA-256 async para nuevas contraseÃ±as.
   return str; // placeholder - reemplazado por passHash en el flujo real
 };
-// ══ B-03 SEGURIDAD: Hashes de credenciales por defecto eliminados (OWASP A07) ══
+// ââ B-03 SEGURIDAD: Hashes de credenciales por defecto eliminados (OWASP A07) ââ
 // adminCode: se configura en el primer uso desde el panel de administracion.
 // El hash se genera dinamicamente con _sha256() - nunca se almacena en codigo.
 // Para restablecer adminCode: usar el panel de usuarios con autenticacion activa.
 const _H = {
-  // SHA-256('9207') - código de borrado de datos por admin
-  // Para cambiar el código: recalcular SHA-256 del nuevo código y actualizar este valor
+  // SHA-256('9207') - cÃ³digo de borrado de datos por admin
+  // Para cambiar el cÃ³digo: recalcular SHA-256 del nuevo cÃ³digo y actualizar este valor
   adminCode: "8cd110accd359cbd1cba8e0d423314c09e531aa4f5fdbc926621198e911fa308",
 };
 // SEGURIDAD: Sanitizador XSS para document.write - escapa caracteres HTML peligrosos
@@ -843,7 +843,7 @@ const _sanitize = (str) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#x27;")
     .replace(/\//g, "&#x2F;");
-// SEC-FIX-02: Validación estricta de URL para imágenes (previene XSS via javascript: protocol)
+// SEC-FIX-02: ValidaciÃ³n estricta de URL para imÃ¡genes (previene XSS via javascript: protocol)
 // OWASP A03: Injection - solo permite data:image/, https:// y http:// (CWE-79)
 const _safeLogoUrl = (url) => {
   if (!url) return "";
@@ -851,9 +851,9 @@ const _safeLogoUrl = (url) => {
   if (u.startsWith("data:image/") || u.startsWith("https://") || u.startsWith("http://")) return u;
   return ""; // Rechaza javascript:, vbscript:, file://, etc.
 };
-// ── HELPER: Columna izquierda para cabeceras de documentos impresos ──────────
-// Si se pasa ipsData (objeto empresa), muestra logo+nombre+NIT+dirección de la IPS.
-// Si ipsData es null, muestra los datos del médico (docData).
+// ââ HELPER: Columna izquierda para cabeceras de documentos impresos ââââââââââ
+// Si se pasa ipsData (objeto empresa), muestra logo+nombre+NIT+direcciÃ³n de la IPS.
+// Si ipsData es null, muestra los datos del mÃ©dico (docData).
 const _ipsDocLeftHtml = (ipsData, docData, accentSafe) => {
   const ac = accentSafe || "#059669";
   if (ipsData) {
@@ -882,7 +882,7 @@ const _ipsDocLeftHtml = (ipsData, docData, accentSafe) => {
       ${
         dir
           ? `<p style="font-size:7.5pt;color:#555;margin:1px 0;">${dir}${
-              ciu ? " · " + ciu : ""
+              ciu ? " Â· " + ciu : ""
             }</p>`
           : ""
       }
@@ -913,16 +913,16 @@ const _ipsDocLeftHtml = (ipsData, docData, accentSafe) => {
     )}</p>
     <p style="font-size:7.5pt;color:#555;margin:1px 0;">Lic: ${_sanitize(
       d.licencia || ""
-    )} · ${_sanitize(d.ciudad || "")}</p>
+    )} Â· ${_sanitize(d.ciudad || "")}</p>
     <p style="font-size:7.5pt;color:#555;margin:1px 0;">Tel: ${_sanitize(
       d.celular || ""
-    )} · ${_sanitize(d.email || "")}</p>
+    )} Â· ${_sanitize(d.email || "")}</p>
   </div>`;
 };
 // ==========================================
-// MÓDULO 1: CONSTANTES ESTÁTICAS
+// MÃDULO 1: CONSTANTES ESTÃTICAS
 // ==========================================
-// ══ B-02 SEGURIDAD: Datos personales del medico eliminados del codigo (Ley 1581/2012) ══
+// ââ B-02 SEGURIDAD: Datos personales del medico eliminados del codigo (Ley 1581/2012) ââ
 // Los valores reales se ingresan desde el modulo de Perfil del Doctor en la aplicacion.
 // La estructura del objeto se mantiene identica para compatibilidad total.
 export const DEFAULT_DOCTOR_DATA = {
@@ -947,9 +947,9 @@ export const DEFAULT_DOCTOR_DATA = {
 };
 const ARL_LIST = [
   "ARL SURA",
-  "POSITIVA COMPAÑÍA DE SEGUROS",
+  "POSITIVA COMPAÃÃA DE SEGUROS",
   "AXA COLPATRIA",
-  "SEGUROS BOLÍVAR",
+  "SEGUROS BOLÃVAR",
   "COLMENA SEGUROS",
   "LA EQUIDAD SEGUROS",
   "MAPFRE SEGUROS",
@@ -959,7 +959,7 @@ const ARL_LIST = [
 const AFP_LIST = [
   "COLPENSIONES",
   "PORVENIR",
-  "PROTECCIÓN",
+  "PROTECCIÃN",
   "COLFONDOS",
   "SKANDIA",
 ];
@@ -979,10 +979,10 @@ const EPS_LIST = [
   "SAVIA SALUD",
 ].sort();
 const CONTRATO_LIST = [
-  "Término Indefinido",
-  "Término Fijo",
+  "TÃ©rmino Indefinido",
+  "TÃ©rmino Fijo",
   "Obra o Labor",
-  "Prestación de Servicios",
+  "PrestaciÃ³n de Servicios",
   "Aprendizaje",
   "Ocasional o Transitorio",
 ];
@@ -990,45 +990,45 @@ const TURNO_LIST = ["Diurno", "Nocturno", "Mixto", "Rotativo"];
 const ETNIA_LIST = [
   "Mestizo",
   "Afrocolombiano",
-  "Indígena",
+  "IndÃ­gena",
   "Raizal",
   "Palenquero",
   "Gitano / Rrom",
   "Ninguno",
 ];
 const SPECIALTIES_LIST = [
-  "Alergología",
-  "Anestesiología",
-  "Cardiología",
-  "Cirugía General",
-  "Dermatología",
-  "Endocrinología",
-  "Fisiatría",
+  "AlergologÃ­a",
+  "AnestesiologÃ­a",
+  "CardiologÃ­a",
+  "CirugÃ­a General",
+  "DermatologÃ­a",
+  "EndocrinologÃ­a",
+  "FisiatrÃ­a",
   "Fisioterapia",
-  "Fonoaudiología",
-  "Gastroenterología",
-  "Geriatría",
-  "Ginecología y Obstetricia",
-  "Hematología",
-  "Infectología",
+  "FonoaudiologÃ­a",
+  "GastroenterologÃ­a",
+  "GeriatrÃ­a",
+  "GinecologÃ­a y Obstetricia",
+  "HematologÃ­a",
+  "InfectologÃ­a",
   "Medicina del Trabajo",
-  "Nefrología",
-  "Neumología",
-  "Neurología",
-  "Nutrición",
-  "Oftalmología",
-  "Oncología",
+  "NefrologÃ­a",
+  "NeumologÃ­a",
+  "NeurologÃ­a",
+  "NutriciÃ³n",
+  "OftalmologÃ­a",
+  "OncologÃ­a",
   "Ortopedia",
-  "Otorrinolaringología",
-  "Pediatría",
-  "Psicología",
-  "Psiquiatría",
-  "Radiología",
-  "Reumatología",
-  "Urología",
+  "OtorrinolaringologÃ­a",
+  "PediatrÃ­a",
+  "PsicologÃ­a",
+  "PsiquiatrÃ­a",
+  "RadiologÃ­a",
+  "ReumatologÃ­a",
+  "UrologÃ­a",
 ].sort();
 // ==========================================
-// CATÁLOGO DE MEDICAMENTOS GENÉRICOS COLOMBIA
+// CATÃLOGO DE MEDICAMENTOS GENÃRICOS COLOMBIA
 // Basado en INVIMA y MSPS -- Lista de medicamentos esenciales
 // ==========================================
 const MEDICAMENTOS_CO_CUSTOM_KEY = "siso_custom_meds";
@@ -1045,9 +1045,9 @@ const addCustomMed = (entry) => {
   _ls.setItem(MEDICAMENTOS_CO_CUSTOM_KEY, JSON.stringify(arr));
 };
 const MEDICAMENTOS_CO_BASE = [
-  // ── ANALGÉSICOS / ANTIINFLAMATORIOS ──────────────────────────────────────
+  // ââ ANALGÃSICOS / ANTIINFLAMATORIOS ââââââââââââââââââââââââââââââââââââââ
   {
-    g: "Acetaminofén (Paracetamol)",
+    g: "AcetaminofÃ©n (Paracetamol)",
     p: [
       "Tylenol 500mg tab",
       "Tylenol 1g tab",
@@ -1056,15 +1056,15 @@ const MEDICAMENTOS_CO_BASE = [
       "Tempra 500mg tab",
       "Winasorb 500mg tab",
       "Paralen 500mg tab",
-      "Acetaminofén MK 500mg tab",
-      "Acetaminofén Genfar 500mg tab",
+      "AcetaminofÃ©n MK 500mg tab",
+      "AcetaminofÃ©n Genfar 500mg tab",
       "Paracetamol 150mg/5mL jbe",
       "Paracetamol 250mg/5mL jbe",
-      "Acetaminofén susp 100mg/mL",
-      "Dolex Pediátrico gotas",
+      "AcetaminofÃ©n susp 100mg/mL",
+      "Dolex PediÃ¡trico gotas",
       "Tempra gotas 100mg/mL",
     ],
-    cat: "Analgésico",
+    cat: "AnalgÃ©sico",
     dosis: "500-1000mg c/6-8h",
   },
   {
@@ -1097,7 +1097,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Naproxeno Genfar 500mg tab",
       "Flanax 275mg tab",
       "Anaprox 250mg tab",
-      "Naproxeno sódico 550mg tab",
+      "Naproxeno sÃ³dico 550mg tab",
       "Naprox Forte 500mg tab",
     ],
     cat: "AINE",
@@ -1164,7 +1164,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Crispin 50mg cap",
       "Travex 50mg cap",
     ],
-    cat: "Opioide débil",
+    cat: "Opioide dÃ©bil",
     dosis: "50-100mg c/6-8h",
   },
   {
@@ -1177,7 +1177,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Ketorolaco Genfar 30mg amp",
     ],
     cat: "AINE parenteral",
-    dosis: "30mg IM o 10mg VO c/8h máx 5 días",
+    dosis: "30mg IM o 10mg VO c/8h mÃ¡x 5 dÃ­as",
   },
   {
     g: "Metamizol (Dipirona)",
@@ -1189,7 +1189,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Metamizol 500mg/mL amp",
       "Novalgin gotas 500mg/mL",
     ],
-    cat: "Analgésico/Antipirético",
+    cat: "AnalgÃ©sico/AntipirÃ©tico",
     dosis: "500-1000mg c/6-8h",
   },
   {
@@ -1202,7 +1202,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Transtec 35mcg/h parche",
     ],
     cat: "Opioide parcial",
-    dosis: "Según especialista",
+    dosis: "SegÃºn especialista",
   },
   {
     g: "Dexketoprofeno",
@@ -1224,37 +1224,37 @@ const MEDICAMENTOS_CO_BASE = [
       "Oramorph 10mg/5mL sol",
     ],
     cat: "Opioide fuerte",
-    dosis: "Según protocolo",
+    dosis: "SegÃºn protocolo",
   },
   {
     g: "Oxicodona",
     p: ["OxyContin 10mg tab CR", "OxyContin 20mg tab CR", "Oxicodona 5mg cap"],
     cat: "Opioide fuerte",
-    dosis: "Según protocolo especialista",
+    dosis: "SegÃºn protocolo especialista",
   },
   {
-    g: "Ibuprofeno tópico",
+    g: "Ibuprofeno tÃ³pico",
     p: [
       "Dolorac gel 5%",
       "Ibuprofeno gel 5% MK",
       "Ibudol gel 5%",
       "Dolgit crema 5%",
     ],
-    cat: "AINE tópico",
-    dosis: "Aplicar 3-4 veces/día",
+    cat: "AINE tÃ³pico",
+    dosis: "Aplicar 3-4 veces/dÃ­a",
   },
   {
-    g: "Diclofenaco tópico",
+    g: "Diclofenaco tÃ³pico",
     p: [
       "Voltaren Emulgel 1%",
       "Diclofenaco gel 1% MK",
       "Lertus gel 1%",
       "Diclo gel Genfar 1%",
     ],
-    cat: "AINE tópico",
+    cat: "AINE tÃ³pico",
     dosis: "Aplicar c/8-12h",
   },
-  // ── ANTIBIÓTICOS ──────────────────────────────────────────────────────────
+  // ââ ANTIBIÃTICOS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Amoxicilina",
     p: [
@@ -1267,8 +1267,8 @@ const MEDICAMENTOS_CO_BASE = [
       "Amoxal 1g tab",
       "Ospamox 500mg cap",
     ],
-    cat: "Betalactámico",
-    dosis: "500mg c/8h o 875mg c/12h x7 días",
+    cat: "BetalactÃ¡mico",
+    dosis: "500mg c/8h o 875mg c/12h x7 dÃ­as",
   },
   {
     g: "Amoxicilina + Clavulanato",
@@ -1282,8 +1282,8 @@ const MEDICAMENTOS_CO_BASE = [
       "Trifamox IBL 875mg tab",
       "Amoxiclav MK 875mg tab",
     ],
-    cat: "Betalactámico + IBL",
-    dosis: "875/125mg c/12h x7-10 días",
+    cat: "BetalactÃ¡mico + IBL",
+    dosis: "875/125mg c/12h x7-10 dÃ­as",
   },
   {
     g: "Azitromicina",
@@ -1297,8 +1297,8 @@ const MEDICAMENTOS_CO_BASE = [
       "Azitrox susp 200mg/5mL",
       "Sumamed 500mg tab",
     ],
-    cat: "Macrólido",
-    dosis: "500mg c/24h x3 días",
+    cat: "MacrÃ³lido",
+    dosis: "500mg c/24h x3 dÃ­as",
   },
   {
     g: "Claritromicina",
@@ -1310,8 +1310,8 @@ const MEDICAMENTOS_CO_BASE = [
       "Claricel 500mg tab",
       "Biaxin 250mg susp",
     ],
-    cat: "Macrólido",
-    dosis: "500mg c/12h x7-14 días",
+    cat: "MacrÃ³lido",
+    dosis: "500mg c/12h x7-14 dÃ­as",
   },
   {
     g: "Ciprofloxacino",
@@ -1326,7 +1326,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Ciproflox 750mg tab",
     ],
     cat: "Fluoroquinolona",
-    dosis: "500mg c/12h x7-10 días",
+    dosis: "500mg c/12h x7-10 dÃ­as",
   },
   {
     g: "Levofloxacino",
@@ -1338,7 +1338,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Florit 500mg tab",
     ],
     cat: "Fluoroquinolona",
-    dosis: "500mg c/24h x7-10 días",
+    dosis: "500mg c/24h x7-10 dÃ­as",
   },
   {
     g: "Metronidazol",
@@ -1349,10 +1349,10 @@ const MEDICAMENTOS_CO_BASE = [
       "Fosmet 500mg tab",
       "Flagyl 500mg/100mL IV",
       "Metronidazol susp 250mg/5mL",
-      "Metronidazol óvulos 500mg",
+      "Metronidazol Ã³vulos 500mg",
     ],
     cat: "Nitroimidazol",
-    dosis: "500mg c/8h x7 días",
+    dosis: "500mg c/8h x7 dÃ­as",
   },
   {
     g: "Doxiciclina",
@@ -1363,7 +1363,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Doxiciclina Genfar 100mg cap",
     ],
     cat: "Tetraciclina",
-    dosis: "100mg c/12h x7-14 días",
+    dosis: "100mg c/12h x7-14 dÃ­as",
   },
   {
     g: "Cefalexina",
@@ -1374,7 +1374,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Cefalexina susp 250mg/5mL",
     ],
     cat: "Cefalosporina 1G",
-    dosis: "500mg c/6h x7 días",
+    dosis: "500mg c/6h x7 dÃ­as",
   },
   {
     g: "Cefadroxilo",
@@ -1385,7 +1385,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Cefadroxilo susp 250mg/5mL",
     ],
     cat: "Cefalosporina 1G",
-    dosis: "500mg-1g c/12h x7 días",
+    dosis: "500mg-1g c/12h x7 dÃ­as",
   },
   {
     g: "Cefuroxima",
@@ -1396,7 +1396,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Cefuroxima susp 125mg/5mL",
     ],
     cat: "Cefalosporina 2G",
-    dosis: "500mg c/12h x7-10 días",
+    dosis: "500mg c/12h x7-10 dÃ­as",
   },
   {
     g: "Ceftriaxona",
@@ -1416,31 +1416,31 @@ const MEDICAMENTOS_CO_BASE = [
       "Bactrim F 400/80mg tab",
       "TMP-SMX MK DS tab",
       "Gantrisin DS tab",
-      "Bactrim suspensión",
+      "Bactrim suspensiÃ³n",
       "Septra DS tab",
     ],
     cat: "Sulfonamida+diaminopiridina",
-    dosis: "DS c/12h x7-10 días",
+    dosis: "DS c/12h x7-10 dÃ­as",
   },
   {
-    g: "Nitrofurantoína",
+    g: "NitrofurantoÃ­na",
     p: [
       "Macrobid 100mg cap",
-      "Nitrofurantoína MK 100mg cap",
+      "NitrofurantoÃ­na MK 100mg cap",
       "Macrodan 100mg cap",
       "Macrodantina 100mg cap",
     ],
-    cat: "Antibiótico urinario",
-    dosis: "100mg c/12h x5-7 días",
+    cat: "AntibiÃ³tico urinario",
+    dosis: "100mg c/12h x5-7 dÃ­as",
   },
   {
     g: "Clindamicina",
     p: [
       "Dalacin C 300mg cap",
       "Clindamicina MK 300mg cap",
-      "Dalacin T gel tópico",
+      "Dalacin T gel tÃ³pico",
       "Clindamicina 600mg amp",
-      "Dalacin óvulos 100mg",
+      "Dalacin Ã³vulos 100mg",
     ],
     cat: "Lincosamida",
     dosis: "150-450mg c/6h",
@@ -1453,7 +1453,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Erythrocin 500mg tab",
       "Eritromicina susp 250mg/5mL",
     ],
-    cat: "Macrólido",
+    cat: "MacrÃ³lido",
     dosis: "250-500mg c/6-8h",
   },
   {
@@ -1464,7 +1464,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Garamycin 80mg amp",
       "Gentamicina colirio 0.3%",
     ],
-    cat: "Aminoglucósido",
+    cat: "AminoglucÃ³sido",
     dosis: "5-7mg/kg/24h IV/IM",
   },
   {
@@ -1476,7 +1476,7 @@ const MEDICAMENTOS_CO_BASE = [
   {
     g: "Piperacilina + Tazobactam",
     p: ["Tazocin 4.5g amp IV", "Piperazin-Taz MK 4.5g amp", "Zosyn 3.375g amp"],
-    cat: "Betalactámico + IBL amplio espectro",
+    cat: "BetalactÃ¡mico + IBL amplio espectro",
     dosis: "4.5g c/6-8h IV",
   },
   {
@@ -1488,10 +1488,10 @@ const MEDICAMENTOS_CO_BASE = [
   {
     g: "Fosfomicina",
     p: ["Monuril 3g sob", "Fosfomicina MK 3g sob", "Fosfocina 3g sob"],
-    cat: "Antibiótico urinario",
-    dosis: "3g dosis única (cistitis no complicada)",
+    cat: "AntibiÃ³tico urinario",
+    dosis: "3g dosis Ãºnica (cistitis no complicada)",
   },
-  // ── ANTIFÚNGICOS ──────────────────────────────────────────────────────────
+  // ââ ANTIFÃNGICOS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Fluconazol",
     p: [
@@ -1502,7 +1502,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Diflucan 200mg/100mL IV",
       "Fluconazol susp 50mg/5mL",
     ],
-    cat: "Azol antifúngico",
+    cat: "Azol antifÃºngico",
     dosis: "150-400mg c/24h",
   },
   {
@@ -1511,9 +1511,9 @@ const MEDICAMENTOS_CO_BASE = [
       "Sporanox 100mg cap",
       "Itraconazol MK 100mg cap",
       "Icaden 100mg cap",
-      "Sporanox solución 10mg/mL",
+      "Sporanox soluciÃ³n 10mg/mL",
     ],
-    cat: "Azol antifúngico",
+    cat: "Azol antifÃºngico",
     dosis: "100-200mg c/12-24h con comida",
   },
   {
@@ -1523,9 +1523,9 @@ const MEDICAMENTOS_CO_BASE = [
       "Clotrimazol MK crema 1%",
       "Lotrimin crema 1%",
       "Canesten vaginal 200mg",
-      "Canesten óvulos 500mg",
+      "Canesten Ã³vulos 500mg",
     ],
-    cat: "Imidazol tópico",
+    cat: "Imidazol tÃ³pico",
     dosis: "Aplicar c/12h x2-4 semanas",
   },
   {
@@ -1536,7 +1536,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Lamisil crema 1%",
       "Terbinafina crema 1%",
     ],
-    cat: "Alilamina antifúngica",
+    cat: "Alilamina antifÃºngica",
     dosis: "250mg c/24h x6-12 semanas (onicomicosis)",
   },
   {
@@ -1544,18 +1544,18 @@ const MEDICAMENTOS_CO_BASE = [
     p: [
       "Mycostatin 100000UI/mL susp oral",
       "Nistatina MK 100000UI/g crema",
-      "Mycostatin óvulos 100000UI",
+      "Mycostatin Ã³vulos 100000UI",
     ],
-    cat: "Polieno antifúngico",
-    dosis: "500000UI c/6h oral o aplicación local",
+    cat: "Polieno antifÃºngico",
+    dosis: "500000UI c/6h oral o aplicaciÃ³n local",
   },
   {
     g: "Voriconazol",
     p: ["Vfend 200mg tab", "Voriconazol MK 200mg tab", "Vfend 200mg amp IV"],
     cat: "Azol 2G (aspergilosis)",
-    dosis: "Según protocolo hospitalario",
+    dosis: "SegÃºn protocolo hospitalario",
   },
-  // ── ANTIVIRALES ───────────────────────────────────────────────────────────
+  // ââ ANTIVIRALES âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Aciclovir",
     p: [
@@ -1567,13 +1567,13 @@ const MEDICAMENTOS_CO_BASE = [
       "Aciclovir 250mg amp IV",
     ],
     cat: "Antiviral (herpes)",
-    dosis: "400-800mg c/8h x5-10 días",
+    dosis: "400-800mg c/8h x5-10 dÃ­as",
   },
   {
     g: "Valaciclovir",
     p: ["Valtrex 500mg tab", "Valtrex 1g tab", "Valaciclovir MK 500mg tab"],
-    cat: "Antiviral (herpes - profármaco)",
-    dosis: "500mg-1g c/12h x5-10 días",
+    cat: "Antiviral (herpes - profÃ¡rmaco)",
+    dosis: "500mg-1g c/12h x5-10 dÃ­as",
   },
   {
     g: "Oseltamivir",
@@ -1584,15 +1584,15 @@ const MEDICAMENTOS_CO_BASE = [
       "Tamiflu susp 6mg/mL",
     ],
     cat: "Antiviral influenza",
-    dosis: "75mg c/12h x5 días",
+    dosis: "75mg c/12h x5 dÃ­as",
   },
   {
     g: "Ganciclovir",
     p: ["Cytovene 500mg amp IV", "Ganciclovir MK 250mg cap"],
     cat: "Antiviral CMV",
-    dosis: "5mg/kg c/12h IV (inducción)",
+    dosis: "5mg/kg c/12h IV (inducciÃ³n)",
   },
-  // ── ANTIPARASITARIOS ──────────────────────────────────────────────────────
+  // ââ ANTIPARASITARIOS ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Albendazol",
     p: [
@@ -1602,19 +1602,19 @@ const MEDICAMENTOS_CO_BASE = [
       "Zentel susp 100mg/5mL",
       "Eskasol 400mg tab",
     ],
-    cat: "Antihelmíntico",
-    dosis: "400mg dosis única adultos",
+    cat: "AntihelmÃ­ntico",
+    dosis: "400mg dosis Ãºnica adultos",
   },
   {
     g: "Mebendazol",
     p: [
       "Vermox 100mg tab",
       "Mebendazol MK 100mg tab",
-      "Vermox 500mg tab (dosis única)",
+      "Vermox 500mg tab (dosis Ãºnica)",
       "Mebendazol susp 100mg/5mL",
     ],
-    cat: "Antihelmíntico",
-    dosis: "100mg c/12h x3 días o 500mg dosis única",
+    cat: "AntihelmÃ­ntico",
+    dosis: "100mg c/12h x3 dÃ­as o 500mg dosis Ãºnica",
   },
   {
     g: "Ivermectina",
@@ -1625,21 +1625,21 @@ const MEDICAMENTOS_CO_BASE = [
       "Ivomec 6mg tab",
     ],
     cat: "Antiparasitario",
-    dosis: "200mcg/kg dosis única",
+    dosis: "200mcg/kg dosis Ãºnica",
   },
   {
     g: "Tinidazol",
     p: ["Fasigyn 500mg tab", "Tinidazol MK 500mg tab", "Tinidazol 2g tab"],
     cat: "Nitroimidazol",
-    dosis: "2g dosis única (giardia/tricomoniasis)",
+    dosis: "2g dosis Ãºnica (giardia/tricomoniasis)",
   },
   {
     g: "Cloroquina",
     p: ["Aralen 250mg tab", "Cloroquina MK 250mg tab", "Resochin 250mg tab"],
-    cat: "Antimalárico/Antiinflamatorio",
-    dosis: "Según esquema malaria o 250mg c/24h (reumatología)",
+    cat: "AntimalÃ¡rico/Antiinflamatorio",
+    dosis: "SegÃºn esquema malaria o 250mg c/24h (reumatologÃ­a)",
   },
-  // ── CARDIOVASCULARES ──────────────────────────────────────────────────────
+  // ââ CARDIOVASCULARES ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Enalapril",
     p: [
@@ -1685,24 +1685,24 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "4-10mg c/24h",
   },
   {
-    g: "Losartán",
+    g: "LosartÃ¡n",
     p: [
       "Cozaar 50mg tab",
       "Cozaar 100mg tab",
-      "Losartán MK 50mg tab",
+      "LosartÃ¡n MK 50mg tab",
       "Repace 50mg tab",
       "Hyzaar 50/12.5mg tab",
-      "Losartán 25mg tab",
+      "LosartÃ¡n 25mg tab",
     ],
     cat: "ARA-II",
     dosis: "50-100mg c/24h",
   },
   {
-    g: "Valsartán",
+    g: "ValsartÃ¡n",
     p: [
       "Diovan 80mg tab",
       "Diovan 160mg tab",
-      "Valsartán MK 80mg tab",
+      "ValsartÃ¡n MK 80mg tab",
       "Exforge 5/80mg tab",
       "Co-Diovan 80/12.5mg tab",
     ],
@@ -1710,21 +1710,21 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "80-320mg c/24h",
   },
   {
-    g: "Telmisartán",
+    g: "TelmisartÃ¡n",
     p: [
       "Micardis 40mg tab",
       "Micardis 80mg tab",
-      "Telmisartán MK 40mg tab",
+      "TelmisartÃ¡n MK 40mg tab",
       "Micardis Plus 40/12.5mg tab",
     ],
     cat: "ARA-II",
     dosis: "40-80mg c/24h",
   },
   {
-    g: "Irbesartán",
+    g: "IrbesartÃ¡n",
     p: [
       "Avapro 150mg tab",
-      "Irbesartán MK 150mg tab",
+      "IrbesartÃ¡n MK 150mg tab",
       "Aprovel 150mg tab",
       "Avapro 300mg tab",
     ],
@@ -1732,8 +1732,8 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "150-300mg c/24h",
   },
   {
-    g: "Candesartán",
-    p: ["Atacand 8mg tab", "Candesartán MK 8mg tab", "Atacand 16mg tab"],
+    g: "CandesartÃ¡n",
+    p: ["Atacand 8mg tab", "CandesartÃ¡n MK 8mg tab", "Atacand 16mg tab"],
     cat: "ARA-II",
     dosis: "4-32mg c/24h",
   },
@@ -1795,7 +1795,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Toprol XL 50mg tab CR",
       "Betaloc 50mg tab",
     ],
-    cat: "Betabloqueador β1 selectivo",
+    cat: "Betabloqueador Î²1 selectivo",
     dosis: "25-200mg c/12-24h",
   },
   {
@@ -1807,7 +1807,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Dilatrend 12.5mg tab",
       "Carvedilol 3.125mg tab",
     ],
-    cat: "Betabloqueador no selectivo + α1",
+    cat: "Betabloqueador no selectivo + Î±1",
     dosis: "3.125-25mg c/12h",
   },
   {
@@ -1819,7 +1819,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Emcor 5mg tab",
       "Bisoprolol 2.5mg tab",
     ],
-    cat: "Betabloqueador β1 selectivo",
+    cat: "Betabloqueador Î²1 selectivo",
     dosis: "2.5-10mg c/24h",
   },
   {
@@ -1830,13 +1830,13 @@ const MEDICAMENTOS_CO_BASE = [
       "Tenormin 100mg tab",
       "Atenolol 25mg tab",
     ],
-    cat: "Betabloqueador β1",
+    cat: "Betabloqueador Î²1",
     dosis: "25-100mg c/24h",
   },
   {
     g: "Nebivolol",
     p: ["Bystolic 5mg tab", "Nebivolol MK 5mg tab", "Nebilox 5mg tab"],
-    cat: "Betabloqueador β1 + vasodilatador",
+    cat: "Betabloqueador Î²1 + vasodilatador",
     dosis: "5-10mg c/24h",
   },
   {
@@ -1848,7 +1848,7 @@ const MEDICAMENTOS_CO_BASE = [
       "HCTZ 12.5mg tab",
       "Hidroclorotiazida 50mg tab",
     ],
-    cat: "Diurético tiazídico",
+    cat: "DiurÃ©tico tiazÃ­dico",
     dosis: "12.5-50mg c/24h",
   },
   {
@@ -1858,7 +1858,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Clortalidona MK 25mg tab",
       "Clortalidona 50mg tab",
     ],
-    cat: "Diurético tiazídico-like",
+    cat: "DiurÃ©tico tiazÃ­dico-like",
     dosis: "12.5-50mg c/24h",
   },
   {
@@ -1868,7 +1868,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Indapamida MK 1.5mg tab CR",
       "Natrilix 1.5mg tab CR",
     ],
-    cat: "Diurético tiazídico-like",
+    cat: "DiurÃ©tico tiazÃ­dico-like",
     dosis: "1.25-2.5mg c/24h",
   },
   {
@@ -1880,7 +1880,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Furosemida 20mg tab",
       "Lasix 80mg tab",
     ],
-    cat: "Diurético de asa",
+    cat: "DiurÃ©tico de asa",
     dosis: "20-80mg c/24h",
   },
   {
@@ -1891,7 +1891,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Aldactone 100mg tab",
       "Verospiron 25mg tab",
     ],
-    cat: "Diurético ahorrador K",
+    cat: "DiurÃ©tico ahorrador K",
     dosis: "25-200mg c/24h",
   },
   {
@@ -1901,7 +1901,7 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "25-50mg c/24h",
   },
   {
-    g: "Ácido Acetilsalicílico",
+    g: "Ãcido AcetilsalicÃ­lico",
     p: [
       "Aspirina 100mg tab",
       "Aspirina Bayer 100mg",
@@ -1940,10 +1940,10 @@ const MEDICAMENTOS_CO_BASE = [
       "Aldocumar 10mg tab",
     ],
     cat: "Anticoagulante oral AVK",
-    dosis: "Según INR (2.0-3.0)",
+    dosis: "SegÃºn INR (2.0-3.0)",
   },
   {
-    g: "Rivaroxabán",
+    g: "RivaroxabÃ¡n",
     p: [
       "Xarelto 20mg tab",
       "Xarelto 15mg tab",
@@ -1954,14 +1954,14 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "10-20mg c/24h (con comida)",
   },
   {
-    g: "Apixabán",
-    p: ["Eliquis 5mg tab", "Eliquis 2.5mg tab", "Apixabán MK 5mg tab"],
+    g: "ApixabÃ¡n",
+    p: ["Eliquis 5mg tab", "Eliquis 2.5mg tab", "ApixabÃ¡n MK 5mg tab"],
     cat: "NACO anti-Xa",
     dosis: "5mg c/12h",
   },
   {
-    g: "Dabigatrán",
-    p: ["Pradaxa 150mg cap", "Pradaxa 110mg cap", "Dabigatrán MK 150mg cap"],
+    g: "DabigatrÃ¡n",
+    p: ["Pradaxa 150mg cap", "Pradaxa 110mg cap", "DabigatrÃ¡n MK 150mg cap"],
     cat: "NACO anti-IIa",
     dosis: "110-150mg c/12h",
   },
@@ -2060,7 +2060,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Amiodarona 150mg/3mL amp IV",
       "Atlansil 200mg tab",
     ],
-    cat: "Antiarrítmico clase III",
+    cat: "AntiarrÃ­tmico clase III",
     dosis: "200-400mg c/24h mantenimiento",
   },
   {
@@ -2070,7 +2070,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Digoxina MK 0.25mg tab",
       "Digoxina 0.5mg/2mL amp",
     ],
-    cat: "Glucósido cardíaco",
+    cat: "GlucÃ³sido cardÃ­aco",
     dosis: "0.125-0.25mg c/24h",
   },
   {
@@ -2080,12 +2080,12 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "5-7.5mg c/12h",
   },
   {
-    g: "Sacubitrilo + Valsartán",
+    g: "Sacubitrilo + ValsartÃ¡n",
     p: ["Entresto 49/51mg tab", "Entresto 24/26mg tab"],
     cat: "ARNI (IC-FEr)",
     dosis: "24/26-97/103mg c/12h",
   },
-  // ── METABÓLICOS / DIABETES ────────────────────────────────────────────────
+  // ââ METABÃLICOS / DIABETES ââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Metformina",
     p: [
@@ -2097,7 +2097,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Glafornil 850mg tab",
       "Glucophage XR 750mg tab",
     ],
-    cat: "Biguanida antidiabético",
+    cat: "Biguanida antidiabÃ©tico",
     dosis: "500-2550mg c/8-12h con comidas",
   },
   {
@@ -2222,7 +2222,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Insulina MK NPH vial",
     ],
     cat: "Insulina basal intermedia",
-    dosis: "Según pauta médica",
+    dosis: "SegÃºn pauta mÃ©dica",
   },
   {
     g: "Insulina Glargina",
@@ -2232,32 +2232,32 @@ const MEDICAMENTOS_CO_BASE = [
       "Abasaglar pluma",
       "Basaglar pluma",
     ],
-    cat: "Insulina análogo basal",
-    dosis: "Según pauta médica",
+    cat: "Insulina anÃ¡logo basal",
+    dosis: "SegÃºn pauta mÃ©dica",
   },
   {
     g: "Insulina Detemir",
     p: ["Levemir FlexPen pluma", "Detemir MK pluma"],
-    cat: "Insulina análogo basal",
-    dosis: "Según pauta médica",
+    cat: "Insulina anÃ¡logo basal",
+    dosis: "SegÃºn pauta mÃ©dica",
   },
   {
     g: "Insulina Regular",
     p: ["Humulin R vial", "Actrapid vial", "Insulina Regular MK vial"],
     cat: "Insulina prandial",
-    dosis: "Según pauta médica",
+    dosis: "SegÃºn pauta mÃ©dica",
   },
   {
     g: "Insulina Lispro",
     p: ["Humalog pluma", "Humalog KwikPen", "Insulina lispro MK pluma"],
-    cat: "Insulina análogo rápida",
-    dosis: "Según pauta médica",
+    cat: "Insulina anÃ¡logo rÃ¡pida",
+    dosis: "SegÃºn pauta mÃ©dica",
   },
   {
     g: "Insulina Aspart",
     p: ["NovoRapid FlexPen", "Novorapid vial", "Fiasp FlexPen"],
-    cat: "Insulina análogo ultrarrápida",
-    dosis: "Según pauta médica",
+    cat: "Insulina anÃ¡logo ultrarrÃ¡pida",
+    dosis: "SegÃºn pauta mÃ©dica",
   },
   {
     g: "Levotiroxina",
@@ -2317,7 +2317,7 @@ const MEDICAMENTOS_CO_BASE = [
     cat: "Antigotoso inhibidor xantina oxidasa",
     dosis: "40-80mg c/24h",
   },
-  // ── RESPIRATORIOS ─────────────────────────────────────────────────────────
+  // ââ RESPIRATORIOS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Salbutamol",
     p: [
@@ -2329,23 +2329,23 @@ const MEDICAMENTOS_CO_BASE = [
       "Salbutamol susp 2.5mg neb",
       "Proventil HFA MDI",
     ],
-    cat: "β2-agonista SABA",
+    cat: "Î²2-agonista SABA",
     dosis: "1-2 puff c/4-6h SOS o 2.5mg neb",
   },
   {
     g: "Formoterol",
     p: [
-      "Foradil 12mcg cap inhalación",
+      "Foradil 12mcg cap inhalaciÃ³n",
       "Formoterol MK 12mcg",
       "Oxis Turbuhaler 4.5mcg",
     ],
-    cat: "β2-agonista LABA",
+    cat: "Î²2-agonista LABA",
     dosis: "12mcg c/12h",
   },
   {
     g: "Salmeterol",
     p: ["Serevent 25mcg MDI", "Serevent Diskus 50mcg"],
-    cat: "β2-agonista LABA",
+    cat: "Î²2-agonista LABA",
     dosis: "50mcg c/12h",
   },
   {
@@ -2422,7 +2422,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Ipratropio MK 20mcg MDI",
       "Ipravent 20mcg MDI",
     ],
-    cat: "Anticolinérgico SAMA",
+    cat: "AnticolinÃ©rgico SAMA",
     dosis: "2-4 puff c/6-8h",
   },
   {
@@ -2432,17 +2432,17 @@ const MEDICAMENTOS_CO_BASE = [
       "Spiriva Respimat 2.5mcg",
       "Tiotropio MK 18mcg cap",
     ],
-    cat: "Anticolinérgico LAMA EPOC",
+    cat: "AnticolinÃ©rgico LAMA EPOC",
     dosis: "18mcg c/24h",
   },
   {
     g: "Umeclidinio + Vilanterol",
     p: ["Anoro Ellipta 62.5/25mcg", "Umeclidinio MK Ellipta"],
     cat: "LAMA + LABA (EPOC)",
-    dosis: "1 inhalación c/24h",
+    dosis: "1 inhalaciÃ³n c/24h",
   },
   {
-    g: "Acetilcisteína",
+    g: "AcetilcisteÃ­na",
     p: [
       "Mucolyte 200mg sob",
       "Fluimucil 200mg sob",
@@ -2451,7 +2451,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Fluimucil 600mg tab efervescente",
       "Rhinathiol 5% jarabe",
     ],
-    cat: "Mucolítico",
+    cat: "MucolÃ­tico",
     dosis: "200mg c/8h o 600mg c/24h",
   },
   {
@@ -2478,27 +2478,27 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "15-30mg c/6-8h",
   },
   {
-    g: "Codeína",
+    g: "CodeÃ­na",
     p: [
-      "Codeína 30mg tab",
-      "Perdolan Compositum (codeína)",
-      "Codeína fosfato 30mg",
+      "CodeÃ­na 30mg tab",
+      "Perdolan Compositum (codeÃ­na)",
+      "CodeÃ­na fosfato 30mg",
     ],
     cat: "Antitusivo opioide",
     dosis: "10-30mg c/6h SOS",
   },
   {
-    g: "Prednisolona (sistémica)",
+    g: "Prednisolona (sistÃ©mica)",
     p: [
       "Prelone 20mg/5mL susp",
       "Prednisolona MK 5mg tab",
       "Omnacortil 5mg tab",
       "Prelone 5mg tab",
     ],
-    cat: "Corticoide sistémico oral",
-    dosis: "0.5-2mg/kg/día",
+    cat: "Corticoide sistÃ©mico oral",
+    dosis: "0.5-2mg/kg/dÃ­a",
   },
-  // ── GASTROINTESTINALES ────────────────────────────────────────────────────
+  // ââ GASTROINTESTINALES ââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Omeprazol",
     p: [
@@ -2564,31 +2564,31 @@ const MEDICAMENTOS_CO_BASE = [
       "Metoclopramida MK 10mg tab",
       "Metoclopramida 10mg/2mL amp",
     ],
-    cat: "Procinético antiemético",
+    cat: "ProcinÃ©tico antiemÃ©tico",
     dosis: "10mg c/8h AC",
   },
   {
     g: "Domperidona",
     p: ["Motilium 10mg tab", "Domperidona MK 10mg tab", "Motilium susp 1mg/mL"],
-    cat: "Procinético periférico",
+    cat: "ProcinÃ©tico perifÃ©rico",
     dosis: "10mg c/8h AC",
   },
   {
-    g: "Ondansetrón",
+    g: "OndansetrÃ³n",
     p: [
       "Zofran 8mg tab",
       "Zofran 4mg tab",
-      "Ondansetrón MK 8mg tab",
+      "OndansetrÃ³n MK 8mg tab",
       "Zofran ODT 8mg",
       "Zofran 2mg/mL amp",
     ],
-    cat: "Antiemético 5HT3",
+    cat: "AntiemÃ©tico 5HT3",
     dosis: "4-8mg c/8h",
   },
   {
-    g: "Granisetrón",
-    p: ["Kytril 1mg tab", "Granisetrón MK 1mg amp", "Kytril 3mg amp"],
-    cat: "Antiemético 5HT3 (QT)",
+    g: "GranisetrÃ³n",
+    p: ["Kytril 1mg tab", "GranisetrÃ³n MK 1mg amp", "Kytril 3mg amp"],
+    cat: "AntiemÃ©tico 5HT3 (QT)",
     dosis: "1mg c/12h",
   },
   {
@@ -2600,30 +2600,30 @@ const MEDICAMENTOS_CO_BASE = [
       "Imodium susp 1mg/5mL",
     ],
     cat: "Antidiarreico",
-    dosis: "4mg inicial luego 2mg/dep (máx 16mg/día)",
+    dosis: "4mg inicial luego 2mg/dep (mÃ¡x 16mg/dÃ­a)",
   },
   {
     g: "Bismuto",
     p: ["Pepto-Bismol 262mg tab", "Pepto-Bismol susp 262mg/15mL"],
-    cat: "Protector gástrico/antidiarreico",
+    cat: "Protector gÃ¡strico/antidiarreico",
     dosis: "525mg c/30min SOS",
   },
   {
     g: "Sucralfato",
     p: ["Carafate 1g tab", "Sucralfato MK 1g tab", "Sucralfato susp 1g/10mL"],
-    cat: "Citoprotector gástrico",
+    cat: "Citoprotector gÃ¡strico",
     dosis: "1g c/6h AC",
   },
   {
     g: "Polietilenglicol",
     p: ["Miralax 17g polvo", "PEG MK polvo", "Forlax 10g sob", "Movicol sob"],
-    cat: "Laxante osmótico",
+    cat: "Laxante osmÃ³tico",
     dosis: "17g en 240mL agua c/24h",
   },
   {
     g: "Lactulosa",
-    p: ["Duphalac solución 3.3g/5mL", "Lactulosa MK sol", "Constulose sol"],
-    cat: "Laxante osmótico prebiótico",
+    p: ["Duphalac soluciÃ³n 3.3g/5mL", "Lactulosa MK sol", "Constulose sol"],
+    cat: "Laxante osmÃ³tico prebiÃ³tico",
     dosis: "15-30mL c/12-24h",
   },
   {
@@ -2656,12 +2656,12 @@ const MEDICAMENTOS_CO_BASE = [
       "Mylecon gotas 40mg/0.6mL",
     ],
     cat: "Antiflatulento",
-    dosis: "40-125mg después de comidas",
+    dosis: "40-125mg despuÃ©s de comidas",
   },
   {
-    g: "Hidróxido Al + Mg",
+    g: "HidrÃ³xido Al + Mg",
     p: ["Mylanta susp", "Maalox susp", "Gelusil susp", "Rolaids tab"],
-    cat: "Antiácido",
+    cat: "AntiÃ¡cido",
     dosis: "15-30mL AC y noche",
   },
   {
@@ -2677,10 +2677,10 @@ const MEDICAMENTOS_CO_BASE = [
   {
     g: "Budesonida oral",
     p: ["Entocort 3mg cap", "Budesonida MK 3mg cap"],
-    cat: "Corticoide oral tópico intestinal",
+    cat: "Corticoide oral tÃ³pico intestinal",
     dosis: "9mg c/24h AC x8 semanas",
   },
-  // ── NEUROLÓGICOS / PSIQUIÁTRICOS ──────────────────────────────────────────
+  // ââ NEUROLÃGICOS / PSIQUIÃTRICOS ââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Carbamazepina",
     p: [
@@ -2694,7 +2694,7 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "200-1600mg c/8-12h",
   },
   {
-    g: "Ácido Valproico",
+    g: "Ãcido Valproico",
     p: [
       "Depakene 250mg cap",
       "Depakene sol 250mg/5mL",
@@ -2703,7 +2703,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Depakote 250mg EC",
     ],
     cat: "Anticonvulsivante / Estabilizador humor",
-    dosis: "15-60mg/kg/día c/8-12h",
+    dosis: "15-60mg/kg/dÃ­a c/8-12h",
   },
   {
     g: "Lamotrigina",
@@ -2742,7 +2742,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Gralise 300mg tab",
       "Neurotin 400mg cap",
     ],
-    cat: "Anticonvulsivante / Dolor neuropático",
+    cat: "Anticonvulsivante / Dolor neuropÃ¡tico",
     dosis: "300-3600mg c/8h",
   },
   {
@@ -2753,7 +2753,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Pregabalina MK 75mg cap",
       "Lyrica 300mg cap",
     ],
-    cat: "Dolor neuropático / Anticonvulsivante",
+    cat: "Dolor neuropÃ¡tico / Anticonvulsivante",
     dosis: "75-300mg c/12h",
   },
   {
@@ -2763,18 +2763,18 @@ const MEDICAMENTOS_CO_BASE = [
       "Luminal 100mg tab",
       "Fenobarbital 200mg/mL amp",
     ],
-    cat: "Anticonvulsivante barbitúrico",
+    cat: "Anticonvulsivante barbitÃºrico",
     dosis: "60-180mg c/24h (noche)",
   },
   {
-    g: "Fenitoína",
+    g: "FenitoÃ­na",
     p: [
       "Dilantin 100mg cap",
-      "Fenitoína MK 100mg cap",
+      "FenitoÃ­na MK 100mg cap",
       "Epamin 100mg cap",
-      "Fenitoína 50mg/mL amp",
+      "FenitoÃ­na 50mg/mL amp",
     ],
-    cat: "Anticonvulsivante hidantoína",
+    cat: "Anticonvulsivante hidantoÃ­na",
     dosis: "200-400mg c/24h",
   },
   {
@@ -2797,7 +2797,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Alprazolam MK 0.25mg tab",
       "Xanax XR 0.5mg tab",
     ],
-    cat: "Benzodiazepina ansiolítica",
+    cat: "Benzodiazepina ansiolÃ­tica",
     dosis: "0.25-1mg c/8h",
   },
   {
@@ -2808,7 +2808,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Diazepam MK 5mg tab",
       "Diazepam 5mg/mL amp IV",
     ],
-    cat: "Benzodiazepina ansiolítica",
+    cat: "Benzodiazepina ansiolÃ­tica",
     dosis: "2-10mg c/8-12h",
   },
   {
@@ -2819,13 +2819,13 @@ const MEDICAMENTOS_CO_BASE = [
       "Lorazepam MK 1mg tab",
       "Lorax 2mg tab",
     ],
-    cat: "Benzodiazepina ansiolítica",
+    cat: "Benzodiazepina ansiolÃ­tica",
     dosis: "0.5-2mg c/12h",
   },
   {
     g: "Bromazepam",
     p: ["Lexotan 3mg tab", "Bromazepam MK 3mg tab", "Lexotanil 3mg tab"],
-    cat: "Benzodiazepina ansiolítica",
+    cat: "Benzodiazepina ansiolÃ­tica",
     dosis: "1.5-3mg c/8-12h",
   },
   {
@@ -2840,7 +2840,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Fluoxetina susp 20mg/5mL",
     ],
     cat: "ISRS antidepresivo",
-    dosis: "20-80mg c/24h mañana",
+    dosis: "20-80mg c/24h maÃ±ana",
   },
   {
     g: "Sertralina",
@@ -2897,16 +2897,16 @@ const MEDICAMENTOS_CO_BASE = [
   {
     g: "Duloxetina",
     p: ["Cymbalta 30mg cap", "Cymbalta 60mg cap", "Duloxetina MK 30mg cap"],
-    cat: "IRSN antidepresivo/dolor neuropático",
+    cat: "IRSN antidepresivo/dolor neuropÃ¡tico",
     dosis: "30-120mg c/24h",
   },
   {
-    g: "Bupropión",
+    g: "BupropiÃ³n",
     p: [
       "Wellbutrin SR 150mg tab",
       "Wellbutrin XL 300mg tab",
-      "Bupropión MK 150mg tab",
-      "Zyban 150mg (cesación tabaco)",
+      "BupropiÃ³n MK 150mg tab",
+      "Zyban 150mg (cesaciÃ³n tabaco)",
     ],
     cat: "Inhibidor NA/DA antidepresivo",
     dosis: "150-300mg c/24h",
@@ -2919,19 +2919,19 @@ const MEDICAMENTOS_CO_BASE = [
       "Amitriptilina 10mg tab",
       "Elavil 25mg tab",
     ],
-    cat: "Antidepresivo tricíclico",
+    cat: "Antidepresivo tricÃ­clico",
     dosis: "25-150mg c/24h noche",
   },
   {
     g: "Nortriptilina",
     p: ["Pamelor 25mg cap", "Nortriptilina MK 25mg cap", "Aventyl 25mg cap"],
-    cat: "Antidepresivo tricíclico",
+    cat: "Antidepresivo tricÃ­clico",
     dosis: "25-150mg c/24h noche",
   },
   {
     g: "Imipramina",
     p: ["Tofranil 25mg tab", "Imipramina MK 25mg tab", "Melipramine 25mg tab"],
-    cat: "Antidepresivo tricíclico",
+    cat: "Antidepresivo tricÃ­clico",
     dosis: "25-200mg c/24h",
   },
   {
@@ -2955,7 +2955,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Haldol 5mg/mL amp",
       "Haldol decanoato 100mg amp",
     ],
-    cat: "Antipsicótico típico",
+    cat: "AntipsicÃ³tico tÃ­pico",
     dosis: "2-10mg c/12-24h",
   },
   {
@@ -2967,7 +2967,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Risperdal M-Tab 1mg",
       "Risperdal Consta 25mg amp IM",
     ],
-    cat: "Antipsicótico atípico",
+    cat: "AntipsicÃ³tico atÃ­pico",
     dosis: "1-6mg c/12-24h",
   },
   {
@@ -2978,7 +2978,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Seroquel XR 200mg tab",
       "Quetiapina MK 100mg tab",
     ],
-    cat: "Antipsicótico atípico",
+    cat: "AntipsicÃ³tico atÃ­pico",
     dosis: "25-800mg c/12-24h",
   },
   {
@@ -2989,14 +2989,14 @@ const MEDICAMENTOS_CO_BASE = [
       "Olanzapina MK 5mg tab",
       "Zyprexa Velotab 10mg ODT",
     ],
-    cat: "Antipsicótico atípico",
+    cat: "AntipsicÃ³tico atÃ­pico",
     dosis: "5-20mg c/24h",
   },
   {
     g: "Clozapina",
     p: ["Clozaril 100mg tab", "Clozapina MK 100mg tab", "Leponex 100mg tab"],
-    cat: "Antipsicótico atípico clásico",
-    dosis: "150-450mg c/24h (monitoreo hematológico)",
+    cat: "AntipsicÃ³tico atÃ­pico clÃ¡sico",
+    dosis: "150-450mg c/24h (monitoreo hematolÃ³gico)",
   },
   {
     g: "Aripiprazol",
@@ -3006,7 +3006,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Abilify 15mg tab",
       "Abilify 1mg/mL sol oral",
     ],
-    cat: "Antipsicótico parcial D2",
+    cat: "AntipsicÃ³tico parcial D2",
     dosis: "10-30mg c/24h",
   },
   {
@@ -3016,7 +3016,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Paliperidona MK 3mg tab CR",
       "Invega Sustenna 50mg amp IM",
     ],
-    cat: "Antipsicótico atípico",
+    cat: "AntipsicÃ³tico atÃ­pico",
     dosis: "3-12mg c/24h",
   },
   {
@@ -3027,13 +3027,13 @@ const MEDICAMENTOS_CO_BASE = [
       "Stilnox 10mg tab",
       "Ambien CR 12.5mg",
     ],
-    cat: "Hipnótico no BZD",
+    cat: "HipnÃ³tico no BZD",
     dosis: "10mg antes dormir",
   },
   {
     g: "Zopiclona",
     p: ["Imovane 7.5mg tab", "Zopiclona MK 7.5mg tab", "Limovan 7.5mg tab"],
-    cat: "Hipnótico",
+    cat: "HipnÃ³tico",
     dosis: "7.5mg antes dormir",
   },
   {
@@ -3061,7 +3061,7 @@ const MEDICAMENTOS_CO_BASE = [
   {
     g: "Cinnarizina",
     p: ["Stugeron 25mg tab", "Cinnarizina MK 25mg tab", "Cinnarizina 75mg tab"],
-    cat: "Antihistamínico/antivertiginoso",
+    cat: "AntihistamÃ­nico/antivertiginoso",
     dosis: "25mg c/8h",
   },
   {
@@ -3073,7 +3073,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Hyoscine parche 1.5mg",
       "Transderm Scop parche",
     ],
-    cat: "Anticolinérgico antiespasmódico",
+    cat: "AnticolinÃ©rgico antiespasmÃ³dico",
     dosis: "10-20mg c/6-8h",
   },
   {
@@ -3104,26 +3104,26 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "1.5-6mg c/12h o parche",
   },
   {
-    g: "Sumatriptán",
+    g: "SumatriptÃ¡n",
     p: [
       "Imitrex 50mg tab",
-      "Sumatriptán MK 50mg tab",
+      "SumatriptÃ¡n MK 50mg tab",
       "Imigran 100mg tab",
       "Imitrex nasal spray",
     ],
-    cat: "Triptán antimigrañoso",
-    dosis: "50-100mg SOS (máx 2 dosis/día)",
+    cat: "TriptÃ¡n antimigraÃ±oso",
+    dosis: "50-100mg SOS (mÃ¡x 2 dosis/dÃ­a)",
   },
   {
-    g: "Rizatriptán",
-    p: ["Maxalt 10mg tab", "Rizatriptán MK 10mg tab", "Maxalt-MLT 10mg ODT"],
-    cat: "Triptán antimigrañoso",
-    dosis: "10mg SOS (máx 30mg/día)",
+    g: "RizatriptÃ¡n",
+    p: ["Maxalt 10mg tab", "RizatriptÃ¡n MK 10mg tab", "Maxalt-MLT 10mg ODT"],
+    cat: "TriptÃ¡n antimigraÃ±oso",
+    dosis: "10mg SOS (mÃ¡x 30mg/dÃ­a)",
   },
   {
-    g: "Topiramato (migraña)",
+    g: "Topiramato (migraÃ±a)",
     p: ["Topamax 25mg cap", "Topiramato MK 25mg tab"],
-    cat: "Profilaxis migraña",
+    cat: "Profilaxis migraÃ±a",
     dosis: "25-100mg c/12h",
   },
   {
@@ -3137,7 +3137,7 @@ const MEDICAMENTOS_CO_BASE = [
     cat: "Betabloqueador no selectivo",
     dosis: "20-80mg c/12h",
   },
-  // ── REUMATOLÓGICOS / MÚSCULO-ESQUELÉTICOS ────────────────────────────────
+  // ââ REUMATOLÃGICOS / MÃSCULO-ESQUELÃTICOS ââââââââââââââââââââââââââââââââ
   {
     g: "Prednisona",
     p: [
@@ -3152,8 +3152,8 @@ const MEDICAMENTOS_CO_BASE = [
   {
     g: "Dexametasona",
     p: [
-      "Decadrón 4mg tab",
-      "Decadrón 8mg/2mL amp",
+      "DecadrÃ³n 4mg tab",
+      "DecadrÃ³n 8mg/2mL amp",
       "Dexametasona MK 4mg tab",
       "Dexametasona 4mg/mL amp",
       "Maxidex colirio 0.1%",
@@ -3169,7 +3169,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Diprophos 5mg/1mL amp",
       "Betanovate crema",
     ],
-    cat: "Corticoide IM/tópico potente",
+    cat: "Corticoide IM/tÃ³pico potente",
     dosis: "4-6mg IM c/24-48h",
   },
   {
@@ -3192,7 +3192,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Depo-Medrol 40mg/mL amp",
     ],
     cat: "Corticoide parenteral/oral",
-    dosis: "4-1000mg según indicación",
+    dosis: "4-1000mg segÃºn indicaciÃ³n",
   },
   {
     g: "Ciclobenzaprina",
@@ -3204,7 +3204,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Cicloflexan 10mg tab",
     ],
     cat: "Relajante muscular central",
-    dosis: "5-10mg c/8h máx 2-3 semanas",
+    dosis: "5-10mg c/8h mÃ¡x 2-3 semanas",
   },
   {
     g: "Tizanidina",
@@ -3214,14 +3214,14 @@ const MEDICAMENTOS_CO_BASE = [
       "Sirdalud 2mg tab",
       "Sirdalud 4mg tab",
     ],
-    cat: "Relajante muscular α2 agonista",
+    cat: "Relajante muscular Î±2 agonista",
     dosis: "2-8mg c/6-8h",
   },
   {
     g: "Carisoprodol",
     p: ["Soma 350mg tab", "Carisoprodol MK 350mg tab", "Dorixina Relax tab"],
     cat: "Relajante muscular central",
-    dosis: "250-350mg c/8h máx 2-3 semanas",
+    dosis: "250-350mg c/8h mÃ¡x 2-3 semanas",
   },
   {
     g: "Metocarbamol",
@@ -3241,7 +3241,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Metotrexato 10mg/mL amp",
     ],
     cat: "DMARD antiinflamatorio",
-    dosis: "7.5-25mg c/semana + ácido fólico",
+    dosis: "7.5-25mg c/semana + Ã¡cido fÃ³lico",
   },
   {
     g: "Hidroxicloroquina",
@@ -3250,7 +3250,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Hidroxicloroquina MK 200mg tab",
       "Quensyl 200mg tab",
     ],
-    cat: "DMARD antipalúdico",
+    cat: "DMARD antipalÃºdico",
     dosis: "200-400mg c/24h",
   },
   {
@@ -3270,24 +3270,24 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "1-3g c/24h (dividido)",
   },
   {
-    g: "Capsaicina tópica",
-    p: ["Zostrix 0.025% crema", "Capsaicina MK crema", "Capsin loción 0.025%"],
-    cat: "Analgésico tópico capsaicinoide",
+    g: "Capsaicina tÃ³pica",
+    p: ["Zostrix 0.025% crema", "Capsaicina MK crema", "Capsin lociÃ³n 0.025%"],
+    cat: "AnalgÃ©sico tÃ³pico capsaicinoide",
     dosis: "Aplicar c/8h zona dolorosa",
   },
   {
-    g: "Lidocaína tópica",
+    g: "LidocaÃ­na tÃ³pica",
     p: [
       "EMLA crema 2.5%",
-      "Lidocaína gel 2%",
-      "Xylocaína gel 2%",
-      "Lidocaína spray",
-      "Xilocaína jalea 2%",
+      "LidocaÃ­na gel 2%",
+      "XylocaÃ­na gel 2%",
+      "LidocaÃ­na spray",
+      "XilocaÃ­na jalea 2%",
     ],
-    cat: "Anestésico local tópico",
+    cat: "AnestÃ©sico local tÃ³pico",
     dosis: "Aplicar 1h antes procedimiento",
   },
-  // ── UROLÓGICOS / GINECOLÓGICOS ────────────────────────────────────────────
+  // ââ UROLÃGICOS / GINECOLÃGICOS ââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Tamsulosina",
     p: [
@@ -3296,7 +3296,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Urimax 0.4mg cap CR",
       "Secotex 0.4mg cap",
     ],
-    cat: "α1-bloqueante HBP",
+    cat: "Î±1-bloqueante HBP",
     dosis: "0.4mg c/24h desayuno",
   },
   {
@@ -3306,7 +3306,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Dutasterida MK 0.5mg cap",
       "Duodart 0.5/0.4mg cap",
     ],
-    cat: "5α-reductasa inhibidor HBP",
+    cat: "5Î±-reductasa inhibidor HBP",
     dosis: "0.5mg c/24h",
   },
   {
@@ -3316,7 +3316,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Propecia 1mg tab (alopecia)",
       "Finasterida MK 5mg tab",
     ],
-    cat: "5α-reductasa inhibidor",
+    cat: "5Î±-reductasa inhibidor",
     dosis: "5mg c/24h (HBP)",
   },
   {
@@ -3347,18 +3347,18 @@ const MEDICAMENTOS_CO_BASE = [
       "Loette (LNG/EE 20mcg)",
     ],
     cat: "Anticonceptivo hormonal combinado",
-    dosis: "1 tab c/24h 21 días activos",
+    dosis: "1 tab c/24h 21 dÃ­as activos",
   },
   {
     g: "Levonorgestrel",
     p: [
       "Plan B 0.75mg tab",
       "Postinor-2 0.75mg tab",
-      "Levonorgestrel 1.5mg tab (dosis única)",
+      "Levonorgestrel 1.5mg tab (dosis Ãºnica)",
       "DIU Mirena 52mg",
     ],
-    cat: "Progestágeno anticoncepción",
-    dosis: "1.5mg dosis única < 72h",
+    cat: "ProgestÃ¡geno anticoncepciÃ³n",
+    dosis: "1.5mg dosis Ãºnica < 72h",
   },
   {
     g: "Progesterona micronizada",
@@ -3367,16 +3367,16 @@ const MEDICAMENTOS_CO_BASE = [
       "Utrogestan 200mg cap",
       "Cyclogest 400mg supos",
     ],
-    cat: "Progestágeno natural",
+    cat: "ProgestÃ¡geno natural",
     dosis: "100-400mg c/24h vaginal",
   },
   {
     g: "Oxitocina",
     p: ["Syntocinon 10UI/mL amp", "Oxitocina MK 10UI amp"],
-    cat: "Oxitócico",
-    dosis: "Según protocolo obstétrico",
+    cat: "OxitÃ³cico",
+    dosis: "SegÃºn protocolo obstÃ©trico",
   },
-  // ── DERMATOLÓGICOS ────────────────────────────────────────────────────────
+  // ââ DERMATOLÃGICOS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Hidrocortisona crema",
     p: [
@@ -3385,13 +3385,13 @@ const MEDICAMENTOS_CO_BASE = [
       "Cortaid crema 1%",
       "Locoid crema 0.1%",
     ],
-    cat: "Corticoide tópico baja potencia",
-    dosis: "Aplicar 2-3 veces/día",
+    cat: "Corticoide tÃ³pico baja potencia",
+    dosis: "Aplicar 2-3 veces/dÃ­a",
   },
   {
-    g: "Triamcinolona tópica",
+    g: "Triamcinolona tÃ³pica",
     p: ["Kenalog crema 0.1%", "Triamcinolona MK crema 0.1%", "Kenacomb crema"],
-    cat: "Corticoide tópico media potencia",
+    cat: "Corticoide tÃ³pico media potencia",
     dosis: "Aplicar c/12h",
   },
   {
@@ -3401,59 +3401,59 @@ const MEDICAMENTOS_CO_BASE = [
       "Clobetasol MK 0.05% crema",
       "Dermovate 0.05% crema",
     ],
-    cat: "Corticoide tópico alta potencia",
-    dosis: "Aplicar c/12h máx 2 semanas",
+    cat: "Corticoide tÃ³pico alta potencia",
+    dosis: "Aplicar c/12h mÃ¡x 2 semanas",
   },
   {
     g: "Mupirocina",
     p: [
-      "Bactroban 2% ungüento",
-      "Mupirocina MK 2% ungüento",
+      "Bactroban 2% ungÃ¼ento",
+      "Mupirocina MK 2% ungÃ¼ento",
       "Bactroban nasal 2%",
     ],
-    cat: "Antibiótico tópico",
-    dosis: "Aplicar c/8h x5-7 días",
+    cat: "AntibiÃ³tico tÃ³pico",
+    dosis: "Aplicar c/8h x5-7 dÃ­as",
   },
   {
     g: "Permetrina",
     p: [
       "Elimite 5% crema",
-      "Nix 1% loción",
+      "Nix 1% lociÃ³n",
       "Permetrina MK 5% crema",
-      "Quellada loción",
+      "Quellada lociÃ³n",
     ],
-    cat: "Antiparasitario tópico sarna/piojos",
-    dosis: "Aplicar toda piel lavar 8-14h después",
+    cat: "Antiparasitario tÃ³pico sarna/piojos",
+    dosis: "Aplicar toda piel lavar 8-14h despuÃ©s",
   },
   {
     g: "Adapaleno",
     p: ["Differin 0.1% crema", "Differin 0.3% gel", "Adapaleno MK 0.1% crema"],
-    cat: "Retinoide tópico acné",
-    dosis: "Aplicar 1 vez/día noche",
+    cat: "Retinoide tÃ³pico acnÃ©",
+    dosis: "Aplicar 1 vez/dÃ­a noche",
   },
   {
-    g: "Tretinoína",
+    g: "TretinoÃ­na",
     p: [
       "Retin-A 0.025% crema",
       "Retin-A 0.05% gel",
-      "Tretinoína MK 0.05% crema",
+      "TretinoÃ­na MK 0.05% crema",
     ],
-    cat: "Retinoide tópico acné/antienvejecimiento",
-    dosis: "Aplicar 1 vez/día noche",
+    cat: "Retinoide tÃ³pico acnÃ©/antienvejecimiento",
+    dosis: "Aplicar 1 vez/dÃ­a noche",
   },
   {
-    g: "Ácido azelaico",
-    p: ["Finacea gel 15%", "Skinoren crema 20%", "Ácido azelaico MK 20%"],
-    cat: "Antibacteriano/queratolítico tópico",
+    g: "Ãcido azelaico",
+    p: ["Finacea gel 15%", "Skinoren crema 20%", "Ãcido azelaico MK 20%"],
+    cat: "Antibacteriano/queratolÃ­tico tÃ³pico",
     dosis: "Aplicar c/12h",
   },
   {
-    g: "Isotretinoína oral",
-    p: ["Roacutan 20mg cap", "Isotretinoína MK 20mg cap", "Accutane 40mg cap"],
-    cat: "Retinoide oral sistémico (acné grave)",
-    dosis: "0.5-1mg/kg/día (bajo control dermatología)",
+    g: "IsotretinoÃ­na oral",
+    p: ["Roacutan 20mg cap", "IsotretinoÃ­na MK 20mg cap", "Accutane 40mg cap"],
+    cat: "Retinoide oral sistÃ©mico (acnÃ© grave)",
+    dosis: "0.5-1mg/kg/dÃ­a (bajo control dermatologÃ­a)",
   },
-  // ── ANTIHISTAMÍNICOS ──────────────────────────────────────────────────────
+  // ââ ANTIHISTAMÃNICOS ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     g: "Loratadina",
     p: [
@@ -3463,7 +3463,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Claritin D tab",
       "Loratadina susp 5mg/5mL",
     ],
-    cat: "Antihistamínico 2G no sedante",
+    cat: "AntihistamÃ­nico 2G no sedante",
     dosis: "10mg c/24h",
   },
   {
@@ -3475,7 +3475,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Alerlisin 10mg tab",
       "Cetirizina sol 5mg/5mL",
     ],
-    cat: "Antihistamínico 2G",
+    cat: "AntihistamÃ­nico 2G",
     dosis: "10mg c/24h noche",
   },
   {
@@ -3486,19 +3486,19 @@ const MEDICAMENTOS_CO_BASE = [
       "Allegra 60mg tab",
       "Telfast 120mg tab",
     ],
-    cat: "Antihistamínico 2G no sedante",
+    cat: "AntihistamÃ­nico 2G no sedante",
     dosis: "60mg c/12h o 180mg c/24h",
   },
   {
     g: "Levocetirizina",
     p: ["Xyzal 5mg tab", "Levocetirizina MK 5mg tab"],
-    cat: "Antihistamínico 2G",
+    cat: "AntihistamÃ­nico 2G",
     dosis: "5mg c/24h noche",
   },
   {
     g: "Desloratadina",
     p: ["Aerius 5mg tab", "Desloratadina MK 5mg tab", "Clarinex 5mg tab"],
-    cat: "Antihistamínico 2G",
+    cat: "AntihistamÃ­nico 2G",
     dosis: "5mg c/24h",
   },
   {
@@ -3509,7 +3509,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Benadryl PM cap",
       "Difenhidramina iny 50mg/mL",
     ],
-    cat: "Antihistamínico 1G sedante",
+    cat: "AntihistamÃ­nico 1G sedante",
     dosis: "25-50mg c/6-8h",
   },
   {
@@ -3519,23 +3519,23 @@ const MEDICAMENTOS_CO_BASE = [
       "Clorfeniramina MK 4mg tab",
       "Polaramine 2mg tab",
     ],
-    cat: "Antihistamínico 1G sedante",
+    cat: "AntihistamÃ­nico 1G sedante",
     dosis: "4mg c/6-8h",
   },
   {
     g: "Hidroxizina",
     p: ["Atarax 25mg tab", "Hidroxizina MK 25mg tab", "Vistaril 25mg cap"],
-    cat: "Antihistamínico 1G ansiolítico",
+    cat: "AntihistamÃ­nico 1G ansiolÃ­tico",
     dosis: "25-100mg c/8h",
   },
-  // ── VITAMINAS Y SUPLEMENTOS ───────────────────────────────────────────────
+  // ââ VITAMINAS Y SUPLEMENTOS âââââââââââââââââââââââââââââââââââââââââââââââ
   {
-    g: "Ácido Fólico",
+    g: "Ãcido FÃ³lico",
     p: [
       "Folidex 1mg tab",
-      "Ácido Fólico MK 1mg tab",
-      "Folacín 5mg tab",
-      "Ácido Fólico 0.4mg prenatal",
+      "Ãcido FÃ³lico MK 1mg tab",
+      "FolacÃ­n 5mg tab",
+      "Ãcido FÃ³lico 0.4mg prenatal",
     ],
     cat: "Vitamina B9",
     dosis: "0.4-5mg c/24h",
@@ -3598,7 +3598,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Becozyme tab",
     ],
     cat: "Vitaminas grupo B",
-    dosis: "1 tab c/24h o amp IM c/7 días",
+    dosis: "1 tab c/24h o amp IM c/7 dÃ­as",
   },
   {
     g: "Vitamina C",
@@ -3606,7 +3606,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Cevalin 500mg tab efervescente",
       "Vitamina C MK 500mg tab",
       "Redoxon 1g tab efervescente",
-      "Cebión 500mg tab",
+      "CebiÃ³n 500mg tab",
     ],
     cat: "Vitamina C antioxidante",
     dosis: "500-2000mg c/24h",
@@ -3642,7 +3642,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Eskimo 1g cap",
       "Lovaza 1g cap",
     ],
-    cat: "Suplemento lipídico cardiosaludable",
+    cat: "Suplemento lipÃ­dico cardiosaludable",
     dosis: "1-4g c/24h con comidas",
   },
   {
@@ -3653,39 +3653,39 @@ const MEDICAMENTOS_CO_BASE = [
       "Iron Sucrose MK 100mg amp",
     ],
     cat: "Hierro parenteral",
-    dosis: "Según fórmula déficit hierro IV",
+    dosis: "SegÃºn fÃ³rmula dÃ©ficit hierro IV",
   },
-  // ── OFTALMOLÓGICOS ────────────────────────────────────────────────────────
+  // ââ OFTALMOLÃGICOS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
-    g: "Gentamicina oftálmica",
+    g: "Gentamicina oftÃ¡lmica",
     p: [
       "Gentamicina colirio 0.3%",
       "Garamycin colirio",
-      "Gentamicina ungüento ocular",
+      "Gentamicina ungÃ¼ento ocular",
     ],
-    cat: "Antibiótico ocular",
+    cat: "AntibiÃ³tico ocular",
     dosis: "1-2 gotas c/4h",
   },
   {
-    g: "Ciprofloxacino oftálmico",
+    g: "Ciprofloxacino oftÃ¡lmico",
     p: ["Ciloxan colirio 0.3%", "Ciprofloxacino colirio 0.3%"],
-    cat: "Antibiótico ocular FQ",
+    cat: "AntibiÃ³tico ocular FQ",
     dosis: "1-2 gotas c/2-4h",
   },
   {
-    g: "Tobramicina oftálmica",
+    g: "Tobramicina oftÃ¡lmica",
     p: ["Tobrex 0.3% gotas", "Tobramicina MK 0.3% gotas"],
-    cat: "Antibiótico ocular aminoglucósido",
+    cat: "AntibiÃ³tico ocular aminoglucÃ³sido",
     dosis: "1-2 gotas c/4h",
   },
   {
-    g: "Lágrimas Artificiales",
+    g: "LÃ¡grimas Artificiales",
     p: [
       "Systane Ultra gotas",
       "Tears Naturale gotas",
       "Optive gotas",
       "Artelac gotas",
-      "Hialuronato sódico 0.2% colirio",
+      "Hialuronato sÃ³dico 0.2% colirio",
       "Visine Tears",
     ],
     cat: "Lubricante ocular",
@@ -3694,11 +3694,11 @@ const MEDICAMENTOS_CO_BASE = [
   {
     g: "Latanoprost",
     p: ["Xalatan 50mcg/mL gotas", "Latanoprost MK 0.005% gotas"],
-    cat: "Análogo prostanoide glaucoma",
+    cat: "AnÃ¡logo prostanoide glaucoma",
     dosis: "1 gota c/24h noche",
   },
   {
-    g: "Timolol oftálmico",
+    g: "Timolol oftÃ¡lmico",
     p: ["Timoptol 0.25% gotas", "Timoptol 0.5% gotas", "Timolol MK 0.5% gotas"],
     cat: "Betabloqueante ocular glaucoma",
     dosis: "1 gota c/12h",
@@ -3710,12 +3710,12 @@ const MEDICAMENTOS_CO_BASE = [
       "Dorzolamida MK 2% gotas",
       "Cosopt (dorzo+timolol) gotas",
     ],
-    cat: "Inhibidor anhidrasa carbónica ocular",
+    cat: "Inhibidor anhidrasa carbÃ³nica ocular",
     dosis: "1 gota c/8h",
   },
-  // ── MISCELÁNEOS ───────────────────────────────────────────────────────────
+  // ââ MISCELÃNEOS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
-    g: "Solución Salina 0.9%",
+    g: "SoluciÃ³n Salina 0.9%",
     p: [
       "SSN 100mL IV",
       "SSN 500mL IV",
@@ -3723,30 +3723,30 @@ const MEDICAMENTOS_CO_BASE = [
       "ClNa 0.9% spray nasal",
       "SSN neb 3mL",
     ],
-    cat: "Electrolítica isotónica/diluyente",
-    dosis: "Según indicación",
+    cat: "ElectrolÃ­tica isotÃ³nica/diluyente",
+    dosis: "SegÃºn indicaciÃ³n",
   },
   {
     g: "Suero Oral (SRO)",
     p: [
       "Pedialyte polvo",
-      "Sales rehidratación oral MK sob",
+      "Sales rehidrataciÃ³n oral MK sob",
       "Hidrasec sobres",
       "Electrolit Plus sobre",
       "ORS polvo WHO",
     ],
     cat: "Rehidratante oral",
-    dosis: "Según nivel deshidratación AIEPI",
+    dosis: "SegÃºn nivel deshidrataciÃ³n AIEPI",
   },
   {
-    g: "N-Acetilcisteína IV",
+    g: "N-AcetilcisteÃ­na IV",
     p: [
       "Fluimucil 600mg tab efervescente",
-      "N-Acetilcisteína MK 600mg sob",
-      "NAC 150mg/mL amp IV (antídoto)",
+      "N-AcetilcisteÃ­na MK 600mg sob",
+      "NAC 150mg/mL amp IV (antÃ­doto)",
     ],
-    cat: "Antídoto paracetamol/nefroprotector",
-    dosis: "150mg/kg IV x15 min luego infusión",
+    cat: "AntÃ­doto paracetamol/nefroprotector",
+    dosis: "150mg/kg IV x15 min luego infusiÃ³n",
   },
   {
     g: "Naloxona",
@@ -3755,19 +3755,19 @@ const MEDICAMENTOS_CO_BASE = [
       "Naloxona MK 0.4mg amp",
       "Narcan 4mg intranasal",
     ],
-    cat: "Antídoto opioides",
+    cat: "AntÃ­doto opioides",
     dosis: "0.4-2mg IV/IM/IN; repetir c/2-3min SOS",
   },
   {
     g: "Flumazenil",
     p: ["Anexate 0.5mg/5mL amp", "Flumazenil MK 1mg/10mL amp"],
-    cat: "Antídoto benzodiazepinas",
+    cat: "AntÃ­doto benzodiazepinas",
     dosis: "0.2mg IV c/60s hasta respuesta",
   },
   {
-    g: "Carbón Activado",
+    g: "CarbÃ³n Activado",
     p: [
-      "Carbón Activado 25g polvo oral",
+      "CarbÃ³n Activado 25g polvo oral",
       "Norit 200mg tab",
       "Toxicarb polvo oral",
     ],
@@ -3775,14 +3775,14 @@ const MEDICAMENTOS_CO_BASE = [
     dosis: "25-50g VO adulto urgencias",
   },
   {
-    g: "Toxoide Tetánico",
+    g: "Toxoide TetÃ¡nico",
     p: [
       "Td adulto 0.5mL amp IM",
-      "Toxoide tetánico 0.5mL",
+      "Toxoide tetÃ¡nico 0.5mL",
       "Boostrix 0.5mL (Tdap)",
     ],
     cat: "Vacuna bacteriana",
-    dosis: "0.5mL IM; refuerzo c/10 años",
+    dosis: "0.5mL IM; refuerzo c/10 aÃ±os",
   },
   {
     g: "Vacuna Influenza",
@@ -3793,7 +3793,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Fluarix 0.5mL iny",
     ],
     cat: "Vacuna viral influenza",
-    dosis: "0.5mL IM c/año",
+    dosis: "0.5mL IM c/aÃ±o",
   },
   {
     g: "Alendronato",
@@ -3804,12 +3804,12 @@ const MEDICAMENTOS_CO_BASE = [
       "Fosamax Plus (con vitamina D)",
     ],
     cat: "Bifosfonato osteoporosis",
-    dosis: "70mg c/semana mañana ayunas",
+    dosis: "70mg c/semana maÃ±ana ayunas",
   },
   {
     g: "Raloxifeno",
     p: ["Evista 60mg tab", "Raloxifeno MK 60mg tab"],
-    cat: "SERM osteoporosis prevención",
+    cat: "SERM osteoporosis prevenciÃ³n",
     dosis: "60mg c/24h",
   },
   {
@@ -3823,32 +3823,32 @@ const MEDICAMENTOS_CO_BASE = [
     p: [
       "Zometa 4mg/5mL IV",
       "Actonel 5mg/mL IV",
-      "Ácido Zoledrónico MK 5mg IV",
+      "Ãcido ZoledrÃ³nico MK 5mg IV",
     ],
     cat: "Bifosfonato IV osteoporosis severa",
-    dosis: "5mg IV 1 vez/año",
+    dosis: "5mg IV 1 vez/aÃ±o",
   },
   {
     g: "Calcio Gluconato IV",
     p: ["Calcio Gluconato 10% amp 10mL", "Calcio Gluconato MK 10% amp"],
-    cat: "Suplemento IV mineral/antídoto hiperpotasemia",
+    cat: "Suplemento IV mineral/antÃ­doto hiperpotasemia",
     dosis: "10-20mL IV lento urgencias",
   },
   {
     g: "Potasio Oral",
     p: ["Potasio Cloruro 20mEq sol oral", "KCl 10% amp", "Kaon-Cl 8mEq CR tab"],
     cat: "Suplemento electrolito potasio",
-    dosis: "20-80mEq/día VO dividido",
+    dosis: "20-80mEq/dÃ­a VO dividido",
   },
   {
-    g: "Bicarbonato Sódico",
+    g: "Bicarbonato SÃ³dico",
     p: [
-      "Bicarbonato sódico 8.4% amp",
+      "Bicarbonato sÃ³dico 8.4% amp",
       "NaHCO3 MK 500mg tab",
       "NaHCO3 7.5% amp",
     ],
-    cat: "Alcalinizante/corrección acidosis",
-    dosis: "Según gasometría o 500mg-1g c/8h VO",
+    cat: "Alcalinizante/correcciÃ³n acidosis",
+    dosis: "SegÃºn gasometrÃ­a o 500mg-1g c/8h VO",
   },
   {
     g: "Desmopresina",
@@ -3858,7 +3858,7 @@ const MEDICAMENTOS_CO_BASE = [
       "Nocdurna 25mcg SL",
       "Desmopresina MK 0.2mg tab",
     ],
-    cat: "Análogo ADH (enuresis/DI)",
+    cat: "AnÃ¡logo ADH (enuresis/DI)",
     dosis: "0.1-0.4mg c/24h oral",
   },
   {
@@ -3874,14 +3874,14 @@ const MEDICAMENTOS_CO_BASE = [
   {
     g: "Sulfato de Magnesio",
     p: ["MgSO4 20% amp 10mL", "MgSO4 50% amp 10mL", "Sulfato Mg MK 20% amp"],
-    cat: "Tocolítico/anticonvulsivante eclampsia",
-    dosis: "4g IV carga + 1-2g/h infusión",
+    cat: "TocolÃ­tico/anticonvulsivante eclampsia",
+    dosis: "4g IV carga + 1-2g/h infusiÃ³n",
   },
   {
     g: "Oxitocina",
     p: ["Syntocinon 10UI/mL amp", "Oxitocina MK 10UI amp"],
-    cat: "Oxitócico",
-    dosis: "Según protocolo obstétrico",
+    cat: "OxitÃ³cico",
+    dosis: "SegÃºn protocolo obstÃ©trico",
   },
   {
     g: "Testosterona",
@@ -3891,13 +3891,13 @@ const MEDICAMENTOS_CO_BASE = [
       "Testogel sobre 50mg",
       "Testosterona undecanoato 1000mg amp",
     ],
-    cat: "Andrógeno TRT",
-    dosis: "Según protocolo especialista",
+    cat: "AndrÃ³geno TRT",
+    dosis: "SegÃºn protocolo especialista",
   },
   {
     g: "Tibolona",
     p: ["Livial 2.5mg tab", "Tibolona MK 2.5mg tab"],
-    cat: "Esteroide sintético menopausia",
+    cat: "Esteroide sintÃ©tico menopausia",
     dosis: "2.5mg c/24h",
   },
   {
@@ -3914,178 +3914,178 @@ const MEDICAMENTOS_CO_BASE = [
 const getAllMeds = () => [...MEDICAMENTOS_CO_BASE, ...getCustomMeds()];
 const MEDICAMENTOS_CO = MEDICAMENTOS_CO_BASE; // Backward compat
 // ==========================================
-// CATÁLOGO DE DERIVACIONES// ==========================================
-// CATÁLOGO DE DERIVACIONES / INTERCONSULTAS
+// CATÃLOGO DE DERIVACIONES// ==========================================
+// CATÃLOGO DE DERIVACIONES / INTERCONSULTAS
 // ==========================================
 const DERIVACIONES_CATALOG = [
   {
     id: "d_med_trab",
     esp: "Medicina del Trabajo",
     motivo:
-      "Valoración de aptitud laboral, restricciones, seguimiento ocupacional",
+      "ValoraciÃ³n de aptitud laboral, restricciones, seguimiento ocupacional",
     tipo: "Ocupacional",
   },
   {
     id: "d_fisiat",
-    esp: "Fisiatría y Rehabilitación",
+    esp: "FisiatrÃ­a y RehabilitaciÃ³n",
     motivo:
-      "Rehabilitación funcional, valoración incapacidad, prescripción ortesis",
-    tipo: "Rehabilitación",
+      "RehabilitaciÃ³n funcional, valoraciÃ³n incapacidad, prescripciÃ³n ortesis",
+    tipo: "RehabilitaciÃ³n",
   },
   {
     id: "d_fisio",
     esp: "Fisioterapia",
-    motivo: "Rehabilitación músculoesquelética, manejo del dolor, movilidad",
-    tipo: "Rehabilitación",
+    motivo: "RehabilitaciÃ³n mÃºsculoesquelÃ©tica, manejo del dolor, movilidad",
+    tipo: "RehabilitaciÃ³n",
   },
   {
     id: "d_orto",
-    esp: "Ortopedia y Traumatología",
-    motivo: "Patología osteoarticular, fracturas, cirugía ortopédica",
-    tipo: "Quirúrgica",
+    esp: "Ortopedia y TraumatologÃ­a",
+    motivo: "PatologÃ­a osteoarticular, fracturas, cirugÃ­a ortopÃ©dica",
+    tipo: "QuirÃºrgica",
   },
   {
     id: "d_neuro",
-    esp: "Neurología",
-    motivo: "Cefalea crónica, convulsiones, neuropatías periféricas, mareo",
-    tipo: "Especialidad médica",
+    esp: "NeurologÃ­a",
+    motivo: "Cefalea crÃ³nica, convulsiones, neuropatÃ­as perifÃ©ricas, mareo",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_cardio",
-    esp: "Cardiología",
+    esp: "CardiologÃ­a",
     motivo:
-      "HTA no controlada, arritmias, dolor torácico, valoración cardiovascular",
-    tipo: "Especialidad médica",
+      "HTA no controlada, arritmias, dolor torÃ¡cico, valoraciÃ³n cardiovascular",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_neumo",
-    esp: "Neumología",
+    esp: "NeumologÃ­a",
     motivo:
-      "EPOC, asma grave, patología respiratoria ocupacional, espirometría",
-    tipo: "Especialidad médica",
+      "EPOC, asma grave, patologÃ­a respiratoria ocupacional, espirometrÃ­a",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_gastro",
-    esp: "Gastroenterología",
-    motivo: "Patología digestiva crónica, endoscopia, hepatopatía",
-    tipo: "Especialidad médica",
+    esp: "GastroenterologÃ­a",
+    motivo: "PatologÃ­a digestiva crÃ³nica, endoscopia, hepatopatÃ­a",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_psiq",
-    esp: "Psiquiatría",
+    esp: "PsiquiatrÃ­a",
     motivo:
-      "Trastorno mental, depresión severa, ansiedad, estrés laboral crónico",
+      "Trastorno mental, depresiÃ³n severa, ansiedad, estrÃ©s laboral crÃ³nico",
     tipo: "Salud mental",
   },
   {
     id: "d_psico",
-    esp: "Psicología Clínica",
+    esp: "PsicologÃ­a ClÃ­nica",
     motivo: "Apoyo emocional, factores de riesgo psicosocial, burnout",
     tipo: "Salud mental",
   },
   {
     id: "d_oftal",
-    esp: "Oftalmología",
-    motivo: "Agudeza visual disminuida, patología ocular, adaptación lentes",
-    tipo: "Especialidad médica",
+    esp: "OftalmologÃ­a",
+    motivo: "Agudeza visual disminuida, patologÃ­a ocular, adaptaciÃ³n lentes",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_orl",
-    esp: "Otorrinolaringología",
-    motivo: "Hipoacusia, acúfenos, vértigo, patología ORL",
-    tipo: "Especialidad médica",
+    esp: "OtorrinolaringologÃ­a",
+    motivo: "Hipoacusia, acÃºfenos, vÃ©rtigo, patologÃ­a ORL",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_derm",
-    esp: "Dermatología",
+    esp: "DermatologÃ­a",
     motivo:
-      "Dermatosis ocupacional, lesiones cutáneas activas, alergias dérmicas",
-    tipo: "Especialidad médica",
+      "Dermatosis ocupacional, lesiones cutÃ¡neas activas, alergias dÃ©rmicas",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_endo",
-    esp: "Endocrinología",
+    esp: "EndocrinologÃ­a",
     motivo:
-      "DM descompensada, hipotiroidismo, obesidad severa, síndrome metabólico",
-    tipo: "Especialidad médica",
+      "DM descompensada, hipotiroidismo, obesidad severa, sÃ­ndrome metabÃ³lico",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_nefro",
-    esp: "Nefrología",
-    motivo: "IRC, proteinuria, HTA nefrogénica, alteración función renal",
-    tipo: "Especialidad médica",
+    esp: "NefrologÃ­a",
+    motivo: "IRC, proteinuria, HTA nefrogÃ©nica, alteraciÃ³n funciÃ³n renal",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_reuma",
-    esp: "Reumatología",
+    esp: "ReumatologÃ­a",
     motivo: "Artritis, lupus, espondiloartritis, enfermedades autoinmunes",
-    tipo: "Especialidad médica",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_nutri",
-    esp: "Nutrición y Dietética",
-    motivo: "Obesidad, DM2, dislipidemia, plan nutricional terapéutico",
-    tipo: "Apoyo diagnóstico",
+    esp: "NutriciÃ³n y DietÃ©tica",
+    motivo: "Obesidad, DM2, dislipidemia, plan nutricional terapÃ©utico",
+    tipo: "Apoyo diagnÃ³stico",
   },
   {
     id: "d_optom",
-    esp: "Optometría",
-    motivo: "Agudeza visual, adaptación de lentes correctivos, pantallas",
-    tipo: "Apoyo diagnóstico",
+    esp: "OptometrÃ­a",
+    motivo: "Agudeza visual, adaptaciÃ³n de lentes correctivos, pantallas",
+    tipo: "Apoyo diagnÃ³stico",
   },
   {
     id: "d_audio",
-    esp: "Audiología",
-    motivo: "Hipoacusia ocupacional, audiometría tonal, adaptación audífonos",
-    tipo: "Apoyo diagnóstico",
+    esp: "AudiologÃ­a",
+    motivo: "Hipoacusia ocupacional, audiometrÃ­a tonal, adaptaciÃ³n audÃ­fonos",
+    tipo: "Apoyo diagnÃ³stico",
   },
   {
     id: "d_cirgen",
-    esp: "Cirugía General",
-    motivo: "Hernias, patología abdominal, procedimientos quirúrgicos menores",
-    tipo: "Quirúrgica",
+    esp: "CirugÃ­a General",
+    motivo: "Hernias, patologÃ­a abdominal, procedimientos quirÃºrgicos menores",
+    tipo: "QuirÃºrgica",
   },
   {
     id: "d_gineco",
-    esp: "Ginecología y Obstetricia",
-    motivo: "Control prenatal, patología ginecológica, restricciones embarazo",
-    tipo: "Especialidad médica",
+    esp: "GinecologÃ­a y Obstetricia",
+    motivo: "Control prenatal, patologÃ­a ginecolÃ³gica, restricciones embarazo",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_urol",
-    esp: "Urología",
+    esp: "UrologÃ­a",
     motivo:
-      "Patología prostática, litiasis renal, infecciones urinarias recurrentes",
-    tipo: "Especialidad médica",
+      "PatologÃ­a prostÃ¡tica, litiasis renal, infecciones urinarias recurrentes",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_hemato",
-    esp: "Hematología",
-    motivo: "Anemia crónica, trombocitopenia, coagulopatías",
-    tipo: "Especialidad médica",
+    esp: "HematologÃ­a",
+    motivo: "Anemia crÃ³nica, trombocitopenia, coagulopatÃ­as",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_oncol",
-    esp: "Oncología",
+    esp: "OncologÃ­a",
     motivo: "Sospecha o seguimiento de neoplasias",
-    tipo: "Especialidad médica",
+    tipo: "Especialidad mÃ©dica",
   },
   {
     id: "d_trab_soc",
     esp: "Trabajo Social",
-    motivo: "Gestión de beneficios, calificación PCL, seguimiento social",
+    motivo: "GestiÃ³n de beneficios, calificaciÃ³n PCL, seguimiento social",
     tipo: "Apoyo social",
   },
   {
     id: "d_medlab",
     esp: "Medicina Laboral / ARL",
-    motivo: "Calificación origen enfermedad, PCL, reincorporación laboral",
+    motivo: "CalificaciÃ³n origen enfermedad, PCL, reincorporaciÃ³n laboral",
     tipo: "Ocupacional",
   },
   {
     id: "d_urgencias",
-    esp: "Urgencias / Hospitalización",
-    motivo: "Remisión urgente a nivel hospitalario",
+    esp: "Urgencias / HospitalizaciÃ³n",
+    motivo: "RemisiÃ³n urgente a nivel hospitalario",
     tipo: "Urgente",
   },
 ];
@@ -4093,7 +4093,7 @@ const DERIVACIONES_CATALOG = [
 const RESTRICCIONES_CATALOG = {
   miembroSuperior: {
     label: "Miembro Superior",
-    icon: "🦾",
+    icon: "ð¦¾",
     color: "blue",
     items: [
       {
@@ -4105,44 +4105,44 @@ const RESTRICCIONES_CATALOG = {
       {
         id: "ms_02",
         texto:
-          "No realizar movimientos repetitivos de muñeca/mano (>30 ciclos/min) con miembro afectado",
+          "No realizar movimientos repetitivos de muÃ±eca/mano (>30 ciclos/min) con miembro afectado",
         normativa: "GATISO-DME 2015",
       },
       {
         id: "ms_03",
         texto:
-          "No mantener postura estática de hombro en elevación superior a 60° por más de 2 horas continuas",
+          "No mantener postura estÃ¡tica de hombro en elevaciÃ³n superior a 60Â° por mÃ¡s de 2 horas continuas",
         normativa: "GTC-45 2012",
       },
       {
         id: "ms_04",
         texto:
-          "No uso de herramientas vibrátiles (martillos, pulidoras, taladros) con miembro afectado",
+          "No uso de herramientas vibrÃ¡tiles (martillos, pulidoras, taladros) con miembro afectado",
         normativa: "GATISO-DME 2015",
       },
       {
         id: "ms_05",
         texto:
-          "Rotación de actividades cada 45 minutos para tareas manuales repetitivas",
+          "RotaciÃ³n de actividades cada 45 minutos para tareas manuales repetitivas",
         normativa: "Res. 1843/2025",
       },
       {
         id: "ms_06",
         texto:
-          "No realizar pinza digital fina o prensión de fuerza sostenida por más de 15 minutos continuos",
+          "No realizar pinza digital fina o prensiÃ³n de fuerza sostenida por mÃ¡s de 15 minutos continuos",
         normativa: "GATISO-DME 2015",
       },
       {
         id: "ms_07",
         texto:
-          "Uso obligatorio de férula o soporte ortopédico durante jornada laboral en actividades de alto riesgo",
+          "Uso obligatorio de fÃ©rula o soporte ortopÃ©dico durante jornada laboral en actividades de alto riesgo",
         normativa: "Res. 0312/2019",
       },
     ],
   },
   columnaLumbar: {
     label: "Columna Lumbar",
-    icon: "🦴",
+    icon: "ð¦´",
     color: "orange",
     items: [
       {
@@ -4154,61 +4154,61 @@ const RESTRICCIONES_CATALOG = {
       {
         id: "cl_02",
         texto:
-          "No permanecer en posición de pie estática por más de 2 horas continuas sin descanso postural",
+          "No permanecer en posiciÃ³n de pie estÃ¡tica por mÃ¡s de 2 horas continuas sin descanso postural",
         normativa: "GTC-45 2012",
       },
       {
         id: "cl_03",
         texto:
-          "No permanecer en posición sedente por más de 1 hora continua sin cambio postural",
+          "No permanecer en posiciÃ³n sedente por mÃ¡s de 1 hora continua sin cambio postural",
         normativa: "GATISO-DME 2015",
       },
       {
         id: "cl_04",
-        texto: "No realizar flexión de tronco mayor a 45° con o sin carga",
+        texto: "No realizar flexiÃ³n de tronco mayor a 45Â° con o sin carga",
         normativa: "GATISO-DME 2015",
       },
       {
         id: "cl_05",
         texto:
-          "No realizar movimientos de torsión de columna lumbar bajo carga",
+          "No realizar movimientos de torsiÃ³n de columna lumbar bajo carga",
         normativa: "GATISO-DME 2015",
       },
       {
         id: "cl_06",
         texto:
-          "Uso obligatorio de cinturón lumbar en tareas de carga/descarga durante período de restricción",
+          "Uso obligatorio de cinturÃ³n lumbar en tareas de carga/descarga durante perÃ­odo de restricciÃ³n",
         normativa: "Res. 0312/2019",
       },
       {
         id: "cl_07",
         texto:
-          "Adaptar puesto de trabajo con silla ergonómica con soporte lumbar y reposapiés si aplica",
+          "Adaptar puesto de trabajo con silla ergonÃ³mica con soporte lumbar y reposapiÃ©s si aplica",
         normativa: "Res. 2400/1979 Art. 381",
       },
     ],
   },
   columnaCervical: {
     label: "Columna Cervical",
-    icon: "🔭",
+    icon: "ð­",
     color: "purple",
     items: [
       {
         id: "cc_01",
         texto:
-          "No mantener postura de flexión cervical mayor a 20° por más de 2 horas continuas (uso de pantallas/microscopia)",
+          "No mantener postura de flexiÃ³n cervical mayor a 20Â° por mÃ¡s de 2 horas continuas (uso de pantallas/microscopia)",
         normativa: "GATISO-DME 2015",
       },
       {
         id: "cc_02",
         texto:
-          "No realizar tareas con el cuello en rotación máxima sostenida por más de 30 minutos",
+          "No realizar tareas con el cuello en rotaciÃ³n mÃ¡xima sostenida por mÃ¡s de 30 minutos",
         normativa: "GTC-45 2012",
       },
       {
         id: "cc_03",
         texto:
-          "Pantalla de computador a nivel de los ojos, distancia mínima 50 cm",
+          "Pantalla de computador a nivel de los ojos, distancia mÃ­nima 50 cm",
         normativa: "Res. 2400/1979",
       },
       {
@@ -4227,50 +4227,50 @@ const RESTRICCIONES_CATALOG = {
   },
   columnaDorsal: {
     label: "Columna Dorsal",
-    icon: "🏥",
+    icon: "ð¥",
     color: "teal",
     items: [
       {
         id: "cd_01",
         texto:
-          "No permanecer en sedestación prolongada sin soporte dorsal adecuado (>1 hora continua)",
+          "No permanecer en sedestaciÃ³n prolongada sin soporte dorsal adecuado (>1 hora continua)",
         normativa: "GATISO-DME 2015",
       },
       {
         id: "cd_02",
         texto:
-          "No realizar actividades que impliquen elevación de brazos por encima de los hombros de forma repetitiva",
+          "No realizar actividades que impliquen elevaciÃ³n de brazos por encima de los hombros de forma repetitiva",
         normativa: "GTC-45 2012",
       },
       {
         id: "cd_03",
         texto:
-          "Silla con respaldo que cubra toda la zona dorsal (vértebras T1-T12)",
+          "Silla con respaldo que cubra toda la zona dorsal (vÃ©rtebras T1-T12)",
         normativa: "Res. 2400/1979",
       },
       {
         id: "cd_04",
         texto:
-          "No exposición a vibración de cuerpo entero (manejo de vehículos pesados, maquinaria) sin estudio de impacto",
+          "No exposiciÃ³n a vibraciÃ³n de cuerpo entero (manejo de vehÃ­culos pesados, maquinaria) sin estudio de impacto",
         normativa: "GTC-45 2012",
       },
     ],
   },
   miembroInferior: {
     label: "Miembro Inferior",
-    icon: "🦵",
+    icon: "ð¦µ",
     color: "green",
     items: [
       {
         id: "mi_01",
         texto:
-          "No permanecer en bipedestación estática por más de 2 horas continuas",
+          "No permanecer en bipedestaciÃ³n estÃ¡tica por mÃ¡s de 2 horas continuas",
         normativa: "GTC-45 2012",
       },
       {
         id: "mi_02",
         texto:
-          "No subir o bajar escaleras de forma repetitiva (>30 ascensos/día) en período de restricción",
+          "No subir o bajar escaleras de forma repetitiva (>30 ascensos/dÃ­a) en perÃ­odo de restricciÃ³n",
         normativa: "GATISO-DME 2015",
       },
       {
@@ -4282,285 +4282,285 @@ const RESTRICCIONES_CATALOG = {
       {
         id: "mi_04",
         texto:
-          "Calzado ergonómico con soporte plantar y tacón máximo 3 cm durante jornada laboral",
+          "Calzado ergonÃ³mico con soporte plantar y tacÃ³n mÃ¡ximo 3 cm durante jornada laboral",
         normativa: "GATISO-DME 2015",
       },
       {
         id: "mi_05",
         texto:
-          "No conducción de vehículos pesados o maquinaria durante período de restricción",
+          "No conducciÃ³n de vehÃ­culos pesados o maquinaria durante perÃ­odo de restricciÃ³n",
         normativa: "Res. 4100/2004",
       },
     ],
   },
   cardiovascular: {
-    label: "Cardiovascular / Metabólico",
-    icon: "❤️",
+    label: "Cardiovascular / MetabÃ³lico",
+    icon: "â¤ï¸",
     color: "red",
     items: [
       {
         id: "cv_01",
         texto:
-          "No realizar actividades de alta demanda cardiovascular sin evaluación cardiológica previa (FC >85% FCM)",
+          "No realizar actividades de alta demanda cardiovascular sin evaluaciÃ³n cardiolÃ³gica previa (FC >85% FCM)",
         normativa: "Res. 1843/2025",
       },
       {
         id: "cv_02",
         texto:
-          "No trabajo en alturas hasta control y estabilización de cifras tensionales (TA >140/90 mmHg)",
+          "No trabajo en alturas hasta control y estabilizaciÃ³n de cifras tensionales (TA >140/90 mmHg)",
         normativa: "Res. 4272/2021",
       },
       {
         id: "cv_03",
         texto:
-          "Control médico periódico mensual de cifras tensionales mientras dure la restricción",
+          "Control mÃ©dico periÃ³dico mensual de cifras tensionales mientras dure la restricciÃ³n",
         normativa: "Res. 1843/2025",
       },
       {
         id: "cv_04",
         texto:
-          "No exposición a temperaturas extremas (calor >35°C / frío <10°C) sin protección individual adecuada",
+          "No exposiciÃ³n a temperaturas extremas (calor >35Â°C / frÃ­o <10Â°C) sin protecciÃ³n individual adecuada",
         normativa: "GTC-45 2012",
       },
       {
         id: "cv_05",
         texto:
-          "Plan de alimentación supervisado: restricción de sodio, grasas saturadas y azúcares simples en jornada laboral",
+          "Plan de alimentaciÃ³n supervisado: restricciÃ³n de sodio, grasas saturadas y azÃºcares simples en jornada laboral",
         normativa: "Res. 1843/2025",
       },
       {
         id: "cv_06",
         texto:
-          "No trabajos en jornadas nocturnas prolongadas (>8 h/noche) sin rotación semestral supervisada",
+          "No trabajos en jornadas nocturnas prolongadas (>8 h/noche) sin rotaciÃ³n semestral supervisada",
         normativa: "Dec. 1072/2015",
       },
     ],
   },
   respiratorio: {
     label: "Respiratorio / Pulmonar",
-    icon: "🫁",
+    icon: "ð«",
     color: "sky",
     items: [
       {
         id: "re_01",
         texto:
-          "No exposición a polvos orgánicos/inorgánicos sin uso de respirador N95 o superior certificado",
+          "No exposiciÃ³n a polvos orgÃ¡nicos/inorgÃ¡nicos sin uso de respirador N95 o superior certificado",
         normativa: "Res. 0773/2021",
       },
       {
         id: "re_02",
         texto:
-          "No exposición a humos de soldadura, gases de escape o vapores químicos sin ventilación localizada extracción",
+          "No exposiciÃ³n a humos de soldadura, gases de escape o vapores quÃ­micos sin ventilaciÃ³n localizada extracciÃ³n",
         normativa: "GTC-45 2012",
       },
       {
         id: "re_03",
         texto:
-          "Espirometría de control semestral mientras persistan factores de riesgo respiratorio",
+          "EspirometrÃ­a de control semestral mientras persistan factores de riesgo respiratorio",
         normativa: "GATISO-ND 2012",
       },
       {
         id: "re_04",
         texto:
-          "No trabajo en espacios confinados hasta nueva evaluación neumológica con resultado apto",
+          "No trabajo en espacios confinados hasta nueva evaluaciÃ³n neumolÃ³gica con resultado apto",
         normativa: "Res. 0491/2020",
       },
       {
         id: "re_05",
         texto:
-          "No exposición a agentes sensibilizantes respiratorios (látex, isocianatos, harinas) sin EPP certificado",
+          "No exposiciÃ³n a agentes sensibilizantes respiratorios (lÃ¡tex, isocianatos, harinas) sin EPP certificado",
         normativa: "GTC-45 2012",
       },
     ],
   },
   neurologico: {
-    label: "Neurológico / Psiquiátrico",
-    icon: "🧠",
+    label: "NeurolÃ³gico / PsiquiÃ¡trico",
+    icon: "ð§ ",
     color: "violet",
     items: [
       {
         id: "ne_01",
         texto:
-          "No operación de maquinaria peligrosa, vehículos o equipos eléctricos de alta tensión hasta concepto neurológico",
+          "No operaciÃ³n de maquinaria peligrosa, vehÃ­culos o equipos elÃ©ctricos de alta tensiÃ³n hasta concepto neurolÃ³gico",
         normativa: "Res. 1843/2025",
       },
       {
         id: "ne_02",
         texto:
-          "No trabajo en alturas hasta nueva evaluación médica con concepto apto (Res. 4272/2021)",
+          "No trabajo en alturas hasta nueva evaluaciÃ³n mÃ©dica con concepto apto (Res. 4272/2021)",
         normativa: "Res. 4272/2021",
       },
       {
         id: "ne_03",
         texto:
-          "No exposición a solventes neurotóxicos (benceno, tolueno, xileno) sin ventilación y EPP certificado",
+          "No exposiciÃ³n a solventes neurotÃ³xicos (benceno, tolueno, xileno) sin ventilaciÃ³n y EPP certificado",
         normativa: "GTC-45 2012",
       },
       {
         id: "ne_04",
         texto:
-          "Jornada laboral máxima de 8 horas/día, sin horas extras durante período de tratamiento psiquiátrico activo",
+          "Jornada laboral mÃ¡xima de 8 horas/dÃ­a, sin horas extras durante perÃ­odo de tratamiento psiquiÃ¡trico activo",
         normativa: "Dec. 1072/2015",
       },
       {
         id: "ne_05",
         texto:
-          "No trabajo en turno nocturno rotativo durante período de tratamiento de trastorno de sueño o ansiedad severa",
+          "No trabajo en turno nocturno rotativo durante perÃ­odo de tratamiento de trastorno de sueÃ±o o ansiedad severa",
         normativa: "Res. 1843/2025",
       },
       {
         id: "ne_06",
         texto:
-          "Seguimiento psicológico laboral mensual y reporte a médico SST de evolución clínica",
+          "Seguimiento psicolÃ³gico laboral mensual y reporte a mÃ©dico SST de evoluciÃ³n clÃ­nica",
         normativa: "Res. 2404/2019",
       },
     ],
   },
   exposicionToxicos: {
-    label: "Exposición a Tóxicos / Químicos",
-    icon: "⚗️",
+    label: "ExposiciÃ³n a TÃ³xicos / QuÃ­micos",
+    icon: "âï¸",
     color: "yellow",
     items: [
       {
         id: "et_01",
         texto:
-          "No manipulación directa de plaguicidas organofosforados sin equipo de protección personal completo (nivel C)",
+          "No manipulaciÃ³n directa de plaguicidas organofosforados sin equipo de protecciÃ³n personal completo (nivel C)",
         normativa: "Res. 0031/1995",
       },
       {
         id: "et_02",
         texto:
-          "No exposición a metales pesados (plomo, mercurio, cadmio) sin niveles biológicos de monitoreo vigentes",
+          "No exposiciÃ³n a metales pesados (plomo, mercurio, cadmio) sin niveles biolÃ³gicos de monitoreo vigentes",
         normativa: "GTC-45 2012",
       },
       {
         id: "et_03",
         texto:
-          "Perfil toxicológico (colinesterasa/metales) semestral obligatorio mientras persista exposición",
+          "Perfil toxicolÃ³gico (colinesterasa/metales) semestral obligatorio mientras persista exposiciÃ³n",
         normativa: "Res. 1843/2025",
       },
       {
         id: "et_04",
         texto:
-          "No ingesta de alimentos ni bebidas en áreas de manejo de sustancias químicas",
+          "No ingesta de alimentos ni bebidas en Ã¡reas de manejo de sustancias quÃ­micas",
         normativa: "Res. 2400/1979",
       },
       {
         id: "et_05",
         texto:
-          "Ducha de emergencia y lavaojos funcionales en área de trabajo como requisito para laborar con químicos corrosivos",
+          "Ducha de emergencia y lavaojos funcionales en Ã¡rea de trabajo como requisito para laborar con quÃ­micos corrosivos",
         normativa: "Res. 2400/1979",
       },
     ],
   },
   visual: {
     label: "Visual / Auditivo",
-    icon: "👁️",
+    icon: "ðï¸",
     color: "indigo",
     items: [
       {
         id: "va_01",
         texto:
-          "Uso obligatorio de corrección óptica (gafas con prescripción) durante jornada laboral en tareas de precisión visual",
+          "Uso obligatorio de correcciÃ³n Ã³ptica (gafas con prescripciÃ³n) durante jornada laboral en tareas de precisiÃ³n visual",
         normativa: "Res. 2400/1979",
       },
       {
         id: "va_02",
         texto:
-          "No trabajo en conducción nocturna de vehículos con agudeza visual corregida inferior a 20/40",
+          "No trabajo en conducciÃ³n nocturna de vehÃ­culos con agudeza visual corregida inferior a 20/40",
         normativa: "Res. 4100/2004",
       },
       {
         id: "va_03",
         texto:
-          "No exposición a radiación UV/IR sin protección ocular certificada (ANSI Z87.1)",
+          "No exposiciÃ³n a radiaciÃ³n UV/IR sin protecciÃ³n ocular certificada (ANSI Z87.1)",
         normativa: "GTC-45 2012",
       },
       {
         id: "va_04",
         texto:
-          "No exposición a ruido >80 dB sin uso de protección auditiva de doble vía (tapón + orejera)",
+          "No exposiciÃ³n a ruido >80 dB sin uso de protecciÃ³n auditiva de doble vÃ­a (tapÃ³n + orejera)",
         normativa: "Res. 1792/1990",
       },
       {
         id: "va_05",
         texto:
-          "Audiometría de control semestral con exposición a ruido ocupacional ≥85 dB",
+          "AudiometrÃ­a de control semestral con exposiciÃ³n a ruido ocupacional â¥85 dB",
         normativa: "Res. 8321/1983",
       },
     ],
   },
   alturas: {
     label: "Trabajo en Alturas",
-    icon: "🏗️",
+    icon: "ðï¸",
     color: "amber",
     items: [
       {
         id: "al_01",
         texto:
-          "NO APTO para trabajo en alturas ≥1.5 metros hasta nueva evaluación médica con concepto específico",
+          "NO APTO para trabajo en alturas â¥1.5 metros hasta nueva evaluaciÃ³n mÃ©dica con concepto especÃ­fico",
         normativa: "Res. 4272/2021",
       },
       {
         id: "al_02",
         texto:
-          "Requiere evaluación especializada (neurología/otorrinolaringología) antes de autorizar trabajo en alturas",
+          "Requiere evaluaciÃ³n especializada (neurologÃ­a/otorrinolaringologÃ­a) antes de autorizar trabajo en alturas",
         normativa: "Res. 4272/2021 Art. 10",
       },
       {
         id: "al_03",
         texto:
-          "No trabajo en alturas con medicación que produzca somnolencia, mareo o alteración del equilibrio",
+          "No trabajo en alturas con medicaciÃ³n que produzca somnolencia, mareo o alteraciÃ³n del equilibrio",
         normativa: "Res. 4272/2021",
       },
       {
         id: "al_04",
         texto:
-          "Uso obligatorio de arnés de cuerpo completo certificado y línea de vida en toda tarea >1.5 m",
+          "Uso obligatorio de arnÃ©s de cuerpo completo certificado y lÃ­nea de vida en toda tarea >1.5 m",
         normativa: "Res. 4272/2021",
       },
       {
         id: "al_05",
         texto:
-          "Acompañamiento permanente de vigía certificado en trabajo en alturas durante período de restricción parcial",
+          "AcompaÃ±amiento permanente de vigÃ­a certificado en trabajo en alturas durante perÃ­odo de restricciÃ³n parcial",
         normativa: "Res. 4272/2021 Art. 14",
       },
     ],
   },
   dermatologico: {
-    label: "Dermatológico",
-    icon: "🩺",
+    label: "DermatolÃ³gico",
+    icon: "ð©º",
     color: "rose",
     items: [
       {
         id: "de_01",
         texto:
-          "No contacto directo con agentes irritantes/sensibilizantes cutáneos sin guantes de nitrilo/neopreno certificados",
+          "No contacto directo con agentes irritantes/sensibilizantes cutÃ¡neos sin guantes de nitrilo/neopreno certificados",
         normativa: "GTC-45 2012",
       },
       {
         id: "de_02",
         texto:
-          "No exposición solar directa sin protector solar SPF 50+ durante jornadas extramurales",
+          "No exposiciÃ³n solar directa sin protector solar SPF 50+ durante jornadas extramurales",
         normativa: "Res. 1843/2025",
       },
       {
         id: "de_03",
         texto:
-          "No manipulación de alimentos hasta resolución completa de lesión cutánea activa en manos",
+          "No manipulaciÃ³n de alimentos hasta resoluciÃ³n completa de lesiÃ³n cutÃ¡nea activa en manos",
         normativa: "Res. 2674/2013",
       },
       {
         id: "de_04",
         texto:
-          "Control dermatológico mensual mientras persistan lesiones laborales activas",
+          "Control dermatolÃ³gico mensual mientras persistan lesiones laborales activas",
         normativa: "Res. 1843/2025",
       },
     ],
   },
 };
 // ==========================================
-// MÓDULO: RESTRICCIONES CHECKLIST PANEL
+// MÃDULO: RESTRICCIONES CHECKLIST PANEL
 // ==========================================
 export const RestriccionesChecklistPanel = ({
   selected,
@@ -4605,10 +4605,10 @@ export const RestriccionesChecklistPanel = ({
               <AlertTriangle className="w-5 h-5" />
               <div>
                 <h2 className="font-black text-base">
-                  Restricciones Médico-Laborales
+                  Restricciones MÃ©dico-Laborales
                 </h2>
                 <p className="text-xs text-red-100">
-                  Seleccione por segmento · GTC-45 / GATISO
+                  Seleccione por segmento Â· GTC-45 / GATISO
                 </p>
               </div>
             </div>
@@ -4732,8 +4732,8 @@ export const RestriccionesChecklistPanel = ({
           >
             <CheckSquare className="w-5 h-5" />
             {countSelected > 0
-              ? `✅ Aplicar ${countSelected} restricciones`
-              : "✅ Aplicar selección"}
+              ? `â Aplicar ${countSelected} restricciones`
+              : "â Aplicar selecciÃ³n"}
           </button>
         </div>
       </div>
@@ -4743,54 +4743,54 @@ export const RestriccionesChecklistPanel = ({
 const RECOMENDACIONES_CATALOG = {
   generales: {
     label: "Recomendaciones Generales de Salud",
-    icon: "💊",
+    icon: "ð",
     color: "emerald",
     items: [
       {
         id: "rg_01",
         texto:
-          "Actividad física aeróbica moderada mínimo 150 minutos/semana (caminar, nadar, ciclismo)",
+          "Actividad fÃ­sica aerÃ³bica moderada mÃ­nimo 150 minutos/semana (caminar, nadar, ciclismo)",
       },
       {
         id: "rg_02",
         texto:
-          "Alimentación balanceada: reducir ultraprocesados, azúcares y grasas saturadas. Aumentar frutas, verduras y proteína magra",
+          "AlimentaciÃ³n balanceada: reducir ultraprocesados, azÃºcares y grasas saturadas. Aumentar frutas, verduras y proteÃ­na magra",
       },
       {
         id: "rg_03",
         texto:
-          "Control médico anual con laboratorios de seguimiento (glicemia, perfil lipídico, hemograma)",
+          "Control mÃ©dico anual con laboratorios de seguimiento (glicemia, perfil lipÃ­dico, hemograma)",
       },
       {
         id: "rg_04",
         texto:
-          "Mantener índice de masa corporal entre 18.5 y 24.9 kg/m² mediante dieta y ejercicio supervisado",
+          "Mantener Ã­ndice de masa corporal entre 18.5 y 24.9 kg/mÂ² mediante dieta y ejercicio supervisado",
       },
       {
         id: "rg_05",
         texto:
-          "Hidratación adecuada: mínimo 2 litros de agua/día, aumentar en jornadas con exposición a calor",
+          "HidrataciÃ³n adecuada: mÃ­nimo 2 litros de agua/dÃ­a, aumentar en jornadas con exposiciÃ³n a calor",
       },
       {
         id: "rg_06",
         texto:
-          "Higiene del sueño: dormir entre 7-8 horas/noche en ambiente oscuro y silencioso",
+          "Higiene del sueÃ±o: dormir entre 7-8 horas/noche en ambiente oscuro y silencioso",
       },
       {
         id: "rg_07",
         texto:
-          "Cesación tabáquica inmediata; se recomienda programa de apoyo psicológico y/o farmacológico",
+          "CesaciÃ³n tabÃ¡quica inmediata; se recomienda programa de apoyo psicolÃ³gico y/o farmacolÃ³gico",
       },
       {
         id: "rg_08",
         texto:
-          "Moderación en consumo de alcohol: máximo 1 unidad/día (mujeres) / 2 unidades/día (hombres)",
+          "ModeraciÃ³n en consumo de alcohol: mÃ¡ximo 1 unidad/dÃ­a (mujeres) / 2 unidades/dÃ­a (hombres)",
       },
     ],
   },
   laborales: {
-    label: "Recomendaciones Laborales / Ergonómicas",
-    icon: "🏢",
+    label: "Recomendaciones Laborales / ErgonÃ³micas",
+    icon: "ð¢",
     color: "blue",
     items: [
       {
@@ -4801,27 +4801,27 @@ const RECOMENDACIONES_CATALOG = {
       {
         id: "rl_02",
         texto:
-          "Ajustar altura de escritorio/banco de trabajo: codos a 90°, pantalla a nivel de los ojos",
+          "Ajustar altura de escritorio/banco de trabajo: codos a 90Â°, pantalla a nivel de los ojos",
       },
       {
         id: "rl_03",
         texto:
-          "Uso de silla ergonómica con soporte lumbar ajustable, altura regulable y apoyabrazos",
+          "Uso de silla ergonÃ³mica con soporte lumbar ajustable, altura regulable y apoyabrazos",
       },
       {
         id: "rl_04",
         texto:
-          "Técnica correcta de levantamiento de cargas: doblar rodillas, mantener espalda recta, carga pegada al cuerpo",
+          "TÃ©cnica correcta de levantamiento de cargas: doblar rodillas, mantener espalda recta, carga pegada al cuerpo",
       },
       {
         id: "rl_05",
         texto:
-          "Rotación de actividades laborales para evitar exposición continua a un solo factor de riesgo ergonómico",
+          "RotaciÃ³n de actividades laborales para evitar exposiciÃ³n continua a un solo factor de riesgo ergonÃ³mico",
       },
       {
         id: "rl_06",
         texto:
-          "Uso obligatorio de calzado de seguridad con soporte plantar en áreas de carga y descarga",
+          "Uso obligatorio de calzado de seguridad con soporte plantar en Ã¡reas de carga y descarga",
       },
       {
         id: "rl_07",
@@ -4836,61 +4836,61 @@ const RECOMENDACIONES_CATALOG = {
     ],
   },
   seguimiento: {
-    label: "Seguimiento Médico y Control",
-    icon: "📋",
+    label: "Seguimiento MÃ©dico y Control",
+    icon: "ð",
     color: "purple",
     items: [
       {
         id: "rs_01",
         texto:
-          "Control médico ocupacional semestral durante los próximos 2 años",
+          "Control mÃ©dico ocupacional semestral durante los prÃ³ximos 2 aÃ±os",
       },
       {
         id: "rs_02",
         texto:
-          "Consulta con médico general/especialista en las próximas 4 semanas para manejo de patología diagnosticada",
+          "Consulta con mÃ©dico general/especialista en las prÃ³ximas 4 semanas para manejo de patologÃ­a diagnosticada",
       },
       {
         id: "rs_03",
         texto:
-          "Continuar o iniciar tratamiento farmacológico indicado por médico tratante. Reportar medicación al médico de empresa",
+          "Continuar o iniciar tratamiento farmacolÃ³gico indicado por mÃ©dico tratante. Reportar medicaciÃ³n al mÃ©dico de empresa",
       },
       {
         id: "rs_04",
         texto:
-          "Adherencia a programa de vigilancia epidemiológica de la empresa según riesgo identificado",
+          "Adherencia a programa de vigilancia epidemiolÃ³gica de la empresa segÃºn riesgo identificado",
       },
       {
         id: "rs_05",
         texto:
-          "Informar de inmediato al médico de empresa cualquier cambio en su condición de salud o aparición de nuevos síntomas",
+          "Informar de inmediato al mÃ©dico de empresa cualquier cambio en su condiciÃ³n de salud o apariciÃ³n de nuevos sÃ­ntomas",
       },
       {
         id: "rs_06",
         texto:
-          "Vacunación al día: esquema de adultos según EPS + vacunas de riesgo ocupacional (hepatitis B, tétanos, influenza)",
+          "VacunaciÃ³n al dÃ­a: esquema de adultos segÃºn EPS + vacunas de riesgo ocupacional (hepatitis B, tÃ©tanos, influenza)",
       },
     ],
   },
   psicosocial: {
     label: "Salud Mental / Psicosocial",
-    icon: "🧘",
+    icon: "ð§",
     color: "teal",
     items: [
       {
         id: "rp_01",
         texto:
-          "Participar en programa de manejo del estrés laboral y técnicas de mindfulness ofrecidas por la empresa o EPS",
+          "Participar en programa de manejo del estrÃ©s laboral y tÃ©cnicas de mindfulness ofrecidas por la empresa o EPS",
       },
       {
         id: "rp_02",
         texto:
-          "Solicitar apoyo psicológico a través de EPS en caso de síntomas de ansiedad, depresión o burnout",
+          "Solicitar apoyo psicolÃ³gico a travÃ©s de EPS en caso de sÃ­ntomas de ansiedad, depresiÃ³n o burnout",
       },
       {
         id: "rp_03",
         texto:
-          "Establecer límites claros entre vida laboral y personal: evitar trabajo fuera de horario habitual",
+          "Establecer lÃ­mites claros entre vida laboral y personal: evitar trabajo fuera de horario habitual",
       },
       {
         id: "rp_04",
@@ -4901,23 +4901,23 @@ const RECOMENDACIONES_CATALOG = {
   },
 };
 const DEFAULT_RECOMENDACIONES_SELECTED = {
-  rg_01: true, // Actividad física aeróbica
-  rg_02: true, // Alimentación balanceada
-  rg_03: true, // Control médico anual
-  rg_05: true, // Hidratación
-  rg_06: true, // Higiene del sueño
+  rg_01: true, // Actividad fÃ­sica aerÃ³bica
+  rg_02: true, // AlimentaciÃ³n balanceada
+  rg_03: true, // Control mÃ©dico anual
+  rg_05: true, // HidrataciÃ³n
+  rg_06: true, // Higiene del sueÃ±o
   rl_01: true, // Pausas activas
-  rl_04: true, // Técnica levantamiento cargas
-  rs_01: true, // Control médico ocupacional semestral
+  rl_04: true, // TÃ©cnica levantamiento cargas
+  rs_01: true, // Control mÃ©dico ocupacional semestral
   rs_05: true, // Informar cambios de salud
-  rs_06: true, // Vacunación al día
+  rs_06: true, // VacunaciÃ³n al dÃ­a
 };
 // ==========================================
 // ==========================================
 // ==========================================
-// MÓDULO 3: MOTOR DE IA MULTI-PROVEEDOR
+// MÃDULO 3: MOTOR DE IA MULTI-PROVEEDOR
 // Modelos verificados activos - Marzo 2026
-// Gemini · Groq · Together AI · OpenRouter
+// Gemini Â· Groq Â· Together AI Â· OpenRouter
 // CORS habilitado en todos - funcionan desde cualquier servidor externo
 // ==========================================
 const AI_CONFIG_VERSION = "2026-03-v2";
@@ -4929,20 +4929,20 @@ const fetchWithTimeout = (url, opts, ms = 40000) => {
   );
 };
 const AI_PROVIDERS = {
-  // ── 1. GEMINI - API Google, CORS nativo, más estable en browsers externos ─
+  // ââ 1. GEMINI - API Google, CORS nativo, mÃ¡s estable en browsers externos â
   gemini: {
     name: "Google Gemini",
     free: true,
-    badge: "🟢 Gratis · Alta calidad",
+    badge: "ð¢ Gratis Â· Alta calidad",
     docs: "aistudio.google.com",
-    hint: "Key gratuita: aistudio.google.com → Get API Key",
+    hint: "Key gratuita: aistudio.google.com â Get API Key",
     link: "https://aistudio.google.com/apikey",
     call: async (prompt, systemPrompt, apiKey) => {
       if (!apiKey)
         throw new Error(
           "Gemini: API Key no configurada - obtenla gratis en aistudio.google.com/apikey"
         );
-      // Modelos verificados activos marzo 2026 (Gemini 1.5 retirado → 404)
+      // Modelos verificados activos marzo 2026 (Gemini 1.5 retirado â 404)
       const tryModels = [
         "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
@@ -4963,8 +4963,8 @@ const AI_PROVIDERS = {
                 generationConfig: {
                   maxOutputTokens: 4096,
                   temperature: 0.3,
-                  ...(systemPrompt.includes("ÚNICAMENTE CON JSON") ||
-                  systemPrompt.includes("ÚNICAMENTE JSON")
+                  ...(systemPrompt.includes("ÃNICAMENTE CON JSON") ||
+                  systemPrompt.includes("ÃNICAMENTE JSON")
                     ? { responseMimeType: "application/json" }
                     : {}),
                 },
@@ -4975,7 +4975,7 @@ const AI_PROVIDERS = {
             const errData = await res.json().catch(() => ({}));
             const msg = errData?.error?.message || res.statusText;
             lastErr = new Error(`Gemini/${model} [${res.status}]: ${msg}`);
-            // 401/403 = key inválida | 400 solo si mensaje indica key inválida
+            // 401/403 = key invÃ¡lida | 400 solo si mensaje indica key invÃ¡lida
             if (res.status === 401 || res.status === 403) break;
             if (
               res.status === 400 &&
@@ -4984,12 +4984,12 @@ const AI_PROVIDERS = {
                 msg.includes("API key"))
             )
               break;
-            continue; // 404 = modelo no disponible → probar siguiente
+            continue; // 404 = modelo no disponible â probar siguiente
           }
           const data = await res.json();
           const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
           if (text?.trim().length > 5) return text.trim();
-          lastErr = new Error(`Gemini/${model}: respuesta vacía`);
+          lastErr = new Error(`Gemini/${model}: respuesta vacÃ­a`);
         } catch (e) {
           if (e.name === "AbortError") {
             lastErr = new Error(`Gemini/${model}: timeout (40s)`);
@@ -5006,13 +5006,13 @@ const AI_PROVIDERS = {
       );
     },
   },
-  // ── 2. GROQ - Velocidad máxima, CORS habilitado explícitamente ────────────
+  // ââ 2. GROQ - Velocidad mÃ¡xima, CORS habilitado explÃ­citamente ââââââââââââ
   groq: {
     name: "Groq",
     free: true,
-    badge: "🟢 Gratis · Ultrarrápido",
+    badge: "ð¢ Gratis Â· UltrarrÃ¡pido",
     docs: "console.groq.com",
-    hint: "Key gratuita: console.groq.com → API Keys → Create API Key",
+    hint: "Key gratuita: console.groq.com â API Keys â Create API Key",
     link: "https://console.groq.com/keys",
     call: async (prompt, systemPrompt, apiKey) => {
       if (!apiKey)
@@ -5053,12 +5053,12 @@ const AI_PROVIDERS = {
             const msg = errData?.error?.message || res.statusText;
             lastErr = new Error(`Groq/${model} [${res.status}]: ${msg}`);
             if (res.status === 401 || res.status === 403) break;
-            continue; // 404/429 → probar siguiente modelo
+            continue; // 404/429 â probar siguiente modelo
           }
           const data = await res.json();
           const text = data.choices?.[0]?.message?.content;
           if (text?.trim().length > 5) return text.trim();
-          lastErr = new Error(`Groq/${model}: respuesta vacía`);
+          lastErr = new Error(`Groq/${model}: respuesta vacÃ­a`);
         } catch (e) {
           if (e.name === "AbortError") {
             lastErr = new Error(`Groq/${model}: timeout`);
@@ -5068,7 +5068,7 @@ const AI_PROVIDERS = {
             lastErr = new Error(
               `Groq: no se pudo conectar a api.groq.com - verifica tu red o renueva tu key en console.groq.com/keys`
             );
-            break; // error de red = no tiene sentido intentar más modelos
+            break; // error de red = no tiene sentido intentar mÃ¡s modelos
           }
           lastErr = e;
         }
@@ -5081,18 +5081,18 @@ const AI_PROVIDERS = {
       );
     },
   },
-  // ── 3. TOGETHER AI - Llama 3.3 70B 100% gratis, robusto ─────────────────
+  // ââ 3. TOGETHER AI - Llama 3.3 70B 100% gratis, robusto âââââââââââââââââ
   together: {
     name: "Together AI",
     free: true,
-    badge: "🟢 Gratis · Muy estable",
+    badge: "ð¢ Gratis Â· Muy estable",
     docs: "api.together.ai",
-    hint: "Key gratuita: api.together.ai → Settings → API Keys - copia la key que empieza por letras/números (NO el código Python)",
+    hint: "Key gratuita: api.together.ai â Settings â API Keys - copia la key que empieza por letras/nÃºmeros (NO el cÃ³digo Python)",
     link: "https://api.together.ai",
     call: async (prompt, systemPrompt, apiKey) => {
       if (!apiKey)
         throw new Error(
-          "Together AI: API Key no configurada - obtenla gratis en api.together.ai → Settings → API Keys"
+          "Together AI: API Key no configurada - obtenla gratis en api.together.ai â Settings â API Keys"
         );
       // Modelos gratuitos verificados Together AI - marzo 2026
       // NOTA: los sufijos -Free fueron deprecados; ahora el acceso free
@@ -5131,9 +5131,9 @@ const AI_PROVIDERS = {
             const msg = errData?.error?.message || res.statusText;
             lastErr = new Error(`Together/${model} [${res.status}]: ${msg}`);
             if (res.status === 401 || res.status === 403) {
-              // Key inválida - no tiene sentido seguir probando modelos
+              // Key invÃ¡lida - no tiene sentido seguir probando modelos
               throw new Error(
-                `Together AI [401]: API Key inválida. Ve a api.together.ai → Settings → API Keys y copia SOLO la key (texto largo, no el código Python).`
+                `Together AI [401]: API Key invÃ¡lida. Ve a api.together.ai â Settings â API Keys y copia SOLO la key (texto largo, no el cÃ³digo Python).`
               );
             }
             continue;
@@ -5141,9 +5141,9 @@ const AI_PROVIDERS = {
           const data = await res.json();
           const text = data.choices?.[0]?.message?.content;
           if (text?.trim().length > 5) return text.trim();
-          lastErr = new Error(`Together/${model}: respuesta vacía`);
+          lastErr = new Error(`Together/${model}: respuesta vacÃ­a`);
         } catch (e) {
-          if (e.message?.includes("API Key inválida")) throw e; // re-throw 401 immediately
+          if (e.message?.includes("API Key invÃ¡lida")) throw e; // re-throw 401 immediately
           if (e.name === "AbortError") {
             lastErr = new Error(`Together/${model}: timeout`);
             continue;
@@ -5159,13 +5159,13 @@ const AI_PROVIDERS = {
       );
     },
   },
-  // ── 4. OPENROUTER - Multi-modelo, fallback máximo ─────────────────────────
+  // ââ 4. OPENROUTER - Multi-modelo, fallback mÃ¡ximo âââââââââââââââââââââââââ
   openrouter: {
     name: "OpenRouter",
     free: true,
-    badge: "🟢 Gratis · Multi-modelo",
+    badge: "ð¢ Gratis Â· Multi-modelo",
     docs: "openrouter.ai",
-    hint: "Key gratuita: openrouter.ai → Keys → Create Key (login con Google)",
+    hint: "Key gratuita: openrouter.ai â Keys â Create Key (login con Google)",
     link: "https://openrouter.ai/keys",
     call: async (prompt, systemPrompt, apiKey) => {
       if (!apiKey)
@@ -5173,7 +5173,7 @@ const AI_PROVIDERS = {
           "OpenRouter: API Key no configurada - obtenla gratis en openrouter.ai/keys"
         );
       // Modelos free VERIFICADOS activos en OpenRouter - marzo 2026
-      // (si alguno da 404, el código pasa automáticamente al siguiente)
+      // (si alguno da 404, el cÃ³digo pasa automÃ¡ticamente al siguiente)
       const tryModels = [
         "openrouter/auto",
         "meta-llama/llama-3.3-70b-instruct:free",
@@ -5217,13 +5217,13 @@ const AI_PROVIDERS = {
             const errData = await res.json().catch(() => ({}));
             const msg = errData?.error?.message || res.statusText;
             lastErr = new Error(`OpenRouter/${model} [${res.status}]: ${msg}`);
-            if (res.status === 401 || res.status === 403) break; // key inválida
-            continue; // 404 = modelo deprecado → probar siguiente
+            if (res.status === 401 || res.status === 403) break; // key invÃ¡lida
+            continue; // 404 = modelo deprecado â probar siguiente
           }
           const data = await res.json();
           const text = data.choices?.[0]?.message?.content;
           if (text?.trim().length > 5) return text.trim();
-          lastErr = new Error(`OpenRouter/${model}: respuesta vacía`);
+          lastErr = new Error(`OpenRouter/${model}: respuesta vacÃ­a`);
         } catch (e) {
           if (e.name === "AbortError") {
             lastErr = new Error(`OpenRouter/${model}: timeout`);
@@ -5242,7 +5242,7 @@ const AI_PROVIDERS = {
   },
 };
 const parseAIJSON = (raw) => {
-  if (!raw) throw new Error("Respuesta vacía");
+  if (!raw) throw new Error("Respuesta vacÃ­a");
   let clean = raw
     .replace(/^\uFEFF/, "")
     .replace(/```json\s*/gi, "")
@@ -5330,11 +5330,11 @@ const parseAIJSON = (raw) => {
   throw new Error("JSON irreparable: " + raw.substring(0, 80));
 };
 // ==========================================
-// MÓDULO: FIRMA DIGITAL VÁLIDA - Ley 527/1999
-// Implementa firma electrónica con integridad verificable:
-// hash SHA-256 del contenido clínico + código QR de verificación
-// + timestamp de servidor + identificación del firmante
-// Cumple: Ley 527/1999, Decreto 2364/2012 (firma electrónica)
+// MÃDULO: FIRMA DIGITAL VÃLIDA - Ley 527/1999
+// Implementa firma electrÃ³nica con integridad verificable:
+// hash SHA-256 del contenido clÃ­nico + cÃ³digo QR de verificaciÃ³n
+// + timestamp de servidor + identificaciÃ³n del firmante
+// Cumple: Ley 527/1999, Decreto 2364/2012 (firma electrÃ³nica)
 // ==========================================
 // Genera hash SHA-256 del contenido de la HC para verificabilidad
 const _generarHashHC = async (data) => {
@@ -5362,8 +5362,8 @@ const _generarHashHC = async (data) => {
     return "HASH-NO-DISPONIBLE-" + Date.now();
   }
 };
-// Genera código de verificación QR para la HC firmada
-// El código contiene: ID paciente + hash (primeros 16 chars) + fecha
+// Genera cÃ³digo de verificaciÃ³n QR para la HC firmada
+// El cÃ³digo contiene: ID paciente + hash (primeros 16 chars) + fecha
 const _generarCodigoQR = (id, hash, fecha) => {
   const short = hash.substring(0, 16).toUpperCase();
   const fechaShort = (fecha || new Date().toISOString())
@@ -5383,18 +5383,18 @@ const _formatFirmaDigital = (firma) => {
   };
 };
 // ==========================================
-// MÓDULO: RIPS JSON - Resolución 2275/2023
-// Generación de archivos RIPS para reporte al MinSalud
-// Archivos: AF (afiliación), AT (atenciones), AC (consultas)
-// NOTA: Este módulo genera la estructura base. Para radicar
+// MÃDULO: RIPS JSON - ResoluciÃ³n 2275/2023
+// GeneraciÃ³n de archivos RIPS para reporte al MinSalud
+// Archivos: AF (afiliaciÃ³n), AT (atenciones), AC (consultas)
+// NOTA: Este mÃ³dulo genera la estructura base. Para radicar
 // ante MinSalud se requiere firma digital certificada DIAN.
 // ==========================================
 
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // B-28: HL7 FHIR R4 - Res. 1888/2025 RDA - Generador de recursos FHIR
 // Recursos: Patient, Practitioner, Observation, DiagnosticReport
 // Deadline de interoperabilidad: 15 de abril de 2026
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const _generarFHIRPatient = (p) => ({
   resourceType: "Patient",
   id:
@@ -5538,12 +5538,12 @@ const _generarFHIRBundle = (paciente, doctor) => {
   return bundle;
 };
 
-// ══════════════════════════════════════════════════════════════════════════
-// B-25: VALIDACIÓN RIPS - Res. 2275/2023 Schema v2
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// B-25: VALIDACIÃN RIPS - Res. 2275/2023 Schema v2
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const validarRIPSPaciente = (p) => {
   const errs = [];
-  if (!p.docNumero || p.docNumero.length < 4) errs.push("docNumero inválido");
+  if (!p.docNumero || p.docNumero.length < 4) errs.push("docNumero invÃ¡lido");
   if (!p.fechaExamen) errs.push("fechaExamen requerida");
   if (!p.tipoExamen) errs.push("tipoExamen requerido");
   if (!p.conceptoAptitud) errs.push("conceptoAptitud requerido para RIPS");
@@ -5564,7 +5564,7 @@ const validarRIPSLote = (pacientes) => {
 const _generarRIPSJson = (pacientes, doctorData, periodo) => {
   const now = new Date().toISOString();
   const numFactura = "SISO-" + Date.now();
-  // Archivo AF: Datos de afiliación de cada paciente atendido
+  // Archivo AF: Datos de afiliaciÃ³n de cada paciente atendido
   const AF = pacientes.map((p) => ({
     tipoDocumentoIdentificacion: p.docTipo || "CC",
     numDocumentoIdentificacion: p.docNumero || "",
@@ -5573,12 +5573,12 @@ const _generarRIPSJson = (pacientes, doctorData, periodo) => {
     codSexo:
       p.genero === "Femenino" ? "F" : p.genero === "Masculino" ? "M" : "N",
     codPaisResidencia: "CO",
-    codMunicipioResidencia: "19001", // Default Popayán - personalizable
+    codMunicipioResidencia: "19001", // Default PopayÃ¡n - personalizable
     codZonaTerritorialResidencia: p.zonaResidencia === "Rural" ? "2" : "1",
     incapacidad: p.diasIncapacidad ? "S" : "N",
     codPaisOrigen: "CO",
   }));
-  // Archivo AT: Resumen de atención
+  // Archivo AT: Resumen de atenciÃ³n
   const AT = [
     {
       codPrestador: doctorData?.licencia?.substring(0, 12) || "SISO001",
@@ -5591,7 +5591,7 @@ const _generarRIPSJson = (pacientes, doctorData, periodo) => {
       grupoServicios: "01",
       codServicio: "890201", // Medicina del trabajo
       finalidadTecnologiaSalud: "27", // Medicina laboral
-      causaMotivoAtencion: "26", // Evaluación ocupacional
+      causaMotivoAtencion: "26", // EvaluaciÃ³n ocupacional
       codDiagnosticoPrincipal:
         pacientes[0]?.diagnosticoPrincipal?.substring(0, 4) || "Z00",
       codDiagnosticoPrincipalE: "",
@@ -5630,7 +5630,7 @@ const _generarRIPSJson = (pacientes, doctorData, periodo) => {
     version: "1.0",
     generadoEn: now,
     periodo: periodo || now.substring(0, 7),
-    norma: "Resolución 2275/2023",
+    norma: "ResoluciÃ³n 2275/2023",
     prestador: {
       nombre: doctorData?.nombre || "",
       nit: doctorData?.rut?.replace("-", "") || "",
@@ -5642,7 +5642,7 @@ const _generarRIPSJson = (pacientes, doctorData, periodo) => {
     AC,
     totalRegistros: { AF: AF.length, AT: AT.length, AC: AC.length },
     advertencia:
-      "RIPS generado por SISO v4.0. Para radicación formal ante MinSalud se requiere firma electrónica DIAN certificada y validación en ADRES.",
+      "RIPS generado por SISO v4.0. Para radicaciÃ³n formal ante MinSalud se requiere firma electrÃ³nica DIAN certificada y validaciÃ³n en ADRES.",
   };
 };
 // Descarga RIPS JSON sin createObjectURL (compatible con sandbox/CSP)
@@ -5666,22 +5666,22 @@ const _descargarRIPSJson = (pacientes, doctorData, periodo) => {
   }
 };
 // ==========================================
-// MÓDULO: RDA - Res. 1888/2025 (Resumen Digital de Atención)
-// Generación del JSON RDA para transmisión al IHCE MinSalud
+// MÃDULO: RDA - Res. 1888/2025 (Resumen Digital de AtenciÃ³n)
+// GeneraciÃ³n del JSON RDA para transmisiÃ³n al IHCE MinSalud
 // ==========================================
-// ══ B-13: Generador RDA - Res. 1888/2025 ══
+// ââ B-13: Generador RDA - Res. 1888/2025 ââ
 const _generarRDA = (paciente, doctorData, sesionId) => {
   if (!paciente || !paciente.fechaExamen) return null;
   const now = new Date().toISOString();
   return {
     version: "1.0",
-    norma: "Resolución 1888/2025 MinSalud",
+    norma: "ResoluciÃ³n 1888/2025 MinSalud",
     fechaGeneracion: now,
     entidadGeneradora: {
       tipoDocumento: "CC",
       numDocumento: (doctorData?.cedula || "").replace(/[^0-9]/g, ""),
       nombreEntidad: doctorData?.nombre || "",
-      municipio: doctorData?.ciudad || "Popayán",
+      municipio: doctorData?.ciudad || "PopayÃ¡n",
     },
     paciente: {
       tipoDocumento: paciente.docTipo || "CC",
@@ -5718,7 +5718,7 @@ const _generarRDA = (paciente, doctorData, sesionId) => {
     restricciones: (paciente.restricciones || []).length,
     rdaGeneradoEn: now,
     _nota:
-      "RDA generado por SISO. Para transmisión oficial al IHCE se requiere firma electrónica certificada.",
+      "RDA generado por SISO. Para transmisiÃ³n oficial al IHCE se requiere firma electrÃ³nica certificada.",
   };
 };
 const _descargarRDA = (paciente, doctorData, sesionId) => {
@@ -5739,51 +5739,51 @@ const _descargarRDA = (paciente, doctorData, sesionId) => {
     return false;
   }
 };
-// MÓDULO CIE-11: Clasificación Internacional de Enfermedades 11a Revisión
-// OMS CIE-11 (2022) - Res. 1442/2024 Colombia (transición gradual)
-// Implementado en paralelo con CIE-10 para migración progresiva.
+// MÃDULO CIE-11: ClasificaciÃ³n Internacional de Enfermedades 11a RevisiÃ³n
+// OMS CIE-11 (2022) - Res. 1442/2024 Colombia (transiciÃ³n gradual)
+// Implementado en paralelo con CIE-10 para migraciÃ³n progresiva.
 // ==========================================
 const CIE11_EQUIVALENCIAS = [
   {
     cie10: "Z10.0",
     cie11: "QC00",
-    desc: "Evaluación médica de rutina del trabajador",
+    desc: "EvaluaciÃ³n mÃ©dica de rutina del trabajador",
   },
-  { cie10: "Z57.0", cie11: "QD84", desc: "Exposición ocupacional al ruido" },
-  { cie10: "Z57.2", cie11: "QD86", desc: "Exposición ocupacional a polvo" },
-  { cie10: "Z57.7", cie11: "QD8B", desc: "Exposición ocupacional a vibración" },
+  { cie10: "Z57.0", cie11: "QD84", desc: "ExposiciÃ³n ocupacional al ruido" },
+  { cie10: "Z57.2", cie11: "QD86", desc: "ExposiciÃ³n ocupacional a polvo" },
+  { cie10: "Z57.7", cie11: "QD8B", desc: "ExposiciÃ³n ocupacional a vibraciÃ³n" },
   {
     cie10: "Z73.0",
     cie11: "QD85.0",
     desc: "Agotamiento profesional - Burnout",
   },
-  { cie10: "Z73.3", cie11: "QD85", desc: "Estrés laboral" },
+  { cie10: "Z73.3", cie11: "QD85", desc: "EstrÃ©s laboral" },
   { cie10: "M54.5", cie11: "ME84.2", desc: "Lumbago no especificado" },
   { cie10: "M54.2", cie11: "ME83.1", desc: "Cervicalgia" },
-  { cie10: "M54.4", cie11: "ME84.3", desc: "Lumbago con ciática" },
+  { cie10: "M54.4", cie11: "ME84.3", desc: "Lumbago con ciÃ¡tica" },
   {
     cie10: "M51.1",
     cie11: "FA81",
-    desc: "Hernia de disco lumbar con radiculopatía",
+    desc: "Hernia de disco lumbar con radiculopatÃ­a",
   },
   {
     cie10: "M50.1",
     cie11: "FA80",
-    desc: "Hernia de disco cervical con radiculopatía",
+    desc: "Hernia de disco cervical con radiculopatÃ­a",
   },
   { cie10: "M51.2", cie11: "FA81.1", desc: "Desplazamiento de disco lumbar" },
   { cie10: "M50.2", cie11: "FA80.1", desc: "Desplazamiento de disco cervical" },
-  { cie10: "G56.0", cie11: "8C10.0", desc: "Síndrome del túnel del carpo" },
-  { cie10: "G56.2", cie11: "8C10.2", desc: "Lesión del nervio cubital" },
+  { cie10: "G56.0", cie11: "8C10.0", desc: "SÃ­ndrome del tÃºnel del carpo" },
+  { cie10: "G56.2", cie11: "8C10.2", desc: "LesiÃ³n del nervio cubital" },
   {
     cie10: "G54.0",
     cie11: "8C80.0",
-    desc: "Trastornos de la raíz nerviosa cervical",
+    desc: "Trastornos de la raÃ­z nerviosa cervical",
   },
   {
     cie10: "G54.2",
     cie11: "8C80.2",
-    desc: "Trastornos de la raíz nerviosa lumbosacra",
+    desc: "Trastornos de la raÃ­z nerviosa lumbosacra",
   },
   { cie10: "M65.4", cie11: "FB52.1", desc: "Tenosinovitis de De Quervain" },
   {
@@ -5791,7 +5791,7 @@ const CIE11_EQUIVALENCIAS = [
     cie11: "FB52.2",
     desc: "Dedo en gatillo - tenosinovitis estenosante",
   },
-  { cie10: "M75.0", cie11: "FB52.0", desc: "Síndrome del manguito rotador" },
+  { cie10: "M75.0", cie11: "FB52.0", desc: "SÃ­ndrome del manguito rotador" },
   {
     cie10: "M75.3",
     cie11: "FB52.3",
@@ -5810,7 +5810,7 @@ const CIE11_EQUIVALENCIAS = [
   {
     cie10: "M70.0",
     cie11: "FB52.6",
-    desc: "Sinovitis crepitante crónica de mano y muñeca",
+    desc: "Sinovitis crepitante crÃ³nica de mano y muÃ±eca",
   },
   {
     cie10: "H90.3",
@@ -5823,34 +5823,34 @@ const CIE11_EQUIVALENCIAS = [
   {
     cie10: "J60",
     cie11: "CA22.0",
-    desc: "Neumoconiosis de los mineros del carbón",
+    desc: "Neumoconiosis de los mineros del carbÃ³n",
   },
-  { cie10: "J45.0", cie11: "CA23", desc: "Asma ocupacional alérgica" },
+  { cie10: "J45.0", cie11: "CA23", desc: "Asma ocupacional alÃ©rgica" },
   { cie10: "J45.1", cie11: "CA23.1", desc: "Asma ocupacional irritativa" },
   {
     cie10: "F43.1",
     cie11: "6B40",
-    desc: "Trastorno de estrés postraumático - TEPT",
+    desc: "Trastorno de estrÃ©s postraumÃ¡tico - TEPT",
   },
-  { cie10: "F43.2", cie11: "6B43", desc: "Trastorno de adaptación laboral" },
+  { cie10: "F43.2", cie11: "6B43", desc: "Trastorno de adaptaciÃ³n laboral" },
   { cie10: "F41.1", cie11: "6B00", desc: "Trastorno de ansiedad generalizada" },
   { cie10: "F41.2", cie11: "6B01", desc: "Trastorno mixto ansioso-depresivo" },
   { cie10: "F32.0", cie11: "6A70.0", desc: "Episodio depresivo leve" },
   { cie10: "F32.1", cie11: "6A70.1", desc: "Episodio depresivo moderado" },
   { cie10: "F32.2", cie11: "6A70.2", desc: "Episodio depresivo grave" },
-  { cie10: "I10", cie11: "BA00", desc: "Hipertensión esencial (primaria)" },
+  { cie10: "I10", cie11: "BA00", desc: "HipertensiÃ³n esencial (primaria)" },
   {
     cie10: "I25.1",
     cie11: "BA80",
-    desc: "Cardiopatía isquémica aterosclerótica",
+    desc: "CardiopatÃ­a isquÃ©mica aterosclerÃ³tica",
   },
   { cie10: "E11.9", cie11: "5A11", desc: "Diabetes mellitus tipo 2" },
-  { cie10: "E66.0", cie11: "5B81", desc: "Obesidad por exceso de calorías" },
+  { cie10: "E66.0", cie11: "5B81", desc: "Obesidad por exceso de calorÃ­as" },
   { cie10: "E78.0", cie11: "5C80", desc: "Hipercolesterolemia pura" },
   {
     cie10: "L23.5",
     cie11: "EK04.3",
-    desc: "Dermatitis alérgica de contacto por químicos",
+    desc: "Dermatitis alÃ©rgica de contacto por quÃ­micos",
   },
   {
     cie10: "L24.2",
@@ -5858,7 +5858,7 @@ const CIE11_EQUIVALENCIAS = [
     desc: "Dermatitis irritativa por disolventes",
   },
   { cie10: "C45.0", cie11: "2C26", desc: "Mesotelioma de pleura - asbestosis" },
-  { cie10: "C34.0", cie11: "2C25.0", desc: "Cáncer de pulmón laboral" },
+  { cie10: "C34.0", cie11: "2C25.0", desc: "CÃ¡ncer de pulmÃ³n laboral" },
   {
     cie10: "C92.0",
     cie11: "2B33.0",
@@ -5867,22 +5867,22 @@ const CIE11_EQUIVALENCIAS = [
   {
     cie10: "T56.0",
     cie11: "NE60",
-    desc: "Intoxicación por plomo - saturnismo",
+    desc: "IntoxicaciÃ³n por plomo - saturnismo",
   },
-  { cie10: "T56.1", cie11: "NE61", desc: "Intoxicación por mercurio" },
+  { cie10: "T56.1", cie11: "NE61", desc: "IntoxicaciÃ³n por mercurio" },
   {
     cie10: "K21.0",
     cie11: "DA22",
-    desc: "Enfermedad por reflujo gastroesofágico",
+    desc: "Enfermedad por reflujo gastroesofÃ¡gico",
   },
   { cie10: "R51", cie11: "MG30.0", desc: "Cefalea tensional" },
   { cie10: "J00", cie11: "CA00", desc: "Rinofaringitis aguda" },
   {
     cie10: "J06.9",
     cie11: "CA0Z",
-    desc: "Infección aguda vías respiratorias superiores",
+    desc: "InfecciÃ³n aguda vÃ­as respiratorias superiores",
   },
-  { cie10: "N39.0", cie11: "GC08", desc: "Infección de vías urinarias" },
+  { cie10: "N39.0", cie11: "GC08", desc: "InfecciÃ³n de vÃ­as urinarias" },
 ];
 const _equivalenciaCIE11 = (cie10code) => {
   if (!cie10code) return null;
@@ -5941,7 +5941,7 @@ export const CIE11Badge = ({ cie10value }) => {
     </div>
   );
 };
-// MÓDULO CUPS: Código Único de Procedimientos en Salud - Colombia
+// MÃDULO CUPS: CÃ³digo Ãnico de Procedimientos en Salud - Colombia
 // Fuente: Res. 2175/2015 MSPS (consolida CUPS, deroga Res. 2175/2015), actualizada 2024
 // Procedimientos frecuentes en Salud Ocupacional y Medicina General
 // Ref. legal: Res. 2275/2023 (RIPS), Res. 1843/2025
@@ -5984,127 +5984,127 @@ const CUPS_OCUPACIONAL = [
   },
   {
     code: "903801",
-    desc: "Evaluación médica ocupacional de ingreso - Res. 1843/2025",
+    desc: "EvaluaciÃ³n mÃ©dica ocupacional de ingreso - Res. 1843/2025",
     group: "Salud Ocupacional",
   },
   {
     code: "903802",
-    desc: "Evaluación médica ocupacional periódica - Res. 1843/2025",
+    desc: "EvaluaciÃ³n mÃ©dica ocupacional periÃ³dica - Res. 1843/2025",
     group: "Salud Ocupacional",
   },
   {
     code: "903803",
-    desc: "Evaluación médica ocupacional de retiro/egreso",
+    desc: "EvaluaciÃ³n mÃ©dica ocupacional de retiro/egreso",
     group: "Salud Ocupacional",
   },
   {
     code: "903804",
-    desc: "Evaluación médica post-incapacidad (>=30 días) - Res. 1843/2025 Art.9",
+    desc: "EvaluaciÃ³n mÃ©dica post-incapacidad (>=30 dÃ­as) - Res. 1843/2025 Art.9",
     group: "Salud Ocupacional",
   },
   {
     code: "903805",
-    desc: "Evaluación médica de retorno laboral (>90 días no médica) - Art.13",
+    desc: "EvaluaciÃ³n mÃ©dica de retorno laboral (>90 dÃ­as no mÃ©dica) - Art.13",
     group: "Salud Ocupacional",
   },
   {
     code: "903806",
-    desc: "Evaluación médica ocupacional de seguimiento",
+    desc: "EvaluaciÃ³n mÃ©dica ocupacional de seguimiento",
     group: "Salud Ocupacional",
   },
   {
     code: "911501",
-    desc: "Audiometría tonal liminar vía aérea y ósea - hipoacusia laboral",
-    group: "Audiología",
+    desc: "AudiometrÃ­a tonal liminar vÃ­a aÃ©rea y Ã³sea - hipoacusia laboral",
+    group: "AudiologÃ­a",
   },
   {
     code: "911502",
-    desc: "Audiometría de tamizaje (screening auditivo)",
-    group: "Audiología",
+    desc: "AudiometrÃ­a de tamizaje (screening auditivo)",
+    group: "AudiologÃ­a",
   },
   {
     code: "911503",
-    desc: "Logoaudiometría - discriminación verbal",
-    group: "Audiología",
+    desc: "LogoaudiometrÃ­a - discriminaciÃ³n verbal",
+    group: "AudiologÃ­a",
   },
   {
     code: "911504",
     desc: "Potenciales evocados auditivos del tronco cerebral (PEATC)",
-    group: "Audiología",
+    group: "AudiologÃ­a",
   },
   {
     code: "911601",
-    desc: "Otoscopía - examen del conducto auditivo externo y tímpano",
-    group: "Audiología",
+    desc: "OtoscopÃ­a - examen del conducto auditivo externo y tÃ­mpano",
+    group: "AudiologÃ­a",
   },
   {
     code: "921601",
-    desc: "Examen optométrico completo - agudeza visual y refracción",
-    group: "Optometría",
+    desc: "Examen optomÃ©trico completo - agudeza visual y refracciÃ³n",
+    group: "OptometrÃ­a",
   },
   {
     code: "921602",
     desc: "Agudeza visual - tamizaje visual laboral",
-    group: "Optometría",
+    group: "OptometrÃ­a",
   },
   {
     code: "921603",
-    desc: "Campimetría (campo visual) - trabajo en alturas, conductores",
-    group: "Optometría",
+    desc: "CampimetrÃ­a (campo visual) - trabajo en alturas, conductores",
+    group: "OptometrÃ­a",
   },
   {
     code: "921604",
-    desc: "Visión de colores (Ishihara) - electrónica y seguridad",
-    group: "Optometría",
+    desc: "VisiÃ³n de colores (Ishihara) - electrÃ³nica y seguridad",
+    group: "OptometrÃ­a",
   },
   {
     code: "921701",
-    desc: "Tonometría ocular - detección glaucoma",
-    group: "Optometría",
+    desc: "TonometrÃ­a ocular - detecciÃ³n glaucoma",
+    group: "OptometrÃ­a",
   },
   {
     code: "912701",
-    desc: "Espirometría simple (CVF, VEF1) - exposición laboral a polvos",
-    group: "Neumología",
+    desc: "EspirometrÃ­a simple (CVF, VEF1) - exposiciÃ³n laboral a polvos",
+    group: "NeumologÃ­a",
   },
   {
     code: "912702",
-    desc: "Espirometría con broncodilatador - asma ocupacional",
-    group: "Neumología",
+    desc: "EspirometrÃ­a con broncodilatador - asma ocupacional",
+    group: "NeumologÃ­a",
   },
   {
     code: "912703",
     desc: "Flujo espiratorio pico (PEF) - monitoreo asma",
-    group: "Neumología",
+    group: "NeumologÃ­a",
   },
   {
     code: "912704",
-    desc: "Oximetría de pulso - saturación O2 laboral",
-    group: "Neumología",
+    desc: "OximetrÃ­a de pulso - saturaciÃ³n O2 laboral",
+    group: "NeumologÃ­a",
   },
   {
     code: "891501",
     desc: "Electroencefalograma (EEG) - epilepsia, alturas",
-    group: "Neurología",
+    group: "NeurologÃ­a",
   },
   {
     code: "891502",
-    desc: "Electromiografía (EMG) - túnel del carpo, neuropatía laboral",
-    group: "Neurología",
+    desc: "ElectromiografÃ­a (EMG) - tÃºnel del carpo, neuropatÃ­a laboral",
+    group: "NeurologÃ­a",
   },
   {
     code: "891503",
-    desc: "Velocidades de conducción nerviosa (VCN) - GATISO-MMSS",
-    group: "Neurología",
+    desc: "Velocidades de conducciÃ³n nerviosa (VCN) - GATISO-MMSS",
+    group: "NeurologÃ­a",
   },
   {
     code: "891504",
     desc: "Potenciales evocados somatosensoriales (PESS)",
-    group: "Neurología",
+    group: "NeurologÃ­a",
   },
   {
     code: "903001",
-    desc: "Hemograma completo con diferencial - cuadro hemático",
+    desc: "Hemograma completo con diferencial - cuadro hemÃ¡tico",
     group: "Laboratorio",
   },
   {
@@ -6119,62 +6119,62 @@ const CUPS_OCUPACIONAL = [
   },
   {
     code: "903004",
-    desc: "Perfil lipídico completo - colesterol HDL, LDL, triglicéridos",
+    desc: "Perfil lipÃ­dico completo - colesterol HDL, LDL, triglicÃ©ridos",
     group: "Laboratorio",
   },
   {
     code: "903005",
-    desc: "Parcial de orina (uroanálisis)",
+    desc: "Parcial de orina (uroanÃ¡lisis)",
     group: "Laboratorio",
   },
   {
     code: "903006",
-    desc: "Creatinina sérica - función renal",
+    desc: "Creatinina sÃ©rica - funciÃ³n renal",
     group: "Laboratorio",
   },
   {
     code: "903007",
-    desc: "Transaminasas ALT/AST - función hepática, exposición a tóxicos",
+    desc: "Transaminasas ALT/AST - funciÃ³n hepÃ¡tica, exposiciÃ³n a tÃ³xicos",
     group: "Laboratorio",
   },
   {
     code: "903008",
-    desc: "Colinesterasa sérica - exposición a organofosforados",
+    desc: "Colinesterasa sÃ©rica - exposiciÃ³n a organofosforados",
     group: "Laboratorio",
   },
   {
     code: "903009",
-    desc: "Plombemia (plomo en sangre) - exposición laboral a plomo",
+    desc: "Plombemia (plomo en sangre) - exposiciÃ³n laboral a plomo",
     group: "Laboratorio",
   },
   {
     code: "903010",
-    desc: "Mercurio en orina 24h - exposición a mercurio laboral",
+    desc: "Mercurio en orina 24h - exposiciÃ³n a mercurio laboral",
     group: "Laboratorio",
   },
   {
     code: "903011",
-    desc: "Manganeso en sangre - exposición laboral",
+    desc: "Manganeso en sangre - exposiciÃ³n laboral",
     group: "Laboratorio",
   },
   {
     code: "903012",
-    desc: "Solventes orgánicos en orina - benceno, tolueno, xileno",
+    desc: "Solventes orgÃ¡nicos en orina - benceno, tolueno, xileno",
     group: "Laboratorio",
   },
   { code: "903013", desc: "Urocultivo", group: "Laboratorio" },
   {
     code: "903014",
-    desc: "Coproscópico directo - parásitos intestinales",
+    desc: "CoproscÃ³pico directo - parÃ¡sitos intestinales",
     group: "Laboratorio",
   },
-  { code: "903016", desc: "Proteína C reactiva (PCR)", group: "Laboratorio" },
+  { code: "903016", desc: "ProteÃ­na C reactiva (PCR)", group: "Laboratorio" },
   {
     code: "903017",
-    desc: "VSG (velocidad de sedimentación globular)",
+    desc: "VSG (velocidad de sedimentaciÃ³n globular)",
     group: "Laboratorio",
   },
-  { code: "903018", desc: "Ácido úrico sérico", group: "Laboratorio" },
+  { code: "903018", desc: "Ãcido Ãºrico sÃ©rico", group: "Laboratorio" },
   {
     code: "903019",
     desc: "TSH (hormona estimulante de tiroides)",
@@ -6183,175 +6183,175 @@ const CUPS_OCUPACIONAL = [
   { code: "903020", desc: "Vitamina D 25-OH", group: "Laboratorio" },
   {
     code: "903021",
-    desc: "Antígeno de superficie hepatitis B (HBsAg)",
+    desc: "AntÃ­geno de superficie hepatitis B (HBsAg)",
     group: "Laboratorio",
   },
   {
     code: "903022",
-    desc: "Anti-HBs - verificación vacuna hepatitis B",
+    desc: "Anti-HBs - verificaciÃ³n vacuna hepatitis B",
     group: "Laboratorio",
   },
   { code: "903023", desc: "Prueba de VIH (ELISA)", group: "Laboratorio" },
-  { code: "903024", desc: "VDRL - sífilis", group: "Laboratorio" },
+  { code: "903024", desc: "VDRL - sÃ­filis", group: "Laboratorio" },
   {
     code: "870101",
-    desc: "Radiografía de columna lumbosacra AP y lateral",
-    group: "Imagenología",
+    desc: "RadiografÃ­a de columna lumbosacra AP y lateral",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870102",
-    desc: "Radiografía de columna cervical AP y lateral",
-    group: "Imagenología",
+    desc: "RadiografÃ­a de columna cervical AP y lateral",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870103",
-    desc: "Radiografía de columna dorsal AP y lateral",
-    group: "Imagenología",
+    desc: "RadiografÃ­a de columna dorsal AP y lateral",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870201",
-    desc: "Radiografía de manos bilateral AP - túnel del carpo",
-    group: "Imagenología",
+    desc: "RadiografÃ­a de manos bilateral AP - tÃºnel del carpo",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870202",
-    desc: "Radiografía de muñecas bilateral",
-    group: "Imagenología",
+    desc: "RadiografÃ­a de muÃ±ecas bilateral",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870203",
-    desc: "Radiografía de hombros bilateral",
-    group: "Imagenología",
+    desc: "RadiografÃ­a de hombros bilateral",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870204",
-    desc: "Radiografía de rodillas bilateral",
-    group: "Imagenología",
+    desc: "RadiografÃ­a de rodillas bilateral",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870205",
-    desc: "Radiografía de tobillos y pies bilateral",
-    group: "Imagenología",
+    desc: "RadiografÃ­a de tobillos y pies bilateral",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870301",
-    desc: "Ecografía de hombro - manguito rotador, tendinitis",
-    group: "Imagenología",
+    desc: "EcografÃ­a de hombro - manguito rotador, tendinitis",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870302",
-    desc: "Ecografía de columna lumbar - hernia discal",
-    group: "Imagenología",
+    desc: "EcografÃ­a de columna lumbar - hernia discal",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870303",
-    desc: "Ecografía de muñeca - síndrome del túnel del carpo",
-    group: "Imagenología",
+    desc: "EcografÃ­a de muÃ±eca - sÃ­ndrome del tÃºnel del carpo",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870304",
-    desc: "Ecografía abdominal total - control preventivo",
-    group: "Imagenología",
+    desc: "EcografÃ­a abdominal total - control preventivo",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870401",
-    desc: "Resonancia magnética (RMN) de columna lumbosacra",
-    group: "Imagenología",
+    desc: "Resonancia magnÃ©tica (RMN) de columna lumbosacra",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870402",
-    desc: "Resonancia magnética de columna cervical",
-    group: "Imagenología",
+    desc: "Resonancia magnÃ©tica de columna cervical",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870403",
-    desc: "Resonancia magnética de hombro",
-    group: "Imagenología",
+    desc: "Resonancia magnÃ©tica de hombro",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870501",
-    desc: "Tomografía computarizada (TAC) de tórax - neumoconiosis",
-    group: "Imagenología",
+    desc: "TomografÃ­a computarizada (TAC) de tÃ³rax - neumoconiosis",
+    group: "ImagenologÃ­a",
   },
   {
     code: "870502",
-    desc: "Radiografía de tórax PA y lateral - ILO 2011 neumoconiosis",
-    group: "Imagenología",
+    desc: "RadiografÃ­a de tÃ³rax PA y lateral - ILO 2011 neumoconiosis",
+    group: "ImagenologÃ­a",
   },
   {
     code: "893001",
     desc: "Electrocardiograma (ECG) 12 derivaciones - riesgo cardiovascular",
-    group: "Cardiología",
+    group: "CardiologÃ­a",
   },
   {
     code: "893002",
-    desc: "Ergometría (prueba de esfuerzo) - alturas, conductores",
-    group: "Cardiología",
+    desc: "ErgometrÃ­a (prueba de esfuerzo) - alturas, conductores",
+    group: "CardiologÃ­a",
   },
   {
     code: "893003",
-    desc: "Ecocardiograma transtorácico - cardiopatía hipertensiva",
-    group: "Cardiología",
+    desc: "Ecocardiograma transtorÃ¡cico - cardiopatÃ­a hipertensiva",
+    group: "CardiologÃ­a",
   },
   {
     code: "893004",
     desc: "Holter de 24 horas (ECG ambulatorio) - arritmias",
-    group: "Cardiología",
+    group: "CardiologÃ­a",
   },
   {
     code: "893005",
-    desc: "Monitoreo ambulatorio de presión arterial (MAPA 24h)",
-    group: "Cardiología",
+    desc: "Monitoreo ambulatorio de presiÃ³n arterial (MAPA 24h)",
+    group: "CardiologÃ­a",
   },
   {
     code: "950801",
-    desc: "Evaluación psicológica de ingreso - factores psicosociales",
-    group: "Psicología",
+    desc: "EvaluaciÃ³n psicolÃ³gica de ingreso - factores psicosociales",
+    group: "PsicologÃ­a",
   },
   {
     code: "950803",
-    desc: "Evaluación factores de riesgo psicosocial - Batería MinTrabajo",
-    group: "Psicología",
+    desc: "EvaluaciÃ³n factores de riesgo psicosocial - BaterÃ­a MinTrabajo",
+    group: "PsicologÃ­a",
   },
   {
     code: "950804",
-    desc: "Test de coordinación visomotora - conductores, operadores maquinaria",
-    group: "Psicología",
+    desc: "Test de coordinaciÃ³n visomotora - conductores, operadores maquinaria",
+    group: "PsicologÃ­a",
   },
   {
     code: "950901",
-    desc: "Valoración psiquiátrica - trastorno mental laboral",
-    group: "Psiquiatría",
+    desc: "ValoraciÃ³n psiquiÃ¡trica - trastorno mental laboral",
+    group: "PsiquiatrÃ­a",
   },
   {
     code: "951001",
-    desc: "Examen toxicológico en orina - sustancias psicoactivas",
-    group: "Toxicología",
+    desc: "Examen toxicolÃ³gico en orina - sustancias psicoactivas",
+    group: "ToxicologÃ­a",
   },
   {
     code: "951002",
     desc: "Alcoholemia (etanol en sangre)",
-    group: "Toxicología",
+    group: "ToxicologÃ­a",
   },
   {
     code: "951003",
     desc: "Metales pesados en sangre - Hg, Pb, Cd, Cr, Mn",
-    group: "Toxicología",
+    group: "ToxicologÃ­a",
   },
   {
     code: "960101",
-    desc: "Valoración por fisioterapia - DME, ergonomía laboral",
-    group: "Rehabilitación",
+    desc: "ValoraciÃ³n por fisioterapia - DME, ergonomÃ­a laboral",
+    group: "RehabilitaciÃ³n",
   },
   {
     code: "960102",
-    desc: "Terapia física - lesiones osteomusculares laborales",
-    group: "Rehabilitación",
+    desc: "Terapia fÃ­sica - lesiones osteomusculares laborales",
+    group: "RehabilitaciÃ³n",
   },
   {
     code: "960201",
     desc: "Terapia ocupacional - reintegro laboral",
-    group: "Rehabilitación",
+    group: "RehabilitaciÃ³n",
   },
 ];
 const _buscarCUPS = (query, maxResults) => {
@@ -6414,7 +6414,7 @@ export const CUPSInput = ({ value, onChange, placeholder, className }) => {
           if (sugerencias.length > 0) setAbierto(true);
         }}
         placeholder={
-          placeholder || "Buscar CUPS - código o nombre del procedimiento..."
+          placeholder || "Buscar CUPS - cÃ³digo o nombre del procedimiento..."
         }
         className={
           className ||
@@ -6507,42 +6507,42 @@ export const CUPSInput = ({ value, onChange, placeholder, className }) => {
               borderTop: "1px solid #e5e7eb",
             }}
           >
-            {sugerencias.length} resultado(s) · CUPS Colombia · Res. 2175/2015
-            actualizada · MinSalud
+            {sugerencias.length} resultado(s) Â· CUPS Colombia Â· Res. 2175/2015
+            actualizada Â· MinSalud
           </div>
         </div>
       )}
     </div>
   );
 };
-// MÓDULO CIE-10: Base de diagnósticos para Salud Ocupacional Colombia
+// MÃDULO CIE-10: Base de diagnÃ³sticos para Salud Ocupacional Colombia
 // Fuentes: OMS CIE-10, Decreto 1477/2014, Res. 1843/2025, GATISO-DME
 // ==========================================
 const CIE10_OCUPACIONAL = [
   // Z: FACTORES DE RIESGO OCUPACIONAL
   {
     code: "Z10.0",
-    desc: "Examen médico ocupacional - evaluación ingreso/periódica/retiro",
+    desc: "Examen mÃ©dico ocupacional - evaluaciÃ³n ingreso/periÃ³dica/retiro",
   },
   { code: "Z10.1", desc: "Examen de salud de las fuerzas armadas" },
   { code: "Z13.1", desc: "Pesquisa especial de diabetes mellitus" },
   {
     code: "Z13.5",
-    desc: "Pesquisa especial de trastornos visuales y de la visión",
+    desc: "Pesquisa especial de trastornos visuales y de la visiÃ³n",
   },
   { code: "Z13.6", desc: "Pesquisa especial de trastornos cardiovasculares" },
   { code: "Z56.0", desc: "Desempleo - problema relacionado con el empleo" },
   { code: "Z56.1", desc: "Cambio de empleo" },
-  { code: "Z56.2", desc: "Amenaza de pérdida del empleo" },
+  { code: "Z56.2", desc: "Amenaza de pÃ©rdida del empleo" },
   { code: "Z56.3", desc: "Ritmo de trabajo penoso - carga laboral excesiva" },
-  { code: "Z56.4", desc: "Desacuerdo con el jefe y compañeros de trabajo" },
+  { code: "Z56.4", desc: "Desacuerdo con el jefe y compaÃ±eros de trabajo" },
   {
     code: "Z56.5",
     desc: "Trabajo desagradable - condiciones laborales adversas",
   },
   {
     code: "Z56.6",
-    desc: "Otras dificultades físicas relacionadas con el trabajo",
+    desc: "Otras dificultades fÃ­sicas relacionadas con el trabajo",
   },
   {
     code: "Z56.7",
@@ -6550,44 +6550,44 @@ const CIE10_OCUPACIONAL = [
   },
   {
     code: "Z57.0",
-    desc: "Exposición ocupacional al ruido - hipoacusia laboral",
+    desc: "ExposiciÃ³n ocupacional al ruido - hipoacusia laboral",
   },
   {
     code: "Z57.1",
-    desc: "Exposición ocupacional a radiación ionizante y no ionizante",
+    desc: "ExposiciÃ³n ocupacional a radiaciÃ³n ionizante y no ionizante",
   },
   {
     code: "Z57.2",
-    desc: "Exposición ocupacional al polvo - silicosis, neumoconiosis",
+    desc: "ExposiciÃ³n ocupacional al polvo - silicosis, neumoconiosis",
   },
   {
     code: "Z57.3",
-    desc: "Exposición ocupacional a otros contaminantes del aire",
+    desc: "ExposiciÃ³n ocupacional a otros contaminantes del aire",
   },
   {
     code: "Z57.4",
-    desc: "Exposición ocupacional a agentes tóxicos en agricultura",
+    desc: "ExposiciÃ³n ocupacional a agentes tÃ³xicos en agricultura",
   },
   {
     code: "Z57.5",
-    desc: "Exposición ocupacional a agentes tóxicos en otras industrias",
+    desc: "ExposiciÃ³n ocupacional a agentes tÃ³xicos en otras industrias",
   },
-  { code: "Z57.6", desc: "Exposición ocupacional a temperaturas extremas" },
-  { code: "Z57.7", desc: "Exposición ocupacional a vibración" },
-  { code: "Z57.8", desc: "Exposición ocupacional a otros factores de riesgo" },
+  { code: "Z57.6", desc: "ExposiciÃ³n ocupacional a temperaturas extremas" },
+  { code: "Z57.7", desc: "ExposiciÃ³n ocupacional a vibraciÃ³n" },
+  { code: "Z57.8", desc: "ExposiciÃ³n ocupacional a otros factores de riesgo" },
   {
     code: "Z57.9",
-    desc: "Exposición ocupacional a factor de riesgo no especificado",
+    desc: "ExposiciÃ³n ocupacional a factor de riesgo no especificado",
   },
-  { code: "Z73.0", desc: "Síndrome de agotamiento - Burnout laboral" },
-  { code: "Z73.1", desc: "Acentuación de rasgos de la personalidad" },
+  { code: "Z73.0", desc: "SÃ­ndrome de agotamiento - Burnout laboral" },
+  { code: "Z73.1", desc: "AcentuaciÃ³n de rasgos de la personalidad" },
   {
     code: "Z73.2",
-    desc: "Falta de relajación y descanso - fatiga laboral crónica",
+    desc: "Falta de relajaciÃ³n y descanso - fatiga laboral crÃ³nica",
   },
   {
     code: "Z73.3",
-    desc: "Estrés no clasificado en otra parte - estrés laboral",
+    desc: "EstrÃ©s no clasificado en otra parte - estrÃ©s laboral",
   },
   {
     code: "Z73.4",
@@ -6595,49 +6595,49 @@ const CIE10_OCUPACIONAL = [
   },
   {
     code: "Z73.5",
-    desc: "Conflicto de rol - dificultad de conciliación laboral/personal",
+    desc: "Conflicto de rol - dificultad de conciliaciÃ³n laboral/personal",
   },
-  { code: "Z73.6", desc: "Limitación de actividades debida a incapacidad" },
+  { code: "Z73.6", desc: "LimitaciÃ³n de actividades debida a incapacidad" },
   {
     code: "Z76.5",
     desc: "Persona que simula enfermedad (simulador consciente)",
   },
-  { code: "Z77.0", desc: "Contacto y exposición a metales y metaloides" },
+  { code: "Z77.0", desc: "Contacto y exposiciÃ³n a metales y metaloides" },
   {
     code: "Z77.1",
-    desc: "Contacto y exposición a materiales tóxicos y contaminantes",
+    desc: "Contacto y exposiciÃ³n a materiales tÃ³xicos y contaminantes",
   },
   // M: SISTEMA OSTEOMUSCULAR - GATISO-DME, GATISO-TME
   {
     code: "M47.8",
     desc: "Espondiloartrosis cervical - cervicoartrosis laboral",
   },
-  { code: "M47.81", desc: "Espondiloartrosis cervical con mielopatía" },
+  { code: "M47.81", desc: "Espondiloartrosis cervical con mielopatÃ­a" },
   { code: "M48.0", desc: "Estenosis espinal cervical o lumbar" },
-  { code: "M50.0", desc: "Enfermedad del disco cervical con mielopatía" },
+  { code: "M50.0", desc: "Enfermedad del disco cervical con mielopatÃ­a" },
   {
     code: "M50.1",
-    desc: "Enfermedad del disco cervical con radiculopatía - hernia cervical",
+    desc: "Enfermedad del disco cervical con radiculopatÃ­a - hernia cervical",
   },
   {
     code: "M50.2",
-    desc: "Desplazamiento de disco cervical - hernia sin mielopatía",
+    desc: "Desplazamiento de disco cervical - hernia sin mielopatÃ­a",
   },
   {
     code: "M51.1",
-    desc: "Enfermedad del disco lumbar con radiculopatía - lumbociática laboral",
+    desc: "Enfermedad del disco lumbar con radiculopatÃ­a - lumbociÃ¡tica laboral",
   },
   {
     code: "M51.2",
     desc: "Desplazamiento de disco lumbar - hernia de disco lumbar",
   },
-  { code: "M51.3", desc: "Degeneración del disco intervertebral lumbar" },
+  { code: "M51.3", desc: "DegeneraciÃ³n del disco intervertebral lumbar" },
   { code: "M54.2", desc: "Cervicalgia - dolor cervical laboral" },
-  { code: "M54.3", desc: "Ciática - radiculopatía lumbosacra" },
-  { code: "M54.4", desc: "Lumbago con ciática" },
+  { code: "M54.3", desc: "CiÃ¡tica - radiculopatÃ­a lumbosacra" },
+  { code: "M54.4", desc: "Lumbago con ciÃ¡tica" },
   {
     code: "M54.5",
-    desc: "Lumbago no especificado - lumbalgia laboral crónica",
+    desc: "Lumbago no especificado - lumbalgia laboral crÃ³nica",
   },
   { code: "M54.6", desc: "Dolor en columna dorsal" },
   { code: "M60.0", desc: "Miositis infecciosa" },
@@ -6658,7 +6658,7 @@ const CIE10_OCUPACIONAL = [
   { code: "M65.9", desc: "Sinovitis y tenosinovitis no especificada" },
   {
     code: "M70.0",
-    desc: "Sinovitis crepitante crónica de mano y muñeca laboral",
+    desc: "Sinovitis crepitante crÃ³nica de mano y muÃ±eca laboral",
   },
   { code: "M70.1", desc: "Bursitis de mano" },
   { code: "M70.2", desc: "Bursitis olecraniana - trabajo manual prolongado" },
@@ -6667,7 +6667,7 @@ const CIE10_OCUPACIONAL = [
   { code: "M70.5", desc: "Otras bursitis de rodilla - trabajo en cuclillas" },
   {
     code: "M70.6",
-    desc: "Bursitis trocantérica - trabajo en bipedestación prolongada",
+    desc: "Bursitis trocantÃ©rica - trabajo en bipedestaciÃ³n prolongada",
   },
   {
     code: "M70.9",
@@ -6675,12 +6675,12 @@ const CIE10_OCUPACIONAL = [
   },
   {
     code: "M75.0",
-    desc: "Síndrome del manguito rotador - hombro doloroso laboral",
+    desc: "SÃ­ndrome del manguito rotador - hombro doloroso laboral",
   },
-  { code: "M75.1", desc: "Síndrome del bíceps - tendinitis bicipital laboral" },
+  { code: "M75.1", desc: "SÃ­ndrome del bÃ­ceps - tendinitis bicipital laboral" },
   { code: "M75.2", desc: "Tendinitis calcificante de hombro" },
-  { code: "M75.3", desc: "Tendinitis del hombro - síndrome de impingement" },
-  { code: "M75.4", desc: "Síndrome de roce del hombro" },
+  { code: "M75.3", desc: "Tendinitis del hombro - sÃ­ndrome de impingement" },
+  { code: "M75.4", desc: "SÃ­ndrome de roce del hombro" },
   { code: "M75.5", desc: "Bursitis del hombro laboral" },
   { code: "M75.8", desc: "Otras lesiones del hombro laboral" },
   { code: "M77.0", desc: "Epicondilitis medial - codo de golfista laboral" },
@@ -6688,39 +6688,39 @@ const CIE10_OCUPACIONAL = [
   { code: "M79.1", desc: "Mialgia - dolor muscular difuso" },
   { code: "M79.2", desc: "Neuralgia y neuritis no especificadas" },
   { code: "M79.3", desc: "Paniculitis - dolor en tejido adiposo" },
-  // G: NEUROLÓGICOS - GATISO-MMSS
-  { code: "G50.0", desc: "Neuralgia del trigémino paroxística" },
+  // G: NEUROLÃGICOS - GATISO-MMSS
+  { code: "G50.0", desc: "Neuralgia del trigÃ©mino paroxÃ­stica" },
   {
     code: "G54.0",
-    desc: "Trastornos de la raíz nerviosa cervical - radiculopatía cervical",
+    desc: "Trastornos de la raÃ­z nerviosa cervical - radiculopatÃ­a cervical",
   },
-  { code: "G54.1", desc: "Trastornos de la raíz nerviosa torácica" },
+  { code: "G54.1", desc: "Trastornos de la raÃ­z nerviosa torÃ¡cica" },
   {
     code: "G54.2",
-    desc: "Trastornos de la raíz nerviosa lumbosacra - radiculopatía lumbar",
+    desc: "Trastornos de la raÃ­z nerviosa lumbosacra - radiculopatÃ­a lumbar",
   },
   {
     code: "G56.0",
-    desc: "Síndrome del túnel del carpo - compresión nervio mediano laboral",
+    desc: "SÃ­ndrome del tÃºnel del carpo - compresiÃ³n nervio mediano laboral",
   },
   { code: "G56.1", desc: "Otras lesiones del nervio mediano laboral" },
   {
     code: "G56.2",
-    desc: "Lesión del nervio cubital - parálisis cubital laboral",
+    desc: "LesiÃ³n del nervio cubital - parÃ¡lisis cubital laboral",
   },
-  { code: "G56.3", desc: "Lesión del nervio radial" },
+  { code: "G56.3", desc: "LesiÃ³n del nervio radial" },
   {
     code: "G57.1",
-    desc: "Meralgia parestésica - compresión nervio femorocutáneo",
+    desc: "Meralgia parestÃ©sica - compresiÃ³n nervio femorocutÃ¡neo",
   },
-  { code: "G57.2", desc: "Lesión del nervio femoral" },
-  { code: "G57.3", desc: "Lesión del nervio ciático poplíteo externo" },
-  { code: "G57.5", desc: "Síndrome del túnel del tarso" },
+  { code: "G57.2", desc: "LesiÃ³n del nervio femoral" },
+  { code: "G57.3", desc: "LesiÃ³n del nervio ciÃ¡tico poplÃ­teo externo" },
+  { code: "G57.5", desc: "SÃ­ndrome del tÃºnel del tarso" },
   {
     code: "G57.6",
-    desc: "Lesión del nervio plantar - trabajo en bipedestación",
+    desc: "LesiÃ³n del nervio plantar - trabajo en bipedestaciÃ³n",
   },
-  { code: "G62.2", desc: "Polineuropatía debida a agentes tóxicos laborales" },
+  { code: "G62.2", desc: "PolineuropatÃ­a debida a agentes tÃ³xicos laborales" },
   // F: TRASTORNOS MENTALES - Psicosocial, Res. 2646/2008
   {
     code: "F10.1",
@@ -6729,104 +6729,104 @@ const CIE10_OCUPACIONAL = [
   { code: "F17.1", desc: "Trastornos debidos al tabaco - uso nocivo" },
   { code: "F32.0", desc: "Episodio depresivo leve - laboral" },
   { code: "F32.1", desc: "Episodio depresivo moderado" },
-  { code: "F32.2", desc: "Episodio depresivo grave sin síntomas psicóticos" },
+  { code: "F32.2", desc: "Episodio depresivo grave sin sÃ­ntomas psicÃ³ticos" },
   {
     code: "F41.0",
-    desc: "Trastorno de pánico - ansiedad paroxística episódica",
+    desc: "Trastorno de pÃ¡nico - ansiedad paroxÃ­stica episÃ³dica",
   },
   {
     code: "F41.1",
-    desc: "Trastorno de ansiedad generalizada - estrés laboral",
+    desc: "Trastorno de ansiedad generalizada - estrÃ©s laboral",
   },
   {
     code: "F41.2",
-    desc: "Trastorno mixto ansioso-depresivo - síndrome laboral",
+    desc: "Trastorno mixto ansioso-depresivo - sÃ­ndrome laboral",
   },
-  { code: "F43.0", desc: "Reacción aguda al estrés - accidente laboral" },
-  { code: "F43.1", desc: "Trastorno de estrés postraumático - TEPT laboral" },
-  { code: "F43.2", desc: "Trastorno de adaptación - cambio laboral" },
+  { code: "F43.0", desc: "ReacciÃ³n aguda al estrÃ©s - accidente laboral" },
+  { code: "F43.1", desc: "Trastorno de estrÃ©s postraumÃ¡tico - TEPT laboral" },
+  { code: "F43.2", desc: "Trastorno de adaptaciÃ³n - cambio laboral" },
   { code: "F48.0", desc: "Neurastenia - agotamiento nervioso laboral" },
-  { code: "F51.0", desc: "Insomnio no orgánico - trastorno del sueño laboral" },
+  { code: "F51.0", desc: "Insomnio no orgÃ¡nico - trastorno del sueÃ±o laboral" },
   // H: AUDITIVOS Y VISUALES - Higiene industrial
   {
     code: "H83.3",
-    desc: "Efectos del ruido sobre el oído interno - NIHL laboral",
+    desc: "Efectos del ruido sobre el oÃ­do interno - NIHL laboral",
   },
   { code: "H90.0", desc: "Hipoacusia conductiva bilateral" },
   { code: "H90.3", desc: "Hipoacusia neurosensorial bilateral - laboral" },
   { code: "H90.4", desc: "Hipoacusia neurosensorial unilateral" },
-  { code: "H91.0", desc: "Hipoacusia ototóxica - medicamentos y disolventes" },
+  { code: "H91.0", desc: "Hipoacusia ototÃ³xica - medicamentos y disolventes" },
   {
     code: "H91.9",
-    desc: "Hipoacusia no especificada - pérdida auditiva laboral",
+    desc: "Hipoacusia no especificada - pÃ©rdida auditiva laboral",
   },
-  { code: "H52.1", desc: "Miopía" },
+  { code: "H52.1", desc: "MiopÃ­a" },
   { code: "H52.2", desc: "Astigmatismo" },
-  { code: "H52.4", desc: "Presbicia - visión afectada por edad" },
+  { code: "H52.4", desc: "Presbicia - visiÃ³n afectada por edad" },
   {
     code: "H53.1",
     desc: "Alteraciones visuales subjetivas - fatiga visual por pantallas",
   },
   // J: RESPIRATORIOS - Decreto 1477/2014
-  { code: "J45.0", desc: "Asma predominantemente alérgica - asma ocupacional" },
-  { code: "J45.1", desc: "Asma no alérgica - asma irritativa laboral" },
-  { code: "J60", desc: "Neumoconiosis de los mineros del carbón" },
+  { code: "J45.0", desc: "Asma predominantemente alÃ©rgica - asma ocupacional" },
+  { code: "J45.1", desc: "Asma no alÃ©rgica - asma irritativa laboral" },
+  { code: "J60", desc: "Neumoconiosis de los mineros del carbÃ³n" },
   { code: "J61", desc: "Neumoconiosis debida a amianto - asbestosis" },
   { code: "J62.0", desc: "Neumoconiosis debida al talco - talcosis" },
   {
     code: "J62.8",
-    desc: "Neumoconiosis debida a polvos con sílice - silicosis",
+    desc: "Neumoconiosis debida a polvos con sÃ­lice - silicosis",
   },
   { code: "J63.0", desc: "Aluminosis pulmonar" },
   { code: "J63.2", desc: "Beriliosis pulmonar" },
-  { code: "J63.4", desc: "Siderosis - polvo de hierro y óxidos" },
+  { code: "J63.4", desc: "Siderosis - polvo de hierro y Ã³xidos" },
   { code: "J64", desc: "Neumoconiosis no especificada" },
-  { code: "J66.0", desc: "Bisinosis - polvo de algodón, tabaco, lino" },
+  { code: "J66.0", desc: "Bisinosis - polvo de algodÃ³n, tabaco, lino" },
   {
     code: "J67.0",
-    desc: "Pulmón del granjero - esporas de actinomicetos termófilos",
+    desc: "PulmÃ³n del granjero - esporas de actinomicetos termÃ³filos",
   },
   {
     code: "J68.0",
-    desc: "Bronquitis y neumonitis por inhalación de gases, humos",
+    desc: "Bronquitis y neumonitis por inhalaciÃ³n de gases, humos",
   },
-  { code: "J00", desc: "Rinofaringitis aguda (Resfriado común)" },
+  { code: "J00", desc: "Rinofaringitis aguda (Resfriado comÃºn)" },
   {
     code: "J06.9",
-    desc: "Infección aguda de vías respiratorias superiores no especificada",
+    desc: "InfecciÃ³n aguda de vÃ­as respiratorias superiores no especificada",
   },
-  { code: "J18.9", desc: "Neumonía no especificada" },
-  { code: "J30.4", desc: "Rinitis alérgica no especificada - rinitis laboral" },
+  { code: "J18.9", desc: "NeumonÃ­a no especificada" },
+  { code: "J30.4", desc: "Rinitis alÃ©rgica no especificada - rinitis laboral" },
   // I: CARDIOVASCULARES
-  { code: "I10", desc: "Hipertensión esencial (primaria)" },
+  { code: "I10", desc: "HipertensiÃ³n esencial (primaria)" },
   {
     code: "I11.9",
-    desc: "Cardiopatía hipertensiva sin insuficiencia cardíaca",
+    desc: "CardiopatÃ­a hipertensiva sin insuficiencia cardÃ­aca",
   },
   { code: "I20.0", desc: "Angina de pecho inestable" },
   { code: "I21.0", desc: "Infarto agudo de miocardio de la pared anterior" },
   {
     code: "I25.1",
-    desc: "Enfermedad aterosclerótica del corazón - cardiopatía isquémica",
+    desc: "Enfermedad aterosclerÃ³tica del corazÃ³n - cardiopatÃ­a isquÃ©mica",
   },
-  { code: "I50.0", desc: "Insuficiencia cardíaca congestiva" },
-  { code: "I63.9", desc: "Infarto cerebral no especificado - ACV isquémico" },
+  { code: "I50.0", desc: "Insuficiencia cardÃ­aca congestiva" },
+  { code: "I63.9", desc: "Infarto cerebral no especificado - ACV isquÃ©mico" },
   {
     code: "I83.0",
-    desc: "Várices de los miembros inferiores - trabajo prolongado de pie",
+    desc: "VÃ¡rices de los miembros inferiores - trabajo prolongado de pie",
   },
-  // L: DERMATOLÓGICOS - exposición ocupacional
+  // L: DERMATOLÃGICOS - exposiciÃ³n ocupacional
   {
     code: "L23.0",
-    desc: "Dermatitis alérgica de contacto debida a metales - níquel, cromo",
+    desc: "Dermatitis alÃ©rgica de contacto debida a metales - nÃ­quel, cromo",
   },
   {
     code: "L23.1",
-    desc: "Dermatitis alérgica de contacto por adhesivos laborales",
+    desc: "Dermatitis alÃ©rgica de contacto por adhesivos laborales",
   },
   {
     code: "L23.5",
-    desc: "Dermatitis alérgica de contacto por otros productos químicos",
+    desc: "Dermatitis alÃ©rgica de contacto por otros productos quÃ­micos",
   },
   {
     code: "L24.2",
@@ -6835,63 +6835,63 @@ const CIE10_OCUPACIONAL = [
   { code: "L24.5", desc: "Dermatitis irritativa de contacto debida a plantas" },
   {
     code: "L57.0",
-    desc: "Queratosis actínica - exposición solar laboral crónica",
+    desc: "Queratosis actÃ­nica - exposiciÃ³n solar laboral crÃ³nica",
   },
   // S/T: ACCIDENTES DE TRABAJO Y LESIONES
   {
     code: "S13.4",
     desc: "Esguince o torcedura de columna cervical - accidente laboral",
   },
-  { code: "S22.0", desc: "Fractura de vértebra torácica" },
-  { code: "S32.0", desc: "Fractura de vértebra lumbar" },
-  { code: "S40.0", desc: "Contusión del hombro y del brazo" },
-  { code: "S42.0", desc: "Fractura de clavícula - accidente laboral" },
-  { code: "S43.0", desc: "Luxación de articulación del hombro" },
+  { code: "S22.0", desc: "Fractura de vÃ©rtebra torÃ¡cica" },
+  { code: "S32.0", desc: "Fractura de vÃ©rtebra lumbar" },
+  { code: "S40.0", desc: "ContusiÃ³n del hombro y del brazo" },
+  { code: "S42.0", desc: "Fractura de clavÃ­cula - accidente laboral" },
+  { code: "S43.0", desc: "LuxaciÃ³n de articulaciÃ³n del hombro" },
   {
     code: "S52.5",
-    desc: "Fractura de extremidad distal del radio - caída laboral",
+    desc: "Fractura de extremidad distal del radio - caÃ­da laboral",
   },
-  { code: "S60.0", desc: "Contusión del dedo de la mano - trabajo manual" },
-  { code: "S72.0", desc: "Fractura del cuello del fémur" },
-  { code: "S80.0", desc: "Contusión de rodilla" },
-  { code: "S83.0", desc: "Luxación de rótula" },
+  { code: "S60.0", desc: "ContusiÃ³n del dedo de la mano - trabajo manual" },
+  { code: "S72.0", desc: "Fractura del cuello del fÃ©mur" },
+  { code: "S80.0", desc: "ContusiÃ³n de rodilla" },
+  { code: "S83.0", desc: "LuxaciÃ³n de rÃ³tula" },
   {
     code: "T14.0",
-    desc: "Herida de lugar de cuerpo no especificado - laceración laboral",
+    desc: "Herida de lugar de cuerpo no especificado - laceraciÃ³n laboral",
   },
   {
     code: "T56.0",
-    desc: "Efecto tóxico del plomo y sus compuestos - saturnismo laboral",
+    desc: "Efecto tÃ³xico del plomo y sus compuestos - saturnismo laboral",
   },
   {
     code: "T56.1",
-    desc: "Efecto tóxico del mercurio - intoxicación por mercurio",
+    desc: "Efecto tÃ³xico del mercurio - intoxicaciÃ³n por mercurio",
   },
-  { code: "T56.2", desc: "Efecto tóxico del manganeso y sus compuestos" },
-  { code: "T56.4", desc: "Efecto tóxico del cromo y sus compuestos" },
-  { code: "T57.0", desc: "Efecto tóxico del arsénico y sus compuestos" },
+  { code: "T56.2", desc: "Efecto tÃ³xico del manganeso y sus compuestos" },
+  { code: "T56.4", desc: "Efecto tÃ³xico del cromo y sus compuestos" },
+  { code: "T57.0", desc: "Efecto tÃ³xico del arsÃ©nico y sus compuestos" },
   {
     code: "T65.3",
-    desc: "Efecto tóxico de nitroderivados del benceno - laboral",
+    desc: "Efecto tÃ³xico de nitroderivados del benceno - laboral",
   },
-  // C: CÁNCER LABORAL - Decreto 1477/2014
+  // C: CÃNCER LABORAL - Decreto 1477/2014
   {
     code: "C34.0",
-    desc: "Tumor maligno del bronquio principal - cáncer de pulmón laboral",
+    desc: "Tumor maligno del bronquio principal - cÃ¡ncer de pulmÃ³n laboral",
   },
   {
     code: "C34.1",
-    desc: "Tumor maligno del lóbulo superior - exposición asbesto/sílice",
+    desc: "Tumor maligno del lÃ³bulo superior - exposiciÃ³n asbesto/sÃ­lice",
   },
   { code: "C45.0", desc: "Mesotelioma de pleura - asbestosis mesotelial" },
   { code: "C45.1", desc: "Mesotelioma de peritoneo - asbesto" },
   {
     code: "C67.9",
-    desc: "Tumor maligno de la vejiga urinaria - aminas aromáticas",
+    desc: "Tumor maligno de la vejiga urinaria - aminas aromÃ¡ticas",
   },
   {
     code: "C91.0",
-    desc: "Leucemia linfoblástica aguda - exposición a benceno",
+    desc: "Leucemia linfoblÃ¡stica aguda - exposiciÃ³n a benceno",
   },
   {
     code: "C92.0",
@@ -6899,28 +6899,28 @@ const CIE10_OCUPACIONAL = [
   },
   // MEDICINA GENERAL FRECUENTE
   { code: "A09.9", desc: "Gastroenteritis no especificada" },
-  { code: "B02.9", desc: "Herpes zóster sin complicaciones" },
+  { code: "B02.9", desc: "Herpes zÃ³ster sin complicaciones" },
   { code: "E11.9", desc: "Diabetes mellitus tipo 2 sin complicaciones" },
-  { code: "E66.0", desc: "Obesidad debida a exceso de calorías" },
+  { code: "E66.0", desc: "Obesidad debida a exceso de calorÃ­as" },
   { code: "E78.0", desc: "Hipercolesterolemia pura" },
   { code: "E78.5", desc: "Hiperlipidemia no especificada" },
   {
     code: "K21.0",
-    desc: "Enfermedad por reflujo gastroesofágico con esofagitis",
+    desc: "Enfermedad por reflujo gastroesofÃ¡gico con esofagitis",
   },
   { code: "K29.7", desc: "Gastritis no especificada" },
   {
     code: "N39.0",
-    desc: "Infección de las vías urinarias, sitio no especificado",
+    desc: "InfecciÃ³n de las vÃ­as urinarias, sitio no especificado",
   },
   { code: "R51", desc: "Cefalea - cefalea tensional laboral" },
   {
     code: "R53",
-    desc: "Malestar y fatiga - síndrome de fatiga crónica laboral",
+    desc: "Malestar y fatiga - sÃ­ndrome de fatiga crÃ³nica laboral",
   },
-  { code: "R55", desc: "Síncope y colapso - vagal laboral" },
+  { code: "R55", desc: "SÃ­ncope y colapso - vagal laboral" },
 ];
-// Buscador CIE-10 con filtrado en tiempo real (insensible a tildes y mayúsculas)
+// Buscador CIE-10 con filtrado en tiempo real (insensible a tildes y mayÃºsculas)
 const _buscarCIE10 = (query, maxResults) => {
   const max = maxResults || 12;
   if (!query || query.trim().length < 2) return [];
@@ -6979,7 +6979,7 @@ export const CIE10Input = ({ value, onChange, placeholder, className, name }) =>
         onFocus={() => {
           if (sugerencias.length > 0) setAbierto(true);
         }}
-        placeholder={placeholder || "Buscar CIE-10 - código o descripción..."}
+        placeholder={placeholder || "Buscar CIE-10 - cÃ³digo o descripciÃ³n..."}
         className={
           className ||
           "w-full p-1.5 border rounded-lg text-xs focus:ring-2 focus:ring-emerald-400 outline-none border-gray-300"
@@ -7058,15 +7058,15 @@ export const CIE10Input = ({ value, onChange, placeholder, className, name }) =>
               borderTop: "1px solid #e5e7eb",
             }}
           >
-            {sugerencias.length} resultado(s) · CIE-10 Salud Ocupacional ·
-            Decreto 1477/2014 · Res. 1843/2025
+            {sugerencias.length} resultado(s) Â· CIE-10 Salud Ocupacional Â·
+            Decreto 1477/2014 Â· Res. 1843/2025
           </div>
         </div>
       )}
     </div>
   );
 };
-// MÓDULO 4: UTILIDADES
+// MÃDULO 4: UTILIDADES
 // ==========================================
 const numeroALetras = (num) => {
   if (!num) return "";
@@ -7124,7 +7124,7 @@ const numeroALetras = (num) => {
   if (n >= 1000000) {
     out +=
       numeroALetras(Math.floor(n / 1000000)) +
-      (Math.floor(n / 1000000) === 1 ? " MILLÓN " : " MILLONES ");
+      (Math.floor(n / 1000000) === 1 ? " MILLÃN " : " MILLONES ");
     n %= 1000000;
   }
   if (n >= 1000) {
@@ -7153,7 +7153,7 @@ const analyzeBP = (v) => {
   const [s, d] = v.split("/").map(Number);
   if (isNaN(s) || isNaN(d)) return null;
   if (s < 90 || d < 60)
-    return { text: "Hipotensión", color: "text-blue-600 bg-blue-100" };
+    return { text: "HipotensiÃ³n", color: "text-blue-600 bg-blue-100" };
   if (s < 120 && d < 80)
     return { text: "Normotenso", color: "text-green-600 bg-green-100" };
   if (s >= 120 && s <= 129 && d < 80)
@@ -7209,35 +7209,35 @@ const getSpanishDate = (d) => {
 };
 const NORMAL_DESCRIPTIONS_SYSTEMS = {
   cabeza:
-    "Normocéfalo, sin deformidades, sin masas palpables ni dolor a la palpación.",
-  ojos: "Pupilas isocóricas normorreactivas, conjuntivas rosadas, escleróticas blancas, movimientos oculares conservados.",
+    "NormocÃ©falo, sin deformidades, sin masas palpables ni dolor a la palpaciÃ³n.",
+  ojos: "Pupilas isocÃ³ricas normorreactivas, conjuntivas rosadas, esclerÃ³ticas blancas, movimientos oculares conservados.",
   oidos:
-    "Pabellones auriculares sin lesiones, conductos auditivos permeables, membranas timpánicas íntegras.",
+    "Pabellones auriculares sin lesiones, conductos auditivos permeables, membranas timpÃ¡nicas Ã­ntegras.",
   nariz:
-    "Tabique centrado, mucosa húmeda rosada, sin pólipos ni secreciones patológicas, permeabilidad nasal conservada.",
-  boca: "Mucosa oral húmeda rosada, orofaringe sin eritema, amígdalas no hipertróficas, dentición conservada.",
+    "Tabique centrado, mucosa hÃºmeda rosada, sin pÃ³lipos ni secreciones patolÃ³gicas, permeabilidad nasal conservada.",
+  boca: "Mucosa oral hÃºmeda rosada, orofaringe sin eritema, amÃ­gdalas no hipertrÃ³ficas, denticiÃ³n conservada.",
   cuello:
-    "Cuello simétrico, sin adenopatías palpables, tráquea centrada, tiroides no palpable, pulsos carotídeos simétricos.",
+    "Cuello simÃ©trico, sin adenopatÃ­as palpables, trÃ¡quea centrada, tiroides no palpable, pulsos carotÃ­deos simÃ©tricos.",
   torax:
-    "Simétrico, normoexpansible, sin deformidades costales, mamas sin masas palpables.",
+    "SimÃ©trico, normoexpansible, sin deformidades costales, mamas sin masas palpables.",
   corazon:
-    "Ruidos cardíacos rítmicos, de buena intensidad, sin soplos, no se palpan thrill.",
+    "Ruidos cardÃ­acos rÃ­tmicos, de buena intensidad, sin soplos, no se palpan thrill.",
   pulmones:
-    "Murmullo vesicular presente y simétrico bilateralmente, sin agregados pulmonares (no sibilancias, no estertores).",
+    "Murmullo vesicular presente y simÃ©trico bilateralmente, sin agregados pulmonares (no sibilancias, no estertores).",
   abdomen:
-    "Blando, depresible, no doloroso a la palpación, sin masas, sin organomegalias, ruidos intestinales presentes.",
+    "Blando, depresible, no doloroso a la palpaciÃ³n, sin masas, sin organomegalias, ruidos intestinales presentes.",
   genitourinario:
-    "Sin puño-percusión renal positiva, región inguinal sin masas ni hernias palpables.",
+    "Sin puÃ±o-percusiÃ³n renal positiva, regiÃ³n inguinal sin masas ni hernias palpables.",
   columna:
-    "Sin escoliosis, sin cifosis patológica, movilidad conservada en todos los planos, no dolor a la palpación de apófisis espinosas.",
+    "Sin escoliosis, sin cifosis patolÃ³gica, movilidad conservada en todos los planos, no dolor a la palpaciÃ³n de apÃ³fisis espinosas.",
   extremidades:
-    "Simétricas, bien conformadas, sin edemas, pulsos periféricos presentes y simétricos, llenado capilar <2 seg.",
-  piel: "Tegumentos de coloración normal, hidratados, sin lesiones activas, sin cicatrices patológicas.",
+    "SimÃ©tricas, bien conformadas, sin edemas, pulsos perifÃ©ricos presentes y simÃ©tricos, llenado capilar <2 seg.",
+  piel: "Tegumentos de coloraciÃ³n normal, hidratados, sin lesiones activas, sin cicatrices patolÃ³gicas.",
   neurologico:
-    "Orientado en tiempo, lugar y persona. Pares craneales sin alteraciones. Fuerza y sensibilidad conservadas, marcha normal, coordinación adecuada.",
+    "Orientado en tiempo, lugar y persona. Pares craneales sin alteraciones. Fuerza y sensibilidad conservadas, marcha normal, coordinaciÃ³n adecuada.",
 };
 // ==========================================
-// MÓDULO 5: ESTADOS INICIALES
+// MÃDULO 5: ESTADOS INICIALES
 // ==========================================
 export const initialOccupPatientState = {
   id: null,
@@ -7247,12 +7247,12 @@ export const initialOccupPatientState = {
   codigoVerificacion: "",
   conteoEdiciones: 0,
   motivoEdicion: "",
-  // Foliación HC - Res. 1995/1999 Art. 3
+  // FoliaciÃ³n HC - Res. 1995/1999 Art. 3
   folioHC: "",
-  // Número consecutivo de versión del documento
+  // NÃºmero consecutivo de versiÃ³n del documento
   versionDocumento: 1,
   fechaExamen: new Date().toISOString().split("T")[0],
-  ciudad: "Popayán",
+  ciudad: "PopayÃ¡n",
   tipoExamen: "INGRESO",
   frecuenciaSeguimiento: "",
   enfasisExamen: "GENERAL",
@@ -7267,12 +7267,12 @@ export const initialOccupPatientState = {
   // Campos de incapacidad y ausencia (Res. 1843/2025 Art. 9 y 13)
   diasIncapacidad: "",
   diasAusenciaNoMedica: "",
-  // ══ B-10: Nuevos campos Res. 1843/2025 ══
-  plazoImplementacionRecomendaciones: "20", // Art. 25 - plazo en días calendario
-  periodicidadUltimaEval: "", // Para alerta de evaluación vencida (max 3 años)
+  // ââ B-10: Nuevos campos Res. 1843/2025 ââ
+  plazoImplementacionRecomendaciones: "20", // Art. 25 - plazo en dÃ­as calendario
+  periodicidadUltimaEval: "", // Para alerta de evaluaciÃ³n vencida (max 3 aÃ±os)
   pausasActivasPrograma: false, // Art. 26 - empresa tiene programa de pausas activas
   pausasActivasParticipa: false, // Trabajador participa en pausas activas
-  justificacionPruebaEspecial: "", // Justificación clínica si se ordena prueba sensible
+  justificacionPruebaEspecial: "", // JustificaciÃ³n clÃ­nica si se ordena prueba sensible
   nombres: "",
   docNumero: "",
   docTipo: "CC",
@@ -7313,7 +7313,7 @@ export const initialOccupPatientState = {
   // Consentimiento con evidencia probatoria (Ley 1581/2012 + Res. 1843/2025 Art. 12)
   consentimientoVersion: "v2025-1843",
   consentimientoTimestamp: "",
-  consentimientoIp: "sesión-web",
+  consentimientoIp: "sesiÃ³n-web",
   riesgos: {
     fisicos: false,
     quimicos: false,
@@ -7445,7 +7445,7 @@ export const initialOccupPatientState = {
   peso: "",
   talla: "",
   imc: "",
-  diagnosticoPrincipal: "Z10.0 - EXAMEN MÉDICO OCUPACIONAL",
+  diagnosticoPrincipal: "Z10.0 - EXAMEN MÃDICO OCUPACIONAL",
   diagnosticoSecundario1: "",
   diagnosticoSecundario2: "",
   conceptoAptitud: "",
@@ -7477,8 +7477,8 @@ export const initialOccupPatientState = {
   // NORMATIVO: Res. 1843/2025 Art. 25 - Entrega del certificado al trabajador
   certificadoEntregado: false,
   fechaEntregaCertificado: "",
-  metodoEntregaCertificado: "Física",
-  // B-16: Adjuntos de paraclínicos (espirometría, audiometría, RX, laboratorios)
+  metodoEntregaCertificado: "FÃ­sica",
+  // B-16: Adjuntos de paraclÃ­nicos (espirometrÃ­a, audiometrÃ­a, RX, laboratorios)
   // Estructura: [{id, nombre, tipo, mimeType, tamano, fecha, subidoPor, path, url}]
   adjuntos: [],
 };
@@ -7571,19 +7571,19 @@ export const initialUsers = [
     mustChangePassword: true,
     name: "Dr. Julian Cucalon",
     role: "super_admin", // FASE 2: promovido a super_admin (puede crear orgs + HC)
-    orgId: ORG_DEFAULT_ID, // FASE 2: organización principal
+    orgId: ORG_DEFAULT_ID, // FASE 2: organizaciÃ³n principal
     license: "clinica",
     licenseExpiry: "2099-12-31",
     licenseStarted: "2026-01-01",
-    porcentajeHonorarios: 100, // FASE 2: hook distribución futura (Componente 10)
+    porcentajeHonorarios: 100, // FASE 2: hook distribuciÃ³n futura (Componente 10)
     secretariaPermisos: { ...SECRETARIA_PERMISOS_DEFAULT },
     // Perfil del super_admin - aparece en navbar, certificados y firmas
     doctorData: {
       ...DEFAULT_DOCTOR_DATA,
       nombre: "Dr. Julian Cucalon",
-      titulo: "Médico Especialista en Salud Ocupacional",
-      ciudad: "Popayán",
-      // licencia, cedula, celular, email: se configuran en Ajustes → Firma
+      titulo: "MÃ©dico Especialista en Salud Ocupacional",
+      ciudad: "PopayÃ¡n",
+      // licencia, cedula, celular, email: se configuran en Ajustes â Firma
     },
   },
 ];
@@ -7600,47 +7600,47 @@ export const initialCompanyState = {
   correo: "",
   arl: "",
   gerente: "",
-  // ── Convenio ──
-  medicoResponsableId: "", // médico principal para esta empresa
+  // ââ Convenio ââ
+  medicoResponsableId: "", // mÃ©dico principal para esta empresa
   tarifaIngreso: "", // tarifa examen de ingreso COP
-  tarifaPeriodico: "", // tarifa examen periódico
+  tarifaPeriodico: "", // tarifa examen periÃ³dico
   tarifaEgreso: "", // tarifa examen de egreso
   tarifaConsulta: "", // tarifa consulta general
   condicionesPago: "contado", // contado / 30dias / 60dias
   convenioFecha: "", // inicio del convenio
-  convenioVencimiento: "", // vencimiento (alerta 30 días antes)
+  convenioVencimiento: "", // vencimiento (alerta 30 dÃ­as antes)
   descuento: "", // % descuento sobre tarifa
   portalActivo: false, // portal cliente habilitado
-  facturacionAgrupada: false, // agrupar varios exámenes en una factura
-  planExamenes: [], // exámenes incluidos en el convenio
+  facturacionAgrupada: false, // agrupar varios exÃ¡menes en una factura
+  planExamenes: [], // exÃ¡menes incluidos en el convenio
   notasConvenio: "", // notas adicionales del convenio
-  // ── Multi-médico / Multi-sede (FASE 2) ──
-  medicoIds: [], // array de usernames de médicos asignados a esta empresa
+  // ââ Multi-mÃ©dico / Multi-sede (FASE 2) ââ
+  medicoIds: [], // array de usernames de mÃ©dicos asignados a esta empresa
   sedes: [], // array de sedes [{nombre, ciudad, direccion}]
-  // ── Admin del Portal Empresa (FASE 2) ──
+  // ââ Admin del Portal Empresa (FASE 2) ââ
   portalAdminUser: "", // username del admin del portal empresa
-  portalAdminPassHash: "", // SHA-256 de la contraseña admin del portal
-  // ── IPS: Admin de empresa con acceso al login principal ──
+  portalAdminPassHash: "", // SHA-256 de la contraseÃ±a admin del portal
+  // ââ IPS: Admin de empresa con acceso al login principal ââ
   adminEmpresaUser: "", // username del admin_empresa (login principal)
-  // ── PASO 1: Perfil IPS ──
+  // ââ PASO 1: Perfil IPS ââ
   logo: "", // base64 del logo de la empresa
   lema: "", // slogan/lema de la IPS
 };
 // ==========================================
-// MÓDULO 6: COMPONENTES UI REUTILIZABLES
+// MÃDULO 6: COMPONENTES UI REUTILIZABLES
 // ==========================================
-// ══ B-07: Validador de contraseña centralizado (OWASP A07 + política SISO) ══
+// ââ B-07: Validador de contraseÃ±a centralizado (OWASP A07 + polÃ­tica SISO) ââ
 const _validarContrasena = (pw) => {
   const errores = [];
-  if (!pw || pw.length < 10) errores.push("Mínimo 10 caracteres");
-  if (!/[A-Z]/.test(pw)) errores.push("Al menos 1 letra mayúscula");
-  if (!/[a-z]/.test(pw)) errores.push("Al menos 1 letra minúscula");
-  if (!/[0-9]/.test(pw)) errores.push("Al menos 1 número");
+  if (!pw || pw.length < 10) errores.push("MÃ­nimo 10 caracteres");
+  if (!/[A-Z]/.test(pw)) errores.push("Al menos 1 letra mayÃºscula");
+  if (!/[a-z]/.test(pw)) errores.push("Al menos 1 letra minÃºscula");
+  if (!/[0-9]/.test(pw)) errores.push("Al menos 1 nÃºmero");
   if (!/[^A-Za-z0-9]/.test(pw))
-    errores.push("Al menos 1 carácter especial (!@#$%...)");
+    errores.push("Al menos 1 carÃ¡cter especial (!@#$%...)");
   const comunes = [
     "password",
-    "contraseña",
+    "contraseÃ±a",
     "123456",
     "qwerty",
     "admin",
@@ -7670,8 +7670,8 @@ export const _FortalezaPass = ({ pw }) => {
   ];
   const labels = [
     "",
-    "Muy débil",
-    "Débil",
+    "Muy dÃ©bil",
+    "DÃ©bil",
     "Aceptable",
     "Fuerte",
     "Muy fuerte",
@@ -7693,17 +7693,17 @@ export const _FortalezaPass = ({ pw }) => {
           valida ? "text-emerald-700" : "text-red-600"
         }`}
       >
-        {valida ? `✅ ${labels[fortaleza]}` : `⚠️ ${errores[0]}`}
+        {valida ? `â ${labels[fortaleza]}` : `â ï¸ ${errores[0]}`}
       </p>
     </div>
   );
 };
 export const PrintStyles = () => (
   <style>{`
-    /* ═══════════════════════════════════════════════════════
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
        OCUPASALUD v3 - PRINT STYLES PREMIUM
-       Continuidad total · Sin cortes · Colores exactos
-    ═══════════════════════════════════════════════════════ */
+       Continuidad total Â· Sin cortes Â· Colores exactos
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
     @media print {
       @page { size: letter portrait; margin: 1.1cm 1.3cm 1.3cm 1.3cm; }
       /* Colores exactos */
@@ -7720,7 +7720,7 @@ export const PrintStyles = () => (
       body { background: white !important; margin: 0 !important; padding: 0 !important; font-family: Arial, Helvetica, sans-serif !important; font-size: 8.5pt !important; line-height: 1.4 !important; color: #111 !important; }
       /* Eliminar fondo gris del wrapper que causa aspecto nublado */
       .min-h-screen, .bg-gray-100, main { background: white !important; }
-      /* Eliminar sombras y bordes redondeados en impresión */
+      /* Eliminar sombras y bordes redondeados en impresiÃ³n */
       .shadow-2xl, .shadow-xl, .shadow-lg, .shadow-md, .shadow-sm, .shadow { box-shadow: none !important; }
       .rounded-2xl, .rounded-xl, .rounded-lg, .rounded-md, .rounded { border-radius: 0 !important; }
       /* Carta: flujo continuo, sin sombra, sin borde */
@@ -7730,7 +7730,7 @@ export const PrintStyles = () => (
       /* Bloques individuales: no cortar */
       .print-break-avoid, .signature-block, table { page-break-inside: avoid !important; break-inside: avoid !important; }
       tr { page-break-inside: avoid !important; break-inside: avoid !important; }
-      /* Títulos no solos al final */
+      /* TÃ­tulos no solos al final */
       h1, h2, h3, h4 { page-break-after: avoid !important; break-after: avoid !important; orphans: 3 !important; widows: 3 !important; }
       p { orphans: 3 !important; widows: 3 !important; }
       /* Saltos: solo page-break tiene salto real; section-break fluye continuo */
@@ -7758,7 +7758,7 @@ export const PrintStyles = () => (
       .bg-purple-50{background-color:#faf5ff!important} .bg-slate-800{background-color:#1e293b!important;color:white!important}
       .bg-indigo-600{background-color:#4f46e5!important;color:white!important}
       .bg-amber-100{background-color:#fef3c7!important} .bg-green-100{background-color:#dcfce7!important}
-      /* Tipografía */
+      /* TipografÃ­a */
       p, span, td, th, li { font-size: 8.5pt !important; }
       .text-xs{font-size:7pt!important} .text-sm{font-size:8pt!important} .text-base{font-size:9pt!important}
       .text-lg{font-size:10.5pt!important} .text-xl{font-size:12pt!important} .text-2xl{font-size:14pt!important}
@@ -7851,7 +7851,7 @@ export const DoctorSignature = ({ signature, data, showData = true }) => {
 // PERF-02: memo evita re-render cuando signature/data no cambian (se usa en ~15 lugares)
 export const DoctorSignatureMemo = React.memo(DoctorSignature);
 // BrandLogo: logotipo compacto para cabecera de documentos
-export export const BrandLogo = ({ data }) => {
+export const BrandLogo = ({ data }) => {
   const doc = data || DEFAULT_DOCTOR_DATA;
   const parts = (doc.nombre || "").trim().split(/\s+/);
   const initials =
@@ -7870,7 +7870,7 @@ export export const BrandLogo = ({ data }) => {
       </div>
       <div className="flex flex-col justify-center">
         <p className="text-[10px] font-black text-gray-900 uppercase leading-tight whitespace-normal break-words">
-          {doc.nombre || "MÉDICO"}
+          {doc.nombre || "MÃDICO"}
         </p>
         <div className="h-0.5 w-8 bg-gradient-to-r from-emerald-500 to-teal-400 my-0.5 rounded-full" />
         <p className="text-[8px] font-bold text-gray-500 uppercase whitespace-normal break-words">
@@ -8008,7 +8008,7 @@ export const SectionTitle = ({ title, icon: Icon, color }) => {
   );
 };
 // ==========================================
-// MÓDULO 6B: PLAN GATE - Control de acceso por plan
+// MÃDULO 6B: PLAN GATE - Control de acceso por plan
 // Uso: <PlanGate feature="ia_analisis" requiredPlan="pro" currentUser={currentUser}>
 //        <contenido restringido />
 //      </PlanGate>
@@ -8030,17 +8030,17 @@ export const PlanGate = ({
         className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 border border-amber-200 rounded-lg text-[10px] font-black text-amber-700 cursor-default"
         title={`Disponible en plan ${req.label}`}
       >
-        🔒 {req.label}
+        ð {req.label}
       </span>
     );
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 border-2 border-dashed border-blue-200 rounded-xl p-5 text-center space-y-2">
-      <div className="text-3xl">🔒</div>
+      <div className="text-3xl">ð</div>
       <p className="font-black text-gray-800 text-sm">
         Disponible en plan {req.label}
       </p>
       <p className="text-gray-500 text-xs">
-        {req.priceLabel} · Desbloquea funciones avanzadas
+        {req.priceLabel} Â· Desbloquea funciones avanzadas
       </p>
       <button
         onClick={() => {
@@ -8049,14 +8049,14 @@ export const PlanGate = ({
         }}
         className="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition"
       >
-        ⬆️ Ver planes
+        â¬ï¸ Ver planes
       </button>
     </div>
   );
 };
 
 // ==========================================
-// MÓDULO 6C: LICENCIAS TAB - componente propio (no IIFE, para cumplir Rules of Hooks)
+// MÃDULO 6C: LICENCIAS TAB - componente propio (no IIFE, para cumplir Rules of Hooks)
 // Props: usersList, setUsersList, patientsList, currentUser, setCurrentUser,
 //        _sync, pendingActivationPlan, setPendingActivationPlan
 // ==========================================
@@ -8070,18 +8070,18 @@ export const LicenciasTab = ({
   pendingActivationPlan,
   setPendingActivationPlan,
 }) => {
-  // ══ GUARD: solo administrador puede gestionar licencias ══
+  // ââ GUARD: solo administrador puede gestionar licencias ââ
   if (currentUser?.role !== "administrador") {
     return (
       <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-8 text-center space-y-3">
-        <div className="text-4xl">🔒</div>
+        <div className="text-4xl">ð</div>
         <p className="font-black text-red-800 text-lg">Acceso denegado</p>
         <p className="text-red-600 text-sm">
-          La gestión de planes y licencias es{" "}
+          La gestiÃ³n de planes y licencias es{" "}
           <strong>exclusiva del administrador</strong>.
         </p>
         <p className="text-red-500 text-xs">
-          Si necesitas un cambio de plan, comunícate con el administrador de tu
+          Si necesitas un cambio de plan, comunÃ­cate con el administrador de tu
           cuenta.
         </p>
       </div>
@@ -8091,7 +8091,7 @@ export const LicenciasTab = ({
   const [licEditId, setLicEditId] = useState(null);
   const [licForm, setLicForm] = useState({});
   const [licSaved, setLicSaved] = useState(false);
-  const [licErrors, setLicErrors] = useState([]); // validación método de pago
+  const [licErrors, setLicErrors] = useState([]); // validaciÃ³n mÃ©todo de pago
 
   const planOrder = ["libre", "starter", "pro", "clinica"];
   const planColors = {
@@ -8101,7 +8101,7 @@ export const LicenciasTab = ({
     clinica: "purple",
   };
 
-  // ── Auto-apertura cuando viene de "Activar para usuario" en renderPlanes ──
+  // ââ Auto-apertura cuando viene de "Activar para usuario" en renderPlanes ââ
   useEffect(() => {
     if (!pendingActivationPlan) return;
     // Abrir el primer usuario que no sea el admin activo, o el primero de la lista
@@ -8142,35 +8142,35 @@ export const LicenciasTab = ({
   };
 
   const saveLic = (u) => {
-    // ══ VALIDACIÓN ESTRICTA POR MÉTODO DE PAGO ══
+    // ââ VALIDACIÃN ESTRICTA POR MÃTODO DE PAGO ââ
     const errors = [];
     const monto = Number(licForm.monto) || 0;
     const planPrecio = PLAN_CONFIG[licForm.license]?.price || 0;
 
     if (licForm.license !== "libre") {
-      // 1. Planes de pago: monto requerido salvo prueba/cortesía
+      // 1. Planes de pago: monto requerido salvo prueba/cortesÃ­a
       if (["manual", "referido"].includes(licForm.tipo)) {
         if (!licForm.monto || monto <= 0)
           errors.push(
-            "💰 El monto cobrado es obligatorio para activación manual o referido."
+            "ð° El monto cobrado es obligatorio para activaciÃ³n manual o referido."
           );
         if (monto < planPrecio * 0.5)
           errors.push(
-            `💰 El monto ($${monto.toLocaleString(
+            `ð° El monto ($${monto.toLocaleString(
               "es-CO"
             )}) parece muy bajo para el plan ${
               PLAN_CONFIG[licForm.license]?.label
             } ($${planPrecio.toLocaleString("es-CO")}/mes). Verifica.`
           );
       }
-      // 2. Cortesía: requiere nota de justificación
+      // 2. CortesÃ­a: requiere nota de justificaciÃ³n
       if (licForm.tipo === "cortesia") {
         if (!licForm.notas || licForm.notas.trim().length < 10)
           errors.push(
-            "📝 Las activaciones por cortesía requieren justificación en las notas (mínimo 10 caracteres)."
+            "ð Las activaciones por cortesÃ­a requieren justificaciÃ³n en las notas (mÃ­nimo 10 caracteres)."
           );
       }
-      // 3. Transferencia/Nequi/Daviplata: requieren método y monto
+      // 3. Transferencia/Nequi/Daviplata: requieren mÃ©todo y monto
       if (
         ["Transferencia", "Nequi", "Daviplata"].includes(licForm.formaPago) &&
         licForm.tipo !== "prueba" &&
@@ -8178,13 +8178,13 @@ export const LicenciasTab = ({
       ) {
         if (!licForm.monto || monto <= 0)
           errors.push(
-            `📲 ${licForm.formaPago}: debes registrar el monto recibido para confirmar el pago.`
+            `ð² ${licForm.formaPago}: debes registrar el monto recibido para confirmar el pago.`
           );
       }
       // 4. Fecha de vencimiento requerida para planes de pago
       if (!licForm.licenseExpiry)
-        errors.push("📅 Define una fecha de vencimiento para el plan.");
-      // 5. Prueba: máx. 30 días
+        errors.push("ð Define una fecha de vencimiento para el plan.");
+      // 5. Prueba: mÃ¡x. 30 dÃ­as
       if (licForm.tipo === "prueba" && licForm.licenseExpiry) {
         const dias = Math.ceil(
           (new Date(licForm.licenseExpiry) - new Date()) / 86400000
@@ -8192,7 +8192,7 @@ export const LicenciasTab = ({
         const maxPrueba = PLAN_CONFIG[licForm.license]?.trialDays || 15;
         if (dias > maxPrueba)
           errors.push(
-            `⏰ Período de prueba máximo: ${maxPrueba} días. Ajusta la fecha de vencimiento.`
+            `â° PerÃ­odo de prueba mÃ¡ximo: ${maxPrueba} dÃ­as. Ajusta la fecha de vencimiento.`
           );
       }
     }
@@ -8241,19 +8241,19 @@ export const LicenciasTab = ({
     if (!u.license || u.license === "libre")
       return (
         <span className="text-[10px] font-black text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
-          🆓 Libre
+          ð Libre
         </span>
       );
     if (d !== null && d < 0)
       return (
         <span className="text-[10px] font-black text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
-          ❌ Vencido
+          â Vencido
         </span>
       );
     if (d !== null && d <= 7)
       return (
         <span className="text-[10px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
-          ⏰ Vence en {d}d
+          â° Vence en {d}d
         </span>
       );
     const hcU = _contarHC(patientsList, u.user);
@@ -8262,19 +8262,19 @@ export const LicenciasTab = ({
       if (pct >= 1)
         return (
           <span className="text-[10px] font-black text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
-            🔴 Límite HC
+            ð´ LÃ­mite HC
           </span>
         );
       if (pct >= 0.8)
         return (
           <span className="text-[10px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
-            🟡 80% HC
+            ð¡ 80% HC
           </span>
         );
     }
     return (
       <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-        ✅ Activo
+        â Activo
       </span>
     );
   };
@@ -8293,20 +8293,20 @@ export const LicenciasTab = ({
 
   return (
     <div className="space-y-5">
-      {/* ── BANNER GUÍA: aparece cuando viene desde "Activar para usuario" ── */}
+      {/* ââ BANNER GUÃA: aparece cuando viene desde "Activar para usuario" ââ */}
       {pendingActivationPlan && pendingPlan && (
         <div className="bg-blue-600 text-white rounded-xl px-5 py-4 flex items-start gap-4">
-          <div className="text-3xl mt-0.5">🎯</div>
+          <div className="text-3xl mt-0.5">ð¯</div>
           <div className="flex-1">
             <p className="font-black text-base">
               Activando plan {pendingPlan.label} - {pendingPlan.priceLabel}
             </p>
             <p className="text-blue-100 text-sm mt-1">
-              Se ha abierto automáticamente el editor del primer usuario.
+              Se ha abierto automÃ¡ticamente el editor del primer usuario.
               <br />
-              <strong>¿Cómo funciona?</strong> Selecciona el usuario, confirma
+              <strong>Â¿CÃ³mo funciona?</strong> Selecciona el usuario, confirma
               las fechas, el monto recibido y haz clic en{" "}
-              <em>"💾 Guardar cambios"</em>.
+              <em>"ð¾ Guardar cambios"</em>.
             </p>
             <ol className="text-blue-100 text-xs mt-2 space-y-0.5 list-decimal list-inside">
               <li>
@@ -8318,7 +8318,7 @@ export const LicenciasTab = ({
               </li>
               <li>Ingresa el monto cobrado y la forma de pago</li>
               <li>
-                Haz clic en <strong>💾 Guardar cambios</strong>
+                Haz clic en <strong>ð¾ Guardar cambios</strong>
               </li>
             </ol>
           </div>
@@ -8326,16 +8326,16 @@ export const LicenciasTab = ({
             onClick={() => setPendingActivationPlan(null)}
             className="text-blue-200 hover:text-white text-lg font-black leading-none"
           >
-            ✕
+            â
           </button>
         </div>
       )}
 
-      {/* ── MÉTRICAS ── */}
+      {/* ââ MÃTRICAS ââ */}
       <div className="grid grid-cols-3 gap-4">
         {[
           {
-            icon: "💰",
+            icon: "ð°",
             label: "Ingresos estimados/mes",
             value: `$${ingresos.toLocaleString("es-CO")} COP`,
             sub: `${
@@ -8345,7 +8345,7 @@ export const LicenciasTab = ({
             bg: "bg-emerald-900",
           },
           {
-            icon: "👥",
+            icon: "ð¥",
             label: "Usuarios activos",
             value: `${activeUsers.length} usuarios`,
             sub: `L:${
@@ -8359,8 +8359,8 @@ export const LicenciasTab = ({
             bg: "bg-slate-800",
           },
           {
-            icon: "⏰",
-            label: "Vencen en 7 días",
+            icon: "â°",
+            label: "Vencen en 7 dÃ­as",
             value: `${vencenProx.length} usuarios`,
             sub:
               vencenProx.map((u) => u.name || u.user).join(", ") || "Ninguno",
@@ -8376,14 +8376,14 @@ export const LicenciasTab = ({
         ))}
       </div>
 
-      {/* ── TABLA DE USUARIOS ── */}
+      {/* ââ TABLA DE USUARIOS ââ */}
       <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
           <span className="text-sm font-black text-gray-800">
-            👥 Usuarios y Planes
+            ð¥ Usuarios y Planes
           </span>
           <span className="text-xs text-gray-400">
-            - Clic en ⚙️ Editar para asignar o cambiar el plan de un usuario
+            - Clic en âï¸ Editar para asignar o cambiar el plan de un usuario
           </span>
         </div>
         <table className="w-full text-xs">
@@ -8405,7 +8405,7 @@ export const LicenciasTab = ({
                 Estado
               </th>
               <th className="text-center px-3 py-2 font-black text-gray-600">
-                Acción
+                AcciÃ³n
               </th>
             </tr>
           </thead>
@@ -8432,7 +8432,7 @@ export const LicenciasTab = ({
                         {u.name || u.user}
                       </p>
                       <p className="text-gray-400">
-                        @{u.user} · {u.role}
+                        @{u.user} Â· {u.role}
                       </p>
                     </td>
                     <td className="px-3 py-2.5">
@@ -8493,12 +8493,12 @@ export const LicenciasTab = ({
                             : "text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100"
                         }`}
                       >
-                        {isEditing ? "✕ Cerrar" : "⚙️ Editar"}
+                        {isEditing ? "â Cerrar" : "âï¸ Editar"}
                       </button>
                     </td>
                   </tr>
 
-                  {/* ── PANEL EDITOR INLINE ── */}
+                  {/* ââ PANEL EDITOR INLINE ââ */}
                   {isEditing && (
                     <tr>
                       <td
@@ -8569,7 +8569,7 @@ export const LicenciasTab = ({
                           {/* Tipo */}
                           <div>
                             <label className="block text-[10px] font-black text-gray-600 mb-1">
-                              Tipo de activación
+                              Tipo de activaciÃ³n
                             </label>
                             <select
                               value={licForm.tipo}
@@ -8586,7 +8586,7 @@ export const LicenciasTab = ({
                               </option>
                               <option value="prueba">Prueba gratuita</option>
                               <option value="referido">Referido</option>
-                              <option value="cortesia">Cortesía</option>
+                              <option value="cortesia">CortesÃ­a</option>
                             </select>
                           </div>
                           {/* Monto */}
@@ -8628,14 +8628,14 @@ export const LicenciasTab = ({
                               <option>Nequi</option>
                               <option>Daviplata</option>
                               <option>Efectivo</option>
-                              <option>Cortesía</option>
+                              <option>CortesÃ­a</option>
                             </select>
                           </div>
-                          {/* Restricciones por método de pago */}
+                          {/* Restricciones por mÃ©todo de pago */}
                           <div className="col-span-2 md:col-span-3 bg-blue-50 rounded-lg p-3 border border-blue-200">
                             <p className="text-[10px] font-black text-blue-800 uppercase mb-2">
-                              📋 Restricciones según método de pago y tipo de
-                              activación
+                              ð Restricciones segÃºn mÃ©todo de pago y tipo de
+                              activaciÃ³n
                             </p>
                             <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                               {[
@@ -8645,26 +8645,26 @@ export const LicenciasTab = ({
                                 },
                                 {
                                   tipo: "Efectivo",
-                                  rule: "Monto recomendado. Verificar recibo físico.",
+                                  rule: "Monto recomendado. Verificar recibo fÃ­sico.",
                                 },
                                 {
                                   tipo: "Manual (pago verificado)",
-                                  rule: "Requiere monto ≥ 50% del precio del plan.",
+                                  rule: "Requiere monto â¥ 50% del precio del plan.",
                                 },
                                 {
                                   tipo: "Prueba gratuita",
-                                  rule: `Máx. ${
+                                  rule: `MÃ¡x. ${
                                     PLAN_CONFIG[licForm.license]?.trialDays ||
                                     15
-                                  } días. Monto = $0. Sin restricción de nota.`,
+                                  } dÃ­as. Monto = $0. Sin restricciÃ³n de nota.`,
                                 },
                                 {
                                   tipo: "Referido",
-                                  rule: "Requiere monto cobrado. Anota quién refirió en notas.",
+                                  rule: "Requiere monto cobrado. Anota quiÃ©n refiriÃ³ en notas.",
                                 },
                                 {
-                                  tipo: "Cortesía",
-                                  rule: "Monto = $0 permitido PERO notas con justificación son OBLIGATORIAS (≥10 caracteres).",
+                                  tipo: "CortesÃ­a",
+                                  rule: "Monto = $0 permitido PERO notas con justificaciÃ³n son OBLIGATORIAS (â¥10 caracteres).",
                                 },
                               ].map((r) => (
                                 <div
@@ -8683,7 +8683,7 @@ export const LicenciasTab = ({
                                   }`}
                                 >
                                   <span className="font-black">
-                                    • {r.tipo}:
+                                    â¢ {r.tipo}:
                                   </span>{" "}
                                   {r.rule}
                                 </div>
@@ -8696,7 +8696,7 @@ export const LicenciasTab = ({
                               Notas internas{" "}
                               {licForm.tipo === "cortesia" ? (
                                 <span className="text-red-600">
-                                  * OBLIGATORIO para cortesía
+                                  * OBLIGATORIO para cortesÃ­a
                                 </span>
                               ) : (
                                 "(recomendado)"
@@ -8713,8 +8713,8 @@ export const LicenciasTab = ({
                               }}
                               placeholder={
                                 licForm.tipo === "cortesia"
-                                  ? "Ej: Cortesía por ser médico fundador del proyecto."
-                                  : "Ej: Pago recibido Nequi 300 123 4567 · Referido por Dr. Pérez"
+                                  ? "Ej: CortesÃ­a por ser mÃ©dico fundador del proyecto."
+                                  : "Ej: Pago recibido Nequi 300 123 4567 Â· Referido por Dr. PÃ©rez"
                               }
                               className={`w-full p-2 border rounded-lg text-xs ${
                                 licForm.tipo === "cortesia"
@@ -8724,21 +8724,21 @@ export const LicenciasTab = ({
                             />
                           </div>
                         </div>
-                        {/* Errores de validación */}
+                        {/* Errores de validaciÃ³n */}
                         {licErrors.length > 0 && (
                           <div className="bg-red-50 border-2 border-red-300 rounded-xl p-3 space-y-1">
                             <p className="text-xs font-black text-red-800 mb-1">
-                              ⛔ Corrige los siguientes errores antes de
+                              â Corrige los siguientes errores antes de
                               guardar:
                             </p>
                             {licErrors.map((e, i) => (
                               <p key={i} className="text-xs text-red-700">
-                                • {e}
+                                â¢ {e}
                               </p>
                             ))}
                           </div>
                         )}
-                        {/* Botones de acción */}
+                        {/* Botones de acciÃ³n */}
                         <div className="flex flex-wrap gap-2 mt-4">
                           <button
                             onClick={() => {
@@ -8751,7 +8751,7 @@ export const LicenciasTab = ({
                                 : "bg-blue-600 hover:bg-blue-700 text-white"
                             }`}
                           >
-                            {licSaved ? "✅ ¡Guardado!" : "💾 Guardar cambios"}
+                            {licSaved ? "â Â¡Guardado!" : "ð¾ Guardar cambios"}
                           </button>
                           <button
                             onClick={() => {
@@ -8781,7 +8781,7 @@ export const LicenciasTab = ({
                               }}
                               className="bg-amber-100 text-amber-700 px-4 py-2 rounded-lg text-xs font-bold hover:bg-amber-200 transition"
                             >
-                              🎁 +
+                              ð +
                               {PLAN_CONFIG[licForm.license]?.trialDays || 15}d
                               prueba
                             </button>
@@ -8817,30 +8817,30 @@ export const LicenciasTab = ({
                               }}
                               className="bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-xs font-bold hover:bg-purple-200 transition"
                             >
-                              +1 año
+                              +1 aÃ±o
                             </button>
                           )}
                         </div>
                         {/* Resumen de lo que se va a guardar */}
                         <div className="mt-3 p-3 bg-white rounded-lg border border-blue-200 text-xs text-gray-600 flex flex-wrap gap-4">
                           <span>
-                            📋 Plan:{" "}
+                            ð Plan:{" "}
                             <strong className="text-blue-700">
                               {PLAN_CONFIG[licForm.license]?.label}
                             </strong>
                           </span>
                           <span>
-                            📅 Vence:{" "}
+                            ð Vence:{" "}
                             <strong>
                               {licForm.licenseExpiry || "sin fecha"}
                             </strong>
                           </span>
                           <span>
-                            💳 Pago: <strong>{licForm.formaPago}</strong>
+                            ð³ Pago: <strong>{licForm.formaPago}</strong>
                           </span>
                           {licForm.monto > 0 && (
                             <span>
-                              💰{" "}
+                              ð°{" "}
                               <strong>
                                 ${Number(licForm.monto).toLocaleString("es-CO")}{" "}
                                 COP
@@ -8862,7 +8862,7 @@ export const LicenciasTab = ({
 };
 
 // ==========================================
-// MÓDULO 7: PANEL DE CONFIGURACIÓN DE IA
+// MÃDULO 7: PANEL DE CONFIGURACIÃN DE IA
 // ==========================================
 export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
   const [cfg, setCfg] = useState(() => ({
@@ -8875,66 +8875,66 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
   const PROVIDER_INFO = {
     gemini: {
       label: "Google Gemini",
-      sub: "2.0 Flash · 1.5 Flash",
-      badge: "🟢 Gratis · Alta calidad",
+      sub: "2.0 Flash Â· 1.5 Flash",
+      badge: "ð¢ Gratis Â· Alta calidad",
       badgeClass: "bg-blue-100 text-blue-800",
       link: "https://aistudio.google.com/apikey",
       color: "blue",
       steps: [
-        "Abre aistudio.google.com/apikey (clic en 'Obtener key →')",
-        "Inicia sesión con tu cuenta Google",
+        "Abre aistudio.google.com/apikey (clic en 'Obtener key â')",
+        "Inicia sesiÃ³n con tu cuenta Google",
         "Clic en 'Create API Key'",
         "Selecciona un proyecto (o crea uno nuevo gratuito)",
         "Copia la key (empieza con 'AIza...')",
-        "Pégala en el campo de abajo y haz clic en Probar",
+        "PÃ©gala en el campo de abajo y haz clic en Probar",
       ],
     },
     groq: {
       label: "Groq",
-      sub: "Llama 3.3 70B · Ultra-rápido",
-      badge: "🟢 Gratis · Más rápido",
+      sub: "Llama 3.3 70B Â· Ultra-rÃ¡pido",
+      badge: "ð¢ Gratis Â· MÃ¡s rÃ¡pido",
       badgeClass: "bg-green-100 text-green-800",
       link: "https://console.groq.com/keys",
       color: "green",
       steps: [
-        "Abre console.groq.com/keys (clic en 'Obtener key →')",
+        "Abre console.groq.com/keys (clic en 'Obtener key â')",
         "Crea una cuenta gratuita (o usa Google/GitHub)",
-        "En el menú, ve a 'API Keys'",
+        "En el menÃº, ve a 'API Keys'",
         "Clic en 'Create API Key', ponle un nombre",
         "Copia la key (empieza con 'gsk_...')",
-        "Pégala en el campo de abajo y haz clic en Probar",
+        "PÃ©gala en el campo de abajo y haz clic en Probar",
       ],
     },
     together: {
       label: "Together AI",
-      sub: "Llama 3.3 70B · Muy estable",
-      badge: "🟢 Gratis · Sin límite diario",
+      sub: "Llama 3.3 70B Â· Muy estable",
+      badge: "ð¢ Gratis Â· Sin lÃ­mite diario",
       badgeClass: "bg-teal-100 text-teal-800",
       link: "https://api.together.ai",
       color: "teal",
       steps: [
-        "Abre api.together.ai (clic en 'Obtener key →')",
+        "Abre api.together.ai (clic en 'Obtener key â')",
         "Clic en 'Sign Up' o 'Continue with Google'",
-        "Una vez dentro, ve a Settings → API Keys",
+        "Una vez dentro, ve a Settings â API Keys",
         "Clic en 'Create new API key'",
         "Copia la key que aparece",
-        "Pégala en el campo de abajo y haz clic en Probar",
+        "PÃ©gala en el campo de abajo y haz clic en Probar",
       ],
     },
     openrouter: {
       label: "OpenRouter",
-      sub: "10 modelos free · Máximo respaldo",
-      badge: "🟢 Gratis · Multi-modelo",
+      sub: "10 modelos free Â· MÃ¡ximo respaldo",
+      badge: "ð¢ Gratis Â· Multi-modelo",
       badgeClass: "bg-purple-100 text-purple-800",
       link: "https://openrouter.ai/keys",
       color: "purple",
       steps: [
-        "Abre openrouter.ai/keys (clic en 'Obtener key →')",
-        "Clic en 'Sign in' → usa Google o GitHub",
+        "Abre openrouter.ai/keys (clic en 'Obtener key â')",
+        "Clic en 'Sign in' â usa Google o GitHub",
         "Una vez dentro, clic en 'Create Key'",
         "Ponle un nombre y clic en 'Create'",
         "Copia la key (empieza con 'sk-or-...')",
-        "Pégala en el campo de abajo y haz clic en Probar",
+        "PÃ©gala en el campo de abajo y haz clic en Probar",
       ],
     },
   };
@@ -8975,7 +8975,7 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
         ...p,
         [providerKey]: {
           ok: false,
-          msg: "⚠️ Ingrese su API Key primero (ver pasos arriba)",
+          msg: "â ï¸ Ingrese su API Key primero (ver pasos arriba)",
         },
       }));
       setActiveGuide(providerKey);
@@ -8983,13 +8983,13 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
     }
     setTestStatus((p) => ({
       ...p,
-      [providerKey]: { ok: null, msg: "⏳ Probando conexión..." },
+      [providerKey]: { ok: null, msg: "â³ Probando conexiÃ³n..." },
     }));
     try {
       const provider = AI_PROVIDERS[providerKey];
       const text = await provider.call(
         "Responde SOLO con la palabra: CONECTADO",
-        "Eres un asistente. Responde únicamente con la palabra CONECTADO.",
+        "Eres un asistente. Responde Ãºnicamente con la palabra CONECTADO.",
         key.trim()
       );
       const ok = !!text && text.length > 0;
@@ -8998,10 +8998,10 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
         [providerKey]: {
           ok,
           msg: ok
-            ? `✅ ¡Funciona! Respuesta: "${text
+            ? `â Â¡Funciona! Respuesta: "${text
                 .slice(0, 40)
                 .replace(/\n/g, " ")}"`
-            : "⚠️ Respuesta vacía",
+            : "â ï¸ Respuesta vacÃ­a",
         },
       }));
     } catch (e) {
@@ -9012,18 +9012,18 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
         msg.includes("403") ||
         msg.includes("invalid") ||
         msg.includes("Invalid") ||
-        msg.includes("API Key inválida")
+        msg.includes("API Key invÃ¡lida")
       )
         hint =
           providerKey === "together"
-            ? " → Key inválida. En api.together.ai copia SOLO la key del campo texto, NO el código Python."
-            : " → Key inválida: renuévala siguiendo los pasos.";
+            ? " â Key invÃ¡lida. En api.together.ai copia SOLO la key del campo texto, NO el cÃ³digo Python."
+            : " â Key invÃ¡lida: renuÃ©vala siguiendo los pasos.";
       else if (
         msg.includes("429") ||
         msg.includes("rate") ||
         msg.includes("limit")
       )
-        hint = " → Límite de uso alcanzado: crea una key nueva.";
+        hint = " â LÃ­mite de uso alcanzado: crea una key nueva.";
       else if (
         msg.includes("Failed to fetch") ||
         msg.includes("network") ||
@@ -9031,12 +9031,12 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
         msg.includes("CORS bloqueado")
       )
         hint =
-          " → CORS bloqueado: Groq no funciona desde este dominio. Usa Gemini u OpenRouter como proveedor principal.";
+          " â CORS bloqueado: Groq no funciona desde este dominio. Usa Gemini u OpenRouter como proveedor principal.";
       else if (msg.includes("404"))
-        hint = " → Modelo no disponible, prueba otro proveedor.";
+        hint = " â Modelo no disponible, prueba otro proveedor.";
       setTestStatus((p) => ({
         ...p,
-        [providerKey]: { ok: false, msg: `❌ ${msg.slice(0, 100)}${hint}` },
+        [providerKey]: { ok: false, msg: `â ${msg.slice(0, 100)}${hint}` },
       }));
     }
   };
@@ -9059,7 +9059,7 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
               <BrainCircuit className="w-6 h-6" />
               <div>
                 <h2 className="text-base font-black">
-                  Configuración de IA - 4 Proveedores Gratuitos
+                  ConfiguraciÃ³n de IA - 4 Proveedores Gratuitos
                 </h2>
                 <p className="text-xs text-indigo-200">
                   Cada uno necesita su propia API Key gratuita (se obtiene en 2
@@ -9077,25 +9077,25 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
             {/* Estado general */}
             {anyWorking ? (
               <div className="bg-green-50 border border-green-300 rounded-xl p-3 text-xs text-green-800 flex gap-2 items-start">
-                <span className="text-base">✅</span>
+                <span className="text-base">â</span>
                 <div>
-                  <strong>¡Al menos un proveedor funciona!</strong> La IA está
-                  operativa. Guarda la configuración para usar los que funcionan
-                  como respaldo automático.
+                  <strong>Â¡Al menos un proveedor funciona!</strong> La IA estÃ¡
+                  operativa. Guarda la configuraciÃ³n para usar los que funcionan
+                  como respaldo automÃ¡tico.
                 </div>
               </div>
             ) : (
               <div className="bg-amber-50 border border-amber-300 rounded-xl p-3 text-xs text-amber-900 flex gap-2 items-start">
-                <span className="text-base">⚡</span>
+                <span className="text-base">â¡</span>
                 <div>
                   <strong>
                     Las keys preconfiguradas pueden haber expirado
                   </strong>{" "}
-                  (son públicas y se agotan con el uso).
+                  (son pÃºblicas y se agotan con el uso).
                   <span className="block mt-1">
-                    Obtén tu propia key gratuita en cualquier proveedor - toma
+                    ObtÃ©n tu propia key gratuita en cualquier proveedor - toma
                     solo 2 minutos. Haz clic en{" "}
-                    <strong>"📋 Cómo obtener"</strong> de cualquier proveedor
+                    <strong>"ð CÃ³mo obtener"</strong> de cualquier proveedor
                     para ver los pasos.
                   </span>
                 </div>
@@ -9104,7 +9104,7 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
             {/* Selector proveedor activo */}
             <div>
               <p className="text-[10px] font-black text-gray-500 uppercase tracking-wide mb-1.5">
-                Proveedor principal (los demás son respaldo automático)
+                Proveedor principal (los demÃ¡s son respaldo automÃ¡tico)
               </p>
               <div className="grid grid-cols-2 gap-1.5">
                 {Object.entries(PROVIDER_INFO).map(([k, info]) => {
@@ -9186,12 +9186,12 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
                       </span>
                       {st?.ok === true && (
                         <span className="ml-1 text-[9px] font-bold text-green-600">
-                          ✅ Activa
+                          â Activa
                         </span>
                       )}
                       {st?.ok === false && (
                         <span className="ml-1 text-[9px] font-bold text-red-600">
-                          ❌ Falla
+                          â Falla
                         </span>
                       )}
                     </div>
@@ -9205,7 +9205,7 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
                             : "border-gray-300 text-gray-600 hover:bg-gray-100"
                         }`}
                       >
-                        📋 {isGuideOpen ? "Ocultar" : "Cómo obtener"}
+                        ð {isGuideOpen ? "Ocultar" : "CÃ³mo obtener"}
                       </button>
                       <a
                         href={info.link}
@@ -9213,11 +9213,11 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
                         rel="noopener noreferrer"
                         className={`text-[9px] px-2 py-1 rounded-lg font-bold ${c.btn} text-white`}
                       >
-                        🔗 Obtener key
+                        ð Obtener key
                       </a>
                     </div>
                   </div>
-                  {/* Guía paso a paso */}
+                  {/* GuÃ­a paso a paso */}
                   {isGuideOpen && (
                     <div className={`p-3 border-t ${c.bg}`}>
                       <p
@@ -9246,7 +9246,7 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
                     <div className="relative flex gap-1.5">
                       <input
                         type={showKey[k] ? "text" : "password"}
-                        placeholder={`Pega aquí tu API Key de ${info.label}...`}
+                        placeholder={`Pega aquÃ­ tu API Key de ${info.label}...`}
                         value={cfg.keys?.[k] || ""}
                         onChange={(e) =>
                           setCfg((p) => ({
@@ -9263,7 +9263,7 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
                         }
                         className="absolute right-20 top-1.5 text-gray-400 hover:text-gray-600 text-[10px]"
                       >
-                        {showKey[k] ? "🙈" : "👁"}
+                        {showKey[k] ? "ð" : "ð"}
                       </button>
                       <button
                         type="button"
@@ -9307,7 +9307,7 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
             }}
             className="flex-1 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 flex items-center justify-center gap-2"
           >
-            <Save className="w-4 h-4" /> Guardar Configuración
+            <Save className="w-4 h-4" /> Guardar ConfiguraciÃ³n
           </button>
         </div>
       </div>
@@ -9315,7 +9315,7 @@ export const AIConfigPanel = ({ aiConfig, onSave, onClose }) => {
   );
 };
 // ==========================================
-// MÓDULO 9: PANEL DE RECOMENDACIONES CHECKLIST
+// MÃDULO 9: PANEL DE RECOMENDACIONES CHECKLIST
 // ==========================================
 export const RecomendacionesChecklistPanel = ({
   selected,
@@ -9347,9 +9347,9 @@ export const RecomendacionesChecklistPanel = ({
             <div className="flex items-center gap-3">
               <ClipboardList className="w-6 h-6" />
               <div>
-                <h2 className="text-lg font-black">Recomendaciones Médicas</h2>
+                <h2 className="text-lg font-black">Recomendaciones MÃ©dicas</h2>
                 <p className="text-xs text-emerald-100">
-                  Checklist de Recomendaciones por Categoría
+                  Checklist de Recomendaciones por CategorÃ­a
                 </p>
               </div>
             </div>
@@ -9457,7 +9457,7 @@ export const RecomendacionesChecklistPanel = ({
             onClick={onApply || onClose}
             className="bg-emerald-600 text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-emerald-700"
           >
-            ✅ Aplicar {countSelected} Recomendaciones
+            â Aplicar {countSelected} Recomendaciones
           </button>
         </div>
       </div>
@@ -9465,7 +9465,7 @@ export const RecomendacionesChecklistPanel = ({
   );
 };
 // ==========================================
-// MÓDULO: FÓRMULA MÉDICA Y DERIVACIONES
+// MÃDULO: FÃRMULA MÃDICA Y DERIVACIONES
 // ==========================================
 export const MedicamentoAutocomplete = ({
   value,
@@ -9490,7 +9490,7 @@ export const MedicamentoAutocomplete = ({
       if (med.g.toLowerCase().includes(q))
         res.push({
           label: med.g,
-          sub: `${med.cat} · ${med.dosis}`,
+          sub: `${med.cat} Â· ${med.dosis}`,
           full: med.g,
           dosis: med.dosis,
           presentaciones: med.p,
@@ -9500,7 +9500,7 @@ export const MedicamentoAutocomplete = ({
         if (p.toLowerCase().includes(q))
           res.push({
             label: p,
-            sub: `${med.g} · ${med.cat}`,
+            sub: `${med.g} Â· ${med.cat}`,
             full: p,
             dosis: med.dosis,
             presentaciones: med.p,
@@ -9530,7 +9530,7 @@ export const MedicamentoAutocomplete = ({
         g: query.trim(),
         p: [query.trim()],
         cat: "Personalizado",
-        dosis: "Según prescripción",
+        dosis: "SegÃºn prescripciÃ³n",
       };
       addCustomMed(newEntry);
       setCustomMeds((prev) => [...prev, newEntry]);
@@ -9555,7 +9555,7 @@ export const MedicamentoAutocomplete = ({
             onChange(e.target.value);
           }}
           onFocus={() => query.length >= 2 && setShow(true)}
-          placeholder={placeholder || "Nombre genérico o comercial..."}
+          placeholder={placeholder || "Nombre genÃ©rico o comercial..."}
           className="flex-1 p-1.5 border border-gray-200 rounded-l text-xs focus:ring-2 focus:ring-emerald-400 outline-none"
         />
         <button
@@ -9564,7 +9564,7 @@ export const MedicamentoAutocomplete = ({
           title="Agregar como medicamento personalizado"
           className="px-2 bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-r text-xs font-bold hover:bg-emerald-200 flex items-center gap-0.5"
         >
-          <Plus className="w-3 h-3" /> Añadir
+          <Plus className="w-3 h-3" /> AÃ±adir
         </button>
       </div>
       {show && suggestions.length > 0 && (
@@ -9587,7 +9587,7 @@ export const MedicamentoAutocomplete = ({
                 <p className="text-xs font-bold text-emerald-900">{s.label}</p>
                 {s.isGeneric && (
                   <span className="text-[9px] bg-emerald-100 text-emerald-700 px-1 rounded">
-                    Genérico
+                    GenÃ©rico
                   </span>
                 )}
               </div>
@@ -9596,7 +9596,7 @@ export const MedicamentoAutocomplete = ({
           ))}
           {suggestions.length === 0 && query.length >= 2 && (
             <div className="px-3 py-2 text-[10px] text-gray-400 italic">
-              No encontrado -- pulse "Añadir" para agregarlo a su base de datos
+              No encontrado -- pulse "AÃ±adir" para agregarlo a su base de datos
             </div>
           )}
         </div>
@@ -9605,7 +9605,7 @@ export const MedicamentoAutocomplete = ({
         <div className="absolute z-50 bg-white border border-emerald-200 rounded-xl shadow-xl mt-1 w-full">
           <div className="px-3 py-2 text-[10px] text-gray-400 italic flex items-center gap-2">
             <AlertCircle className="w-3 h-3" />
-            No encontrado en base de datos -- pulse "Añadir" para guardarlo.
+            No encontrado en base de datos -- pulse "AÃ±adir" para guardarlo.
           </div>
         </div>
       )}
@@ -9705,8 +9705,8 @@ export const TabFormulaDerivacion = ({
         ).slice(0, 15)
       : [];
   const today = new Date().toISOString().split("T")[0];
-  // ── Genera ventana de impresión premium con HTML nativo ──────────────────
-  // No captura innerHTML (pierde íconos). Genera HTML directamente del state.
+  // ââ Genera ventana de impresiÃ³n premium con HTML nativo ââââââââââââââââââ
+  // No captura innerHTML (pierde Ã­conos). Genera HTML directamente del state.
   const buildPrintHeader = (titleDoc, accentColor) => {
     const fechaDoc =
       data.fechaExamen ||
@@ -9735,7 +9735,7 @@ export const TabFormulaDerivacion = ({
       ? accentColor
       : "#059669";
 
-    // ── PASO 2: Cabecera IPS — columna izquierda muestra empresa si hay empresaId ──
+    // ââ PASO 2: Cabecera IPS â columna izquierda muestra empresa si hay empresaId ââ
     const miIPS = currentUser?.empresaId
       ? companies.find((c) => c.id === currentUser.empresaId)
       : null;
@@ -9766,7 +9766,7 @@ export const TabFormulaDerivacion = ({
             ${
               ipsDir
                 ? `<p style="font-size:7.5pt;color:#555;margin:1px 0;">${ipsDir}${
-                    ipsCiudad ? " · " + ipsCiudad : ""
+                    ipsCiudad ? " Â· " + ipsCiudad : ""
                   }</p>`
                 : ""
             }
@@ -9802,7 +9802,7 @@ export const TabFormulaDerivacion = ({
           <p style="font-size:13pt;font-weight:900;color:${accentSafe};text-transform:uppercase;margin:2px 0;">${_sanitize(
       titleDoc
     )}</p>
-          <p style="font-size:7pt;color:#888;margin:2px 0;">Res. 1995&#x2F;1999 · Res. 1843&#x2F;2025</p>
+          <p style="font-size:7pt;color:#888;margin:2px 0;">Res. 1995&#x2F;1999 Â· Res. 1843&#x2F;2025</p>
           <p style="font-size:8pt;font-weight:700;color:#333;margin:5px 0 2px 0;">Fecha: ${_sanitize(
             fechaDoc
           )}</p>
@@ -9810,7 +9810,7 @@ export const TabFormulaDerivacion = ({
         </div>
         <div style="width:32%;text-align:right;padding-left:8px;">
           <p style="font-size:10.5pt;font-weight:900;color:${accentSafe};text-transform:uppercase;margin:0 0 3px 0;">${pNombre}</p>
-          <p style="font-size:7.5pt;color:#444;margin:1px 0;">${pDocTipo}: <b>${pDocNum}</b> &nbsp;|&nbsp; Edad: <b>${pEdad} años</b></p>
+          <p style="font-size:7.5pt;color:#444;margin:1px 0;">${pDocTipo}: <b>${pDocNum}</b> &nbsp;|&nbsp; Edad: <b>${pEdad} aÃ±os</b></p>
           <p style="font-size:7.5pt;color:#444;margin:1px 0;">Sexo: ${pGenero} &nbsp;|&nbsp; EPS: <b>${pEps}</b></p>
           <p style="font-size:7.5pt;color:#444;margin:1px 0;">ARL: <b>${pArl}</b> &nbsp;|&nbsp; AFP: ${pAfp}</p>
           <p style="font-size:7.5pt;color:#444;margin:1px 0;">Empresa: <b>${pEmpresa}</b></p>
@@ -9837,7 +9837,7 @@ export const TabFormulaDerivacion = ({
     const w = window.open("", "_blank", "width=600,height=700");
     if (!w) return;
     const accent = "#059669";
-    const header = buildPrintHeader("Prescripción Individual", accent);
+    const header = buildPrintHeader("PrescripciÃ³n Individual", accent);
     const singleMedHtml = `
       <div class="med-card" style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">
         <span class="med-num">${idx + 1}</span>
@@ -9849,12 +9849,12 @@ export const TabFormulaDerivacion = ({
     )})</span></p>
           <p style="font-size:9.5pt;color:#374151;margin:2px 0;"><b>Dosis:</b> ${_sanitize(
             med.dosis || "--"
-          )} &nbsp;·&nbsp; <b>Frecuencia:</b> ${_sanitize(
+          )} &nbsp;Â·&nbsp; <b>Frecuencia:</b> ${_sanitize(
       med.frecuencia || "--"
-    )} &nbsp;·&nbsp; <b>Duración:</b> ${_sanitize(med.duracion || "--")}</p>
+    )} &nbsp;Â·&nbsp; <b>DuraciÃ³n:</b> ${_sanitize(med.duracion || "--")}</p>
           ${
             med.indicaciones
-              ? `<p style="font-size:9pt;color:#92400e;font-style:italic;margin:4px 0;">⚠ ${_sanitize(
+              ? `<p style="font-size:9pt;color:#92400e;font-style:italic;margin:4px 0;">â  ${_sanitize(
                   med.indicaciones
                 )}</p>`
               : ""
@@ -9862,7 +9862,7 @@ export const TabFormulaDerivacion = ({
         </div>
       </div>
       <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:4px;padding:8px 12px;margin-top:8px;">
-        <p style="font-size:8.5pt;"><b>Diagnóstico:</b> ${_sanitize(
+        <p style="font-size:8.5pt;"><b>DiagnÃ³stico:</b> ${_sanitize(
           data.diagnosticoPrincipal ||
             (data.diagnosticos || [])[0]?.descripcion ||
             "--"
@@ -9913,10 +9913,10 @@ body{padding-top:52px;}
 @media print{.print-toolbar{display:none!important;}[contenteditable]{outline:none!important;background:transparent!important;}}
 </style></head><body>
 <div class="print-toolbar">
-  <span class="ptitle">💊 Receta - ${_sanitize(med.nombre)}</span>
+  <span class="ptitle">ð Receta - ${_sanitize(med.nombre)}</span>
   <span class="hint">Edita el texto antes de imprimir</span>
-  <button class="btn-print" onclick="window.print()">🖨️ Imprimir receta</button>
-  <button class="btn-close" onclick="window.close()">✕ Cerrar</button>
+  <button class="btn-print" onclick="window.print()">ð¨ï¸ Imprimir receta</button>
+  <button class="btn-close" onclick="window.close()">â Cerrar</button>
 </div>
 <div contenteditable="false">${header}</div>
 <div contenteditable="true" spellcheck="false">${singleMedHtml}</div>
@@ -9950,9 +9950,9 @@ body{padding-top:52px;}
                 )}</span></p>
             <p style="font-size:8.5pt;color:#374151;margin:1px 0;"><b>Dosis:</b> ${_sanitize(
               m.dosis || "--"
-            )} &nbsp;·&nbsp; <b>Frec.:</b> ${_sanitize(
+            )} &nbsp;Â·&nbsp; <b>Frec.:</b> ${_sanitize(
                   m.frecuencia || "--"
-                )} &nbsp;·&nbsp; <b>Duración:</b> ${_sanitize(
+                )} &nbsp;Â·&nbsp; <b>DuraciÃ³n:</b> ${_sanitize(
                   m.duracion || "--"
                 )}</p>
             ${
@@ -9978,16 +9978,16 @@ body{padding-top:52px;}
       );
       const planMeds =
         !meds.length && data.plan?.medicamentos
-          ? `<div style="margin-top:10px;"><p style="font-weight:700;font-size:8.5pt;color:#374151;border-bottom:1px solid #d1d5db;padding-bottom:3px;margin-bottom:5px;">PRESCRIPCIÓN</p><p style="font-size:8.5pt;white-space:pre-wrap;">${_sanitize(
+          ? `<div style="margin-top:10px;"><p style="font-weight:700;font-size:8.5pt;color:#374151;border-bottom:1px solid #d1d5db;padding-bottom:3px;margin-bottom:5px;">PRESCRIPCIÃN</p><p style="font-size:8.5pt;white-space:pre-wrap;">${_sanitize(
               data.plan.medicamentos
             )}</p></div>`
           : "";
       bodyHtml = `
         <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:4px;padding:10px 12px;margin-bottom:12px;">
-          <p class="section-title" style="color:#065f46;">&#128138; Prescripción Médica</p>
+          <p class="section-title" style="color:#065f46;">&#128138; PrescripciÃ³n MÃ©dica</p>
           ${medsHtml}${planMeds}
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;border-top:1px solid #a7f3d0;padding-top:8px;">
-            <p style="font-size:8.5pt;"><b>Diagnóstico:</b> ${dx}</p>
+            <p style="font-size:8.5pt;"><b>DiagnÃ³stico:</b> ${dx}</p>
             <p style="font-size:8.5pt;"><b>Control en:</b> ${control}</p>
           </div>
         </div>
@@ -10095,12 +10095,12 @@ body{padding-top:52px;}
 @media print{.print-toolbar{display:none!important;}[contenteditable]{outline:none!important;background:transparent!important;}}
 </style></head><body>
 <div class="print-toolbar">
-  <span class="ptitle">✏️ ${_sanitize(titleDoc)} - ${_sanitize(
+  <span class="ptitle">âï¸ ${_sanitize(titleDoc)} - ${_sanitize(
       data.nombres
     )}</span>
   <span class="hint">Haz clic en cualquier texto para editar antes de imprimir</span>
-  <button class="btn-print" onclick="window.print()">🖨️ Imprimir ahora</button>
-  <button class="btn-close" onclick="window.close()">✕ Cerrar</button>
+  <button class="btn-print" onclick="window.print()">ð¨ï¸ Imprimir ahora</button>
+  <button class="btn-close" onclick="window.close()">â Cerrar</button>
 </div>
 <div contenteditable="false">${header}</div><div contenteditable="true" spellcheck="false">${bodyHtml}</div></body></html>`);
     w.document.close();
@@ -10125,32 +10125,32 @@ body{padding-top:52px;}
         <div className="w-1/3 text-center">
           <h1 className="text-sm font-black text-gray-800 uppercase">
             {activeSubTab === "formula"
-              ? "Fórmula Médica"
-              : "Derivación / Interconsulta"}
+              ? "FÃ³rmula MÃ©dica"
+              : "DerivaciÃ³n / Interconsulta"}
           </h1>
           <p className="text-[9px] text-gray-500">
-            Res. 1995/1999 · Res. 1843/2025
+            Res. 1995/1999 Â· Res. 1843/2025
           </p>
         </div>
         <div className="w-1/3 text-right text-[9px] text-gray-500">
           <p className="font-black text-gray-800 text-[10px]">{data.nombres}</p>
           <p>
-            {data.docTipo || "CC"}: {data.docNumero} · {data.edad} años
+            {data.docTipo || "CC"}: {data.docNumero} Â· {data.edad} aÃ±os
           </p>
           <p>Empresa: {data.empresaNombre || "--"}</p>
           <p>Cargo: {data.cargo || "--"}</p>
           <p>
-            EPS: {data.eps || "--"} · ARL: {data.arl || "--"}
+            EPS: {data.eps || "--"} Â· ARL: {data.arl || "--"}
           </p>
           <p>Fecha: {data.fechaExamen || today}</p>
         </div>
       </div>
-      {/* Tabs + botones de impresión individual */}
+      {/* Tabs + botones de impresiÃ³n individual */}
       <div className="flex gap-2 mb-4 no-print flex-wrap items-center justify-between">
         <div className="flex gap-2">
           {[
-            { k: "formula", l: "💊 Fórmula Médica" },
-            { k: "derivacion", l: "🏥 Derivaciones" },
+            { k: "formula", l: "ð FÃ³rmula MÃ©dica" },
+            { k: "derivacion", l: "ð¥ Derivaciones" },
           ].map((t) => (
             <button
               key={t.k}
@@ -10168,37 +10168,37 @@ body{padding-top:52px;}
         <div className="flex gap-2">
           {activeSubTab === "formula" && (
             <button
-              onClick={() => openPrintWindow("formula", "Fórmula Médica")}
+              onClick={() => openPrintWindow("formula", "FÃ³rmula MÃ©dica")}
               className="flex items-center gap-1 bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-700"
             >
-              <Printer className="w-3 h-3" /> Imprimir Fórmula
+              <Printer className="w-3 h-3" /> Imprimir FÃ³rmula
             </button>
           )}
           {activeSubTab === "derivacion" && (
             <button
               onClick={() =>
-                openPrintWindow("derivacion", "Derivación / Interconsulta")
+                openPrintWindow("derivacion", "DerivaciÃ³n / Interconsulta")
               }
               className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-700"
             >
-              <Printer className="w-3 h-3" /> Imprimir Derivación
+              <Printer className="w-3 h-3" /> Imprimir DerivaciÃ³n
             </button>
           )}
         </div>
       </div>
-      {/* ══ FÓRMULA ══ */}
+      {/* ââ FÃRMULA ââ */}
       <div
         id="print-formula-sec"
         className={activeSubTab !== "formula" ? "hidden print:block" : ""}
       >
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 mb-3 print:bg-transparent print:border-gray-300">
           <h3 className="font-black text-emerald-900 text-xs uppercase mb-3 flex items-center gap-2">
-            <Pill className="w-4 h-4" /> Prescripción Médica
+            <Pill className="w-4 h-4" /> PrescripciÃ³n MÃ©dica
           </h3>
           {/* Input nuevo medicamento */}
           <div className="no-print mb-3 bg-white p-3 rounded-lg border border-emerald-100 space-y-2">
             <p className="text-[10px] font-bold text-gray-600 uppercase">
-              Agregar Medicamento a la Fórmula
+              Agregar Medicamento a la FÃ³rmula
             </p>
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -10217,12 +10217,12 @@ body{padding-top:52px;}
                       dosis: p.dosis || s.dosis || "",
                     }))
                   }
-                  placeholder="Buscar por nombre genérico o comercial..."
+                  placeholder="Buscar por nombre genÃ©rico o comercial..."
                 />
               </div>
               <div>
                 <label className="block text-[10px] font-bold text-gray-500 mb-0.5">
-                  Presentación
+                  PresentaciÃ³n
                 </label>
                 <input
                   value={newMed.presentacion}
@@ -10261,14 +10261,14 @@ body{padding-top:52px;}
               </div>
               <div>
                 <label className="block text-[10px] font-bold text-gray-500 mb-0.5">
-                  Duración
+                  DuraciÃ³n
                 </label>
                 <input
                   value={newMed.duracion}
                   onChange={(e) =>
                     setNewMed((p) => ({ ...p, duracion: e.target.value }))
                   }
-                  placeholder="Ej: 7 días"
+                  placeholder="Ej: 7 dÃ­as"
                   className="w-full p-1.5 border rounded text-xs"
                 />
               </div>
@@ -10291,7 +10291,7 @@ body{padding-top:52px;}
               type="button"
               className="w-full bg-emerald-600 text-white py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-700 flex items-center justify-center gap-1"
             >
-              <Plus className="w-3 h-3" /> Agregar a la Fórmula
+              <Plus className="w-3 h-3" /> Agregar a la FÃ³rmula
             </button>
           </div>
           {/* Lista */}
@@ -10313,12 +10313,12 @@ body{padding-top:52px;}
                       </span>
                     </p>
                     <p className="text-xs text-gray-700 mt-0.5">
-                      <b>Dosis:</b> {med.dosis}&nbsp;·&nbsp;<b>Frec:</b>{" "}
-                      {med.frecuencia}&nbsp;·&nbsp;<b>Dur:</b> {med.duracion}
+                      <b>Dosis:</b> {med.dosis}&nbsp;Â·&nbsp;<b>Frec:</b>{" "}
+                      {med.frecuencia}&nbsp;Â·&nbsp;<b>Dur:</b> {med.duracion}
                     </p>
                     {med.indicaciones && (
                       <p className="text-[10px] text-amber-700 mt-0.5 italic">
-                        ⚠ {med.indicaciones}
+                        â  {med.indicaciones}
                       </p>
                     )}
                   </div>
@@ -10342,13 +10342,13 @@ body{padding-top:52px;}
             </div>
           ) : (
             <p className="text-center text-gray-400 text-xs italic py-3">
-              Sin medicamentos en la fórmula.
+              Sin medicamentos en la fÃ³rmula.
             </p>
           )}
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div>
               <label className="block text-[10px] font-bold text-gray-600 mb-0.5 uppercase">
-                Diagnóstico
+                DiagnÃ³stico
               </label>
               <input
                 value={data.diagnosticoPrincipal || ""}
@@ -10368,13 +10368,13 @@ body{padding-top:52px;}
                     frecuenciaSeguimiento: e.target.value,
                   }))
                 }
-                placeholder="Ej: 15 días"
+                placeholder="Ej: 15 dÃ­as"
                 className="w-full p-1.5 border-b border-gray-300 text-xs outline-none"
               />
             </div>
           </div>
         </div>
-        {/* Firma fórmula - solo impresión */}
+        {/* Firma fÃ³rmula - solo impresiÃ³n */}
         <div className="hidden print:flex mt-8 justify-between items-end px-2 signature-block">
           <div className="text-center w-2/5 pt-8 border-t-2 border-gray-800">
             <p className="text-[10px] font-bold">
@@ -10393,7 +10393,7 @@ body{padding-top:52px;}
           </div>
         </div>
       </div>
-      {/* ══ DERIVACIONES ══ */}
+      {/* ââ DERIVACIONES ââ */}
       <div
         id="print-deriv-sec"
         className={activeSubTab !== "derivacion" ? "hidden print:block" : ""}
@@ -10402,15 +10402,15 @@ body{padding-top:52px;}
           <h3 className="font-black text-blue-900 text-xs uppercase mb-3 flex items-center gap-2">
             <Share2 className="w-4 h-4" /> Derivaciones / Interconsultas
           </h3>
-          {/* Formulario agregar derivación */}
+          {/* Formulario agregar derivaciÃ³n */}
           <div
             className="no-print mb-3 bg-white p-3 rounded-lg border border-blue-100"
             ref={derivRef}
           >
             <p className="text-[10px] font-bold text-gray-600 uppercase mb-2">
-              Agregar Derivación
+              Agregar DerivaciÃ³n
             </p>
-            {/* Barra de búsqueda interactiva de especialidades */}
+            {/* Barra de bÃºsqueda interactiva de especialidades */}
             <div className="relative mb-2">
               <Search className="absolute left-2.5 top-2 w-3.5 h-3.5 text-blue-400 pointer-events-none" />
               <input
@@ -10509,7 +10509,7 @@ body{padding-top:52px;}
               </div>
               <div className="col-span-2">
                 <label className="block text-[10px] font-bold text-gray-500 mb-0.5">
-                  Motivo de la derivación{" "}
+                  Motivo de la derivaciÃ³n{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -10518,7 +10518,7 @@ body{padding-top:52px;}
                   onChange={(e) =>
                     setNewDeriv((p) => ({ ...p, motivo: e.target.value }))
                   }
-                  placeholder="Describa el motivo clínico de la derivación..."
+                  placeholder="Describa el motivo clÃ­nico de la derivaciÃ³n..."
                   className="w-full p-1.5 border rounded text-xs resize-none"
                 />
               </div>
@@ -10534,7 +10534,7 @@ body{padding-top:52px;}
                       observaciones: e.target.value,
                     }))
                   }
-                  placeholder="Antecedentes relevantes, información adicional..."
+                  placeholder="Antecedentes relevantes, informaciÃ³n adicional..."
                   className="w-full p-1.5 border rounded text-xs"
                 />
               </div>
@@ -10544,7 +10544,7 @@ body{padding-top:52px;}
               type="button"
               className="w-full bg-blue-600 text-white py-1.5 rounded-lg text-xs font-bold hover:bg-blue-700 flex items-center justify-center gap-1 mt-2"
             >
-              <Plus className="w-3 h-3" /> Agregar Derivación
+              <Plus className="w-3 h-3" /> Agregar DerivaciÃ³n
             </button>
           </div>
           {/* Lista derivaciones */}
@@ -10601,7 +10601,7 @@ body{padding-top:52px;}
             </p>
           )}
         </div>
-        {/* Firma derivación - solo impresión */}
+        {/* Firma derivaciÃ³n - solo impresiÃ³n */}
         <div className="hidden print:flex mt-8 justify-between items-end px-2 signature-block">
           <div className="text-center w-2/5 pt-8 border-t-2 border-gray-800">
             <p className="text-[10px] font-bold">
@@ -10624,14 +10624,14 @@ body{padding-top:52px;}
   );
 };
 // ==========================================
-// MÓDULO 10: COMPONENTE PRINCIPAL APP
+// MÃDULO 10: COMPONENTE PRINCIPAL APP
 // ==========================================
-// ── LoginForm: inputs controlados (sin document.getElementById) ──────────────
-// ══════════════════════════════════════════════════════════════════════════
+// ââ LoginForm: inputs controlados (sin document.getElementById) ââââââââââââââ
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // B-19 CONSENTIMIENTO INFORMADO DIGITAL
-// Ley 23/1981 (ética médica) + Res. 8430/1993 (investigación en salud)
+// Ley 23/1981 (Ã©tica mÃ©dica) + Res. 8430/1993 (investigaciÃ³n en salud)
 // Ley 1581/2012 (habeas data) + Res. 1843/2025 Art. 12
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export const ConsentimientoModal = ({
   data,
   onConfirmar,
@@ -10664,7 +10664,7 @@ export const ConsentimientoModal = ({
       return;
     }
     if (!aceptado) {
-      setError("Debe marcar la casilla de aceptación para continuar.");
+      setError("Debe marcar la casilla de aceptaciÃ³n para continuar.");
       return;
     }
     const ts = new Date().toISOString();
@@ -10674,7 +10674,7 @@ export const ConsentimientoModal = ({
       tipoConsentimiento: "Digital",
       fechaConsentimiento: ts.split("T")[0],
       consentimientoTimestamp: ts,
-      consentimientoIp: "sesión-web",
+      consentimientoIp: "sesiÃ³n-web",
       consentimientoVersion: "v2025-1843",
     });
   };
@@ -10697,7 +10697,7 @@ export const ConsentimientoModal = ({
               Consentimiento Informado
             </h2>
             <p className="text-emerald-200 text-xs mt-0.5">
-              Ley 23/1981 · Res. 8430/1993 · Ley 1581/2012 · Res. 1843/2025
+              Ley 23/1981 Â· Res. 8430/1993 Â· Ley 1581/2012 Â· Res. 1843/2025
               Art.12
             </p>
           </div>
@@ -10707,7 +10707,7 @@ export const ConsentimientoModal = ({
               className="text-emerald-200 hover:text-white text-xl font-black leading-none"
               aria-label="Cerrar"
             >
-              ✕
+              â
             </button>
           )}
         </div>
@@ -10715,49 +10715,49 @@ export const ConsentimientoModal = ({
         {/* Cuerpo scrollable */}
         <div className="overflow-y-auto flex-grow px-6 py-4 text-xs text-gray-700 space-y-3">
           <p className="font-bold text-gray-900 text-sm">
-            AUTORIZACIÓN PARA EVALUACIÓN MÉDICA OCUPACIONAL
+            AUTORIZACIÃN PARA EVALUACIÃN MÃDICA OCUPACIONAL
           </p>
           <p>
             Yo, el/la trabajador(a) identificado(a) con el nombre y documento
-            que diligencie a continuación, en ejercicio de mi capacidad legal y
+            que diligencie a continuaciÃ³n, en ejercicio de mi capacidad legal y
             actuando de manera libre y voluntaria, <strong>AUTORIZO</strong> al
             profesional de medicina del trabajo y salud ocupacional a:
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li>
-              Realizar la evaluación médica ocupacional de ingreso, periódica o
-              de egreso, según corresponda, de conformidad con la{" "}
-              <strong>Resolución 1843 de 2025</strong> y la Resolución 2346 de
+              Realizar la evaluaciÃ³n mÃ©dica ocupacional de ingreso, periÃ³dica o
+              de egreso, segÃºn corresponda, de conformidad con la{" "}
+              <strong>ResoluciÃ³n 1843 de 2025</strong> y la ResoluciÃ³n 2346 de
               2007.
             </li>
             <li>
               Recopilar, almacenar y procesar mis datos personales y de salud
-              con fines exclusivamente médico-ocupacionales, en cumplimiento de
+              con fines exclusivamente mÃ©dico-ocupacionales, en cumplimiento de
               la <strong>Ley 1581 de 2012</strong> (Habeas Data) y el Decreto
               1377 de 2013.
             </li>
             <li>
               Compartir el <em>Certificado de Aptitud Laboral</em> con la
-              empresa contratante o solicitante de la evaluación, en los
-              términos del artículo 12 de la Resolución 1843 de 2025.
+              empresa contratante o solicitante de la evaluaciÃ³n, en los
+              tÃ©rminos del artÃ­culo 12 de la ResoluciÃ³n 1843 de 2025.
             </li>
           </ul>
           <p>
-            <strong>Confidencialidad:</strong> Mi historia clínica ocupacional
-            es un documento privado. Su acceso está restringido únicamente al
+            <strong>Confidencialidad:</strong> Mi historia clÃ­nica ocupacional
+            es un documento privado. Su acceso estÃ¡ restringido Ãºnicamente al
             equipo de salud tratante y a las autoridades que lo requieran por
-            mandato legal (<strong>Ley 23 de 1981, Art. 37</strong>). El médico
-            está sujeto al secreto profesional.
+            mandato legal (<strong>Ley 23 de 1981, Art. 37</strong>). El mÃ©dico
+            estÃ¡ sujeto al secreto profesional.
           </p>
           <p>
             <strong>Derechos como titular de datos (Ley 1581/2012):</strong>{" "}
             Tengo derecho a conocer, actualizar, rectificar y solicitar la
-            supresión de mis datos personales. Puedo ejercer estos derechos
-            directamente ante el médico tratante.
+            supresiÃ³n de mis datos personales. Puedo ejercer estos derechos
+            directamente ante el mÃ©dico tratante.
           </p>
           <p>
             <strong>Voluntariedad:</strong> Entiendo que puedo revocar esta
-            autorización en cualquier momento, aunque ello puede implicar la
+            autorizaciÃ³n en cualquier momento, aunque ello puede implicar la
             imposibilidad de emitir el certificado de aptitud laboral requerido
             por mi empleador.
           </p>
@@ -10787,7 +10787,7 @@ export const ConsentimientoModal = ({
                   setNombre(e.target.value);
                   setError("");
                 }}
-                placeholder="Ej: JUAN CARLOS PÉREZ GÓMEZ"
+                placeholder="Ej: JUAN CARLOS PÃREZ GÃMEZ"
                 className="w-full p-2 border-2 border-gray-300 rounded-lg text-sm font-semibold focus:border-emerald-500 focus:outline-none"
                 autoComplete="off"
               />
@@ -10803,13 +10803,13 @@ export const ConsentimientoModal = ({
                 className="mt-0.5 w-4 h-4 accent-emerald-600 flex-shrink-0"
               />
               <span className="text-xs text-gray-700 leading-relaxed">
-                He leído, comprendido y acepto voluntariamente el presente
-                consentimiento informado. Confirmo que la información es veraz y
-                que actúo sin presión alguna.
+                He leÃ­do, comprendido y acepto voluntariamente el presente
+                consentimiento informado. Confirmo que la informaciÃ³n es veraz y
+                que actÃºo sin presiÃ³n alguna.
               </span>
             </label>
             {error && (
-              <p className="text-red-600 text-xs font-bold">⚠️ {error}</p>
+              <p className="text-red-600 text-xs font-bold">â ï¸ {error}</p>
             )}
             <div className="flex gap-3 justify-end pt-1">
               <button
@@ -10823,14 +10823,14 @@ export const ConsentimientoModal = ({
                 disabled={!nombre.trim() || !aceptado}
                 className="px-5 py-2 text-xs font-black text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
               >
-                ✅ Confirmar consentimiento
+                â Confirmar consentimiento
               </button>
             </div>
           </div>
         ) : (
           <div className="border-t border-gray-200 px-6 py-4 bg-emerald-50 flex-shrink-0">
             <p className="text-xs text-emerald-800 font-bold">
-              ✅ Consentimiento registrado - Historia clínica cerrada (solo
+              â Consentimiento registrado - Historia clÃ­nica cerrada (solo
               lectura)
             </p>
           </div>
@@ -10872,7 +10872,7 @@ export function LoginForm({ onLogin, blockedUntil, attempts }) {
     <div className="space-y-4 mb-6">
       {isBlocked && (
         <div className="bg-red-50 border border-red-300 rounded-xl p-3 text-center">
-          <p className="text-red-700 font-black text-sm">🔒 Acceso bloqueado</p>
+          <p className="text-red-700 font-black text-sm">ð Acceso bloqueado</p>
           <p className="text-red-500 text-xs mt-1">
             Espere <span className="font-black">{remaining}s</span> antes de
             intentar de nuevo
@@ -10882,8 +10882,8 @@ export function LoginForm({ onLogin, blockedUntil, attempts }) {
       {!isBlocked && attempts > 0 && (
         <div className="bg-yellow-50 border border-yellow-300 rounded-xl p-2 text-center">
           <p className="text-yellow-700 text-xs font-bold">
-            ⚠️ {attempts} intento{attempts > 1 ? "s" : ""} fallido
-            {attempts > 1 ? "s" : ""}. Máx. 5 antes del bloqueo.
+            â ï¸ {attempts} intento{attempts > 1 ? "s" : ""} fallido
+            {attempts > 1 ? "s" : ""}. MÃ¡x. 5 antes del bloqueo.
           </p>
         </div>
       )}
@@ -10902,7 +10902,7 @@ export function LoginForm({ onLogin, blockedUntil, attempts }) {
         value={p}
         onChange={(e) => setP(e.target.value.slice(0, MAX_PASS_LEN))}
         className="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 outline-none"
-        placeholder="Contraseña"
+        placeholder="ContraseÃ±a"
         onKeyDown={(e) => e.key === "Enter" && submit()}
         autoComplete="current-password"
         maxLength={MAX_PASS_LEN}
@@ -10917,20 +10917,20 @@ export function LoginForm({ onLogin, blockedUntil, attempts }) {
             : "bg-gradient-to-r from-emerald-600 to-teal-500 text-white hover:opacity-90"
         }`}
       >
-        {isBlocked ? `Bloqueado (${remaining}s)` : "Iniciar Sesión"}
+        {isBlocked ? `Bloqueado (${remaining}s)` : "Iniciar SesiÃ³n"}
       </button>
     </div>
   );
 }
-// ══════════════════════════════════════════════════════════
-// MÓDULO NORMATIVO 1: AVISO DE PRIVACIDAD (Ley 1581/2012)
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// MÃDULO NORMATIVO 1: AVISO DE PRIVACIDAD (Ley 1581/2012)
 // Decreto 1078/2015 Art. 2.2.2.25.2.2 - Tratamiento datos sensibles (deroga Decreto 1377/2013)
-// ══════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // B-15: MODAL DE NOTIFICACIONES - Res. 1552/2013
 // WhatsApp y Email sin servidor externo (links directos)
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export const NotificacionModal = ({ data, onCerrar }) => {
   if (!data || !data.nombre) return null;
   const tel = (data.celular || "").replace(/\D/g, "");
@@ -10944,26 +10944,26 @@ export const NotificacionModal = ({ data, onCerrar }) => {
 
   const waMsg = encodeURIComponent(
     `Estimado/a ${nombre},\n\n` +
-      `Le informamos que su evaluación médica ocupacional ha sido registrada.\n\n` +
-      `📋 *Código de verificación:* ${codigo}\n` +
-      `📅 *Fecha:* ${fecha}\n` +
-      `🏢 *Empresa:* ${empresa}\n` +
-      `✅ *Concepto:* ${concepto}\n\n` +
-      `Puede verificar su certificado en cualquier momento solicitando este código al médico.\n\n` +
-      `Atentamente,\nServicio Médico Ocupacional - SISO OcupaSalud v4`
+      `Le informamos que su evaluaciÃ³n mÃ©dica ocupacional ha sido registrada.\n\n` +
+      `ð *CÃ³digo de verificaciÃ³n:* ${codigo}\n` +
+      `ð *Fecha:* ${fecha}\n` +
+      `ð¢ *Empresa:* ${empresa}\n` +
+      `â *Concepto:* ${concepto}\n\n` +
+      `Puede verificar su certificado en cualquier momento solicitando este cÃ³digo al mÃ©dico.\n\n` +
+      `Atentamente,\nServicio MÃ©dico Ocupacional - SISO OcupaSalud v4`
   );
 
   const mailSubject = encodeURIComponent(
-    `Evaluación Médica Ocupacional - Código ${codigo}`
+    `EvaluaciÃ³n MÃ©dica Ocupacional - CÃ³digo ${codigo}`
   );
   const mailBody = encodeURIComponent(
     `Estimado/a ${nombre},
 
 ` +
-      `Le informamos que su evaluación médica ocupacional ha sido registrada.
+      `Le informamos que su evaluaciÃ³n mÃ©dica ocupacional ha sido registrada.
 
 ` +
-      `Código de verificación: ${codigo}
+      `CÃ³digo de verificaciÃ³n: ${codigo}
 ` +
       `Fecha: ${fecha}
 ` +
@@ -10972,11 +10972,11 @@ export const NotificacionModal = ({ data, onCerrar }) => {
       `Concepto de aptitud: ${concepto}
 
 ` +
-      `Puede verificar su certificado presentando este código al médico tratante.
+      `Puede verificar su certificado presentando este cÃ³digo al mÃ©dico tratante.
 
 ` +
       `Atentamente,
-Servicio Médico Ocupacional - SISO OcupaSalud v4`
+Servicio MÃ©dico Ocupacional - SISO OcupaSalud v4`
   );
 
   const waUrl = `https://wa.me/${
@@ -10984,7 +10984,7 @@ Servicio Médico Ocupacional - SISO OcupaSalud v4`
   }?text=${waMsg}`;
   const mailUrl = `mailto:${email}?subject=${mailSubject}&body=${mailBody}`;
   const smsUrl = `sms:${tel}?body=${encodeURIComponent(
-    `SISO OcupaSalud: Su código de verificación es ${codigo}. Fecha evaluación: ${fecha}.`
+    `SISO OcupaSalud: Su cÃ³digo de verificaciÃ³n es ${codigo}. Fecha evaluaciÃ³n: ${fecha}.`
   )}`;
 
   return (
@@ -10992,16 +10992,16 @@ Servicio Médico Ocupacional - SISO OcupaSalud v4`
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
         <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-5 text-white flex items-center justify-between">
           <div>
-            <h2 className="font-black text-base">📲 Notificar al Paciente</h2>
+            <h2 className="font-black text-base">ð² Notificar al Paciente</h2>
             <p className="text-green-100 text-xs mt-0.5">
-              Res. 1552/2013 · Comunicación resultado
+              Res. 1552/2013 Â· ComunicaciÃ³n resultado
             </p>
           </div>
           <button
             onClick={onCerrar}
             className="text-white/80 hover:text-white text-2xl font-bold"
           >
-            ✕
+            â
           </button>
         </div>
         <div className="p-5 space-y-3">
@@ -11015,7 +11015,7 @@ Servicio Médico Ocupacional - SISO OcupaSalud v4`
             </p>
             <p>
               <span className="font-black text-gray-600">
-                Código verificación:
+                CÃ³digo verificaciÃ³n:
               </span>{" "}
               <span className="font-black text-blue-700">
                 {codigo || "(guardar HC primero)"}
@@ -11028,7 +11028,7 @@ Servicio Médico Ocupacional - SISO OcupaSalud v4`
           </div>
 
           <p className="text-xs font-black text-gray-700 uppercase">
-            Canales de notificación
+            Canales de notificaciÃ³n
           </p>
 
           {tel ? (
@@ -11038,7 +11038,7 @@ Servicio Médico Ocupacional - SISO OcupaSalud v4`
               rel="noreferrer"
               className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-xl hover:bg-green-100 transition"
             >
-              <span className="text-2xl">💬</span>
+              <span className="text-2xl">ð¬</span>
               <div>
                 <p className="text-xs font-black text-green-800">WhatsApp</p>
                 <p className="text-[10px] text-green-600">
@@ -11046,12 +11046,12 @@ Servicio Médico Ocupacional - SISO OcupaSalud v4`
                 </p>
               </div>
               <span className="ml-auto text-xs font-bold text-green-600">
-                Abrir →
+                Abrir â
               </span>
             </a>
           ) : (
             <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-400">
-              💬 WhatsApp - Registre celular del paciente para habilitar
+              ð¬ WhatsApp - Registre celular del paciente para habilitar
             </div>
           )}
 
@@ -11060,20 +11060,20 @@ Servicio Médico Ocupacional - SISO OcupaSalud v4`
               href={mailUrl}
               className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 transition"
             >
-              <span className="text-2xl">📧</span>
+              <span className="text-2xl">ð§</span>
               <div>
                 <p className="text-xs font-black text-blue-800">
-                  Correo electrónico
+                  Correo electrÃ³nico
                 </p>
                 <p className="text-[10px] text-blue-600">{email}</p>
               </div>
               <span className="ml-auto text-xs font-bold text-blue-600">
-                Abrir →
+                Abrir â
               </span>
             </a>
           ) : (
             <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-400">
-              📧 Email - Registre correo del paciente para habilitar
+              ð§ Email - Registre correo del paciente para habilitar
             </div>
           )}
 
@@ -11082,27 +11082,27 @@ Servicio Médico Ocupacional - SISO OcupaSalud v4`
               href={smsUrl}
               className="flex items-center gap-3 p-3 bg-purple-50 border border-purple-200 rounded-xl hover:bg-purple-100 transition"
             >
-              <span className="text-2xl">💬</span>
+              <span className="text-2xl">ð¬</span>
               <div>
                 <p className="text-xs font-black text-purple-800">
-                  SMS (código únicamente)
+                  SMS (cÃ³digo Ãºnicamente)
                 </p>
                 <p className="text-[10px] text-purple-600">
                   +{tel.startsWith("57") ? tel : "57" + tel}
                 </p>
               </div>
               <span className="ml-auto text-xs font-bold text-purple-600">
-                Abrir →
+                Abrir â
               </span>
             </a>
           ) : null}
 
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-[10px] text-amber-700">
             <p className="font-black">
-              📋 Res. 1552/2013 - Notificación de resultados
+              ð Res. 1552/2013 - NotificaciÃ³n de resultados
             </p>
             <p className="mt-0.5">
-              El médico tiene la obligación de informar los resultados al
+              El mÃ©dico tiene la obligaciÃ³n de informar los resultados al
               trabajador evaluado. Los links abren su app de WhatsApp/Email con
               el mensaje prellenado.
             </p>
@@ -11120,18 +11120,18 @@ Servicio Médico Ocupacional - SISO OcupaSalud v4`
   );
 };
 
-// ══════════════════════════════════════════════════════════════════════════
-// B-20: FACTURACIÓN ELECTRÓNICA DIAN - UBL 2.1
-// Decreto 358 de 2020 · Resolución DIAN 000012 de 2021
-// Genera XML base para envío a software autorizado (Siigo, Alegra, Facture)
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// B-20: FACTURACIÃN ELECTRÃNICA DIAN - UBL 2.1
+// Decreto 358 de 2020 Â· ResoluciÃ³n DIAN 000012 de 2021
+// Genera XML base para envÃ­o a software autorizado (Siigo, Alegra, Facture)
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const _generarFacturaDIAN_UBL = (billData, doctorData, numero) => {
   const now = new Date();
   const fecha = now.toISOString().split("T")[0];
   const hora = now.toISOString().split("T")[1].slice(0, 8);
   const cufe = `SISO-${numero}-${fecha}`.replace(/-/g, "");
   const bruto = parseFloat(billData.amount || "0");
-  const iva = 0; // Servicios médicos exentos de IVA (Art. 476 E.T. numeral 1)
+  const iva = 0; // Servicios mÃ©dicos exentos de IVA (Art. 476 E.T. numeral 1)
   const total = bruto;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -11148,15 +11148,15 @@ const _generarFacturaDIAN_UBL = (billData, doctorData, numero) => {
   <cbc:IssueDate>${fecha}</cbc:IssueDate>
   <cbc:IssueTime>${hora}-05:00</cbc:IssueTime>
   <cbc:InvoiceTypeCode>01</cbc:InvoiceTypeCode>
-  <cbc:Note>Servicios médicos ocupacionales exentos de IVA - Art. 476 E.T. num. 1</cbc:Note>
+  <cbc:Note>Servicios mÃ©dicos ocupacionales exentos de IVA - Art. 476 E.T. num. 1</cbc:Note>
   <cbc:DocumentCurrencyCode>COP</cbc:DocumentCurrencyCode>
   <cbc:LineCountNumeric>1</cbc:LineCountNumeric>
-  <!-- Emisor (médico) -->
+  <!-- Emisor (mÃ©dico) -->
   <cac:AccountingSupplierParty>
     <cac:Party>
       <cac:PartyTaxScheme>
         <cbc:RegistrationName>${
-          doctorData?.nombre || "MÉDICO OCUPACIONAL"
+          doctorData?.nombre || "MÃDICO OCUPACIONAL"
         }</cbc:RegistrationName>
         <cbc:CompanyID schemeID="13">${(doctorData?.cedula || "").replace(
           /[^0-9]/g,
@@ -11197,7 +11197,7 @@ const _generarFacturaDIAN_UBL = (billData, doctorData, numero) => {
     )}</cbc:TaxInclusiveAmount>
     <cbc:PayableAmount currencyID="COP">${total.toFixed(2)}</cbc:PayableAmount>
   </cac:LegalMonetaryTotal>
-  <!-- Línea de factura -->
+  <!-- LÃ­nea de factura -->
   <cac:InvoiceLine>
     <cbc:ID>1</cbc:ID>
     <cbc:InvoicedQuantity unitCode="94">1</cbc:InvoicedQuantity>
@@ -11232,15 +11232,15 @@ const _generarFacturaDIAN_UBL = (billData, doctorData, numero) => {
 </Invoice>`;
 };
 
-// ══════════════════════════════════════════════════════════════════════════
-// B-14: RETENCIÓN CERTIFICADA 20 AÑOS - Res. 1995/1999 Art. 15
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// B-14: RETENCIÃN CERTIFICADA 20 AÃOS - Res. 1995/1999 Art. 15
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // B-18: 2FA TOTP - RFC 6238 con Web Crypto API (HMAC-SHA1)
-// Res. 3100/2019 (habilitación IPS) - Seguridad en sistemas de información
+// Res. 3100/2019 (habilitaciÃ³n IPS) - Seguridad en sistemas de informaciÃ³n
 // Compatible con Google Authenticator, Authy, Microsoft Authenticator
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const _totpBase32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
 const _totpBase32ToBytes = (base32) => {
@@ -11336,12 +11336,12 @@ const _generarPaqueteRetencion = async (hcData, medicoData) => {
     _tipo: "SISO_HC_RETENCION_CERTIFICADA",
     metadata: {
       norma:
-        "Resolución 1995 de 1999 Art. 15 - Retención Historia Clínica 20 años",
+        "ResoluciÃ³n 1995 de 1999 Art. 15 - RetenciÃ³n Historia ClÃ­nica 20 aÃ±os",
       version: "SISO-OCUPASALUD-v4",
       fechaPreservacion: ts,
       anioVencimientoLegal: new Date().getFullYear() + 20,
       medicoId: medicoData?.cedula || "desconocido",
-      medicoNombre: medicoData?.nombre || "Médico Ocupacional",
+      medicoNombre: medicoData?.nombre || "MÃ©dico Ocupacional",
       paciente: hcData.nombres || "Desconocido",
       docNumero: hcData.docNumero || "--",
       empresa: hcData.empresaNombre || "PARTICULAR",
@@ -11361,9 +11361,9 @@ const _generarPaqueteRetencion = async (hcData, medicoData) => {
   };
 };
 
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // B-23: CERTIFICADO DE APTITUD ESTANDARIZADO - Res. 1843/2025
-// ══════════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const _generarCertificadoHTMLNormalizado = (
   data,
   doctorData,
@@ -11377,14 +11377,14 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     day: "numeric",
   });
   const nomDoc =
-    doctorData && doctorData.nombre ? doctorData.nombre : "MÉDICO OCUPACIONAL";
+    doctorData && doctorData.nombre ? doctorData.nombre : "MÃDICO OCUPACIONAL";
   const nomTit =
     doctorData && doctorData.titulo
       ? doctorData.titulo
-      : "Médico Especialista en Salud Ocupacional";
+      : "MÃ©dico Especialista en Salud Ocupacional";
   const nomLic = doctorData && doctorData.licencia ? doctorData.licencia : "--";
   const nomCiu =
-    doctorData && doctorData.ciudad ? doctorData.ciudad : "Popayán";
+    doctorData && doctorData.ciudad ? doctorData.ciudad : "PopayÃ¡n";
   const nomCell =
     doctorData && doctorData.celular
       ? doctorData.celular
@@ -11402,7 +11402,7 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
   const conceptoRaw = data.conceptoAptitud || "";
   const conceptoDisplay = conceptoRaw || "PENDIENTE DE CONCEPTO";
 
-  /* ── Formato de restricciones / recomendaciones ─────────────────── */
+  /* ââ Formato de restricciones / recomendaciones âââââââââââââââââââ */
   const fmtBlocks = (txt) => {
     if (!txt) return "";
     const str = Array.isArray(txt) ? txt.join("\n") : String(txt);
@@ -11412,7 +11412,7 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
       .filter(Boolean);
     if (
       lines.some(
-        (l) => /^[•*\-]/.test(l) || /^\*\*/.test(l) || /^\d+\./.test(l)
+        (l) => /^[â¢*\-]/.test(l) || /^\*\*/.test(l) || /^\d+\./.test(l)
       )
     ) {
       return (
@@ -11422,7 +11422,7 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
             (l) =>
               '<li style="margin-bottom:3px;font-size:9.5pt;">' +
               l
-                .replace(/^[•*\-]+\s*/, "")
+                .replace(/^[â¢*\-]+\s*/, "")
                 .replace(/^\d+\.\s*/, "")
                 .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>") +
               "</li>"
@@ -11455,10 +11455,10 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
   const restCheck = checkItems(data.restriccionesChecklist);
   const recCheck = checkItems(data.recomendacionesChecklist);
 
-  /* ── Fecha de vigencia ─────────────────────────────────────────── */
-  const vigencia = data.vigencia || "1 año";
+  /* ââ Fecha de vigencia âââââââââââââââââââââââââââââââââââââââââââ */
+  const vigencia = data.vigencia || "1 aÃ±o";
 
-  /* ── Color concepto ────────────────────────────────────────────── */
+  /* ââ Color concepto ââââââââââââââââââââââââââââââââââââââââââââââ */
   const cLow = conceptoRaw.toLowerCase();
   const aptBg = cLow.includes("no apto")
     ? "#7f1d1d"
@@ -11480,23 +11480,23 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     ".np-dl button{background:#065f46;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:900;font-size:11pt;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2);}" +
     ".np-dl p{font-size:8pt;color:#6b7280;text-align:right;}" +
     "@media print{.np-dl{display:none!important;}body{padding:10mm 14mm;}}" +
-    /* ── HEADER ── */
+    /* ââ HEADER ââ */
     ".hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #065f46;padding-bottom:10px;margin-bottom:14px;}" +
     ".hdr-brand{display:flex;align-items:center;gap:10px;}" +
     ".hdr-logo{width:44px;height:44px;border-radius:10px;background:#065f46;display:flex;align-items:center;justify-content:center;font-size:20pt;color:#fff;font-weight:900;flex-shrink:0;}" +
     ".hdr-name{font-size:13pt;font-weight:900;color:#065f46;text-transform:uppercase;letter-spacing:1px;}" +
     ".hdr-sub{font-size:8pt;color:#6b7280;margin-top:1px;}" +
     ".hdr-ref{text-align:right;font-size:8pt;color:#6b7280;line-height:1.5;}" +
-    /* ── TITLE ── */
+    /* ââ TITLE ââ */
     ".title{text-align:center;font-size:16pt;font-weight:900;text-transform:uppercase;letter-spacing:3px;margin:10px 0 4px;}" +
     ".subtitle{text-align:center;font-size:9pt;color:#6b7280;margin-bottom:10px;}" +
     ".intro{font-size:9.5pt;color:#374151;margin-bottom:10px;line-height:1.5;}" +
-    /* ── PATIENT BOX ── */
+    /* ââ PATIENT BOX ââ */
     ".pat-box{border:1.5px solid #d1d5db;border-radius:8px;padding:10px 14px;margin-bottom:10px;display:grid;grid-template-columns:1fr 1fr;gap:5px 20px;}" +
     ".pat-field{display:flex;flex-direction:column;}" +
     ".pat-label{font-size:7.5pt;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;}" +
     ".pat-val{font-size:10.5pt;font-weight:700;color:#111;}" +
-    /* ── CONCEPT ── */
+    /* ââ CONCEPT ââ */
     ".concepto-lbl{text-align:center;font-size:8pt;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:#6b7280;margin:6px 0 4px;}" +
     ".concepto-box{border:2px solid " +
     aptBg +
@@ -11505,14 +11505,14 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     ";}" +
     ".concepto-txt{font-size:16pt;font-weight:900;text-transform:uppercase;color:#fff;line-height:1.3;}" +
     ".concepto-note{font-size:8pt;color:#e5e7eb;margin-top:4px;}" +
-    /* ── SECTIONS ── */
+    /* ââ SECTIONS ââ */
     ".sec{margin-bottom:10px;}" +
     ".sec-title{font-size:9pt;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#111;border-bottom:2px solid #d1d5db;padding-bottom:3px;margin-bottom:6px;}" +
     ".pill{display:inline-block;background:#fef9c3;border:1px solid #fde047;color:#78350f;padding:2px 8px;border-radius:4px;font-size:8.5pt;margin:2px;}" +
     ".pill.ok{background:#f0fdf4;border-color:#86efac;color:#14532d;}" +
-    /* ── ALERTA ── */
+    /* ââ ALERTA ââ */
     ".alerta{background:#fef9c3;border:1px solid #fde047;padding:7px 12px;border-radius:6px;font-size:8.5pt;color:#713f12;margin-bottom:10px;}" +
-    /* ── FIRMA ROW ── */
+    /* ââ FIRMA ROW ââ */
     ".firma-row{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:end;border-top:2px solid #d1d5db;padding-top:12px;margin-top:4px;}" +
     ".firma-col{display:flex;flex-direction:column;align-items:center;text-align:center;}" +
     ".firma-line{width:180px;border-top:1px solid #374151;margin-top:50px;padding-top:5px;}" +
@@ -11522,12 +11522,12 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     ".cv-box{background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:8px 16px;text-align:center;}" +
     ".cv-lbl{font-size:7.5pt;font-weight:900;color:#6b7280;text-transform:uppercase;letter-spacing:1px;}" +
     ".cv-code{font-size:14pt;font-family:monospace;font-weight:900;letter-spacing:3px;color:#065f46;margin-top:2px;}" +
-    /* ── FOOTER ── */
+    /* ââ FOOTER ââ */
     ".footer{margin-top:10px;border-top:1px solid #e5e7eb;padding-top:6px;font-size:7.5pt;color:#9ca3af;display:flex;justify-content:space-between;}" +
-    /* ── CONSENT ── */
+    /* ââ CONSENT ââ */
     ".consent{margin-top:8px;font-size:7pt;color:#9ca3af;line-height:1.4;border-top:1px dashed #e5e7eb;padding-top:6px;}" +
     "</style></head><body>" +
-    /* ── HEADER ─────────────────────────────────────────────── */
+    /* ââ HEADER âââââââââââââââââââââââââââââââââââââââââââââââ */
     '<div class="hdr">' +
     '<div class="hdr-brand">' +
     (ipsData
@@ -11549,9 +11549,9 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     (ipsData
       ? _sanitize(
           (ipsData.direccion || "") +
-            (ipsData.ciudad ? " · " + ipsData.ciudad : "")
+            (ipsData.ciudad ? " Â· " + ipsData.ciudad : "")
         )
-      : "Lic. " + nomLic + " · " + nomCiu) +
+      : "Lic. " + nomLic + " Â· " + nomCiu) +
     "</div>" +
     (ipsData && ipsData.telefono
       ? '<div class="hdr-sub">Tel: ' + _sanitize(ipsData.telefono) + "</div>"
@@ -11565,21 +11565,21 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     fechaHoy +
     "</p></div>" +
     "</div>" +
-    /* ── TITLE ──────────────────────────────────────────────── */
+    /* ââ TITLE ââââââââââââââââââââââââââââââââââââââââââââââââ */
     '<div class="title">Certificado de Aptitud Laboral</div>' +
-    '<div class="subtitle">Conforme a la Resolución 1843 de 2025</div>' +
-    /* ── INTRO ──────────────────────────────────────────────── */
-    '<p class="intro">El suscrito Médico Especialista en Salud Ocupacional, con licencia vigente, certifica que ha realizado la evaluación médica ocupacional de tipo <strong>' +
+    '<div class="subtitle">Conforme a la ResoluciÃ³n 1843 de 2025</div>' +
+    /* ââ INTRO ââââââââââââââââââââââââââââââââââââââââââââââââ */
+    '<p class="intro">El suscrito MÃ©dico Especialista en Salud Ocupacional, con licencia vigente, certifica que ha realizado la evaluaciÃ³n mÃ©dica ocupacional de tipo <strong>' +
     tipoExamen +
-    "</strong> con énfasis <strong>" +
+    "</strong> con Ã©nfasis <strong>" +
     enfasis +
     "</strong> a:</p>" +
-    /* ── PATIENT BOX ────────────────────────────────────────── */
+    /* ââ PATIENT BOX ââââââââââââââââââââââââââââââââââââââââââ */
     '<div class="pat-box">' +
     '<div class="pat-field"><span class="pat-label">Nombre</span><span class="pat-val">' +
     (data.nombres || "--") +
     "</span></div>" +
-    '<div class="pat-field"><span class="pat-label">Identificación</span><span class="pat-val">' +
+    '<div class="pat-field"><span class="pat-label">IdentificaciÃ³n</span><span class="pat-val">' +
     (data.docTipo || "CC") +
     " " +
     (data.docNumero || "--") +
@@ -11597,7 +11597,7 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     vigencia +
     "</span></div>" +
     "</div>" +
-    /* ── CONCEPTO ───────────────────────────────────────────── */
+    /* ââ CONCEPTO âââââââââââââââââââââââââââââââââââââââââââââ */
     '<div class="concepto-lbl">Concepto Emitido</div>' +
     '<div class="concepto-box">' +
     '<div class="concepto-txt">' +
@@ -11605,23 +11605,23 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     "</div>" +
     '<div class="concepto-note">Concepto emitido bajo Res. 1843 de 2025, Art. 20</div>' +
     "</div>" +
-    /* ── RECOMENDACIONES ────────────────────────────────────── */
+    /* ââ RECOMENDACIONES ââââââââââââââââââââââââââââââââââââââ */
     (recomendacionesText || recCheck.length > 0
       ? '<div class="sec"><div class="sec-title">Recomendaciones</div>' +
         "" +
         fmtBlocks(recomendacionesText) +
         "</div>"
       : "") +
-    /* ── RESTRICCIONES ──────────────────────────────────────── */
+    /* ââ RESTRICCIONES ââââââââââââââââââââââââââââââââââââââââ */
     (restriccionesText || restCheck.length > 0
       ? '<div class="sec"><div class="sec-title">Restricciones Laborales</div>' +
         "" +
         fmtBlocks(restriccionesText) +
         "</div>"
       : "") +
-    /* ── ALERTA CONFIDENCIALIDAD ─────────────────────────────── */
-    '<div class="alerta">⚠ <strong>Confidencialidad:</strong> El diagnóstico clínico no es entregado al empleador (Art. 16 Res. 1843/2025). Solo uso para gestión del riesgo ocupacional.</div>' +
-    /* ── FIRMA ROW ──────────────────────────────────────────── */
+    /* ââ ALERTA CONFIDENCIALIDAD âââââââââââââââââââââââââââââââ */
+    '<div class="alerta">â  <strong>Confidencialidad:</strong> El diagnÃ³stico clÃ­nico no es entregado al empleador (Art. 16 Res. 1843/2025). Solo uso para gestiÃ³n del riesgo ocupacional.</div>' +
+    /* ââ FIRMA ROW ââââââââââââââââââââââââââââââââââââââââââââ */
     '<div class="firma-row">' +
     '<div class="firma-col">' +
     '<div class="firma-line">' +
@@ -11634,7 +11634,7 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     "</div>" +
     "</div>" +
     '<div class="cv-box">' +
-    '<div class="cv-lbl">Código Verificación</div>' +
+    '<div class="cv-lbl">CÃ³digo VerificaciÃ³n</div>' +
     '<div class="cv-code">' +
     (data.codigoVerificacion || "--") +
     "</div>" +
@@ -11660,36 +11660,36 @@ const _dateRef = data.fechaCierre ? new Date(data.fechaCierre + "T12:00:00") : n
     "</div>" +
     "</div>" +
     "</div>" +
-    /* ── FOOTER ─────────────────────────────────────────────── */
+    /* ââ FOOTER âââââââââââââââââââââââââââââââââââââââââââââââ */
     '<div class="footer">' +
-    "<span>Res. 1843/2025 · Res. 1995/1999 · Ley 23/1981 · Ley 1581/2012</span>" +
+    "<span>Res. 1843/2025 Â· Res. 1995/1999 Â· Ley 23/1981 Â· Ley 1581/2012</span>" +
     "<span>SISO OcupaSalud v4.8</span>" +
     "</div>" +
-    /* ── CONSENTIMIENTO ─────────────────────────────────────── */
-    '<div class="consent">El suscrito Médico Especialista en Salud Ocupacional, con licencia vigente, certifica que realizó el examen médico ocupacional registrado en este documento. ' +
-    "El paciente fue informado de las medidas de protección de la confidencialidad de los resultados. " +
-    "Las respuestas dadas fueron consideradas verídicas. " +
-    "Se autoriza al doctor para suministrar la Historia Clínica a la EPS y a las personas o entidades contempladas en la legislación vigente, para el buen cumplimiento del sistema de seguridad y salud en el trabajo. " +
-    "Res. 1843/2025 · Ley 1581/2012 · Ley 23/1981.</div>" +
+    /* ââ CONSENTIMIENTO âââââââââââââââââââââââââââââââââââââââ */
+    '<div class="consent">El suscrito MÃ©dico Especialista en Salud Ocupacional, con licencia vigente, certifica que realizÃ³ el examen mÃ©dico ocupacional registrado en este documento. ' +
+    "El paciente fue informado de las medidas de protecciÃ³n de la confidencialidad de los resultados. " +
+    "Las respuestas dadas fueron consideradas verÃ­dicas. " +
+    "Se autoriza al doctor para suministrar la Historia ClÃ­nica a la EPS y a las personas o entidades contempladas en la legislaciÃ³n vigente, para el buen cumplimiento del sistema de seguridad y salud en el trabajo. " +
+    "Res. 1843/2025 Â· Ley 1581/2012 Â· Ley 23/1981.</div>" +
     "</body></html>"
   );
 };
 
-// ══════════════════════════════════════════════════════════════════════════
-// PORTAL PÚBLICO DEL TRABAJADOR - Acceso sin login
-// Solo requiere: código de verificación de HC O número de cédula
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// PORTAL PÃBLICO DEL TRABAJADOR - Acceso sin login
+// Solo requiere: cÃ³digo de verificaciÃ³n de HC O nÃºmero de cÃ©dula
 // Consulta DIRECTA a Supabase (no usa estado del App)
 // SEC-13: Sin acceso a datos de otros pacientes
 const PORTAL_URL = "https://fw5fnt.csb.app/#portaltrabajador";
-// ══════════════════════════════════════════════════════════════════════════
-// PORTAL PÚBLICO DEL TRABAJADOR - v2 - Acceso sin login
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// PORTAL PÃBLICO DEL TRABAJADOR - v2 - Acceso sin login
 // URL: https://fw5fnt.csb.app/#portaltrabajador
-// Búsqueda por código de verificación O número de cédula
-// Query directo a Supabase clave pública 'siso_portal_{codigo}'
+// BÃºsqueda por cÃ³digo de verificaciÃ³n O nÃºmero de cÃ©dula
+// Query directo a Supabase clave pÃºblica 'siso_portal_{codigo}'
 // Compatible: Chrome, Firefox, Safari, Edge, Opera (todos los navegadores)
 // SEC-13: Nunca expone datos de otros pacientes
-// NORMATIVO: Res. 2346/2007 Art.14 · Ley 1581/2012 · Res. 1843/2025
-// ══════════════════════════════════════════════════════════════════════════
+// NORMATIVO: Res. 2346/2007 Art.14 Â· Ley 1581/2012 Â· Res. 1843/2025
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
   const { useState, useCallback, useRef } = React;
   const [busqueda, setBusqueda] = useState("");
@@ -11716,30 +11716,30 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
     if (ahora < bloqueadoHasta) {
       const restMin = Math.ceil((bloqueadoHasta - ahora) / 60000);
       setError(
-        `🔒 Demasiados intentos. Espere ${restMin} minuto(s) antes de intentar.`
+        `ð Demasiados intentos. Espere ${restMin} minuto(s) antes de intentar.`
       );
       return;
     }
     const q = busqueda.trim();
     if (!q) {
-      setError("Ingrese su código de verificación o número de cédula.");
+      setError("Ingrese su cÃ³digo de verificaciÃ³n o nÃºmero de cÃ©dula.");
       return;
     }
     if (q.length < 4) {
-      setError("El código o cédula debe tener al menos 4 caracteres.");
+      setError("El cÃ³digo o cÃ©dula debe tener al menos 4 caracteres.");
       return;
     }
     setCargando(true);
     setError("");
     setResultado(null);
     try {
-      // ── Construcción de claves de búsqueda ───────────────────────────────────
-      // Formatos históricos coexistentes:
+      // ââ ConstrucciÃ³n de claves de bÃºsqueda âââââââââââââââââââââââââââââââââââ
+      // Formatos histÃ³ricos coexistentes:
       //   ANTIGUO: CV-XXXXXXXXX  (p.ej. CV-I64CIYHE7)  - 71 HCs
       //   NUEVO:   SISO-YYYYMMDD-ID-HASH16              - desde 2026-03
       // El portal busca con el prefijo siso_portal_ en Supabase
-      // Para búsqueda por código: intentar la clave exacta
-      // Para búsqueda por cédula: intentar siso_portal_doc_CEDULA
+      // Para bÃºsqueda por cÃ³digo: intentar la clave exacta
+      // Para bÃºsqueda por cÃ©dula: intentar siso_portal_doc_CEDULA
 
       const headers = {
         apikey: sbKey,
@@ -11773,29 +11773,29 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
         } else if (r1.data) {
           pac = r1.data;
         }
-        // 2) Si el código no tiene prefijo CV- ni SISO-, probar con CV- delante
+        // 2) Si el cÃ³digo no tiene prefijo CV- ni SISO-, probar con CV- delante
         if (!pac && !qUp.startsWith("CV-") && !qUp.startsWith("SISO-")) {
           const r2 = await fetchKey("siso_portal_CV-" + qUp);
           if (r2.ok && r2.data) pac = r2.data;
         }
-        // 3) Probar código exacto sin normalizar (algunos códigos tienen minúsculas)
+        // 3) Probar cÃ³digo exacto sin normalizar (algunos cÃ³digos tienen minÃºsculas)
         if (!pac && qUp !== q.trim()) {
           const r3 = await fetchKey("siso_portal_" + q.trim());
           if (r3.ok && r3.data) pac = r3.data;
         }
-        // 4) Buscar por código directamente en siso_store (formato antiguo no-portal)
+        // 4) Buscar por cÃ³digo directamente en siso_store (formato antiguo no-portal)
         if (!pac) {
           const r4 = await fetchKey(qUp);
           if (r4.ok && r4.data && r4.data.codigoVerificacion) pac = r4.data;
         }
-        // 5) Búsqueda por dígito verificador flexible (sin guión, con guión)
+        // 5) BÃºsqueda por dÃ­gito verificador flexible (sin guiÃ³n, con guiÃ³n)
         if (!pac) {
           const codeNoDash = qUp.replace(/-/g, "");
           const r5 = await fetchKey("siso_portal_" + codeNoDash);
           if (r5.ok && r5.data) pac = r5.data;
         }
       } else {
-        // Búsqueda por cédula
+        // BÃºsqueda por cÃ©dula
         const docClean = q.replace(/\s/g, "");
         const r1 = await fetchKey("siso_portal_doc_" + docClean);
         if (!r1.ok) {
@@ -11806,7 +11806,7 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
       if (firstError && !pac) {
         if (firstError.status === 401 || firstError.status === 403) {
           setError(
-            "⚙️ El portal requiere configuración en Supabase.\nEjecute en el SQL Editor de Supabase:\nCREATE POLICY portal_public_read ON siso_store FOR SELECT USING (key LIKE 'siso_portal_%');"
+            "âï¸ El portal requiere configuraciÃ³n en Supabase.\nEjecute en el SQL Editor de Supabase:\nCREATE POLICY portal_public_read ON siso_store FOR SELECT USING (key LIKE 'siso_portal_%');"
           );
         } else {
           setError(`Error ${firstError.status}: ${firstError.text}`);
@@ -11821,8 +11821,8 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
       if (!pac) {
         setError(
           tipoBusqueda === "codigo"
-            ? "❌ Código no encontrado. Aceptamos formatos CV-XXXXXXX y SISO-FECHA-ID-HASH. Verifique mayúsculas y que la HC esté cerrada."
-            : "❌ Número de cédula no encontrado. Solo aparecen evaluaciones con historia cerrada."
+            ? "â CÃ³digo no encontrado. Aceptamos formatos CV-XXXXXXX y SISO-FECHA-ID-HASH. Verifique mayÃºsculas y que la HC estÃ© cerrada."
+            : "â NÃºmero de cÃ©dula no encontrado. Solo aparecen evaluaciones con historia cerrada."
         );
       } else {
         setResultado(pac);
@@ -11830,9 +11830,9 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
     } catch (e) {
       if (e.name === "AbortError")
         setError(
-          "⏱️ Tiempo de espera agotado. Verifique su conexión a internet."
+          "â±ï¸ Tiempo de espera agotado. Verifique su conexiÃ³n a internet."
         );
-      else setError("Error de conexión: " + (e.message || "desconocido"));
+      else setError("Error de conexiÃ³n: " + (e.message || "desconocido"));
     } finally {
       setCargando(false);
     }
@@ -11845,48 +11845,48 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
         bg: "bg-red-50",
         text: "text-red-800",
         badge: "bg-red-100 text-red-800 border-red-300",
-        dot: "🔴",
+        dot: "ð´",
       };
     if (
       cl.includes("condicion") ||
-      cl.includes("condición") ||
+      cl.includes("condiciÃ³n") ||
       cl.includes("restricc")
     )
       return {
         bg: "bg-amber-50",
         text: "text-amber-800",
         badge: "bg-amber-100 text-amber-800 border-amber-300",
-        dot: "🟡",
+        dot: "ð¡",
       };
     if (cl.includes("apto"))
       return {
         bg: "bg-emerald-50",
         text: "text-emerald-800",
         badge: "bg-emerald-100 text-emerald-800 border-emerald-300",
-        dot: "🟢",
+        dot: "ð¢",
       };
     return {
       bg: "bg-gray-50",
       text: "text-gray-700",
       badge: "bg-gray-100 text-gray-700 border-gray-300",
-      dot: "⚪",
+      dot: "âª",
     };
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 font-sans flex flex-col">
-      {/* ── Barra superior ── */}
+      {/* ââ Barra superior ââ */}
       <div className="bg-gradient-to-r from-teal-700 to-blue-700 px-5 py-4 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">
-            🧑‍💼
+            ð§âð¼
           </div>
           <div>
             <h1 className="text-white font-black text-sm tracking-tight">
               Portal del Trabajador
             </h1>
             <p className="text-teal-200 text-[10px]">
-              Servicio Médico Ocupacional · SISO OcupaSalud
+              Servicio MÃ©dico Ocupacional Â· SISO OcupaSalud
             </p>
           </div>
         </div>
@@ -11895,35 +11895,35 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
             onClick={onVolver}
             className="text-white/80 text-xs hover:text-white font-bold flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition"
           >
-            ← Volver al sistema
+            â Volver al sistema
           </button>
         )}
       </div>
 
       <div className="flex-1 p-4 max-w-lg mx-auto w-full space-y-4 mt-2">
-        {/* ── Instrucciones ── */}
+        {/* ââ Instrucciones ââ */}
         <div className="bg-white rounded-2xl shadow-sm border border-teal-100 p-4">
           <div className="flex items-start gap-3">
-            <span className="text-2xl mt-0.5">📋</span>
+            <span className="text-2xl mt-0.5">ð</span>
             <div>
               <h2 className="font-black text-gray-800 text-sm">
-                Consulta tu evaluación médica
+                Consulta tu evaluaciÃ³n mÃ©dica
               </h2>
               <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                Ingresa el código entregado por el médico o tu número de cédula
+                Ingresa el cÃ³digo entregado por el mÃ©dico o tu nÃºmero de cÃ©dula
                 para ver el resultado de tu examen de aptitud laboral.
               </p>
             </div>
           </div>
         </div>
 
-        {/* ── Formulario ── */}
+        {/* ââ Formulario ââ */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-3">
-          {/* Selector tipo búsqueda */}
+          {/* Selector tipo bÃºsqueda */}
           <div className="flex gap-2 p-1 bg-gray-100 rounded-xl">
             {[
-              { v: "codigo", label: "🔑 Código", hint: "SISO-2025-XXXX" },
-              { v: "cedula", label: "🪪 Cédula", hint: "1234567890" },
+              { v: "codigo", label: "ð CÃ³digo", hint: "SISO-2025-XXXX" },
+              { v: "cedula", label: "ðªª CÃ©dula", hint: "1234567890" },
             ].map((opt) => (
               <button
                 key={opt.v}
@@ -11947,8 +11947,8 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
           <div>
             <label className="block text-[10px] font-black text-gray-400 uppercase tracking-wider mb-1">
               {tipoBusqueda === "codigo"
-                ? "Código de verificación"
-                : "Número de cédula (sin puntos ni espacios)"}
+                ? "CÃ³digo de verificaciÃ³n"
+                : "NÃºmero de cÃ©dula (sin puntos ni espacios)"}
             </label>
             <input
               value={busqueda}
@@ -11977,7 +11977,7 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
               <pre className="whitespace-pre-wrap font-sans">{error}</pre>
             </div>
           )}
-          {/* Botón buscar */}
+          {/* BotÃ³n buscar */}
           <button
             onClick={buscar}
             disabled={
@@ -11987,19 +11987,19 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
           >
             {cargando ? (
               <>
-                <span className="animate-spin">⏳</span> Consultando...
+                <span className="animate-spin">â³</span> Consultando...
               </>
             ) : (
-              "🔍 Consultar resultado"
+              "ð Consultar resultado"
             )}
           </button>
           <p className="text-[9px] text-gray-400 text-center">
-            Consulta segura y confidencial · Solo verás tus propios datos
-            {intentos > 0 && ` · Intentos: ${intentos}/${MAX_INTENTOS}`}
+            Consulta segura y confidencial Â· Solo verÃ¡s tus propios datos
+            {intentos > 0 && ` Â· Intentos: ${intentos}/${MAX_INTENTOS}`}
           </p>
         </div>
 
-        {/* ── Resultado ── */}
+        {/* ââ Resultado ââ */}
         {resultado &&
           (() => {
             const col = colorAptitud(resultado.conceptoAptitud);
@@ -12010,7 +12010,7 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider">
-                        Resultado de tu evaluación
+                        Resultado de tu evaluaciÃ³n
                       </p>
                       <p className={`font-black text-base mt-0.5 ${col.text}`}>
                         {col.dot}{" "}
@@ -12028,18 +12028,18 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
                 <div className="p-4 space-y-3">
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      ["👤 Nombre", resultado.nombres],
+                      ["ð¤ Nombre", resultado.nombres],
                       [
-                        "🪪 Documento",
+                        "ðªª Documento",
                         `${resultado.docTipo || "CC"} ${resultado.docNumero}`,
                       ],
-                      ["🏭 Empresa", resultado.empresaNombre || "--"],
-                      ["💼 Cargo", resultado.cargo || "--"],
-                      ["🔬 Tipo de examen", resultado.tipoExamen || "--"],
-                      ["📅 Fecha evaluación", resultado.fechaExamen || "--"],
-                      ["👨‍⚕️ Médico evaluador", resultado.medicoNombre || "--"],
+                      ["ð­ Empresa", resultado.empresaNombre || "--"],
+                      ["ð¼ Cargo", resultado.cargo || "--"],
+                      ["ð¬ Tipo de examen", resultado.tipoExamen || "--"],
+                      ["ð Fecha evaluaciÃ³n", resultado.fechaExamen || "--"],
+                      ["ð¨ââï¸ MÃ©dico evaluador", resultado.medicoNombre || "--"],
                       [
-                        "🔑 Código verificación",
+                        "ð CÃ³digo verificaciÃ³n",
                         resultado.codigoVerificacion || "--",
                       ],
                     ].map(([k, v]) => (
@@ -12059,21 +12059,21 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
                   {resultado.restricciones && (
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
                       <p className="text-[10px] font-black text-amber-700 uppercase mb-1">
-                        ⚠️ Restricciones / Recomendaciones
+                        â ï¸ Restricciones / Recomendaciones
                       </p>
                       <p className="text-xs text-amber-800 leading-relaxed">
                         {resultado.restricciones}
                       </p>
                     </div>
                   )}
-                  {/* ── DESCARGAR CERTIFICADO PDF ─────────────────────────── */}
+                  {/* ââ DESCARGAR CERTIFICADO PDF âââââââââââââââââââââââââââ */}
                   <button
                     onClick={() => {
                       const docData = resultado._doctorData || {
-                        nombre: resultado.medicoNombre || "MÉDICO OCUPACIONAL",
-                        titulo: "Médico Especialista en Salud Ocupacional",
+                        nombre: resultado.medicoNombre || "MÃDICO OCUPACIONAL",
+                        titulo: "MÃ©dico Especialista en Salud Ocupacional",
                         licencia: "--",
-                        ciudad: "Popayán",
+                        ciudad: "PopayÃ¡n",
                         email: "",
                       };
                       const firma = resultado._firma || "";
@@ -12095,16 +12095,16 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
                       );
                       if (!w) {
                         alert(
-                          "El navegador bloqueó la ventana emergente. Permita los popups para descargar el certificado."
+                          "El navegador bloqueÃ³ la ventana emergente. Permita los popups para descargar el certificado."
                         );
                         return;
                       }
-                      // Inyectar botón flotante de descarga
+                      // Inyectar botÃ³n flotante de descarga
                       const htmlConBtn = html.replace(
                         "</body>",
                         '<div class="np-dl">' +
-                          '<button onclick="window.print()">📥 Guardar / Imprimir PDF</button>' +
-                          "<p>En el diálogo de impresión,<br/>selecciona <b>Guardar como PDF</b></p>" +
+                          '<button onclick="window.print()">ð¥ Guardar / Imprimir PDF</button>' +
+                          "<p>En el diÃ¡logo de impresiÃ³n,<br/>selecciona <b>Guardar como PDF</b></p>" +
                           "</div></body>"
                       );
                       w.document.write(htmlConBtn);
@@ -12131,12 +12131,12 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
                   </button>
                   <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[10px] text-blue-700 leading-relaxed">
                     <p className="font-black mb-0.5">
-                      🔒 Información confidencial - Res. 1995/1999
+                      ð InformaciÃ³n confidencial - Res. 1995/1999
                     </p>
                     <p>
-                      Tu historia clínica completa es custodiada por el médico
-                      ocupacional. Para consultas sobre tu resultado, comunícate
-                      con el servicio médico.
+                      Tu historia clÃ­nica completa es custodiada por el mÃ©dico
+                      ocupacional. Para consultas sobre tu resultado, comunÃ­cate
+                      con el servicio mÃ©dico.
                     </p>
                   </div>
                 </div>
@@ -12145,7 +12145,7 @@ export const PortalPublicoTrabajador = ({ sbUrl, sbKey, onVolver }) => {
           })()}
       </div>
       <div className="text-center pb-4 pt-2 text-[9px] text-gray-300">
-        SISO OcupaSalud v4 · Res. 2346/2007 · Ley 1581/2012 · Res. 1843/2025
+        SISO OcupaSalud v4 Â· Res. 2346/2007 Â· Ley 1581/2012 Â· Res. 1843/2025
       </div>
     </div>
   );
@@ -12161,10 +12161,10 @@ export const PrivacyModal = ({ onAccept }) => (
           </div>
           <div>
             <h2 className="font-black text-base uppercase tracking-tight">
-              Política de Privacidad y Tratamiento de Datos
+              PolÃ­tica de Privacidad y Tratamiento de Datos
             </h2>
             <p className="text-blue-100 text-[11px] font-medium">
-              Ley 1581 de 2012 · Decreto 1078 de 2015
+              Ley 1581 de 2012 Â· Decreto 1078 de 2015
             </p>
           </div>
         </div>
@@ -12174,45 +12174,45 @@ export const PrivacyModal = ({ onAccept }) => (
           <span className="font-black text-gray-900">
             Responsable del tratamiento:
           </span>{" "}
-          El profesional médico registrado en esta plataforma es el responsable
+          El profesional mÃ©dico registrado en esta plataforma es el responsable
           del tratamiento de los datos personales y de salud gestionados en
           OCUPASALUD.
         </p>
         <p>
           <span className="font-black text-gray-900">Datos tratados:</span>{" "}
-          Datos de identificación, datos de salud (historia clínica,
-          diagnósticos, resultados de exámenes) y datos laborales de los
+          Datos de identificaciÃ³n, datos de salud (historia clÃ­nica,
+          diagnÃ³sticos, resultados de exÃ¡menes) y datos laborales de los
           trabajadores evaluados.
         </p>
         <p>
-          <span className="font-black text-gray-900">Finalidad:</span> Gestión
-          de historias clínicas ocupacionales, emisión de certificados de
-          aptitud laboral y cumplimiento del Sistema de Gestión de Seguridad y
+          <span className="font-black text-gray-900">Finalidad:</span> GestiÃ³n
+          de historias clÃ­nicas ocupacionales, emisiÃ³n de certificados de
+          aptitud laboral y cumplimiento del Sistema de GestiÃ³n de Seguridad y
           Salud en el Trabajo (SG-SST) conforme a la Res. 1843/2025 (deroga Res.
           2346/2007).
         </p>
         <p>
           <span className="font-black text-gray-900">Base legal:</span> El
-          tratamiento de datos de salud está autorizado por la Ley 1562/2012
-          (riesgos laborales) y la Resolución 1843/2025 (evaluaciones médicas
+          tratamiento de datos de salud estÃ¡ autorizado por la Ley 1562/2012
+          (riesgos laborales) y la ResoluciÃ³n 1843/2025 (evaluaciones mÃ©dicas
           ocupacionales - deroga Res. 2346/2007).
         </p>
         <p>
           <span className="font-black text-gray-900">Confidencialidad:</span>{" "}
-          Las historias clínicas son documentos privados sometidos a reserva.
-          Solo personal médico autorizado puede acceder a ellas (Res. 1995/1999
-          Art. 14). Se conservan por un mínimo de 20 años (Res. 1995/1999 Art.
-          15 - Archivo de Gestión 5 años + Central 10 años + Histórico 5 años).
+          Las historias clÃ­nicas son documentos privados sometidos a reserva.
+          Solo personal mÃ©dico autorizado puede acceder a ellas (Res. 1995/1999
+          Art. 14). Se conservan por un mÃ­nimo de 20 aÃ±os (Res. 1995/1999 Art.
+          15 - Archivo de GestiÃ³n 5 aÃ±os + Central 10 aÃ±os + HistÃ³rico 5 aÃ±os).
         </p>
         <p>
           <span className="font-black text-gray-900">
             Derechos del titular (Habeas Data):
           </span>{" "}
           Conocer, actualizar, rectificar y suprimir sus datos personales. Para
-          ejercer estos derechos contacte directamente al médico responsable.
+          ejercer estos derechos contacte directamente al mÃ©dico responsable.
         </p>
         <p className="text-[10px] text-gray-400 border-t pt-2">
-          Al continuar usando esta plataforma, el profesional médico declara
+          Al continuar usando esta plataforma, el profesional mÃ©dico declara
           conocer y cumplir las obligaciones del responsable del tratamiento
           establecidas en la Ley 1581 de 2012 y sus decretos reglamentarios.
         </p>
@@ -12222,23 +12222,23 @@ export const PrivacyModal = ({ onAccept }) => (
           onClick={onAccept}
           className="w-full bg-gradient-to-r from-blue-700 to-blue-600 text-white py-3 rounded-xl font-black text-sm hover:opacity-90 transition shadow-lg flex items-center justify-center gap-2"
         >
-          <CheckCircle2 className="w-4 h-4" /> He leído y acepto la Política de
+          <CheckCircle2 className="w-4 h-4" /> He leÃ­do y acepto la PolÃ­tica de
           Privacidad
         </button>
         <p className="text-[10px] text-center text-gray-400 mt-2">
-          Esta aceptación queda registrada con fecha y hora
+          Esta aceptaciÃ³n queda registrada con fecha y hora
         </p>
         <button
           onClick={onAccept}
           className="mt-2 w-full text-[10px] text-blue-500 underline hover:text-blue-700"
         >
-          Ya acepté anteriormente - Continuar al sistema
+          Ya aceptÃ© anteriormente - Continuar al sistema
         </button>
       </div>
     </div>
   </div>
 );
-// ── AgendaFieldInput: componente de campo de formulario de agenda
+// ââ AgendaFieldInput: componente de campo de formulario de agenda
 // DEBE estar fuera del App/renderAgenda para que React no lo destruya en cada keystroke
 export const AgendaFieldF = ({
   label,
@@ -12282,7 +12282,7 @@ export const AgendaFieldF = ({
     )}
   </div>
 );
-// ══ B-07: Componente cambio de contraseña (componente propio para hooks válidos) ══
+// ââ B-07: Componente cambio de contraseÃ±a (componente propio para hooks vÃ¡lidos) ââ
 export function ChangePasswordForm({
   currentUser,
   usersList,
@@ -12313,23 +12313,23 @@ export function ChangePasswordForm({
             <Lock className="w-7 h-7 text-violet-600" />
           </div>
           <h2 className="text-xl font-black text-violet-900">
-            Establecer Contraseña
+            Establecer ContraseÃ±a
           </h2>
           <p className="text-xs text-gray-500 mt-1">
-            Debe configurar una contraseña segura antes de continuar
+            Debe configurar una contraseÃ±a segura antes de continuar
           </p>
         </div>
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-black text-gray-700 mb-1 uppercase">
-              Nueva contraseña
+              Nueva contraseÃ±a
             </label>
             <input
               type="password"
               value={np}
               onChange={(e) => setNp(e.target.value)}
               className="w-full p-3 border-2 border-gray-200 rounded-xl text-sm focus:border-violet-500 outline-none"
-              placeholder="Mínimo 10 caracteres"
+              placeholder="MÃ­nimo 10 caracteres"
             />
             {np && (
               <div className="mt-1.5">
@@ -12345,12 +12345,12 @@ export function ChangePasswordForm({
                 </div>
                 {errores.length > 0 && (
                   <p className="text-[10px] text-red-600 font-semibold">
-                    ⚠️ {errores[0]}
+                    â ï¸ {errores[0]}
                   </p>
                 )}
                 {valida && (
                   <p className="text-[10px] text-emerald-700 font-bold">
-                    ✅ Contraseña segura
+                    â ContraseÃ±a segura
                   </p>
                 )}
               </div>
@@ -12358,23 +12358,23 @@ export function ChangePasswordForm({
           </div>
           <div>
             <label className="block text-xs font-black text-gray-700 mb-1 uppercase">
-              Confirmar contraseña
+              Confirmar contraseÃ±a
             </label>
             <input
               type="password"
               value={np2}
               onChange={(e) => setNp2(e.target.value)}
               className="w-full p-3 border-2 border-gray-200 rounded-xl text-sm focus:border-violet-500 outline-none"
-              placeholder="Repita la contraseña"
+              placeholder="Repita la contraseÃ±a"
             />
             {np2 && np !== np2 && (
               <p className="text-[10px] text-red-600 font-semibold mt-0.5">
-                ⚠️ Las contraseñas no coinciden
+                â ï¸ Las contraseÃ±as no coinciden
               </p>
             )}
             {np2 && np === np2 && valida && (
               <p className="text-[10px] text-emerald-700 font-bold mt-0.5">
-                ✅ Coinciden
+                â Coinciden
               </p>
             )}
           </div>
@@ -12400,14 +12400,14 @@ export function ChangePasswordForm({
                   mustChangePassword: false,
                 }));
                 showAlert(
-                  "✅ Contraseña establecida. Ya puede usar el sistema."
+                  "â ContraseÃ±a establecida. Ya puede usar el sistema."
                 );
                 goTo("dashboard");
               });
             }}
             className="w-full py-3 bg-violet-600 text-white rounded-xl font-bold text-sm hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           >
-            Guardar y continuar →
+            Guardar y continuar â
           </button>
         </div>
       </div>
