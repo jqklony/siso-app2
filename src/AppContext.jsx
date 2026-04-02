@@ -1,7 +1,3 @@
-import React from 'react';
-// ============================================================
-// AppContext.jsx — Combina todos los stores en un único contexto
-// ============================================================
 import React, { createContext, useContext } from "react";
 import { useAuthStore } from "./stores/authStore.js";
 import { useUIStore } from "./stores/uiStore.js";
