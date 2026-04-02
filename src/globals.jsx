@@ -7851,7 +7851,7 @@ const DoctorSignature = ({ signature, data, showData = true }) => {
 // PERF-02: memo evita re-render cuando signature/data no cambian (se usa en ~15 lugares)
 const DoctorSignatureMemo = React.memo(DoctorSignature);
 // BrandLogo: logotipo compacto para cabecera de documentos
-const BrandLogo = ({ data }) => {
+export export const BrandLogo = ({ data }) => {
   const doc = data || DEFAULT_DOCTOR_DATA;
   const parts = (doc.nombre || "").trim().split(/\s+/);
   const initials =
