@@ -920,7 +920,7 @@ export function useAppState() {
         const init = initialUsers.find((i) => i.user === u.user);
         // Recuperar passHash vacío
         if (!u.passHash && init) {
-          return { ...u, passHash: init.passHash, mustChangePassword: true };
+          return { ...u, passHash: init.passHash, mustChangePassword: init.mustChangePassword ?? true };
         }
         // Migración: si doctorData.nombre está vacío, rellenar desde initialUsers (primera carga)
         if (init && init.doctorData?.nombre && !u.doctorData?.nombre) {
