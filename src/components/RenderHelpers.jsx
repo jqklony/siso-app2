@@ -2,8 +2,9 @@ import React from 'react';
 import {
   BrainCircuit, ClipboardList, Cloud, Download, FileCheck, FileSignature, HardDrive, Lock, LogOut, MessageSquare, Plus, Printer, Save, Unlock, UploadCloud, Wifi, WifiOff
 } from "lucide-react";
+import { BrandLogo } from './AppComponents.jsx';
 
-// ─── Render Helpers Factory ──────────────────────────────────────────────────
+// âââ Render Helpers Factory ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Returns all render helper functions bound to the provided state
 export function createRenderHelpers(state) {
   const {
@@ -399,7 +400,7 @@ export function createRenderHelpers(state) {
   goBack
   } = state;
 
-  // ─── renderNavbar ───────────────────────────────────────────────────────────────
+  // âââ renderNavbar âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   const renderNavbar = () => {
     const _aiBg =
       aiStatus === "ok"
@@ -415,7 +416,7 @@ export function createRenderHelpers(state) {
         : "bg-red-50 text-red-500 border-red-200";
     const _syncTxt =
       syncStatus === "ok"
-        ? "Nube ✓"
+        ? "Nube â"
         : syncStatus === "syncing"
         ? "Sync..."
         : syncStatus === "loading"
@@ -429,7 +430,7 @@ export function createRenderHelpers(state) {
         : syncStatus === "loading"
         ? "Cargando datos..."
         : syncStatus === "error"
-        ? "Error de sincronización"
+        ? "Error de sincronizaciÃ³n"
         : "Listo";
     const _agCls =
       view === "agenda"
@@ -466,7 +467,7 @@ export function createRenderHelpers(state) {
           onClick={() => goTo("dashboard")}
         >
           <BrandLogo data={activeDoctorData} />
-          {/* ── IPS: nombre de empresa en navbar ── */}
+          {/* ââ IPS: nombre de empresa en navbar ââ */}
           {currentUser?.empresaId &&
             (() => {
               const _navEmp = companies.find(
@@ -474,15 +475,15 @@ export function createRenderHelpers(state) {
               );
               return _navEmp ? (
                 <span className="text-[10px] font-black text-teal-700 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded-lg ml-1 hidden sm:inline-block">
-                  🏥{" "}
+                  ð¥{" "}
                   {_navEmp.nombre?.length > 25
-                    ? _navEmp.nombre.substring(0, 25) + "…"
+                    ? _navEmp.nombre.substring(0, 25) + "â¦"
                     : _navEmp.nombre}
                 </span>
               ) : null;
             })()}
         </div>
-        {/* ── Bloque 1: Datos médico activo en header ── */}
+        {/* ââ Bloque 1: Datos mÃ©dico activo en header ââ */}
         {currentUser && activeDoctorData?.nombre && (
           <div className="hidden md:flex items-center gap-2 flex-shrink-0 ml-2">
             {activeSignature ? (
@@ -519,7 +520,7 @@ export function createRenderHelpers(state) {
             ) : (
               <BrainCircuit className="w-3 h-3" />
             )}
-            {" ⚙️ IA"}
+            {" âï¸ IA"}
           </button>
           {view === "historia" && (
             <>
@@ -527,18 +528,18 @@ export function createRenderHelpers(state) {
                 onClick={() => data.estadoHistoria === "Cerrada" ? goTo("dashboard") : goBack()}
                 className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-200 flex items-center gap-1 border border-gray-200 no-print"
               >
-                ← Volver
+                â Volver
               </button>
               <div className="w-px h-6 bg-gray-200 no-print" />
               {data.estadoHistoria === "Cerrada" && (
                 <div className="hidden no-print bg-red-50 border border-red-300 rounded-lg px-3 py-1 flex items-center gap-1.5 text-[10px] font-bold text-red-700">
-                  <Lock className="w-3 h-3" /> Historia Cerrada ·{" "}
+                  <Lock className="w-3 h-3" /> Historia Cerrada Â·{" "}
                   {data.firmaDigital?.codigoQR || data.codigoVerificacion || ""}
                 </div>
               )}
               {data.estadoHistoria === "Cerrada" ? (
                 <div className="flex items-center gap-1">
-                  {/* Botón principal: Evolución */}
+                  {/* BotÃ³n principal: EvoluciÃ³n */}
                   <button
                     onClick={() => {
                       setEvolucionForm({
@@ -560,7 +561,7 @@ export function createRenderHelpers(state) {
                         incapacidad: {
                           aplica: false,
                           dias: 0,
-                          origen: "Común",
+                          origen: "ComÃºn",
                           diagnostico: "",
                           desde: "",
                           hasta: "",
@@ -570,7 +571,7 @@ export function createRenderHelpers(state) {
                     }}
                     className="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-purple-700 flex items-center gap-1"
                   >
-                    <ClipboardList className="w-3 h-3" /> Evolución
+                    <ClipboardList className="w-3 h-3" /> EvoluciÃ³n
                   </button>
                                 <button
                 onClick={() => {
@@ -579,9 +580,9 @@ export function createRenderHelpers(state) {
                 }}
                 className="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 shadow hover:bg-emerald-700"
               >
-                📄 Nuevo Certificado
+                ð Nuevo Certificado
               </button>
-                  {/* Mini-botón admin: Nota Aclaratoria / Reapertura */}
+                  {/* Mini-botÃ³n admin: Nota Aclaratoria / Reapertura */}
                   {(_isAdmin(currentUser?.role) ||
                     currentUser?.role === "admin_empresa") && (
                     <button
@@ -632,20 +633,20 @@ export function createRenderHelpers(state) {
                     onClick={() => setActiveTab("solicitudExamenes")}
                     className={_tabBlue("solicitudExamenes")}
                   >
-                    🔬 Exámenes
+                    ð¬ ExÃ¡menes
                   </button>
                   <button
                     onClick={() => setActiveTab("adjuntos")}
                     className={_tabBlue("adjuntos")}
                   >
-                    📎 Adjuntos
+                    ð Adjuntos
                   </button>
                   {data.enfasisExamen === "ALIMENTOS" && (
                     <button
                       onClick={() => setActiveTab("carnetAlimentos")}
                       className={_tabBlue("carnetAlimentos")}
                     >
-                      🍽️ Carné
+                      ð½ï¸ CarnÃ©
                     </button>
                   )}
                 </>
@@ -686,7 +687,7 @@ export function createRenderHelpers(state) {
                 <Printer className="w-3 h-3" /> PDF
               </button>
 
-              {/* ── Descargar Todo: Certificado + Incapacidad + Fórmula/Derivación ── */}
+              {/* ââ Descargar Todo: Certificado + Incapacidad + FÃ³rmula/DerivaciÃ³n ââ */}
               {dataType === "ocupacional" && (
                 <button
                   onClick={() => {
@@ -698,7 +699,7 @@ export function createRenderHelpers(state) {
                         .replace(/</g, "&lt;")
                         .replace(/>/g, "&gt;");
 
-                    // ── Estilos compartidos ────────────────────────────────────────────
+                    // ââ Estilos compartidos ââââââââââââââââââââââââââââââââââââââââââââ
                     const sharedCss = `
                     *{margin:0;padding:0;box-sizing:border-box;}
                     body{font-family:'Segoe UI',Arial,sans-serif;font-size:9.5pt;color:#111;}
@@ -729,7 +730,7 @@ export function createRenderHelpers(state) {
                     @media print{.dl-bar{display:none!important;}.page{padding:12mm 15mm;}}
                   `;
 
-                    // ── 1. CERTIFICADO DE APTITUD ──────────────────────────────────────
+                    // ââ 1. CERTIFICADO DE APTITUD ââââââââââââââââââââââââââââââââââââââ
                     const cLow = (data.conceptoAptitud || "").toLowerCase();
                     const aptBg = cLow.includes("no apto")
                       ? "#7f1d1d"
@@ -750,7 +751,7 @@ export function createRenderHelpers(state) {
                       if (
                         lines.some(
                           (l) =>
-                            /^[•*\-]/.test(l) ||
+                            /^[â¢*\-]/.test(l) ||
                             /^\*\*/.test(l) ||
                             /^\d+\./.test(l)
                         )
@@ -762,7 +763,7 @@ export function createRenderHelpers(state) {
                               (l) =>
                                 '<li style="margin-bottom:2px;font-size:9.5pt;">' +
                                 l
-                                  .replace(/^[•*\-]+\s*/, "")
+                                  .replace(/^[â¢*\-]+\s*/, "")
                                   .replace(/^\d+\.\s*/, "")
                                   .replace(
                                     /\*\*(.+?)\*\*/g,
@@ -798,14 +799,14 @@ export function createRenderHelpers(state) {
                       <div class="hdr">
                         <div class="hdr-left">
                           <div class="doc-name">${_esc(
-                            docData.nombre || "MÉDICO OCUPACIONAL"
+                            docData.nombre || "MÃDICO OCUPACIONAL"
                           )}</div>
                           <p>${_esc(
                             docData.titulo ||
-                              "Médico Especialista en Salud Ocupacional"
+                              "MÃ©dico Especialista en Salud Ocupacional"
                           )}</p>
-                          <p>Lic. ${_esc(docData.licencia || "--")} · ${_esc(
-                      docData.ciudad || "Popayán"
+                          <p>Lic. ${_esc(docData.licencia || "--")} Â· ${_esc(
+                      docData.ciudad || "PopayÃ¡n"
                     )}</p>
                         </div>
                         <div class="hdr-right">
@@ -816,10 +817,10 @@ export function createRenderHelpers(state) {
                         </div>
                       </div>
                       <h2 style="text-align:center;font-size:14pt;font-weight:900;text-transform:uppercase;letter-spacing:2px;margin:8px 0 4px;">Certificado de Aptitud Laboral</h2>
-                      <p style="text-align:center;font-size:8.5pt;color:#6b7280;margin-bottom:10px;">Conforme a la Resolución 1843 de 2025</p>
-                      <p style="font-size:9.5pt;margin-bottom:10px;line-height:1.5;">El suscrito Médico Especialista en Salud Ocupacional certifica que realizó la evaluación de tipo <strong>${_esc(
+                      <p style="text-align:center;font-size:8.5pt;color:#6b7280;margin-bottom:10px;">Conforme a la ResoluciÃ³n 1843 de 2025</p>
+                      <p style="font-size:9.5pt;margin-bottom:10px;line-height:1.5;">El suscrito MÃ©dico Especialista en Salud Ocupacional certifica que realizÃ³ la evaluaciÃ³n de tipo <strong>${_esc(
                         data.tipoExamen || "--"
-                      )}</strong> con énfasis <strong>${_esc(
+                      )}</strong> con Ã©nfasis <strong>${_esc(
                       data.enfasisExamen || "GENERAL"
                     )}</strong> a:</p>
                       <table style="margin-bottom:10px;">
@@ -836,7 +837,7 @@ export function createRenderHelpers(state) {
                         <tr><th style="background:#d1fae5;">Fecha</th><td>${_esc(
                           data.fechaExamen
                         )}</td><th style="background:#d1fae5;">Vigencia</th><td>${_esc(
-                      data.vigencia || "1 año"
+                      data.vigencia || "1 aÃ±o"
                     )}</td></tr>
                       </table>
                       <p style="text-align:center;font-size:8pt;font-weight:900;text-transform:uppercase;color:#6b7280;margin:6px 0 4px;">Concepto Emitido</p>
@@ -860,12 +861,12 @@ export function createRenderHelpers(state) {
                             "</div>"
                           : ""
                       }
-                      <div class="alerta">⚠ <strong>Confidencialidad:</strong> El diagnóstico clínico no es entregado al empleador (Art. 16 Res. 1843/2025).</div>
+                      <div class="alerta">â  <strong>Confidencialidad:</strong> El diagnÃ³stico clÃ­nico no es entregado al empleador (Art. 16 Res. 1843/2025).</div>
                       <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:end;border-top:2px solid #d1d5db;padding-top:12px;margin-top:4px;">
                         <div style="text-align:center;"><div style="height:50px;"></div><div style="border-top:1px solid #333;width:180px;margin:0 auto;padding-top:4px;font-size:8pt;font-weight:700;">Firma del Trabajador<br/>${_esc(
                           data.docTipo || "CC"
                         )}: ${_esc(data.docNumero)}</div></div>
-                        <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:8px 16px;text-align:center;"><p style="font-size:7.5pt;font-weight:900;color:#6b7280;text-transform:uppercase;">Código Verificación</p><p style="font-size:13pt;font-family:monospace;font-weight:900;letter-spacing:3px;color:#065f46;">${_esc(
+                        <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:8px 16px;text-align:center;"><p style="font-size:7.5pt;font-weight:900;color:#6b7280;text-transform:uppercase;">CÃ³digo VerificaciÃ³n</p><p style="font-size:13pt;font-family:monospace;font-weight:900;letter-spacing:3px;color:#065f46;">${_esc(
                           data.codigoVerificacion || "--"
                         )}</p></div>
                         <div style="text-align:center;">${sigHtml}<div style="border-top:1px solid #333;width:180px;margin:0 auto;padding-top:4px;font-size:8pt;font-weight:700;">${_esc(
@@ -880,10 +881,10 @@ export function createRenderHelpers(state) {
                       docData.email ? "<br/>" + _esc(docData.email) : ""
                     }</div></div>
                       </div>
-                      <div class="consent">El suscrito Médico Especialista certifica la evaluación realizada. Res. 1843/2025 · Ley 1581/2012 · Ley 23/1981.</div>
+                      <div class="consent">El suscrito MÃ©dico Especialista certifica la evaluaciÃ³n realizada. Res. 1843/2025 Â· Ley 1581/2012 Â· Ley 23/1981.</div>
                     </div>`;
 
-                    // ── 2. CERTIFICADO DE INCAPACIDAD ──────────────────────────────────
+                    // ââ 2. CERTIFICADO DE INCAPACIDAD ââââââââââââââââââââââââââââââââââ
                     const inc = data.incapacidad || {};
                     const diasInc =
                       inc.dias ||
@@ -903,21 +904,21 @@ export function createRenderHelpers(state) {
                       <div class="hdr">
                         <div class="hdr-left">
                           <div class="doc-name">${_esc(
-                            docData.nombre || "MÉDICO OCUPACIONAL"
+                            docData.nombre || "MÃDICO OCUPACIONAL"
                           )}</div>
-                          <p>${_esc(docData.titulo || "")} · Lic: ${_esc(
+                          <p>${_esc(docData.titulo || "")} Â· Lic: ${_esc(
                       docData.licencia || ""
                     )}</p>
-                          <p>Tel: ${_esc(docData.celular || "")} · ${_esc(
+                          <p>Tel: ${_esc(docData.celular || "")} Â· ${_esc(
                       docData.ciudad || ""
                     )}</p>
                         </div>
                         <div class="hdr-right">
-                          <div class="doc-title" style="color:#dc2626;">Certificado de Incapacidad Médica</div>
-                          <p>Expedición: ${new Date().toLocaleDateString(
+                          <div class="doc-title" style="color:#dc2626;">Certificado de Incapacidad MÃ©dica</div>
+                          <p>ExpediciÃ³n: ${new Date().toLocaleDateString(
                             "es-CO"
                           )}</p>
-                          <p style="font-size:7.5pt;color:#888;">Res. 1995/1999 · Ley 100/1993 Art. 227 · Dec. 2943/2013</p>
+                          <p style="font-size:7.5pt;color:#888;">Res. 1995/1999 Â· Ley 100/1993 Art. 227 Â· Dec. 2943/2013</p>
                         </div>
                       </div>
                       <table>
@@ -928,10 +929,10 @@ export function createRenderHelpers(state) {
                     )} ${_esc(data.docNumero)}</td></tr>
                         <tr><th style="background:#fee2e2;">EPS / Aseguradora</th><td>${_esc(
                           data.eps || "--"
-                        )}</td><th style="background:#fee2e2;">Género</th><td>${_esc(
+                        )}</td><th style="background:#fee2e2;">GÃ©nero</th><td>${_esc(
                       data.genero || "--"
                     )}</td></tr>
-                        <tr><th style="background:#fee2e2;">Diagnóstico (CIE-10)</th><td colspan="3">${_esc(
+                        <tr><th style="background:#fee2e2;">DiagnÃ³stico (CIE-10)</th><td colspan="3">${_esc(
                           inc.diagnosticoCIE ||
                             inc.diagnostico ||
                             data.diagnosticoPrincipal ||
@@ -939,7 +940,7 @@ export function createRenderHelpers(state) {
                         )}</td></tr>
                         <tr><th style="background:#fee2e2;">Origen</th><td>${_esc(
                           inc.origen || "Enfermedad General"
-                        )}</td><th style="background:#fee2e2;">Prórroga N°</th><td>${_esc(
+                        )}</td><th style="background:#fee2e2;">PrÃ³rroga NÂ°</th><td>${_esc(
                       inc.prorroga || "N/A"
                     )}</td></tr>
                         <tr><th style="background:#fee2e2;">Fecha inicio</th><td>${_esc(
@@ -948,18 +949,18 @@ export function createRenderHelpers(state) {
                       inc.hasta || "--"
                     )}</td></tr>
                         <tr>
-                          <th colspan="2" style="background:#dc2626;color:white;text-align:center;font-size:13pt;padding:10px;">DÍAS DE INCAPACIDAD: ${diasInc}</th>
+                          <th colspan="2" style="background:#dc2626;color:white;text-align:center;font-size:13pt;padding:10px;">DÃAS DE INCAPACIDAD: ${diasInc}</th>
                           <th colspan="2" style="text-align:center;font-size:11pt;padding:10px;">${_esc(
-                            inc.motivo || "Incapacidad Médica"
+                            inc.motivo || "Incapacidad MÃ©dica"
                           )}</th>
                         </tr>
                         <tr><th style="background:#fee2e2;">Restricciones</th><td colspan="3">${_esc(
                           inc.restricciones ||
-                            "Reposo relativo. Evitar esfuerzo físico intenso."
+                            "Reposo relativo. Evitar esfuerzo fÃ­sico intenso."
                         )}</td></tr>
                         <tr><th style="background:#fee2e2;">Recomendaciones</th><td colspan="3">${_esc(
                           inc.recoIncapacidad ||
-                            "Consultar nuevamente si no hay mejoría."
+                            "Consultar nuevamente si no hay mejorÃ­a."
                         )}</td></tr>
                       </table>
                       <p style="font-size:7.5pt;color:#888;margin-top:8px;">Incapacidad expedida conforme Ley 100/1993 Art. 227, Decreto 2943/2013.</p>
@@ -967,13 +968,13 @@ export function createRenderHelpers(state) {
                         <div class="sig-block"><div class="sig-line">Firma Paciente / Responsable</div></div>
                         <div class="sig-block">${sigHtml}<div class="sig-line">${_esc(
                       docData.nombre || ""
-                    )}<br/>${_esc(docData.titulo || "")} · Lic: ${_esc(
+                    )}<br/>${_esc(docData.titulo || "")} Â· Lic: ${_esc(
                       docData.licencia || ""
                     )}</div></div>
                       </div>
                     </div>`;
 
-                    // ── 3. FÓRMULA MÉDICA ──────────────────────────────────────────────
+                    // ââ 3. FÃRMULA MÃDICA ââââââââââââââââââââââââââââââââââââââââââââââ
                     const meds = data.formulaMedicamentos || [];
                     const medRows =
                       meds.length > 0
@@ -995,17 +996,17 @@ export function createRenderHelpers(state) {
                       <div class="hdr">
                         <div class="hdr-left">
                           <div class="doc-name">${_esc(
-                            docData.nombre || "MÉDICO OCUPACIONAL"
+                            docData.nombre || "MÃDICO OCUPACIONAL"
                           )}</div>
-                          <p>${_esc(docData.titulo || "")} · Lic: ${_esc(
+                          <p>${_esc(docData.titulo || "")} Â· Lic: ${_esc(
                       docData.licencia || ""
                     )}</p>
-                          <p>Tel: ${_esc(docData.celular || "")} · ${_esc(
+                          <p>Tel: ${_esc(docData.celular || "")} Â· ${_esc(
                       docData.ciudad || ""
                     )}</p>
                         </div>
                         <div class="hdr-right">
-                          <div class="doc-title" style="color:#7c3aed;">Fórmula Médica</div>
+                          <div class="doc-title" style="color:#7c3aed;">FÃ³rmula MÃ©dica</div>
                           <p>Fecha: ${_esc(
                             data.fechaExamen ||
                               new Date().toLocaleDateString("es-CO")
@@ -1014,14 +1015,14 @@ export function createRenderHelpers(state) {
                       </div>
                       <p style="margin-bottom:10px;font-size:9.5pt;">Paciente: <strong>${_esc(
                         data.nombres
-                      )}</strong> &nbsp;·&nbsp; ${_esc(
+                      )}</strong> &nbsp;Â·&nbsp; ${_esc(
                       data.docTipo || "CC"
-                    )} ${_esc(data.docNumero)} &nbsp;·&nbsp; ${_esc(
+                    )} ${_esc(data.docNumero)} &nbsp;Â·&nbsp; ${_esc(
                       String(data.edad || "--")
-                    )} años &nbsp;·&nbsp; EPS: ${_esc(data.eps || "--")}</p>
+                    )} aÃ±os &nbsp;Â·&nbsp; EPS: ${_esc(data.eps || "--")}</p>
                       <table>
                         <thead><tr style="background:#ede9fe;">
-                          <th>Medicamento</th><th>Presentación</th><th>Dosis</th><th>Frecuencia</th><th>Duración</th><th>Indicaciones</th>
+                          <th>Medicamento</th><th>PresentaciÃ³n</th><th>Dosis</th><th>Frecuencia</th><th>DuraciÃ³n</th><th>Indicaciones</th>
                         </tr></thead>
                         <tbody>${medRows}</tbody>
                       </table>
@@ -1042,7 +1043,7 @@ export function createRenderHelpers(state) {
                       </div>
                     </div>`;
 
-                    // ── 4. DERIVACIONES / INTERCONSULTAS ──────────────────────────────
+                    // ââ 4. DERIVACIONES / INTERCONSULTAS ââââââââââââââââââââââââââââââ
                     const derivs = data.derivaciones || [];
                     const derivRows =
                       derivs.length > 0
@@ -1061,17 +1062,17 @@ export function createRenderHelpers(state) {
                       <div class="hdr">
                         <div class="hdr-left">
                           <div class="doc-name">${_esc(
-                            docData.nombre || "MÉDICO OCUPACIONAL"
+                            docData.nombre || "MÃDICO OCUPACIONAL"
                           )}</div>
-                          <p>${_esc(docData.titulo || "")} · Lic: ${_esc(
+                          <p>${_esc(docData.titulo || "")} Â· Lic: ${_esc(
                       docData.licencia || ""
                     )}</p>
-                          <p>Tel: ${_esc(docData.celular || "")} · ${_esc(
+                          <p>Tel: ${_esc(docData.celular || "")} Â· ${_esc(
                       docData.ciudad || ""
                     )}</p>
                         </div>
                         <div class="hdr-right">
-                          <div class="doc-title">Fórmula de Derivación / Interconsulta</div>
+                          <div class="doc-title">FÃ³rmula de DerivaciÃ³n / Interconsulta</div>
                           <p>Fecha: ${_esc(
                             data.fechaExamen ||
                               new Date().toLocaleDateString("es-CO")
@@ -1082,10 +1083,10 @@ export function createRenderHelpers(state) {
                         data.nombres
                       )}</strong> (${_esc(data.docTipo || "CC")} ${_esc(
                       data.docNumero
-                    )}) para valoración especializada:</p>
+                    )}) para valoraciÃ³n especializada:</p>
                       <table>
                         <thead><tr style="background:#d1fae5;">
-                          <th>Especialidad / Servicio</th><th>Motivo de consulta / Hallazgo clínico</th><th>Prioridad</th>
+                          <th>Especialidad / Servicio</th><th>Motivo de consulta / Hallazgo clÃ­nico</th><th>Prioridad</th>
                         </tr></thead>
                         <tbody>${derivRows}</tbody>
                       </table>
@@ -1106,7 +1107,7 @@ export function createRenderHelpers(state) {
                       </div>
                     </div>`;
 
-                    // ── Ensamblar ventana ──────────────────────────────────────────────
+                    // ââ Ensamblar ventana ââââââââââââââââââââââââââââââââââââââââââââââ
                     const w = window.open(
                       "",
                       "_blank",
@@ -1114,23 +1115,23 @@ export function createRenderHelpers(state) {
                     );
                     if (!w) {
                       showAlert(
-                        "El navegador bloqueó la ventana emergente. Permita los popups e intente de nuevo."
+                        "El navegador bloqueÃ³ la ventana emergente. Permita los popups e intente de nuevo."
                       );
                       return;
                     }
                     w.document
                       .write(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>
-                    <title>Documentos - ${_esc(data.nombres)} · ${_esc(
+                    <title>Documentos - ${_esc(data.nombres)} Â· ${_esc(
                       data.fechaExamen || ""
                     )}</title>
                     <style>${sharedCss}</style>
                     </head><body>
                     <div class="dl-bar">
-                      <span class="title">📄 4 documentos - ${_esc(
+                      <span class="title">ð 4 documentos - ${_esc(
                         data.nombres
-                      )} · ${_esc(data.fechaExamen || "")}</span>
-                      <button class="btn-print" onclick="window.print()">📥 Guardar / Imprimir PDF</button>
-                      <button class="btn-close" onclick="window.close()">✕ Cerrar</button>
+                      )} Â· ${_esc(data.fechaExamen || "")}</span>
+                      <button class="btn-print" onclick="window.print()">ð¥ Guardar / Imprimir PDF</button>
+                      <button class="btn-close" onclick="window.close()">â Cerrar</button>
                     </div>
                     ${certSec}${incapSec}${formulaSec}${derivSec}
                     </body></html>`);
@@ -1138,7 +1139,7 @@ export function createRenderHelpers(state) {
                     w.focus();
                   }}
                   className="bg-cyan-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 no-print hover:bg-cyan-800"
-                  title="Descargar todos los documentos: certificado + incapacidad + fórmula + derivaciones"
+                  title="Descargar todos los documentos: certificado + incapacidad + fÃ³rmula + derivaciones"
                 >
                   <Download className="w-3 h-3" /> Todo
                 </button>
@@ -1149,7 +1150,7 @@ export function createRenderHelpers(state) {
                   <button
                     onClick={async () => {
                       try {
-                        showAlert("⏳ Generando paquete SHA-256...");
+                        showAlert("â³ Generando paquete SHA-256...");
                         const pkg = await _generarPaqueteRetencion(
                           data,
                           activeDoctorData
@@ -1182,7 +1183,7 @@ export function createRenderHelpers(state) {
                           return n;
                         });
                         showAlert(
-                          "✅ HC preservada.\nHash SHA-256: " +
+                          "â HC preservada.\nHash SHA-256: " +
                             pkg.hashSHA256.substring(0, 16) +
                             "...\nVigente hasta: " +
                             pkg.metadata.anioVencimientoLegal
@@ -1192,9 +1193,9 @@ export function createRenderHelpers(state) {
                       }
                     }}
                     className="bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 no-print hover:bg-purple-800"
-                    title="Preservar HC (Res.1995/1999 - 20 años)"
+                    title="Preservar HC (Res.1995/1999 - 20 aÃ±os)"
                   >
-                    <HardDrive className="w-3 h-3" /> 20 años
+                    <HardDrive className="w-3 h-3" /> 20 aÃ±os
                   </button>
                 )}
               <button
@@ -1205,14 +1206,14 @@ export function createRenderHelpers(state) {
                 className="bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 no-print hover:bg-green-700"
                 title="Notificar resultado al paciente (Res. 1552/2013)"
               >
-                📲 Notificar
+                ð² Notificar
               </button>
-              {/* FASE 2: Indicador HC de otro médico (modo lectura) */}
+              {/* FASE 2: Indicador HC de otro mÃ©dico (modo lectura) */}
               {currentUser?.role === "medico" &&
                 data._medicoId &&
                 data._medicoId !== currentUser?.user && (
                   <span className="bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1">
-                    👁 Lectura — HC del Dr.{" "}
+                    ð Lectura â HC del Dr.{" "}
                     {usersList.find((u) => u.user === data._medicoId)?.name ||
                       data._medicoId}
                   </span>
@@ -1248,7 +1249,7 @@ export function createRenderHelpers(state) {
               >
                 <HardDrive className="w-3 h-3 mr-1" /> Backup
               </button>
-              {/* NORMATIVO: Res. 2275/2023 - Exportación RIPS JSON */}
+              {/* NORMATIVO: Res. 2275/2023 - ExportaciÃ³n RIPS JSON */}
               <button
                 onClick={() => {
                   try {
@@ -1264,13 +1265,13 @@ export function createRenderHelpers(state) {
                     // B-25: Validar antes de generar
                     const ripsErrs = validarRIPSLote(pats);
                     if (ripsErrs.length > 0) {
-                      const msg = `⚠️ ${
+                      const msg = `â ï¸ ${
                         ripsErrs.length
                       } paciente(s) con datos incompletos para RIPS:\n\n${ripsErrs
                         .slice(0, 5)
                         .join("\n")}${
-                        ripsErrs.length > 5 ? "\n...y más" : ""
-                      }\n\n¿Generar RIPS de todas formas?`;
+                        ripsErrs.length > 5 ? "\n...y mÃ¡s" : ""
+                      }\n\nÂ¿Generar RIPS de todas formas?`;
                       if (!window.confirm(msg)) return;
                     }
                     const rips = _generarRIPSJson(
@@ -1348,7 +1349,7 @@ export function createRenderHelpers(state) {
               }
               title="Habeas Data - Ley 1581/2012"
             >
-              🔐 Privacidad
+              ð Privacidad
             </button>
           )}
           {(_isAdmin(currentUser?.role) ||
@@ -1364,14 +1365,14 @@ export function createRenderHelpers(state) {
               }
               title="Telemedicina - Res. 2654/2019"
             >
-              🩺 Tele
+              ð©º Tele
             </button>
           )}
           {["administrador", "secretaria", "medico", "super_admin"].includes(
             currentUser?.role
           ) && (
             <button onClick={() => goTo("agenda")} className={_agCls}>
-              {"🗓️ Agenda"}
+              {"ðï¸ Agenda"}
               {_agN > 0 && (
                 <span className="ml-1 bg-red-500 text-white text-[8px] font-black px-1 rounded-full">
                   {_agN}
@@ -1391,7 +1392,7 @@ export function createRenderHelpers(state) {
               </span>
             )}
           </button>
-          {/* ── VER PLANES ── */}
+          {/* ââ VER PLANES ââ */}
           <button
             onClick={() => goTo("planes")}
             className={
@@ -1401,7 +1402,7 @@ export function createRenderHelpers(state) {
             }
             title="Ver planes y precios"
           >
-            ⭐ Planes
+            â­ Planes
           </button>
           <button
             onClick={() => {
@@ -1419,17 +1420,17 @@ export function createRenderHelpers(state) {
     );
   };
 
-  // ─── renderTabAdjuntos ───────────────────────────────────────────────────────────────
+  // âââ renderTabAdjuntos âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   const renderTabAdjuntos = () => {
     const TIPOS_ADJUNTO = [
-      { valor: "espirometria", etiqueta: "🫁 Espirometría" },
-      { valor: "audiometria", etiqueta: "👂 Audiometría" },
-      { valor: "rayos_x", etiqueta: "🩻 Rayos X / Imágenes" },
-      { valor: "laboratorio", etiqueta: "🧪 Laboratorio" },
-      { valor: "optometria", etiqueta: "👁 Optometría" },
-      { valor: "ecg", etiqueta: "❤️ ECG / Holter" },
-      { valor: "vacunacion", etiqueta: "💉 Carnet Vacunación" },
-      { valor: "otro", etiqueta: "📄 Otro documento" },
+      { valor: "espirometria", etiqueta: "ð« EspirometrÃ­a" },
+      { valor: "audiometria", etiqueta: "ð AudiometrÃ­a" },
+      { valor: "rayos_x", etiqueta: "ð©» Rayos X / ImÃ¡genes" },
+      { valor: "laboratorio", etiqueta: "ð§ª Laboratorio" },
+      { valor: "optometria", etiqueta: "ð OptometrÃ­a" },
+      { valor: "ecg", etiqueta: "â¤ï¸ ECG / Holter" },
+      { valor: "vacunacion", etiqueta: "ð Carnet VacunaciÃ³n" },
+      { valor: "otro", etiqueta: "ð Otro documento" },
     ];
     const adjuntos = data.adjuntos || [];
     const MAX_MB = 10;
@@ -1446,11 +1447,11 @@ export function createRenderHelpers(state) {
       const file = e.target.files?.[0];
       if (!file) return;
       if (!TIPOS_MIME.includes(file.type)) {
-        showAlert("⚠️ Solo se permiten PDF, PNG, JPG, TIFF o WebP.");
+        showAlert("â ï¸ Solo se permiten PDF, PNG, JPG, TIFF o WebP.");
         return;
       }
       if (file.size > MAX_BYTES) {
-        showAlert(`⚠️ El archivo supera el límite de ${MAX_MB} MB.`);
+        showAlert(`â ï¸ El archivo supera el lÃ­mite de ${MAX_MB} MB.`);
         return;
       }
 
@@ -1468,14 +1469,14 @@ export function createRenderHelpers(state) {
         file.name
       }`;
 
-      showAlert("⏳ Subiendo archivo a Supabase Storage...");
+      showAlert("â³ Subiendo archivo a Supabase Storage...");
 
       const result = await _sbStorageUpload(storagePath, file);
       if (!result.ok) {
         showAlert(
-          `❌ Error al subir: ${
+          `â Error al subir: ${
             result.error ||
-            "Verifica que el bucket siso-adjuntos esté habilitado en Supabase."
+            "Verifica que el bucket siso-adjuntos estÃ© habilitado en Supabase."
           }`
         );
         return;
@@ -1495,7 +1496,7 @@ export function createRenderHelpers(state) {
 
       const nuevosAdjuntos = [...adjuntos, nuevoAdj];
       setData((prev) => ({ ...prev, adjuntos: nuevosAdjuntos }));
-      showAlert(`✅ "${file.name}" subido correctamente como ${tipoLabel}.`);
+      showAlert(`â "${file.name}" subido correctamente como ${tipoLabel}.`);
       if (tipoSelect) tipoSelect.value = "otro";
       e.target.value = "";
     };
@@ -1506,19 +1507,19 @@ export function createRenderHelpers(state) {
         window.open(url, "_blank");
       } else {
         showAlert(
-          "⚠️ No se pudo obtener el enlace. Verifica la conexión con Supabase."
+          "â ï¸ No se pudo obtener el enlace. Verifica la conexiÃ³n con Supabase."
         );
       }
     };
 
     const handleEliminarAdjunto = async (adj) => {
       if (data.estadoHistoria === "Cerrada") {
-        showAlert("ℹ️ No se pueden eliminar adjuntos de una HC cerrada.");
+        showAlert("â¹ï¸ No se pueden eliminar adjuntos de una HC cerrada.");
         return;
       }
       const ok = await new Promise((res) =>
         setConfirmConfig({
-          msg: `¿Eliminar "${adj.nombre}"? Esta acción no se puede deshacer.`,
+          msg: `Â¿Eliminar "${adj.nombre}"? Esta acciÃ³n no se puede deshacer.`,
           onConfirm: () => res(true),
           onCancel: () => res(false),
         })
@@ -1527,7 +1528,7 @@ export function createRenderHelpers(state) {
       await _sbStorageDelete(adj.path);
       const filtrados = adjuntos.filter((a) => a.id !== adj.id);
       setData((prev) => ({ ...prev, adjuntos: filtrados }));
-      showAlert("🗑 Adjunto eliminado.");
+      showAlert("ð Adjunto eliminado.");
     };
 
     const formatBytes = (b) =>
@@ -1540,10 +1541,10 @@ export function createRenderHelpers(state) {
         {/* Header */}
         <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 bg-teal-50">
           <span className="text-sm font-black text-teal-800">
-            📎 Adjuntos de Paraclínicos
+            ð Adjuntos de ParaclÃ­nicos
           </span>
           <span className="text-[10px] text-teal-600 bg-teal-100 px-2 py-0.5 rounded-full">
-            Res. 1843/2025 · Supabase Storage
+            Res. 1843/2025 Â· Supabase Storage
           </span>
           <span className="ml-auto text-[10px] text-gray-400">
             {adjuntos.length} archivo{adjuntos.length !== 1 ? "s" : ""}
@@ -1575,7 +1576,7 @@ export function createRenderHelpers(state) {
                   </select>
                 </div>
                 <label className="cursor-pointer px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-black rounded-lg flex items-center gap-2">
-                  <span>⬆ Seleccionar archivo</span>
+                  <span>â¬ Seleccionar archivo</span>
                   <input
                     type="file"
                     className="hidden"
@@ -1585,7 +1586,7 @@ export function createRenderHelpers(state) {
                 </label>
               </div>
               <p className="text-[10px] text-gray-400">
-                Formatos: PDF, PNG, JPG, TIFF, WebP · Máx. {MAX_MB} MB · Se
+                Formatos: PDF, PNG, JPG, TIFF, WebP Â· MÃ¡x. {MAX_MB} MB Â· Se
                 almacena en Supabase Storage
               </p>
             </div>
@@ -1594,11 +1595,11 @@ export function createRenderHelpers(state) {
           {/* Lista de adjuntos */}
           {adjuntos.length === 0 ? (
             <div className="text-center py-10 text-gray-400">
-              <p className="text-3xl mb-2">📂</p>
+              <p className="text-3xl mb-2">ð</p>
               <p className="text-sm font-bold">Sin adjuntos</p>
               <p className="text-xs mt-1">
-                Suba espirometrías, audiometrías, resultados de laboratorio u
-                otros documentos clínicos
+                Suba espirometrÃ­as, audiometrÃ­as, resultados de laboratorio u
+                otros documentos clÃ­nicos
               </p>
             </div>
           ) : (
@@ -1610,15 +1611,15 @@ export function createRenderHelpers(state) {
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <span className="text-2xl flex-shrink-0">
-                      {adj.mimeType === "application/pdf" ? "📄" : "🖼️"}
+                      {adj.mimeType === "application/pdf" ? "ð" : "ð¼ï¸"}
                     </span>
                     <div className="min-w-0">
                       <p className="text-xs font-bold text-gray-800 truncate">
                         {adj.nombre}
                       </p>
                       <p className="text-[10px] text-gray-400 mt-0.5">
-                        {formatBytes(adj.tamano)} ·{" "}
-                        {new Date(adj.fecha).toLocaleDateString("es-CO")} ·{" "}
+                        {formatBytes(adj.tamano)} Â·{" "}
+                        {new Date(adj.fecha).toLocaleDateString("es-CO")} Â·{" "}
                         {adj.subidoPor}
                       </p>
                     </div>
@@ -1628,14 +1629,14 @@ export function createRenderHelpers(state) {
                       onClick={() => handleVerAdjunto(adj)}
                       className="px-3 py-1.5 text-[10px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg"
                     >
-                      👁 Ver
+                      ð Ver
                     </button>
                     {data.estadoHistoria !== "Cerrada" && (
                       <button
                         onClick={() => handleEliminarAdjunto(adj)}
                         className="px-3 py-1.5 text-[10px] font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg"
                       >
-                        🗑
+                        ð
                       </button>
                     )}
                   </div>
@@ -1647,14 +1648,14 @@ export function createRenderHelpers(state) {
           {/* Nota normativa */}
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
             <p className="text-[10px] text-amber-800 font-bold">
-              📋 Normativa aplicable
+              ð Normativa aplicable
             </p>
             <p className="text-[10px] text-amber-700 mt-0.5">
-              Los resultados de paraclínicos forman parte integral de la
-              Historia Clínica Ocupacional según la Res. 1843/2025 Art. 12 y la
-              Res. 1995/1999 (retención 20 años). Los archivos se almacenan en
+              Los resultados de paraclÃ­nicos forman parte integral de la
+              Historia ClÃ­nica Ocupacional segÃºn la Res. 1843/2025 Art. 12 y la
+              Res. 1995/1999 (retenciÃ³n 20 aÃ±os). Los archivos se almacenan en
               Supabase Storage con acceso restringido por credenciales del
-              médico.
+              mÃ©dico.
             </p>
           </div>
         </div>
@@ -1662,10 +1663,10 @@ export function createRenderHelpers(state) {
     );
   };
 
-  // ─── ROUTER ───────────────────────────────────────────────────────────────
-  // ─── RENDER: GESTIÓN DE USUARIOS ─────────────────────────────────────────
+  // âââ ROUTER âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // âââ RENDER: GESTIÃN DE USUARIOS âââââââââââââââââââââââââââââââââââââââââ
 
-  // ─── renderTabSolicitudExamenes ───────────────────────────────────────────────────────────────
+  // âââ renderTabSolicitudExamenes âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   const renderTabSolicitudExamenes = () => {
     // FIX: definir _billDocData/_billDocSig en scope de renderTabSolicitudExamenes
     const _examDocUser2 =
@@ -1675,25 +1676,25 @@ export function createRenderHelpers(state) {
     const _billDocData = _examDocUser2?.doctorData || activeDoctorData;
     const _billDocSig = _examDocUser2?.doctorData?.firma || activeSignature;
     const EXAMENES_DB = [
-      // Laboratorio Clínico
+      // Laboratorio ClÃ­nico
       "Hemograma completo (CBC)",
-      "Cuadro hemático",
+      "Cuadro hemÃ¡tico",
       "Hemograma con diferencial",
       "Hematocrito y hemoglobina",
       "Glicemia en ayunas",
       "Glicemia posprandial",
       "Hemoglobina glicosilada (HbA1c)",
-      "Glucosa sérica",
-      "Creatinina sérica",
-      "BUN (nitrógeno ureico)",
-      "Ácido úrico",
+      "Glucosa sÃ©rica",
+      "Creatinina sÃ©rica",
+      "BUN (nitrÃ³geno ureico)",
+      "Ãcido Ãºrico",
       "Urea",
-      "Perfil lipídico completo",
+      "Perfil lipÃ­dico completo",
       "Colesterol total",
       "Colesterol HDL",
       "Colesterol LDL",
-      "Triglicéridos",
-      "Pruebas de función hepática",
+      "TriglicÃ©ridos",
+      "Pruebas de funciÃ³n hepÃ¡tica",
       "ALT (TGP)",
       "AST (TGO)",
       "Fosfatasa alcalina",
@@ -1702,42 +1703,42 @@ export function createRenderHelpers(state) {
       "T3 libre",
       "T4 libre",
       "Perfil tiroideo",
-      "Sodio sérico",
-      "Potasio sérico",
-      "Cloro sérico",
-      "Calcio sérico",
-      "Magnesio sérico",
-      "Fósforo sérico",
-      "Proteína C reactiva (PCR)",
+      "Sodio sÃ©rico",
+      "Potasio sÃ©rico",
+      "Cloro sÃ©rico",
+      "Calcio sÃ©rico",
+      "Magnesio sÃ©rico",
+      "FÃ³sforo sÃ©rico",
+      "ProteÃ­na C reactiva (PCR)",
       "PCR ultrasensible",
-      "VSG (velocidad de sedimentación globular)",
-      "Parcial de orina (uroanálisis)",
+      "VSG (velocidad de sedimentaciÃ³n globular)",
+      "Parcial de orina (uroanÃ¡lisis)",
       "Urocultivo",
       "Coprocultivo",
-      "Coproscópico",
+      "CoproscÃ³pico",
       "Tiempo de protrombina (TP)",
       "Tiempo de tromboplastina (PTT)",
       "INR",
-      "Tiempo de sangría",
+      "Tiempo de sangrÃ­a",
       "Ferritina",
-      "Hierro sérico",
+      "Hierro sÃ©rico",
       "Transferrina",
-      "Saturación de transferrina",
+      "SaturaciÃ³n de transferrina",
       "Vitamina B12",
-      "Ácido fólico",
+      "Ãcido fÃ³lico",
       "Vitamina D (25-OH)",
-      "Calcio iónico",
+      "Calcio iÃ³nico",
       "Parathormona (PTH)",
-      "PSA (antígeno prostático)",
+      "PSA (antÃ­geno prostÃ¡tico)",
       "PSA libre",
-      "AFP (alfa fetoproteína)",
+      "AFP (alfa fetoproteÃ­na)",
       "CEA",
       "CA 19-9",
       "CA 125",
       "VDRL",
       "FTA-ABS",
       "Prueba de VIH (ELISA)",
-      "Antígeno de superficie hepatitis B (HBsAg)",
+      "AntÃ­geno de superficie hepatitis B (HBsAg)",
       "Anti-HBs",
       "Anti-HBc total",
       "Anti-VHC",
@@ -1751,123 +1752,123 @@ export function createRenderHelpers(state) {
       "Testosterona total",
       "Prolactina",
       "DHEA-S",
-      "Cortisol sérico (8am)",
+      "Cortisol sÃ©rico (8am)",
       "Cortisol en orina 24h",
       "Espermograma",
-      "Proteína en orina 24h",
+      "ProteÃ­na en orina 24h",
       "Creatinuria en orina 24h",
-      // Imagenología
-      "Radiografía de tórax PA y lateral",
-      "Radiografía columna lumbosacra AP y lateral",
-      "Radiografía columna cervical AP y lateral",
-      "Radiografía de manos AP bilateral",
-      "Radiografía de pelvis AP",
-      "Radiografía de rodilla AP y lateral",
-      "Radiografía de pies bilateral",
-      "Radiografía de cráneo",
-      "Radiografía de senos paranasales",
-      "Ecografía abdominal total",
-      "Ecografía pélvica transabdominal",
-      "Ecografía pélvica transvaginal",
-      "Ecografía de tiroides",
-      "Ecografía de mama bilateral",
-      "Ecografía de partes blandas",
-      "Ecografía renal y vías urinarias",
-      "Ecografía Doppler venoso miembros inferiores",
-      "Ecografía Doppler arterial miembros inferiores",
-      "Ecografía de cuello",
-      "TAC de cráneo simple",
-      "TAC de cráneo con contraste",
-      "TAC de tórax simple",
-      "TAC de tórax con contraste",
+      // ImagenologÃ­a
+      "RadiografÃ­a de tÃ³rax PA y lateral",
+      "RadiografÃ­a columna lumbosacra AP y lateral",
+      "RadiografÃ­a columna cervical AP y lateral",
+      "RadiografÃ­a de manos AP bilateral",
+      "RadiografÃ­a de pelvis AP",
+      "RadiografÃ­a de rodilla AP y lateral",
+      "RadiografÃ­a de pies bilateral",
+      "RadiografÃ­a de crÃ¡neo",
+      "RadiografÃ­a de senos paranasales",
+      "EcografÃ­a abdominal total",
+      "EcografÃ­a pÃ©lvica transabdominal",
+      "EcografÃ­a pÃ©lvica transvaginal",
+      "EcografÃ­a de tiroides",
+      "EcografÃ­a de mama bilateral",
+      "EcografÃ­a de partes blandas",
+      "EcografÃ­a renal y vÃ­as urinarias",
+      "EcografÃ­a Doppler venoso miembros inferiores",
+      "EcografÃ­a Doppler arterial miembros inferiores",
+      "EcografÃ­a de cuello",
+      "TAC de crÃ¡neo simple",
+      "TAC de crÃ¡neo con contraste",
+      "TAC de tÃ³rax simple",
+      "TAC de tÃ³rax con contraste",
       "TAC de abdomen y pelvis con contraste",
       "TAC de columna lumbosacra",
       "TAC de columna cervical",
       "TAC de huesos y articulaciones",
-      "Resonancia magnética de cráneo",
-      "Resonancia magnética de columna lumbar",
-      "Resonancia magnética de columna cervical",
-      "Resonancia magnética de rodilla",
-      "Resonancia magnética de hombro",
-      "Resonancia magnética de cadera",
-      "Gamagrafía ósea",
-      "Gamagrafía tiroidea",
-      "Densitometría ósea (DXA)",
-      "Mamografía bilateral",
-      "Mamografía digital bilateral",
-      // Cardiología / Fisiología
+      "Resonancia magnÃ©tica de crÃ¡neo",
+      "Resonancia magnÃ©tica de columna lumbar",
+      "Resonancia magnÃ©tica de columna cervical",
+      "Resonancia magnÃ©tica de rodilla",
+      "Resonancia magnÃ©tica de hombro",
+      "Resonancia magnÃ©tica de cadera",
+      "GamagrafÃ­a Ã³sea",
+      "GamagrafÃ­a tiroidea",
+      "DensitometrÃ­a Ã³sea (DXA)",
+      "MamografÃ­a bilateral",
+      "MamografÃ­a digital bilateral",
+      // CardiologÃ­a / FisiologÃ­a
       "Electrocardiograma (ECG) de 12 derivaciones",
       "Electrocardiograma en reposo",
-      "Ecocardiograma transtorácico",
+      "Ecocardiograma transtorÃ¡cico",
       "Ecocardiograma con Doppler",
-      "Prueba de esfuerzo (ergometría)",
+      "Prueba de esfuerzo (ergometrÃ­a)",
       "Holter de ritmo 24 horas",
-      "Holter de presión arterial (MAPA)",
-      "Espirometría simple",
-      "Espirometría con broncodilatador",
+      "Holter de presiÃ³n arterial (MAPA)",
+      "EspirometrÃ­a simple",
+      "EspirometrÃ­a con broncodilatador",
       "Pleuroscopia",
-      "Audiometría",
-      "Audiometría tonal",
-      "Audiometría de palabras",
-      "Impedanciometría",
-      "Optometría",
+      "AudiometrÃ­a",
+      "AudiometrÃ­a tonal",
+      "AudiometrÃ­a de palabras",
+      "ImpedanciometrÃ­a",
+      "OptometrÃ­a",
       "Agudeza visual",
-      "Tonometría ocular",
-      "Campimetría",
+      "TonometrÃ­a ocular",
+      "CampimetrÃ­a",
       "Electroencefalograma (EEG)",
-      "Electromiografía (EMG)",
-      "Velocidad de conducción nerviosa",
+      "ElectromiografÃ­a (EMG)",
+      "Velocidad de conducciÃ³n nerviosa",
       // Procedimientos
       "Endoscopia digestiva alta",
       "Colonoscopia",
       "Colonoscopia con toma de biopsia",
       "Gastroscopia",
       "Rectosigmoidoscopia",
-      "CPRE (colangiopancreatografía retrógrada)",
+      "CPRE (colangiopancreatografÃ­a retrÃ³grada)",
       "Culdocentesis",
       "Amniocentesis",
       "Biopsia de piel",
       "Biopsia de ganglio",
-      "Biopsia de próstata guiada por ecografía",
+      "Biopsia de prÃ³stata guiada por ecografÃ­a",
       "Biopsia de mama guiada",
-      "Punción lumbar",
-      "Punción aspiración con aguja fina (PAAF) tiroides",
+      "PunciÃ³n lumbar",
+      "PunciÃ³n aspiraciÃ³n con aguja fina (PAAF) tiroides",
       "Drenaje de absceso",
-      "Curación de herida",
-      "Citología cervicouterina (PAP)",
+      "CuraciÃ³n de herida",
+      "CitologÃ­a cervicouterina (PAP)",
       "Colposcopia",
       "Histeroscopia",
-      "Laparoscopia diagnóstica",
+      "Laparoscopia diagnÃ³stica",
       // Medicina Laboral / Ocupacional
-      "Espirometría ocupacional",
-      "Audiometría ocupacional",
-      "Optometría ocupacional",
-      "Visiometría",
-      "Examen de optometría y visiometría",
+      "EspirometrÃ­a ocupacional",
+      "AudiometrÃ­a ocupacional",
+      "OptometrÃ­a ocupacional",
+      "VisiometrÃ­a",
+      "Examen de optometrÃ­a y visiometrÃ­a",
       "Perfil de columna ocupacional",
-      "Evaluación osteomuscular",
+      "EvaluaciÃ³n osteomuscular",
       "Test de Wells",
       "Test de Phalen",
       "Test de Tinel",
-      "Valoración de riesgo cardiovascular (Framingham)",
-      "Índice tobillo-brazo (ITB)",
+      "ValoraciÃ³n de riesgo cardiovascular (Framingham)",
+      "Ãndice tobillo-brazo (ITB)",
       "Glicemia en ayunas (preocupacional)",
-      "Perfil lipídico (preocupacional)",
+      "Perfil lipÃ­dico (preocupacional)",
       "Hemograma (preocupacional)",
-      "Cuadro hemático (preocupacional)",
-      "Hepatitis B antígeno (HBsAg)",
-      "Serología completa",
+      "Cuadro hemÃ¡tico (preocupacional)",
+      "Hepatitis B antÃ­geno (HBsAg)",
+      "SerologÃ­a completa",
       "Tamizaje VIH",
-      // Psicología / Neuropsicología
+      // PsicologÃ­a / NeuropsicologÃ­a
       "Test de Minnesota (MMPI)",
       "Test de Bender",
       "Test de matrices de Raven",
-      "Evaluación neuropsicológica",
-      "Evaluación psicológica forense",
+      "EvaluaciÃ³n neuropsicolÃ³gica",
+      "EvaluaciÃ³n psicolÃ³gica forense",
       "Test de personalidad",
-      "Evaluación de aptitudes laborales",
-      "Evaluación de estrés laboral (Bonn)",
-      "Evaluación del riesgo psicosocial",
+      "EvaluaciÃ³n de aptitudes laborales",
+      "EvaluaciÃ³n de estrÃ©s laboral (Bonn)",
+      "EvaluaciÃ³n del riesgo psicosocial",
     ];
     // States moved to component level (no hooks in conditionals - React rule)
     const showSuggs = showExamSuggs;
@@ -1878,7 +1879,7 @@ export function createRenderHelpers(state) {
             e.toLowerCase().includes(examSearch.toLowerCase())
           ).slice(0, 12)
         : [];
-    // ══ B-11: Pruebas prohibidas como requisito laboral - Res. 1843/2025 Art. 10 ══
+    // ââ B-11: Pruebas prohibidas como requisito laboral - Res. 1843/2025 Art. 10 ââ
     const _PRUEBAS_PROHIBIDAS_RES1843 = [
       {
         terminos: [
@@ -1907,13 +1908,13 @@ export function createRenderHelpers(state) {
       {
         terminos: [
           "serologia",
-          "serológico",
+          "serolÃ³gico",
           "vdrl",
           "rpr",
           "sifilis",
           "treponema",
         ],
-        nombre: "Prueba serológica (sífilis/treponema)",
+        nombre: "Prueba serolÃ³gica (sÃ­filis/treponema)",
       },
     ];
     const _esPruebaProhibida = (nombre) => {
@@ -1923,18 +1924,18 @@ export function createRenderHelpers(state) {
       );
     };
     const addExam = (nombre) => {
-      // ── Verificar si es prueba prohibida como requisito laboral ──
+      // ââ Verificar si es prueba prohibida como requisito laboral ââ
       const prohibida = _esPruebaProhibida(nombre);
       const tipoExActual = data?.tipoExamen || "";
       const esEvalOcupacional = ["INGRESO", "PERIODICO", "RETIRO"].includes(
         tipoExActual
       );
       if (prohibida && esEvalOcupacional) {
-        // Mostrar advertencia - el médico PUEDE agregarla con justificación clínica
+        // Mostrar advertencia - el mÃ©dico PUEDE agregarla con justificaciÃ³n clÃ­nica
         showPrompt(
-          `⚠️ Res. 1843/2025 Art. 10 - PRUEBA RESTRINGIDA\n\n"${prohibida.nombre}" está prohibida como requisito de ingreso o permanencia laboral.\n\nSi hay indicación CLÍNICA justificada, escriba la justificación aquí. De lo contrario, cancele.\n\nJustificación clínica (requerida):`,
+          `â ï¸ Res. 1843/2025 Art. 10 - PRUEBA RESTRINGIDA\n\n"${prohibida.nombre}" estÃ¡ prohibida como requisito de ingreso o permanencia laboral.\n\nSi hay indicaciÃ³n CLÃNICA justificada, escriba la justificaciÃ³n aquÃ­. De lo contrario, cancele.\n\nJustificaciÃ³n clÃ­nica (requerida):`,
           (justificacion) => {
-            if (!justificacion || !justificacion.trim()) return; // canceló
+            if (!justificacion || !justificacion.trim()) return; // cancelÃ³
             const nuevo = {
               nombre,
               fecha: new Date().toISOString().split("T")[0],
@@ -1956,9 +1957,9 @@ export function createRenderHelpers(state) {
             setShowExamSuggs(false);
           }
         );
-        return; // espera confirmación del médico
+        return; // espera confirmaciÃ³n del mÃ©dico
       }
-      // ── Examen sin restricción - agregar normalmente ──
+      // ââ Examen sin restricciÃ³n - agregar normalmente ââ
       const nuevo = {
         nombre,
         fecha: new Date().toISOString().split("T")[0],
@@ -1987,134 +1988,134 @@ export function createRenderHelpers(state) {
         solicitudExamenesJust: justExamen,
       }));
     };
-    // Paquetes de exámenes por grupo/frecuencia
+    // Paquetes de exÃ¡menes por grupo/frecuencia
     const EXAM_PACKAGES = [
       {
         id: "ocup_ingreso",
-        nombre: "📋 Ingreso Ocupacional",
+        nombre: "ð Ingreso Ocupacional",
         frecuencia: "Por evento",
         examenes: [
           "Hemograma completo (CBC)",
           "Glicemia en ayunas",
-          "Perfil lipídico completo",
-          "Creatinina sérica",
-          "Parcial de orina (uroanálisis)",
-          "Radiografía de tórax PA y lateral",
+          "Perfil lipÃ­dico completo",
+          "Creatinina sÃ©rica",
+          "Parcial de orina (uroanÃ¡lisis)",
+          "RadiografÃ­a de tÃ³rax PA y lateral",
           "Electrocardiograma (ECG) de 12 derivaciones",
-          "Audiometría ocupacional",
-          "Optometría ocupacional",
-          "Visiometría",
+          "AudiometrÃ­a ocupacional",
+          "OptometrÃ­a ocupacional",
+          "VisiometrÃ­a",
         ],
       },
       {
         id: "ocup_periodico",
-        nombre: "🔄 Periódico Ocupacional",
+        nombre: "ð PeriÃ³dico Ocupacional",
         frecuencia: "Anual",
         examenes: [
           "Hemograma completo (CBC)",
           "Glicemia en ayunas",
-          "Perfil lipídico completo",
-          "Creatinina sérica",
-          "Parcial de orina (uroanálisis)",
-          "Audiometría ocupacional",
-          "Optometría ocupacional",
+          "Perfil lipÃ­dico completo",
+          "Creatinina sÃ©rica",
+          "Parcial de orina (uroanÃ¡lisis)",
+          "AudiometrÃ­a ocupacional",
+          "OptometrÃ­a ocupacional",
         ],
       },
       {
         id: "alturas",
-        nombre: "⛰️ Trabajo en Alturas (Res. 4272/2021)",
+        nombre: "â°ï¸ Trabajo en Alturas (Res. 4272/2021)",
         frecuencia: "Anual",
         examenes: [
           "Electrocardiograma (ECG) de 12 derivaciones",
-          "Espirometría simple",
-          "Audiometría ocupacional",
-          "Optometría ocupacional",
-          "Glucosa sérica",
+          "EspirometrÃ­a simple",
+          "AudiometrÃ­a ocupacional",
+          "OptometrÃ­a ocupacional",
+          "Glucosa sÃ©rica",
           "Hemograma completo (CBC)",
-          "Radiografía de tórax PA y lateral",
+          "RadiografÃ­a de tÃ³rax PA y lateral",
         ],
       },
       {
         id: "alimentos",
-        nombre: "🍽️ Manipulación Alimentos (Res. 2674/2013)",
+        nombre: "ð½ï¸ ManipulaciÃ³n Alimentos (Res. 2674/2013)",
         frecuencia: "Anual",
         examenes: [
-          "Coproscópico",
+          "CoproscÃ³pico",
           "Coprocultivo",
           "VDRL",
-          "Parcial de orina (uroanálisis)",
+          "Parcial de orina (uroanÃ¡lisis)",
           "Hemograma completo (CBC)",
-          "Citología cervicouterina (PAP)",
+          "CitologÃ­a cervicouterina (PAP)",
         ],
       },
       {
         id: "cardiovascular",
-        nombre: "❤️ Riesgo Cardiovascular",
+        nombre: "â¤ï¸ Riesgo Cardiovascular",
         frecuencia: "Semestral",
         examenes: [
-          "Perfil lipídico completo",
+          "Perfil lipÃ­dico completo",
           "Glicemia en ayunas",
           "Hemoglobina glicosilada (HbA1c)",
           "Electrocardiograma (ECG) de 12 derivaciones",
-          "Proteína C reactiva (PCR) ultrasensible",
-          "Creatinina sérica",
+          "ProteÃ­na C reactiva (PCR) ultrasensible",
+          "Creatinina sÃ©rica",
         ],
       },
       {
         id: "respiratorio",
-        nombre: "🫁 Riesgo Respiratorio (SVE)",
+        nombre: "ð« Riesgo Respiratorio (SVE)",
         frecuencia: "Anual",
         examenes: [
-          "Espirometría simple",
-          "Espirometría con broncodilatador",
-          "Radiografía de tórax PA y lateral",
+          "EspirometrÃ­a simple",
+          "EspirometrÃ­a con broncodilatador",
+          "RadiografÃ­a de tÃ³rax PA y lateral",
           "Hemograma completo (CBC)",
         ],
       },
       {
         id: "osteomuscular",
-        nombre: "🦴 Riesgo Osteomuscular (SVE)",
+        nombre: "ð¦´ Riesgo Osteomuscular (SVE)",
         frecuencia: "Anual",
         examenes: [
-          "Radiografía columna lumbosacra AP y lateral",
-          "Radiografía columna cervical AP y lateral",
-          "Radiografía de manos AP bilateral",
-          "Electromiografía (EMG)",
+          "RadiografÃ­a columna lumbosacra AP y lateral",
+          "RadiografÃ­a columna cervical AP y lateral",
+          "RadiografÃ­a de manos AP bilateral",
+          "ElectromiografÃ­a (EMG)",
         ],
       },
       {
         id: "ruido",
-        nombre: "🔊 Exposición a Ruido (SVE)",
+        nombre: "ð ExposiciÃ³n a Ruido (SVE)",
         frecuencia: "Anual",
         examenes: [
-          "Audiometría ocupacional",
-          "Audiometría tonal",
-          "Audiometría de palabras",
-          "Impedanciometría",
+          "AudiometrÃ­a ocupacional",
+          "AudiometrÃ­a tonal",
+          "AudiometrÃ­a de palabras",
+          "ImpedanciometrÃ­a",
         ],
       },
       {
         id: "quimico",
-        nombre: "⚗️ Riesgo Químico",
+        nombre: "âï¸ Riesgo QuÃ­mico",
         frecuencia: "Anual",
         examenes: [
           "Hemograma completo (CBC)",
-          "Pruebas de función hepática",
-          "Creatinina sérica",
-          "Parcial de orina (uroanálisis)",
-          "Plomo en sangre (si exposición)",
+          "Pruebas de funciÃ³n hepÃ¡tica",
+          "Creatinina sÃ©rica",
+          "Parcial de orina (uroanÃ¡lisis)",
+          "Plomo en sangre (si exposiciÃ³n)",
         ],
       },
       {
         id: "visual",
-        nombre: "👁️ Riesgo Visual",
+        nombre: "ðï¸ Riesgo Visual",
         frecuencia: "Anual",
         examenes: [
-          "Optometría ocupacional",
+          "OptometrÃ­a ocupacional",
           "Agudeza visual",
-          "Tonometría ocular",
-          "Campimetría",
-          "Visiometría",
+          "TonometrÃ­a ocular",
+          "CampimetrÃ­a",
+          "VisiometrÃ­a",
         ],
       },
     ];
@@ -2141,24 +2142,24 @@ export function createRenderHelpers(state) {
         {/* Encabezado */}
         <div className="bg-white rounded-2xl shadow-sm border border-teal-100 p-5">
           <h3 className="text-base font-black text-teal-800 flex items-center gap-2 mb-1">
-            🔬 Solicitud de Exámenes y Procedimientos
+            ð¬ Solicitud de ExÃ¡menes y Procedimientos
           </h3>
           <p className="text-xs text-gray-400">
-            Busque el examen o escríbalo libremente · Se imprimirá con los datos
+            Busque el examen o escrÃ­balo libremente Â· Se imprimirÃ¡ con los datos
             del paciente
           </p>
         </div>
-        {/* ── PAQUETES DE EXÁMENES ── */}
+        {/* ââ PAQUETES DE EXÃMENES ââ */}
         <div className="bg-white rounded-2xl shadow-sm border border-indigo-100 p-5">
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs font-black text-indigo-800 uppercase">
-              📦 Paquetes por Grupo / Frecuencia
+              ð¦ Paquetes por Grupo / Frecuencia
             </p>
             <button
               onClick={() => setShowPackages((v) => !v)}
               className="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-indigo-700"
             >
-              {showPackages ? "✕ Cerrar" : "+ Seleccionar Paquete"}
+              {showPackages ? "â Cerrar" : "+ Seleccionar Paquete"}
             </button>
           </div>
           {showPackages && (
@@ -2181,7 +2182,7 @@ export function createRenderHelpers(state) {
                   >
                     <p className="font-black text-gray-800">{pkg.nombre}</p>
                     <p className="text-[10px] text-gray-400 mt-0.5">
-                      🔁 {pkg.frecuencia} · {pkg.examenes.length} exámenes
+                      ð {pkg.frecuencia} Â· {pkg.examenes.length} exÃ¡menes
                     </p>
                   </button>
                 ))}
@@ -2194,7 +2195,7 @@ export function createRenderHelpers(state) {
                   return (
                     <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3">
                       <p className="text-xs font-black text-indigo-800 mb-2">
-                        {pkg.nombre} - Seleccione los exámenes a agregar:
+                        {pkg.nombre} - Seleccione los exÃ¡menes a agregar:
                       </p>
                       <div className="grid grid-cols-2 gap-1 max-h-48 overflow-y-auto mb-3">
                         {pkg.examenes.map((ex) => (
@@ -2222,7 +2223,7 @@ export function createRenderHelpers(state) {
                           onClick={applyPackage}
                           className="px-4 py-2 bg-indigo-600 text-white text-xs font-black rounded-lg hover:bg-indigo-700"
                         >
-                          ✓ Agregar seleccionados
+                          â Agregar seleccionados
                         </button>
                         <button
                           onClick={() => {
@@ -2243,12 +2244,12 @@ export function createRenderHelpers(state) {
         {/* Buscador */}
         <div className="bg-white rounded-2xl shadow-sm border border-teal-200 p-5">
           <label className="block text-xs font-black text-teal-700 uppercase mb-2">
-            Buscar o añadir examen / procedimiento
+            Buscar o aÃ±adir examen / procedimiento
           </label>
           <div className="relative">
             <div className="flex gap-2">
               <div className="flex-1 relative">
-                {/* Buscador CUPS integrado + búsqueda libre */}
+                {/* Buscador CUPS integrado + bÃºsqueda libre */}
                 <input
                   value={examSearch}
                   onChange={(e) => {
@@ -2256,7 +2257,7 @@ export function createRenderHelpers(state) {
                     setShowExamSuggs(true);
                   }}
                   onFocus={() => setShowSuggs(true)}
-                  placeholder="Buscar CUPS o examen - Ej: 903001 hemograma, 912701 espirometría, audiometría..."
+                  placeholder="Buscar CUPS o examen - Ej: 903001 hemograma, 912701 espirometrÃ­a, audiometrÃ­a..."
                   className="w-full p-2.5 border-2 border-teal-200 rounded-xl text-sm focus:border-teal-500 outline-none"
                 />
                 {showSuggs && suggestions.length > 0 && (
@@ -2310,7 +2311,7 @@ export function createRenderHelpers(state) {
                           onClick={() => addExam(s)}
                           className="w-full text-left px-3 py-2 text-xs hover:bg-teal-50 border-b border-gray-50 last:border-none font-medium text-gray-800"
                         >
-                          🔬 {s}
+                          ð¬ {s}
                         </button>
                       ))}
                     {examSearch.trim() &&
@@ -2322,7 +2323,7 @@ export function createRenderHelpers(state) {
                           onClick={addFreeText}
                           className="w-full text-left px-3 py-2 text-xs bg-teal-50 text-teal-700 font-black border-t"
                         >
-                          ✏️ Agregar "{examSearch}" como texto libre
+                          âï¸ Agregar "{examSearch}" como texto libre
                         </button>
                       )}
                   </div>
@@ -2336,23 +2337,23 @@ export function createRenderHelpers(state) {
               </button>
             </div>
           </div>
-          {/* Lista de exámenes agregados */}
+          {/* Lista de exÃ¡menes agregados */}
           {examList.length > 0 && (
             <div className="mt-4 space-y-2">
               <p className="text-xs font-bold text-gray-500 uppercase">
-                Exámenes solicitados ({examList.length})
+                ExÃ¡menes solicitados ({examList.length})
               </p>
               {examList.map((ex, i) => (
                 <div
                   key={i}
                   className="flex items-center gap-2 bg-teal-50 border border-teal-200 rounded-lg px-3 py-2"
                 >
-                  <span className="text-teal-500 font-black text-sm">🔬</span>
+                  <span className="text-teal-500 font-black text-sm">ð¬</span>
                   <span className="flex-1 text-xs font-semibold text-gray-800">
                     {ex.nombre}
                     {ex.alertaRes1843 && (
                       <span className="ml-1 text-[9px] bg-amber-100 text-amber-800 border border-amber-300 px-1 rounded font-black">
-                        ⚠️ Justif. clínica - Res.1843 Art.10
+                        â ï¸ Justif. clÃ­nica - Res.1843 Art.10
                       </span>
                     )}
                   </span>
@@ -2374,18 +2375,18 @@ export function createRenderHelpers(state) {
                     onClick={() => removeExam(i)}
                     className="text-red-400 hover:text-red-600 font-black text-sm"
                   >
-                    ✕
+                    â
                   </button>
                 </div>
               ))}
             </div>
           )}
         </div>
-        {/* Diagnóstico y justificación */}
+        {/* DiagnÃ³stico y justificaciÃ³n */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-3">
           <div>
             <label className="block text-xs font-black text-gray-600 uppercase mb-1">
-              Diagnóstico / Impresión Diagnóstica
+              DiagnÃ³stico / ImpresiÃ³n DiagnÃ³stica
             </label>
             <input
               value={diagExamen}
@@ -2396,13 +2397,13 @@ export function createRenderHelpers(state) {
                   solicitudExamenesDiag: e.target.value,
                 }));
               }}
-              placeholder="Ej: Hipertensión arterial esencial (I10), Diabetes tipo 2 (E11)..."
+              placeholder="Ej: HipertensiÃ³n arterial esencial (I10), Diabetes tipo 2 (E11)..."
               className="w-full p-2.5 border-2 border-gray-200 rounded-xl text-sm focus:border-blue-400 outline-none"
             />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-600 uppercase mb-1">
-              Justificación / Motivo del examen
+              JustificaciÃ³n / Motivo del examen
             </label>
             <textarea
               rows={3}
@@ -2414,7 +2415,7 @@ export function createRenderHelpers(state) {
                   solicitudExamenesJust: e.target.value,
                 }));
               }}
-              placeholder="Explique el motivo clínico por el cual se solicitan los exámenes..."
+              placeholder="Explique el motivo clÃ­nico por el cual se solicitan los exÃ¡menes..."
               className="w-full p-2.5 border-2 border-gray-200 rounded-xl text-sm resize-none focus:border-blue-400 outline-none"
             />
           </div>
@@ -2422,7 +2423,7 @@ export function createRenderHelpers(state) {
             <button
               onClick={() => {
                 saveLocal();
-                showAlert("✅ Solicitud de exámenes guardada correctamente.");
+                showAlert("â Solicitud de exÃ¡menes guardada correctamente.");
               }}
               className="bg-teal-600 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-teal-700 flex items-center gap-2"
             >
@@ -2430,7 +2431,7 @@ export function createRenderHelpers(state) {
             </button>
           </div>
         </div>
-        {/* Preview de impresión */}
+        {/* Preview de impresiÃ³n */}
         {examList.length > 0 && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
             <div className="flex items-center justify-between mb-3">
@@ -2463,23 +2464,23 @@ export function createRenderHelpers(state) {
                       null
                     : null;
                   w.document.write(
-                    `<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Solicitud de Exámenes</title><style>@page{size:letter portrait;margin:1.2cm 1.5cm;}body{font-family:Arial,sans-serif;font-size:9pt;color:#222;}h2{margin:0;font-size:13pt;color:#0d9488;text-transform:uppercase;}table{width:100%;border-collapse:collapse;margin-top:8px;}th{background:#0d9488;color:white;padding:7px 10px;font-size:8.5pt;text-align:left;}td{border-bottom:1px solid #e5e7eb;}p{margin:3px 0;font-size:9pt;}.sig{margin-top:40px;display:flex;justify-content:space-between;}.sig-line{border-top:1.5px solid #222;width:200px;text-align:center;padding-top:4px;font-size:8pt;font-weight:bold;}</style></head><body><div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #0d9488;padding-bottom:10px;margin-bottom:14px;">${_ipsDocLeftHtml(
+                    `<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Solicitud de ExÃ¡menes</title><style>@page{size:letter portrait;margin:1.2cm 1.5cm;}body{font-family:Arial,sans-serif;font-size:9pt;color:#222;}h2{margin:0;font-size:13pt;color:#0d9488;text-transform:uppercase;}table{width:100%;border-collapse:collapse;margin-top:8px;}th{background:#0d9488;color:white;padding:7px 10px;font-size:8.5pt;text-align:left;}td{border-bottom:1px solid #e5e7eb;}p{margin:3px 0;font-size:9pt;}.sig{margin-top:40px;display:flex;justify-content:space-between;}.sig-line{border-top:1.5px solid #222;width:200px;text-align:center;padding-top:4px;font-size:8pt;font-weight:bold;}</style></head><body><div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #0d9488;padding-bottom:10px;margin-bottom:14px;">${_ipsDocLeftHtml(
                       _miIPSExam,
                       _billDocData,
                       "#0d9488"
-                    )}<div style="text-align:right;"><h2>Solicitud de Exámenes</h2><p>Fecha: ${fd}</p></div></div><div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:4px;padding:10px;margin-bottom:10px;"><p><b>Paciente:</b> ${
+                    )}<div style="text-align:right;"><h2>Solicitud de ExÃ¡menes</h2><p>Fecha: ${fd}</p></div></div><div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:4px;padding:10px;margin-bottom:10px;"><p><b>Paciente:</b> ${
                       data.nombres || ""
                     } &nbsp; <b>Doc:</b> ${data.docTipo || "CC"} ${
                       data.docNumero || ""
                     } &nbsp; <b>Edad:</b> ${
                       data.edad || "--"
-                    } años &nbsp; <b>EPS:</b> ${data.eps || "--"}</p>${
+                    } aÃ±os &nbsp; <b>EPS:</b> ${data.eps || "--"}</p>${
                       diagExamen
-                        ? `<p style="margin-top:4px;"><b>Diagnóstico:</b> ${diagExamen}</p>`
+                        ? `<p style="margin-top:4px;"><b>DiagnÃ³stico:</b> ${diagExamen}</p>`
                         : ""
                     }</div><table><thead><tr><th>Examen / Procedimiento Solicitado</th></tr></thead><tbody>${exHtml}</tbody></table>${
                       justExamen
-                        ? `<div style="margin-top:12px;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:8px;"><p style="font-weight:bold;font-size:8.5pt;color:#92400e;text-transform:uppercase;margin-bottom:4px;">Justificación clínica:</p><p style="white-space:pre-wrap;">${justExamen}</p></div>`
+                        ? `<div style="margin-top:12px;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:8px;"><p style="font-weight:bold;font-size:8.5pt;color:#92400e;text-transform:uppercase;margin-bottom:4px;">JustificaciÃ³n clÃ­nica:</p><p style="white-space:pre-wrap;">${justExamen}</p></div>`
                         : ""
                     }<div class="sig"><div class="sig-line">Firma Paciente / Responsable</div><div style="text-align:center;"><img src="${
                       _billDocSig || ""
@@ -2503,7 +2504,7 @@ export function createRenderHelpers(state) {
             </div>
             <div className="border border-gray-200 rounded-xl overflow-hidden">
               <div className="bg-teal-700 text-white px-4 py-2 text-xs font-bold uppercase">
-                Exámenes Solicitados - {data.nombres || "Paciente"}
+                ExÃ¡menes Solicitados - {data.nombres || "Paciente"}
               </div>
               {examList.map((ex, i) => (
                 <div
@@ -2527,9 +2528,9 @@ export function createRenderHelpers(state) {
       </div>
     );
   };
-  // ─── RENDER: TAB INCAPACIDAD GENERAL ────────────────────────────────────
+  // âââ RENDER: TAB INCAPACIDAD GENERAL ââââââââââââââââââââââââââââââââââââ
 
-  // ─── renderTabIncapacidadGeneral ───────────────────────────────────────────────────────────────
+  // âââ renderTabIncapacidadGeneral âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   const renderTabIncapacidadGeneral = () => {
     const diasCalc = (() => {
       if (!data.incapacidad?.desde || !data.incapacidad?.hasta)
@@ -2551,11 +2552,11 @@ export function createRenderHelpers(state) {
       const headerHtml = `<div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #dc2626;padding-bottom:10px;margin-bottom:14px;">
     ${_ipsDocLeftHtml(_miIPSIncap, doc, "#dc2626")}
     <div style="text-align:right;">
-      <h2 style="margin:0;font-size:13pt;font-weight:900;color:#dc2626;text-transform:uppercase;">Certificado de Incapacidad Médica</h2>
-      <p style="font-size:8.5pt;color:#555;">Fecha de expedición: ${_sanitize(
+      <h2 style="margin:0;font-size:13pt;font-weight:900;color:#dc2626;text-transform:uppercase;">Certificado de Incapacidad MÃ©dica</h2>
+      <p style="font-size:8.5pt;color:#555;">Fecha de expediciÃ³n: ${_sanitize(
         data.fechaConsulta || new Date().toLocaleDateString("es-CO")
       )}</p>
-      <p style="font-size:7.5pt;color:#888;">Res. 1995/1999 · Ley 100/1993 Art. 227 · Dec. 2943/2013</p>
+      <p style="font-size:7.5pt;color:#888;">Res. 1995/1999 Â· Ley 100/1993 Art. 227 Â· Dec. 2943/2013</p>
     </div>
   </div>`;
       const bodyHtml = `
@@ -2566,18 +2567,18 @@ export function createRenderHelpers(state) {
       )}: ${_sanitize(data.docNumero || "")}</td></tr>
     <tr><th>Edad</th><td>${_sanitize(
       String(data.edad || "--")
-    )} años</td><th>Fecha de nacimiento</th><td>${_sanitize(
+    )} aÃ±os</td><th>Fecha de nacimiento</th><td>${_sanitize(
         data.fechaNacimiento || "--"
       )}</td></tr>
     <tr><th>EPS / Aseguradora</th><td>${_sanitize(
       data.eps || "--"
-    )}</td><th>Género</th><td>${_sanitize(data.genero || "--")}</td></tr>
-    <tr><th>Diagnóstico (CIE-10)</th><td colspan="3">${_sanitize(
+    )}</td><th>GÃ©nero</th><td>${_sanitize(data.genero || "--")}</td></tr>
+    <tr><th>DiagnÃ³stico (CIE-10)</th><td colspan="3">${_sanitize(
       data.incapacidad?.diagnosticoCIE || data.incapacidad?.diagnostico || "--"
     )}</td></tr>
     <tr><th>Origen de la incapacidad</th><td>${_sanitize(
       data.incapacidad?.origen || "Enfermedad General"
-    )}</td><th>Prórroga N°</th><td>${_sanitize(
+    )}</td><th>PrÃ³rroga NÂ°</th><td>${_sanitize(
         data.incapacidad?.prorroga || "N/A"
       )}</td></tr>
     <tr><th>Fecha de inicio</th><td>${_sanitize(
@@ -2585,17 +2586,17 @@ export function createRenderHelpers(state) {
     )}</td><th>Fecha de fin</th><td>${_sanitize(
         data.incapacidad?.hasta || "--"
       )}</td></tr>
-    <tr><th colspan="2" style="background:#dc2626;color:white;text-align:center;font-size:12pt;">DÍAS DE INCAPACIDAD: ${dias}</th>
+    <tr><th colspan="2" style="background:#dc2626;color:white;text-align:center;font-size:12pt;">DÃAS DE INCAPACIDAD: ${dias}</th>
         <th colspan="2" style="text-align:center;font-size:11pt;">${_sanitize(
           numeroALetras(dias)
-        )} (${dias}) DÍAS</th></tr>
+        )} (${dias}) DÃAS</th></tr>
     <tr><th>Restricciones durante la incapacidad</th><td colspan="3">${_sanitize(
       data.incapacidad?.restricciones ||
-        "Reposo relativo en casa. Evitar esfuerzo físico intenso."
+        "Reposo relativo en casa. Evitar esfuerzo fÃ­sico intenso."
     )}</td></tr>
     <tr><th>Recomendaciones al paciente</th><td colspan="3">${_sanitize(
       data.incapacidad?.recoIncapacidad ||
-        "Consultar nuevamente si no hay mejoría o si los síntomas empeoran."
+        "Consultar nuevamente si no hay mejorÃ­a o si los sÃ­ntomas empeoran."
     )}</td></tr>
     </table>
     <p class="legal">La presente incapacidad es expedida conforme a la Ley 100/1993 Art. 227, Decreto 2943/2013, y la normatividad vigente del SGSSS. Para incapacidades por accidente de trabajo o enfermedad laboral aplica el Decreto 1295/1994.</p>
@@ -2609,7 +2610,7 @@ export function createRenderHelpers(state) {
         }
         <div class="sig-line">${_sanitize(doc.nombre || "")}<br/>${_sanitize(
         doc.titulo || ""
-      )} · Lic: ${_sanitize(doc.licencia || "")}</div>
+      )} Â· Lic: ${_sanitize(doc.licencia || "")}</div>
       </div>
     </div>`;
       w.document
@@ -2637,29 +2638,29 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
 @media print{.print-toolbar{display:none!important;}[contenteditable]{outline:none!important;background:transparent!important;}body{padding-top:0;}}
 </style></head><body>
 <div class="print-toolbar">
-  <span class="ptitle">🏥 Certificado de Incapacidad - ${_sanitize(
+  <span class="ptitle">ð¥ Certificado de Incapacidad - ${_sanitize(
     data.nombres || ""
   )}</span>
-  <span class="hint">✏️ Haz clic en cualquier celda para editar</span>
-  <button class="btn-print" onclick="window.print()">🖨️ Imprimir certificado</button>
-  <button class="btn-close" onclick="window.close()">✕ Cerrar</button>
+  <span class="hint">âï¸ Haz clic en cualquier celda para editar</span>
+  <button class="btn-print" onclick="window.print()">ð¨ï¸ Imprimir certificado</button>
+  <button class="btn-close" onclick="window.close()">â Cerrar</button>
 </div>
 <div contenteditable="false">${headerHtml}</div>
 <div contenteditable="true" spellcheck="false">${bodyHtml}</div>
 </body></html>`);
       w.document.close();
       w.focus();
-      // No auto-print - el médico edita y luego hace clic en "Imprimir certificado"
+      // No auto-print - el mÃ©dico edita y luego hace clic en "Imprimir certificado"
     };
     return (
       <div className="max-w-4xl mx-auto space-y-4">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-sm border border-red-100 p-5">
           <h3 className="text-base font-black text-red-800 flex items-center gap-2 mb-1">
-            🏥 Certificado de Incapacidad Médica
+            ð¥ Certificado de Incapacidad MÃ©dica
           </h3>
           <p className="text-xs text-gray-400">
-            Ley 100/1993 Art. 227 · Decreto 2943/2013 · Res. 1995/1999 · Decreto
+            Ley 100/1993 Art. 227 Â· Decreto 2943/2013 Â· Res. 1995/1999 Â· Decreto
             1295/1994
           </p>
         </div>
@@ -2675,10 +2676,10 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 "Documento",
                 `${data.docTipo || "CC"}: ${data.docNumero || "--"}`,
               ],
-              ["Edad", `${data.edad || "--"} años`],
+              ["Edad", `${data.edad || "--"} aÃ±os`],
               ["Fecha Nac.", data.fechaNacimiento || "--"],
               ["EPS", data.eps || "--"],
-              ["Género", data.genero || "--"],
+              ["GÃ©nero", data.genero || "--"],
             ].map(([k, v]) => (
               <div key={k} className="bg-gray-50 rounded-lg p-2">
                 <p className="text-[10px] font-bold text-gray-400 uppercase">
@@ -2697,7 +2698,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">
-                Diagnóstico Principal (CIE-10)
+                DiagnÃ³stico Principal (CIE-10)
               </label>
               <CIE10Input
                 value={
@@ -2714,7 +2715,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     incapacidad: { ...p.incapacidad, diagnosticoCIE: v },
                   }))
                 }
-                placeholder="Buscar CIE-10 - J06.9, lumbalgia, túnel carpo..."
+                placeholder="Buscar CIE-10 - J06.9, lumbalgia, tÃºnel carpo..."
                 className="w-full p-2 border-2 border-gray-200 rounded-xl text-xs focus:border-red-400 outline-none"
               />
             </div>
@@ -2736,8 +2737,8 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 <option>Accidente de Trabajo</option>
                 <option>Enfermedad Laboral</option>
                 <option>Maternidad</option>
-                <option>Accidente de Tránsito</option>
-                <option>Lesión Común</option>
+                <option>Accidente de TrÃ¡nsito</option>
+                <option>LesiÃ³n ComÃºn</option>
               </select>
             </div>
             <div>
@@ -2800,7 +2801,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">
-                Prorroga N°
+                Prorroga NÂ°
               </label>
               <input
                 value={data.incapacidad?.prorroga || ""}
@@ -2816,13 +2817,13 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
             </div>
             <div className="flex flex-col justify-center items-center bg-red-50 border-2 border-red-200 rounded-xl p-4">
               <p className="text-[10px] font-black text-red-600 uppercase">
-                Días de Incapacidad
+                DÃ­as de Incapacidad
               </p>
               <p className="text-5xl font-black text-red-900">
                 {data.incapacidad?.dias || diasCalc}
               </p>
               <p className="text-[10px] text-red-700 font-bold text-center">
-                {numeroALetras(data.incapacidad?.dias || diasCalc)} DÍAS
+                {numeroALetras(data.incapacidad?.dias || diasCalc)} DÃAS
               </p>
             </div>
           </div>
@@ -2834,7 +2835,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               rows={2}
               value={
                 data.incapacidad?.restricciones ||
-                "Reposo relativo en casa. Evitar esfuerzo físico y exposición al frío."
+                "Reposo relativo en casa. Evitar esfuerzo fÃ­sico y exposiciÃ³n al frÃ­o."
               }
               onChange={(e) =>
                 setData((p) => ({
@@ -2856,7 +2857,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               rows={2}
               value={
                 data.incapacidad?.recoIncapacidad ||
-                "Consultar nuevamente si no hay mejoría o si presenta síntomas de alarma."
+                "Consultar nuevamente si no hay mejorÃ­a o si presenta sÃ­ntomas de alarma."
               }
               onChange={(e) =>
                 setData((p) => ({
@@ -2872,7 +2873,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           </div>
           <div className="flex justify-between items-center pt-2 border-t border-gray-100">
             <p className="text-[10px] text-gray-400 italic">
-              Ley 100/1993 Art. 227 · Decreto 2943/2013 · Decreto 1295/1994 (AT)
+              Ley 100/1993 Art. 227 Â· Decreto 2943/2013 Â· Decreto 1295/1994 (AT)
             </p>
             <div className="flex gap-2">
               <button
@@ -2887,9 +2888,9 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       </div>
     );
   };
-  // ─── RENDER: AGENDA / SALA DE ESPERA ───────────────────────────────────────
+  // âââ RENDER: AGENDA / SALA DE ESPERA âââââââââââââââââââââââââââââââââââââââ
 
-  // ─── renderEvolucionModal ───────────────────────────────────────────────────────────────
+  // âââ renderEvolucionModal âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   const renderEvolucionModal = () => {
     if (!showEvolucionModal) return null;
     const evoluciones = data.evoluciones || [];
@@ -2903,7 +2904,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
 
     const guardarEvolucion = () => {
       if (!evolucionForm.texto.trim() && !evolucionForm.motivoConsulta.trim()) {
-        showAlert("Ingrese al menos la nota clínica o el motivo de consulta.");
+        showAlert("Ingrese al menos la nota clÃ­nica o el motivo de consulta.");
         return;
       }
       const nuevaEv = {
@@ -2949,7 +2950,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
         incapacidad: {
           aplica: false,
           dias: 0,
-          origen: "Común",
+          origen: "ComÃºn",
           diagnostico: "",
           desde: "",
           hasta: "",
@@ -2962,7 +2963,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
         activeEvTab: "nota",
       }));
       showAlert(
-        `✅ Evolución ${nuevaEv.codigoEvolucion} guardada correctamente.`
+        `â EvoluciÃ³n ${nuevaEv.codigoEvolucion} guardada correctamente.`
       );
     };
 
@@ -2973,17 +2974,17 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           <div className="bg-gradient-to-r from-purple-700 to-indigo-700 p-4 flex justify-between items-start flex-shrink-0">
             <div>
               <h2 className="text-white font-black text-base flex items-center gap-2">
-                <ClipboardList className="w-4 h-4" /> Evolución Clínica
+                <ClipboardList className="w-4 h-4" /> EvoluciÃ³n ClÃ­nica
               </h2>
               <p className="text-purple-200 text-xs mt-0.5">
-                {data.nombres} · HC:{" "}
+                {data.nombres} Â· HC:{" "}
                 <strong className="text-white">
-                  {data.codigoVerificacion || "—"}
+                  {data.codigoVerificacion || "â"}
                 </strong>
                 {evolucionForm.codigoEvolucion && (
                   <>
                     {" "}
-                    · Nuevo código:{" "}
+                    Â· Nuevo cÃ³digo:{" "}
                     <strong className="text-yellow-300">
                       {evolucionForm.codigoEvolucion}
                     </strong>
@@ -2995,7 +2996,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               onClick={() => setShowEvolucionModal(false)}
               className="text-white hover:text-purple-200 text-xl font-black mt-0.5"
             >
-              ✕
+              â
             </button>
           </div>
 
@@ -3003,7 +3004,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           {evoluciones.length > 0 && (
             <div className="px-4 pt-3 pb-0 flex-shrink-0 max-h-36 overflow-y-auto border-b border-gray-100">
               <p className="text-[10px] font-black text-gray-500 uppercase mb-1.5">
-                📜 Historial ({evoluciones.length} evoluciones previas)
+                ð Historial ({evoluciones.length} evoluciones previas)
               </p>
               <div className="space-y-1.5">
                 {evoluciones
@@ -3016,7 +3017,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     >
                       <div className="flex justify-between items-center mb-0.5">
                         <span className="font-black text-purple-800">
-                          {ev.fecha} — {ev.medico || "Dr."}
+                          {ev.fecha} â {ev.medico || "Dr."}
                         </span>
                         <div className="flex gap-1.5 items-center">
                           {ev.codigoEvolucion && (
@@ -3032,16 +3033,16 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                         </div>
                       </div>
                       <p className="text-gray-700 text-[10px] leading-snug line-clamp-2">
-                        {ev.texto || ev.motivoConsulta || "—"}
+                        {ev.texto || ev.motivoConsulta || "â"}
                       </p>
                       {ev.formulaMedicamentos?.length > 0 && (
                         <p className="text-[9px] text-blue-600 mt-0.5">
-                          💊 {ev.formulaMedicamentos.length} medicamento(s)
+                          ð {ev.formulaMedicamentos.length} medicamento(s)
                         </p>
                       )}
                       {ev.incapacidad?.aplica && (
                         <p className="text-[9px] text-red-600 mt-0.5">
-                          🏥 Incapacidad: {ev.incapacidad.dias} días
+                          ð¥ Incapacidad: {ev.incapacidad.dias} dÃ­as
                         </p>
                       )}
                     </div>
@@ -3050,15 +3051,15 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
             </div>
           )}
 
-          {/* Tabs navegación */}
+          {/* Tabs navegaciÃ³n */}
           <div className="flex gap-1 px-4 pt-3 pb-1 flex-shrink-0 flex-wrap">
             {[
-              { id: "nota", label: "📝 Nota Clínica" },
-              { id: "dx", label: "🩺 Diagnósticos" },
-              { id: "plan", label: "📋 Plan" },
-              { id: "formula", label: "💊 Fórmula" },
-              { id: "incapacidad", label: "🏥 Incapacidad" },
-                          { id: "concepto", label: "📄 Concepto Médico" },
+              { id: "nota", label: "ð Nota ClÃ­nica" },
+              { id: "dx", label: "ð©º DiagnÃ³sticos" },
+              { id: "plan", label: "ð Plan" },
+              { id: "formula", label: "ð FÃ³rmula" },
+              { id: "incapacidad", label: "ð¥ Incapacidad" },
+                          { id: "concepto", label: "ð Concepto MÃ©dico" },
             ].map((t) => (
               <button
                 key={t.id}
@@ -3074,7 +3075,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
 
           {/* Contenido scrollable */}
           <div className="flex-1 overflow-y-auto px-4 pb-4 pt-2">
-            {/* TAB: Nota Clínica */}
+            {/* TAB: Nota ClÃ­nica */}
             {evTab === "nota" && (
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
@@ -3108,14 +3109,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       }
                       className="w-full p-2 border border-purple-200 rounded-lg text-xs"
                     >
-                      <option value="">— Sin cambio —</option>
+                      <option value="">â Sin cambio â</option>
                       {[
                         "APTO",
                         "APTO CON RESTRICCIONES",
                         "NO APTO TEMPORAL",
                         "NO APTO DEFINITIVO",
                         "EN SEGUIMIENTO",
-                        "PENDIENTE EXÁMENES",
+                        "PENDIENTE EXÃMENES",
                       ].map((o) => (
                         <option key={o}>{o}</option>
                       ))}
@@ -3124,7 +3125,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 </div>
                 <div>
                   <label className="text-[10px] font-black text-gray-600 uppercase block mb-1">
-                    Motivo de Consulta / Evolución
+                    Motivo de Consulta / EvoluciÃ³n
                   </label>
                   <textarea
                     value={evolucionForm.motivoConsulta}
@@ -3135,13 +3136,13 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       }))
                     }
                     rows={2}
-                    placeholder="Razón de la consulta o seguimiento..."
+                    placeholder="RazÃ³n de la consulta o seguimiento..."
                     className="w-full p-2 border border-purple-200 rounded-lg text-xs resize-none"
                   />
                 </div>
                 <div>
                   <label className="text-[10px] font-black text-gray-600 uppercase block mb-1">
-                    Nota Clínica / Hallazgos *
+                    Nota ClÃ­nica / Hallazgos *
                   </label>
                   <textarea
                     value={evolucionForm.texto}
@@ -3149,18 +3150,18 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       setEvolucionForm((p) => ({ ...p, texto: e.target.value }))
                     }
                     rows={5}
-                    placeholder="Descripción clínica, hallazgos, seguimiento, cambios observados..."
+                    placeholder="DescripciÃ³n clÃ­nica, hallazgos, seguimiento, cambios observados..."
                     className="w-full p-2 border border-purple-200 rounded-lg text-xs resize-none"
                   />
                 </div>
               </div>
             )}
 
-            {/* TAB: Diagnósticos */}
+            {/* TAB: DiagnÃ³sticos */}
             {evTab === "dx" && (
               <div className="space-y-2">
                 <p className="text-[10px] font-black text-gray-500 uppercase">
-                  Diagnósticos CIE-10
+                  DiagnÃ³sticos CIE-10
                 </p>
                 {(evolucionForm.diagnosticos || []).map((diag, i) => (
                   <div key={i} className="flex gap-2 items-center">
@@ -3182,7 +3183,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                         setEvolucionForm((p) => ({ ...p, diagnosticos: d }));
                       }}
                       className="flex-1 p-1.5 border rounded text-xs"
-                      placeholder="Descripción diagnóstico..."
+                      placeholder="DescripciÃ³n diagnÃ³stico..."
                     />
                     <select
                       value={diag.tipo}
@@ -3226,7 +3227,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                   }
                   className="text-purple-600 text-[11px] font-bold flex items-center gap-1 hover:underline"
                 >
-                  <Plus className="w-3 h-3" /> Agregar diagnóstico
+                  <Plus className="w-3 h-3" /> Agregar diagnÃ³stico
                 </button>
               </div>
             )}
@@ -3247,7 +3248,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       }))
                     }
                     rows={4}
-                    placeholder="Tratamiento, conducta médica, decisiones clínicas..."
+                    placeholder="Tratamiento, conducta mÃ©dica, decisiones clÃ­nicas..."
                     className="w-full p-2 border border-purple-200 rounded-lg text-xs resize-none"
                   />
                 </div>
@@ -3264,7 +3265,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       }))
                     }
                     rows={3}
-                    placeholder="Indicaciones, cuidados, próxima cita..."
+                    placeholder="Indicaciones, cuidados, prÃ³xima cita..."
                     className="w-full p-2 border border-purple-200 rounded-lg text-xs resize-none"
                   />
                 </div>
@@ -3347,7 +3348,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               </div>
             )}
 
-            {/* TAB: Fórmula Médica */}
+            {/* TAB: FÃ³rmula MÃ©dica */}
             {evTab === "formula" && (
               <div className="space-y-2">
                 <div className="flex justify-between items-center mb-2">
@@ -3378,7 +3379,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 </div>
                 {(evolucionForm.formulaMedicamentos || []).length === 0 && (
                   <p className="text-center text-gray-400 text-xs py-6 border border-dashed rounded-xl">
-                    Sin medicamentos. Use el botón + para agregar.
+                    Sin medicamentos. Use el botÃ³n + para agregar.
                   </p>
                 )}
                 {(evolucionForm.formulaMedicamentos || []).map((med, i) => (
@@ -3429,7 +3430,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                           }));
                         }}
                         className="p-1.5 border rounded text-xs"
-                        placeholder="Presentación (mg, ml...)"
+                        placeholder="PresentaciÃ³n (mg, ml...)"
                       />
                       <input
                         value={med.dosis}
@@ -3468,7 +3469,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                           }));
                         }}
                         className="p-1.5 border rounded text-xs"
-                        placeholder="Duración (5 días...)"
+                        placeholder="DuraciÃ³n (5 dÃ­as...)"
                       />
                       <input
                         value={med.indicaciones}
@@ -3512,14 +3513,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     htmlFor="evIncapCheck"
                     className="text-sm font-black text-red-700 cursor-pointer"
                   >
-                    Aplica incapacidad médica
+                    Aplica incapacidad mÃ©dica
                   </label>
                 </div>
                 {evolucionForm.incapacidad?.aplica && (
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-[10px] font-black text-gray-600 uppercase block mb-1">
-                        Días de incapacidad
+                        DÃ­as de incapacidad
                       </label>
                       <input
                         type="number"
@@ -3544,7 +3545,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                         Origen
                       </label>
                       <select
-                        value={evolucionForm.incapacidad?.origen || "Común"}
+                        value={evolucionForm.incapacidad?.origen || "ComÃºn"}
                         onChange={(e) =>
                           setEvolucionForm((p) => ({
                             ...p,
@@ -3556,7 +3557,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                         }
                         className="w-full p-2 border border-red-200 rounded-lg text-xs"
                       >
-                        <option>Común</option>
+                        <option>ComÃºn</option>
                         <option>Laboral</option>
                         <option>Accidente de Trabajo</option>
                         <option>Enfermedad Profesional</option>
@@ -3602,7 +3603,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     </div>
                     <div className="col-span-2">
                       <label className="text-[10px] font-black text-gray-600 uppercase block mb-1">
-                        Diagnóstico (CIE-10)
+                        DiagnÃ³stico (CIE-10)
                       </label>
                       <input
                         value={evolucionForm.incapacidad?.diagnostico || ""}
@@ -3616,7 +3617,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                           }))
                         }
                         className="w-full p-2 border rounded-lg text-xs"
-                        placeholder="Código CIE-10 y descripción..."
+                        placeholder="CÃ³digo CIE-10 y descripciÃ³n..."
                       />
                     </div>
                   </div>
@@ -3624,11 +3625,11 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               </div>
             )}
           </div>
-                    {/* TAB: Concepto Médico + Certificado */}
+                    {/* TAB: Concepto MÃ©dico + Certificado */}
           {evTab === "concepto" && (
             <div className="space-y-3">
               <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
-                <h4 className="text-xs font-bold text-emerald-800 mb-2">📄 Concepto Médico Ocupacional</h4>
+                <h4 className="text-xs font-bold text-emerald-800 mb-2">ð Concepto MÃ©dico Ocupacional</h4>
                 <div className="space-y-2">
                   <div>
                     <label className="text-[10px] font-black text-gray-600 block mb-1">Concepto de Aptitud</label>
@@ -3642,7 +3643,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       <option value="APTO CON RESTRICCIONES">APTO CON RESTRICCIONES</option>
                       <option value="NO APTO">NO APTO</option>
                       <option value="APTO CON LIMITACIONES">APTO CON LIMITACIONES</option>
-                      <option value="PENDIENTE">PENDIENTE - Requiere evaluación adicional</option>
+                      <option value="PENDIENTE">PENDIENTE - Requiere evaluaciÃ³n adicional</option>
                     </select>
                   </div>
                   <div>
@@ -3662,7 +3663,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       value={evolucionForm.texto || ""}
                       onChange={(e) => setEvolucionForm((p) => ({ ...p, texto: e.target.value }))}
                       className="w-full p-2 border border-emerald-300 rounded text-xs"
-                      placeholder="Observaciones del médico..."
+                      placeholder="Observaciones del mÃ©dico..."
                     />
                   </div>
                 </div>
@@ -3677,7 +3678,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                   }}
                   className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg text-xs flex items-center justify-center gap-2"
                 >
-                  📄 Expedir Nuevo Certificado Médico
+                  ð Expedir Nuevo Certificado MÃ©dico
                 </button>
               )}
             </div>
@@ -3686,7 +3687,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           {/* Footer: guardar */}
           <div className="border-t border-gray-100 px-4 py-3 flex justify-between items-center flex-shrink-0 bg-gray-50 rounded-b-2xl">
             <div className="text-[10px] text-gray-400">
-              Médico:{" "}
+              MÃ©dico:{" "}
               <span className="font-bold text-gray-600">
                 {activeDoctorData?.nombre || currentUser?.name}
               </span>
@@ -3707,7 +3708,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 onClick={guardarEvolucion}
                 className="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white text-xs font-black rounded-xl flex items-center gap-1.5"
               >
-                <Save className="w-3.5 h-3.5" /> Guardar Evolución
+                <Save className="w-3.5 h-3.5" /> Guardar EvoluciÃ³n
               </button>
             </div>
           </div>
@@ -3716,14 +3717,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
     );
   };
 
-  // ─── RENDER: MENSAJERÍA INTERNA ────────────────────────────────────────────
+  // âââ RENDER: MENSAJERÃA INTERNA ââââââââââââââââââââââââââââââââââââââââââââ
   // Called inline as overlay + floating panel - not a full-page view
 
-  // ─── renderMensajesOverlay ───────────────────────────────────────────────────────────────
+  // âââ renderMensajesOverlay âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   const renderMensajesOverlay = () => {
     if (!showMensajePanel) return null;
     const esMensajeAdmin = _isAdmin(currentUser?.role);
-    // Mensajes que me corresponden (como destinatario) o que yo envié
+    // Mensajes que me corresponden (como destinatario) o que yo enviÃ©
     const misMensajes = mensajes
       .filter(
         (m) =>
@@ -3762,7 +3763,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       saveMensajes([...mensajes, nm]);
       setComposeMensaje({ destinatarios: [], texto: "" });
       setShowComposeMensaje(false);
-      showAlert("✅ Aviso enviado.");
+      showAlert("â Aviso enviado.");
     };
     const responderMensaje = (msg) => {
       if (!mensajeRespuesta.trim()) {
@@ -3783,7 +3784,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       );
       saveMensajes(upd);
       setMensajeRespuesta("");
-      showAlert("✅ Respuesta enviada.");
+      showAlert("â Respuesta enviada.");
     };
     const marcarLeido = (msgId) => {
       const upd = mensajes.map((m) =>
@@ -3823,14 +3824,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                   onClick={() => setShowComposeMensaje((v) => !v)}
                   className="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-lg text-xs font-black flex items-center gap-1"
                 >
-                  ✏️ Nuevo
+                  âï¸ Nuevo
                 </button>
               )}
               <button
                 onClick={() => setShowMensajePanel(false)}
                 className="text-white/80 hover:text-white text-lg font-black leading-none"
               >
-                ✕
+                â
               </button>
             </div>
           </div>
@@ -3874,7 +3875,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     }
                     className="text-[9px] px-2 py-1 rounded-full font-bold border bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100"
                   >
-                    ✓ Todos
+                    â Todos
                   </button>
                 </div>
               </div>
@@ -3907,7 +3908,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           <div className="flex-1 overflow-y-auto p-3 space-y-3">
             {misMensajes.length === 0 && (
               <div className="text-center py-10 text-gray-400">
-                <p className="text-3xl mb-2">💬</p>
+                <p className="text-3xl mb-2">ð¬</p>
                 <p className="text-xs font-bold">Sin mensajes</p>
               </div>
             )}
@@ -3929,14 +3930,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                   <div className="flex justify-between items-start gap-2 mb-1">
                     <p className="text-[10px] font-black text-gray-600">
                       {esMio
-                        ? `📤 Tú → ${
+                        ? `ð¤ TÃº â ${
                             msg.destinatarios?.length > 1
                               ? "Varios"
                               : usersList.find(
                                   (u) => u.user === msg.destinatarios?.[0]
                                 )?.name || "?"
                           }`
-                        : `📥 ${msg.fromName || msg.from}`}
+                        : `ð¥ ${msg.fromName || msg.from}`}
                     </p>
                     <p className="text-[9px] text-gray-400 flex-shrink-0">
                       {new Date(msg.fecha).toLocaleDateString("es-CO", {
@@ -3961,7 +3962,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       </p>
                     </div>
                   )}
-                  {/* Form responder (si es para mí y no ha sido respondido) */}
+                  {/* Form responder (si es para mÃ­ y no ha sido respondido) */}
                   {esParaMi && !msg.respondido && (
                     <div className="mt-2 space-y-1.5">
                       <textarea
@@ -4000,7 +4001,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                           }}
                           className="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-[10px] font-black hover:bg-red-200"
                         >
-                          ✕
+                          â
                         </button>
                       </div>
                     </div>
@@ -4013,14 +4014,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       </div>
     );
   };
-  // ── B-F1-03: Persistir portafolio ──────────────────────────────────────
+  // ââ B-F1-03: Persistir portafolio ââââââââââââââââââââââââââââââââââââââ
   const savePortafolio = (items) => {
     setPortafolioItems(items);
     try {
       localStorage.setItem("siso_portafolio", JSON.stringify(items));
     } catch {}
   };
-  // ── B-F1-04: Persistir cotizaciones ──────────────────────────────────
+  // ââ B-F1-04: Persistir cotizaciones ââââââââââââââââââââââââââââââââââ
   const saveCotizaciones = (list) => {
     setCotizaciones(list);
     try {
@@ -4034,7 +4035,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
     );
     return String(max + 1).padStart(4, "0");
   };
-  // ── B-F2-01: Persistir caja ───────────────────────────────────────────
+  // ââ B-F2-01: Persistir caja âââââââââââââââââââââââââââââââââââââââââââ
   const saveCaja = (movs) => {
     setCajaMovimientos(movs);
     try {
@@ -4046,7 +4047,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       _sbSet(`siso_caja_movs_${suf}`, movs); // Bloque 3: sync Supabase
     } catch {}
   };
-  // ── B-F2-01/02: Generar comprobante ──────────────────────────────────
+  // ââ B-F2-01/02: Generar comprobante ââââââââââââââââââââââââââââââââââ
   const openComprobanteWindow = (tipo, mov) => {
     const doc = activeDoctorData;
     const _miIPSComp = currentUser?.empresaId
@@ -4082,7 +4083,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               ? `<div style="font-size:9px;color:#555;">${_sanitize(
                   _miIPSComp.direccion
                 )}${
-                  _miIPSComp.ciudad ? " · " + _sanitize(_miIPSComp.ciudad) : ""
+                  _miIPSComp.ciudad ? " Â· " + _sanitize(_miIPSComp.ciudad) : ""
                 }</div>`
               : ""
           }
@@ -4103,7 +4104,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           )}</div>
           <div style="font-size:9px;color:#555;">Lic: ${_sanitize(
             doc?.licencia || ""
-          )} · ${_sanitize(doc?.ciudad || "")}</div>
+          )} Â· ${_sanitize(doc?.ciudad || "")}</div>
         </div>`;
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
 <title>${tipoLabel}</title>
@@ -4125,7 +4126,7 @@ td{padding:5px 8px;border-bottom:1px solid #ddd;font-size:11px}
 ${_compLeftHtml}
 <div>
 <div class="title">${tipoLabel}</div>
-<div class="sub">No. ${num} · Fecha: ${fecha}</div>
+<div class="sub">No. ${num} Â· Fecha: ${fecha}</div>
 </div>
 </div>
 <table>
@@ -4142,8 +4143,8 @@ ${_compLeftHtml}
     )}<br/>Lic: ${_sanitize(doc?.licencia || "")}</div>
 </div>
 <div class="no-print">
-<button onclick="window.print()" style="background:#1a1a1a;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:900;cursor:pointer">🖨️ Imprimir</button>
-<button onclick="window.close()" style="background:#666;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:900;cursor:pointer">✕ Cerrar</button>
+<button onclick="window.print()" style="background:#1a1a1a;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:900;cursor:pointer">ð¨ï¸ Imprimir</button>
+<button onclick="window.close()" style="background:#666;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:900;cursor:pointer">â Cerrar</button>
 </div></body></html>`;
     const w = window.open("", "_blank", "width=560,height=620");
     if (w) {
@@ -4151,7 +4152,7 @@ ${_compLeftHtml}
       w.document.close();
     }
   };
-  // ── B-F1-05: Carné manipulación alimentos ────────────────────────────
+  // ââ B-F1-05: CarnÃ© manipulaciÃ³n alimentos ââââââââââââââââââââââââââââ
   const openCarnetAlimentos = (paciente, docData) => {
     const doc = docData || activeDoctorData;
     const p = paciente || {};
@@ -4161,9 +4162,9 @@ ${_compLeftHtml}
           new Date(p.fechaConsulta || Date.now()).getTime() +
             parseInt(p.vigencia) * 24 * 60 * 60 * 1000
         ).toLocaleDateString("es-CO")
-      : "Ver concepto médico";
+      : "Ver concepto mÃ©dico";
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
-<title>Carné Manipulación de Alimentos</title>
+<title>CarnÃ© ManipulaciÃ³n de Alimentos</title>
 <style>
 @media print{body{margin:0}@page{size:8.5cm 5.5cm;margin:0}}
 body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5}
@@ -4187,10 +4188,10 @@ body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5}
 @media print{.no-print{display:none}}
 </style></head><body>
 <div class="carne">
-<div class="hdr"><h1>🍽️ Carné Médico - Manipulación de Alimentos</h1></div>
+<div class="hdr"><h1>ð½ï¸ CarnÃ© MÃ©dico - ManipulaciÃ³n de Alimentos</h1></div>
 <div class="body">
 <div class="foto">${
-      p.fotoPaciente ? `<img src="${p.fotoPaciente}" alt="Foto"/>` : "📷"
+      p.fotoPaciente ? `<img src="${p.fotoPaciente}" alt="Foto"/>` : "ð·"
     }</div>
 <div class="info">
 <div class="nom">${p.nombres || "Paciente"}</div>
@@ -4206,11 +4207,11 @@ body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5}
 <div class="firma">${doc?.nombre || ""}<br/>${doc?.titulo || ""}<br/>Lic: ${
       doc?.licencia || ""
     }</div>
-<div class="valid">✅ VÁLIDO<br/>Hasta: ${fechaVig}</div>
+<div class="valid">â VÃLIDO<br/>Hasta: ${fechaVig}</div>
 </div></div>
 <div class="no-print">
-<button onclick="window.print()" style="background:#1a6b2f;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-weight:900;cursor:pointer">🖨️ Imprimir Carné</button>
-<button onclick="window.close()" style="background:#666;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-weight:900;cursor:pointer">✕ Cerrar</button>
+<button onclick="window.print()" style="background:#1a6b2f;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-weight:900;cursor:pointer">ð¨ï¸ Imprimir CarnÃ©</button>
+<button onclick="window.close()" style="background:#666;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-weight:900;cursor:pointer">â Cerrar</button>
 </div></body></html>`;
     const w = window.open("", "_blank", "width=380,height=320");
     if (w) {
