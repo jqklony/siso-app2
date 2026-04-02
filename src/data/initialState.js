@@ -463,7 +463,7 @@ export const initialUsers = [
     user: "drcucalon",
     passHash:
       "49679f37304820e18bae7ed12292e42a7722a7d1a55f12e41b1abca5cc5162fd",
-    mustChangePassword: true,
+    mustChangePassword: false,
     name: "Dr. Julian Cucalon",
     role: "super_admin", // FASE 2: promovido a super_admin (puede crear orgs + HC)
     orgId: ORG_DEFAULT_ID, // FASE 2: organización principal
