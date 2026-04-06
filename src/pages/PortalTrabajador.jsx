@@ -406,7 +406,13 @@ export const PortalTrabajador = (props) => {
     PortalPublicoTrabajador,
     AgendaFieldF,
     ...rest
-  } = props;
+    // ─── Role guard helpers from sharedProps ───
+  _isAdmin,
+  _isAdminEmpresa,
+  _secretariaPuede,
+  _canUse,
+  _contarHC,
+} = props;
 
     const handleBuscar = () => {
       const q = portalCodigo.trim();
