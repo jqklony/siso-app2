@@ -2,36 +2,9 @@ import React from 'react';
 import {
   BrainCircuit, ClipboardList, Cloud, Download, FileCheck, FileSignature, HardDrive, Lock, LogOut, MessageSquare, Plus, Printer, Save, Unlock, UploadCloud, Wifi, WifiOff
 } from "lucide-react";
-import { BrandLogo } from './AppComponents.jsx';
+import { BrandLogo, _isAdmin, _secretariaPuede } from './AppComponents.jsx';
 
-// --- Role & permission helpers ---
-const _isAdmin = (role) => role === "administrador" || role === "super_admin";
-const _isAdminEmpresa = (role) => role === "admin_empresa";
-const _isEmpresaUser = (user) => !!user?.empresaId;
-const _isAdminOrEmpresa = (role) => _isAdmin(role) || _isAdminEmpresa(role);
-const SECRETARIA_PERMISOS_DEFAULT = {
-  agenda: false, bill: false, propuestas: false, telemedicina: false,
-  empresas: false, pacientes_lista: false, reporte: false, sve: false,
-  caja: false, adjuntos: false, cuentas_cobro: false, pacientes_crear: false,
-};
-const MEDICO_SIEMPRE_PUEDE = new Set([
-  "agenda","bill","propuestas","empresas","pacientes_lista","reporte",
-  "sve","caja","adjuntos","cuentas_cobro","pacientes_crear","telemedicina",
-]);
-const _secretariaPuede = (feature, currentUser, usersList) => {
-  if (!currentUser) return false;
-  if (_isAdmin(currentUser.role)) return true;
-  if (_isAdminEmpresa(currentUser.role)) return true;
-  if (currentUser.role === "medico") return MEDICO_SIEMPRE_PUEDE.has(feature) || true;
-  if (currentUser.role === "secretaria") {
-    const userObj = usersList?.find((u) => u.user === currentUser.user);
-    const permisos = userObj?.secretariaPermisos || SECRETARIA_PERMISOS_DEFAULT;
-    return permisos[feature] === true;
-  }
-  return false;
-};
-const _sbSet = async (key, value) => false; // stub
-
+const _sbSet = async (key, value) => false; // stub - persistence handled in useAppState
 
 // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Render Helpers Factory ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
 // Returns all render helper functions bound to the provided state
