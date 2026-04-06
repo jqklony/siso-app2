@@ -409,7 +409,13 @@ export const Patients = (props) => {
     PortalPublicoTrabajador,
     AgendaFieldF,
     ...rest
-  } = props;
+    // ─── Role guard helpers from sharedProps ───
+  _isAdmin,
+  _isAdminEmpresa,
+  _secretariaPuede,
+  _canUse,
+  _contarHC,
+} = props;
 
     const unique = new Map();
     patientsList.forEach((p) => {
