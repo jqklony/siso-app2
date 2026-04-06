@@ -409,7 +409,13 @@ export const SVE = (props) => {
     PortalPublicoTrabajador,
     AgendaFieldF,
     ...rest
-  } = props;
+    // ─── Role guard helpers from sharedProps ───
+  _isAdmin,
+  _isAdminEmpresa,
+  _secretariaPuede,
+  _canUse,
+  _contarHC,
+} = props;
 
     // ── PLAN GATE: SVE requiere plan STARTER o superior ──
     if (!_canUse("sve_starter", currentUser))
