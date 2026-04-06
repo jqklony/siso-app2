@@ -4,7 +4,7 @@ import {
 } from "lucide-react";
 import { BrandLogo } from './AppComponents.jsx';
 
-// -- Module-level helpers (required by render functions, migrated from App.jsx) --
+// --- Role & permission helpers ---
 const _isAdmin = (role) => role === "administrador" || role === "super_admin";
 const _isAdminEmpresa = (role) => role === "admin_empresa";
 const _isEmpresaUser = (user) => !!user?.empresaId;
@@ -30,30 +30,10 @@ const _secretariaPuede = (feature, currentUser, usersList) => {
   }
   return false;
 };
-const _rh_cfgRaw = (typeof window !== "undefined" && window.__SISO_CONFIG) || {};
-const _rh_SB_URL = (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_URL) || _rh_cfgRaw.sbUrl || null;
-const _rh_SB_KEY = (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_KEY) || _rh_cfgRaw.sbKey || null;
-const _rh_rl = { count: 0, reset: Date.now() + 60000 };
-const _rh_rlCheck = () => {
-  const now = Date.now();
-  if (now > _rh_rl.reset) { _rh_rl.count = 0; _rh_rl.reset = now + 60000; }
-  if (++_rh_rl.count > 120) return false;
-  return true;
-};
-const _sbSet = async (key, value) => {
-  if (!_rh_rlCheck() || !_rh_SB_URL || !_rh_SB_KEY) return false;
-  try {
-    const r = await fetch(`${_rh_SB_URL}/rest/v1/siso_store`, {
-      method: "POST",
-      headers: { apikey: _rh_SB_KEY, Authorization: `Bearer ${_rh_SB_KEY}`, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=minimal" },
-      body: JSON.stringify({ key, value, updated_at: new Date().toISOString() }),
-    });
-    return r.ok;
-  } catch { return false; }
-};
+const _sbSet = async (key, value) => false; // stub
 
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Render Helpers Factory ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Render Helpers Factory ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
 // Returns all render helper functions bound to the provided state
 export function createRenderHelpers(state) {
   const {
@@ -456,7 +436,7 @@ export function createRenderHelpers(state) {
   saveCaja,
   } = state;
 
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ renderNavbar ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ renderNavbar ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const renderNavbar = () => {
     const _aiBg =
       aiStatus === "ok"
@@ -472,7 +452,7 @@ export function createRenderHelpers(state) {
         : "bg-red-50 text-red-500 border-red-200";
     const _syncTxt =
       syncStatus === "ok"
-        ? "Nube ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ"
+        ? "Nube ÃÂ¢ÃÂÃÂ"
         : syncStatus === "syncing"
         ? "Sync..."
         : syncStatus === "loading"
@@ -486,7 +466,7 @@ export function createRenderHelpers(state) {
         : syncStatus === "loading"
         ? "Cargando datos..."
         : syncStatus === "error"
-        ? "Error de sincronizaciÃÂÃÂÃÂÃÂ³n"
+        ? "Error de sincronizaciÃÂÃÂ³n"
         : "Listo";
     const _agCls =
       view === "agenda"
@@ -523,7 +503,7 @@ export function createRenderHelpers(state) {
           onClick={() => goTo("dashboard")}
         >
           <BrandLogo data={activeDoctorData} />
-          {/* ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ IPS: nombre de empresa en navbar ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ */}
+          {/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ IPS: nombre de empresa en navbar ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */}
           {currentUser?.empresaId &&
             (() => {
               const _navEmp = companies.find(
@@ -531,15 +511,15 @@ export function createRenderHelpers(state) {
               );
               return _navEmp ? (
                 <span className="text-[10px] font-black text-teal-700 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded-lg ml-1 hidden sm:inline-block">
-                  ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¥{" "}
+                  ÃÂ°ÃÂÃÂÃÂ¥{" "}
                   {_navEmp.nombre?.length > 25
-                    ? _navEmp.nombre.substring(0, 25) + "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦"
+                    ? _navEmp.nombre.substring(0, 25) + "ÃÂ¢ÃÂÃÂ¦"
                     : _navEmp.nombre}
                 </span>
               ) : null;
             })()}
         </div>
-        {/* ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Bloque 1: Datos mÃÂÃÂÃÂÃÂ©dico activo en header ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ */}
+        {/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Bloque 1: Datos mÃÂÃÂ©dico activo en header ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */}
         {currentUser && activeDoctorData?.nombre && (
           <div className="hidden md:flex items-center gap-2 flex-shrink-0 ml-2">
             {activeSignature ? (
@@ -576,7 +556,7 @@ export function createRenderHelpers(state) {
             ) : (
               <BrainCircuit className="w-3 h-3" />
             )}
-            {" ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ IA"}
+            {" ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ IA"}
           </button>
           {view === "historia" && (
             <>
@@ -584,18 +564,18 @@ export function createRenderHelpers(state) {
                 onClick={() => data.estadoHistoria === "Cerrada" ? goTo("dashboard") : goBack()}
                 className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-200 flex items-center gap-1 border border-gray-200 no-print"
               >
-                ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Volver
+                ÃÂ¢ÃÂÃÂ Volver
               </button>
               <div className="w-px h-6 bg-gray-200 no-print" />
               {data.estadoHistoria === "Cerrada" && (
                 <div className="hidden no-print bg-red-50 border border-red-300 rounded-lg px-3 py-1 flex items-center gap-1.5 text-[10px] font-bold text-red-700">
-                  <Lock className="w-3 h-3" /> Historia Cerrada ÃÂÃÂÃÂÃÂ·{" "}
+                  <Lock className="w-3 h-3" /> Historia Cerrada ÃÂÃÂ·{" "}
                   {data.firmaDigital?.codigoQR || data.codigoVerificacion || ""}
                 </div>
               )}
               {data.estadoHistoria === "Cerrada" ? (
                 <div className="flex items-center gap-1">
-                  {/* BotÃÂÃÂÃÂÃÂ³n principal: EvoluciÃÂÃÂÃÂÃÂ³n */}
+                  {/* BotÃÂÃÂ³n principal: EvoluciÃÂÃÂ³n */}
                   <button
                     onClick={() => {
                       setEvolucionForm({
@@ -617,7 +597,7 @@ export function createRenderHelpers(state) {
                         incapacidad: {
                           aplica: false,
                           dias: 0,
-                          origen: "ComÃÂÃÂÃÂÃÂºn",
+                          origen: "ComÃÂÃÂºn",
                           diagnostico: "",
                           desde: "",
                           hasta: "",
@@ -627,7 +607,7 @@ export function createRenderHelpers(state) {
                     }}
                     className="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-purple-700 flex items-center gap-1"
                   >
-                    <ClipboardList className="w-3 h-3" /> EvoluciÃÂÃÂÃÂÃÂ³n
+                    <ClipboardList className="w-3 h-3" /> EvoluciÃÂÃÂ³n
                   </button>
                                 <button
                 onClick={() => {
@@ -636,9 +616,9 @@ export function createRenderHelpers(state) {
                 }}
                 className="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 shadow hover:bg-emerald-700"
               >
-                ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Nuevo Certificado
+                ÃÂ°ÃÂÃÂÃÂ Nuevo Certificado
               </button>
-                  {/* Mini-botÃÂÃÂÃÂÃÂ³n admin: Nota Aclaratoria / Reapertura */}
+                  {/* Mini-botÃÂÃÂ³n admin: Nota Aclaratoria / Reapertura */}
                   {(_isAdmin(currentUser?.role) ||
                     currentUser?.role === "admin_empresa") && (
                     <button
@@ -689,20 +669,20 @@ export function createRenderHelpers(state) {
                     onClick={() => setActiveTab("solicitudExamenes")}
                     className={_tabBlue("solicitudExamenes")}
                   >
-                    ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¬ ExÃÂÃÂÃÂÃÂ¡menes
+                    ÃÂ°ÃÂÃÂÃÂ¬ ExÃÂÃÂ¡menes
                   </button>
                   <button
                     onClick={() => setActiveTab("adjuntos")}
                     className={_tabBlue("adjuntos")}
                   >
-                    ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Adjuntos
+                    ÃÂ°ÃÂÃÂÃÂ Adjuntos
                   </button>
                   {data.enfasisExamen === "ALIMENTOS" && (
                     <button
                       onClick={() => setActiveTab("carnetAlimentos")}
                       className={_tabBlue("carnetAlimentos")}
                     >
-                      ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ½ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ CarnÃÂÃÂÃÂÃÂ©
+                      ÃÂ°ÃÂÃÂÃÂ½ÃÂ¯ÃÂ¸ÃÂ CarnÃÂÃÂ©
                     </button>
                   )}
                 </>
@@ -743,7 +723,7 @@ export function createRenderHelpers(state) {
                 <Printer className="w-3 h-3" /> PDF
               </button>
 
-              {/* ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Descargar Todo: Certificado + Incapacidad + FÃÂÃÂÃÂÃÂ³rmula/DerivaciÃÂÃÂÃÂÃÂ³n ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ */}
+              {/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Descargar Todo: Certificado + Incapacidad + FÃÂÃÂ³rmula/DerivaciÃÂÃÂ³n ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */}
               {dataType === "ocupacional" && (
                 <button
                   onClick={() => {
@@ -755,7 +735,7 @@ export function createRenderHelpers(state) {
                         .replace(/</g, "&lt;")
                         .replace(/>/g, "&gt;");
 
-                    // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Estilos compartidos ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+                    // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Estilos compartidos ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
                     const sharedCss = `
                     *{margin:0;padding:0;box-sizing:border-box;}
                     body{font-family:'Segoe UI',Arial,sans-serif;font-size:9.5pt;color:#111;}
@@ -786,7 +766,7 @@ export function createRenderHelpers(state) {
                     @media print{.dl-bar{display:none!important;}.page{padding:12mm 15mm;}}
                   `;
 
-                    // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ 1. CERTIFICADO DE APTITUD ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+                    // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ 1. CERTIFICADO DE APTITUD ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
                     const cLow = (data.conceptoAptitud || "").toLowerCase();
                     const aptBg = cLow.includes("no apto")
                       ? "#7f1d1d"
@@ -807,7 +787,7 @@ export function createRenderHelpers(state) {
                       if (
                         lines.some(
                           (l) =>
-                            /^[ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢*\-]/.test(l) ||
+                            /^[ÃÂ¢ÃÂÃÂ¢*\-]/.test(l) ||
                             /^\*\*/.test(l) ||
                             /^\d+\./.test(l)
                         )
@@ -819,7 +799,7 @@ export function createRenderHelpers(state) {
                               (l) =>
                                 '<li style="margin-bottom:2px;font-size:9.5pt;">' +
                                 l
-                                  .replace(/^[ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢*\-]+\s*/, "")
+                                  .replace(/^[ÃÂ¢ÃÂÃÂ¢*\-]+\s*/, "")
                                   .replace(/^\d+\.\s*/, "")
                                   .replace(
                                     /\*\*(.+?)\*\*/g,
@@ -855,14 +835,14 @@ export function createRenderHelpers(state) {
                       <div class="hdr">
                         <div class="hdr-left">
                           <div class="doc-name">${_esc(
-                            docData.nombre || "MÃÂÃÂÃÂÃÂDICO OCUPACIONAL"
+                            docData.nombre || "MÃÂÃÂDICO OCUPACIONAL"
                           )}</div>
                           <p>${_esc(
                             docData.titulo ||
-                              "MÃÂÃÂÃÂÃÂ©dico Especialista en Salud Ocupacional"
+                              "MÃÂÃÂ©dico Especialista en Salud Ocupacional"
                           )}</p>
-                          <p>Lic. ${_esc(docData.licencia || "--")} ÃÂÃÂÃÂÃÂ· ${_esc(
-                      docData.ciudad || "PopayÃÂÃÂÃÂÃÂ¡n"
+                          <p>Lic. ${_esc(docData.licencia || "--")} ÃÂÃÂ· ${_esc(
+                      docData.ciudad || "PopayÃÂÃÂ¡n"
                     )}</p>
                         </div>
                         <div class="hdr-right">
@@ -873,10 +853,10 @@ export function createRenderHelpers(state) {
                         </div>
                       </div>
                       <h2 style="text-align:center;font-size:14pt;font-weight:900;text-transform:uppercase;letter-spacing:2px;margin:8px 0 4px;">Certificado de Aptitud Laboral</h2>
-                      <p style="text-align:center;font-size:8.5pt;color:#6b7280;margin-bottom:10px;">Conforme a la ResoluciÃÂÃÂÃÂÃÂ³n 1843 de 2025</p>
-                      <p style="font-size:9.5pt;margin-bottom:10px;line-height:1.5;">El suscrito MÃÂÃÂÃÂÃÂ©dico Especialista en Salud Ocupacional certifica que realizÃÂÃÂÃÂÃÂ³ la evaluaciÃÂÃÂÃÂÃÂ³n de tipo <strong>${_esc(
+                      <p style="text-align:center;font-size:8.5pt;color:#6b7280;margin-bottom:10px;">Conforme a la ResoluciÃÂÃÂ³n 1843 de 2025</p>
+                      <p style="font-size:9.5pt;margin-bottom:10px;line-height:1.5;">El suscrito MÃÂÃÂ©dico Especialista en Salud Ocupacional certifica que realizÃÂÃÂ³ la evaluaciÃÂÃÂ³n de tipo <strong>${_esc(
                         data.tipoExamen || "--"
-                      )}</strong> con ÃÂÃÂÃÂÃÂ©nfasis <strong>${_esc(
+                      )}</strong> con ÃÂÃÂ©nfasis <strong>${_esc(
                       data.enfasisExamen || "GENERAL"
                     )}</strong> a:</p>
                       <table style="margin-bottom:10px;">
@@ -893,7 +873,7 @@ export function createRenderHelpers(state) {
                         <tr><th style="background:#d1fae5;">Fecha</th><td>${_esc(
                           data.fechaExamen
                         )}</td><th style="background:#d1fae5;">Vigencia</th><td>${_esc(
-                      data.vigencia || "1 aÃÂÃÂÃÂÃÂ±o"
+                      data.vigencia || "1 aÃÂÃÂ±o"
                     )}</td></tr>
                       </table>
                       <p style="text-align:center;font-size:8pt;font-weight:900;text-transform:uppercase;color:#6b7280;margin:6px 0 4px;">Concepto Emitido</p>
@@ -917,12 +897,12 @@ export function createRenderHelpers(state) {
                             "</div>"
                           : ""
                       }
-                      <div class="alerta">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ  <strong>Confidencialidad:</strong> El diagnÃÂÃÂÃÂÃÂ³stico clÃÂÃÂÃÂÃÂ­nico no es entregado al empleador (Art. 16 Res. 1843/2025).</div>
+                      <div class="alerta">ÃÂ¢ÃÂÃÂ  <strong>Confidencialidad:</strong> El diagnÃÂÃÂ³stico clÃÂÃÂ­nico no es entregado al empleador (Art. 16 Res. 1843/2025).</div>
                       <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:end;border-top:2px solid #d1d5db;padding-top:12px;margin-top:4px;">
                         <div style="text-align:center;"><div style="height:50px;"></div><div style="border-top:1px solid #333;width:180px;margin:0 auto;padding-top:4px;font-size:8pt;font-weight:700;">Firma del Trabajador<br/>${_esc(
                           data.docTipo || "CC"
                         )}: ${_esc(data.docNumero)}</div></div>
-                        <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:8px 16px;text-align:center;"><p style="font-size:7.5pt;font-weight:900;color:#6b7280;text-transform:uppercase;">CÃÂÃÂÃÂÃÂ³digo VerificaciÃÂÃÂÃÂÃÂ³n</p><p style="font-size:13pt;font-family:monospace;font-weight:900;letter-spacing:3px;color:#065f46;">${_esc(
+                        <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:8px 16px;text-align:center;"><p style="font-size:7.5pt;font-weight:900;color:#6b7280;text-transform:uppercase;">CÃÂÃÂ³digo VerificaciÃÂÃÂ³n</p><p style="font-size:13pt;font-family:monospace;font-weight:900;letter-spacing:3px;color:#065f46;">${_esc(
                           data.codigoVerificacion || "--"
                         )}</p></div>
                         <div style="text-align:center;">${sigHtml}<div style="border-top:1px solid #333;width:180px;margin:0 auto;padding-top:4px;font-size:8pt;font-weight:700;">${_esc(
@@ -937,10 +917,10 @@ export function createRenderHelpers(state) {
                       docData.email ? "<br/>" + _esc(docData.email) : ""
                     }</div></div>
                       </div>
-                      <div class="consent">El suscrito MÃÂÃÂÃÂÃÂ©dico Especialista certifica la evaluaciÃÂÃÂÃÂÃÂ³n realizada. Res. 1843/2025 ÃÂÃÂÃÂÃÂ· Ley 1581/2012 ÃÂÃÂÃÂÃÂ· Ley 23/1981.</div>
+                      <div class="consent">El suscrito MÃÂÃÂ©dico Especialista certifica la evaluaciÃÂÃÂ³n realizada. Res. 1843/2025 ÃÂÃÂ· Ley 1581/2012 ÃÂÃÂ· Ley 23/1981.</div>
                     </div>`;
 
-                    // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ 2. CERTIFICADO DE INCAPACIDAD ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+                    // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ 2. CERTIFICADO DE INCAPACIDAD ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
                     const inc = data.incapacidad || {};
                     const diasInc =
                       inc.dias ||
@@ -960,21 +940,21 @@ export function createRenderHelpers(state) {
                       <div class="hdr">
                         <div class="hdr-left">
                           <div class="doc-name">${_esc(
-                            docData.nombre || "MÃÂÃÂÃÂÃÂDICO OCUPACIONAL"
+                            docData.nombre || "MÃÂÃÂDICO OCUPACIONAL"
                           )}</div>
-                          <p>${_esc(docData.titulo || "")} ÃÂÃÂÃÂÃÂ· Lic: ${_esc(
+                          <p>${_esc(docData.titulo || "")} ÃÂÃÂ· Lic: ${_esc(
                       docData.licencia || ""
                     )}</p>
-                          <p>Tel: ${_esc(docData.celular || "")} ÃÂÃÂÃÂÃÂ· ${_esc(
+                          <p>Tel: ${_esc(docData.celular || "")} ÃÂÃÂ· ${_esc(
                       docData.ciudad || ""
                     )}</p>
                         </div>
                         <div class="hdr-right">
-                          <div class="doc-title" style="color:#dc2626;">Certificado de Incapacidad MÃÂÃÂÃÂÃÂ©dica</div>
-                          <p>ExpediciÃÂÃÂÃÂÃÂ³n: ${new Date().toLocaleDateString(
+                          <div class="doc-title" style="color:#dc2626;">Certificado de Incapacidad MÃÂÃÂ©dica</div>
+                          <p>ExpediciÃÂÃÂ³n: ${new Date().toLocaleDateString(
                             "es-CO"
                           )}</p>
-                          <p style="font-size:7.5pt;color:#888;">Res. 1995/1999 ÃÂÃÂÃÂÃÂ· Ley 100/1993 Art. 227 ÃÂÃÂÃÂÃÂ· Dec. 2943/2013</p>
+                          <p style="font-size:7.5pt;color:#888;">Res. 1995/1999 ÃÂÃÂ· Ley 100/1993 Art. 227 ÃÂÃÂ· Dec. 2943/2013</p>
                         </div>
                       </div>
                       <table>
@@ -985,10 +965,10 @@ export function createRenderHelpers(state) {
                     )} ${_esc(data.docNumero)}</td></tr>
                         <tr><th style="background:#fee2e2;">EPS / Aseguradora</th><td>${_esc(
                           data.eps || "--"
-                        )}</td><th style="background:#fee2e2;">GÃÂÃÂÃÂÃÂ©nero</th><td>${_esc(
+                        )}</td><th style="background:#fee2e2;">GÃÂÃÂ©nero</th><td>${_esc(
                       data.genero || "--"
                     )}</td></tr>
-                        <tr><th style="background:#fee2e2;">DiagnÃÂÃÂÃÂÃÂ³stico (CIE-10)</th><td colspan="3">${_esc(
+                        <tr><th style="background:#fee2e2;">DiagnÃÂÃÂ³stico (CIE-10)</th><td colspan="3">${_esc(
                           inc.diagnosticoCIE ||
                             inc.diagnostico ||
                             data.diagnosticoPrincipal ||
@@ -996,7 +976,7 @@ export function createRenderHelpers(state) {
                         )}</td></tr>
                         <tr><th style="background:#fee2e2;">Origen</th><td>${_esc(
                           inc.origen || "Enfermedad General"
-                        )}</td><th style="background:#fee2e2;">PrÃÂÃÂÃÂÃÂ³rroga NÃÂÃÂÃÂÃÂ°</th><td>${_esc(
+                        )}</td><th style="background:#fee2e2;">PrÃÂÃÂ³rroga NÃÂÃÂ°</th><td>${_esc(
                       inc.prorroga || "N/A"
                     )}</td></tr>
                         <tr><th style="background:#fee2e2;">Fecha inicio</th><td>${_esc(
@@ -1005,18 +985,18 @@ export function createRenderHelpers(state) {
                       inc.hasta || "--"
                     )}</td></tr>
                         <tr>
-                          <th colspan="2" style="background:#dc2626;color:white;text-align:center;font-size:13pt;padding:10px;">DÃÂÃÂÃÂÃÂAS DE INCAPACIDAD: ${diasInc}</th>
+                          <th colspan="2" style="background:#dc2626;color:white;text-align:center;font-size:13pt;padding:10px;">DÃÂÃÂAS DE INCAPACIDAD: ${diasInc}</th>
                           <th colspan="2" style="text-align:center;font-size:11pt;padding:10px;">${_esc(
-                            inc.motivo || "Incapacidad MÃÂÃÂÃÂÃÂ©dica"
+                            inc.motivo || "Incapacidad MÃÂÃÂ©dica"
                           )}</th>
                         </tr>
                         <tr><th style="background:#fee2e2;">Restricciones</th><td colspan="3">${_esc(
                           inc.restricciones ||
-                            "Reposo relativo. Evitar esfuerzo fÃÂÃÂÃÂÃÂ­sico intenso."
+                            "Reposo relativo. Evitar esfuerzo fÃÂÃÂ­sico intenso."
                         )}</td></tr>
                         <tr><th style="background:#fee2e2;">Recomendaciones</th><td colspan="3">${_esc(
                           inc.recoIncapacidad ||
-                            "Consultar nuevamente si no hay mejorÃÂÃÂÃÂÃÂ­a."
+                            "Consultar nuevamente si no hay mejorÃÂÃÂ­a."
                         )}</td></tr>
                       </table>
                       <p style="font-size:7.5pt;color:#888;margin-top:8px;">Incapacidad expedida conforme Ley 100/1993 Art. 227, Decreto 2943/2013.</p>
@@ -1024,13 +1004,13 @@ export function createRenderHelpers(state) {
                         <div class="sig-block"><div class="sig-line">Firma Paciente / Responsable</div></div>
                         <div class="sig-block">${sigHtml}<div class="sig-line">${_esc(
                       docData.nombre || ""
-                    )}<br/>${_esc(docData.titulo || "")} ÃÂÃÂÃÂÃÂ· Lic: ${_esc(
+                    )}<br/>${_esc(docData.titulo || "")} ÃÂÃÂ· Lic: ${_esc(
                       docData.licencia || ""
                     )}</div></div>
                       </div>
                     </div>`;
 
-                    // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ 3. FÃÂÃÂÃÂÃÂRMULA MÃÂÃÂÃÂÃÂDICA ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+                    // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ 3. FÃÂÃÂRMULA MÃÂÃÂDICA ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
                     const meds = data.formulaMedicamentos || [];
                     const medRows =
                       meds.length > 0
@@ -1052,17 +1032,17 @@ export function createRenderHelpers(state) {
                       <div class="hdr">
                         <div class="hdr-left">
                           <div class="doc-name">${_esc(
-                            docData.nombre || "MÃÂÃÂÃÂÃÂDICO OCUPACIONAL"
+                            docData.nombre || "MÃÂÃÂDICO OCUPACIONAL"
                           )}</div>
-                          <p>${_esc(docData.titulo || "")} ÃÂÃÂÃÂÃÂ· Lic: ${_esc(
+                          <p>${_esc(docData.titulo || "")} ÃÂÃÂ· Lic: ${_esc(
                       docData.licencia || ""
                     )}</p>
-                          <p>Tel: ${_esc(docData.celular || "")} ÃÂÃÂÃÂÃÂ· ${_esc(
+                          <p>Tel: ${_esc(docData.celular || "")} ÃÂÃÂ· ${_esc(
                       docData.ciudad || ""
                     )}</p>
                         </div>
                         <div class="hdr-right">
-                          <div class="doc-title" style="color:#7c3aed;">FÃÂÃÂÃÂÃÂ³rmula MÃÂÃÂÃÂÃÂ©dica</div>
+                          <div class="doc-title" style="color:#7c3aed;">FÃÂÃÂ³rmula MÃÂÃÂ©dica</div>
                           <p>Fecha: ${_esc(
                             data.fechaExamen ||
                               new Date().toLocaleDateString("es-CO")
@@ -1071,14 +1051,14 @@ export function createRenderHelpers(state) {
                       </div>
                       <p style="margin-bottom:10px;font-size:9.5pt;">Paciente: <strong>${_esc(
                         data.nombres
-                      )}</strong> &nbsp;ÃÂÃÂÃÂÃÂ·&nbsp; ${_esc(
+                      )}</strong> &nbsp;ÃÂÃÂ·&nbsp; ${_esc(
                       data.docTipo || "CC"
-                    )} ${_esc(data.docNumero)} &nbsp;ÃÂÃÂÃÂÃÂ·&nbsp; ${_esc(
+                    )} ${_esc(data.docNumero)} &nbsp;ÃÂÃÂ·&nbsp; ${_esc(
                       String(data.edad || "--")
-                    )} aÃÂÃÂÃÂÃÂ±os &nbsp;ÃÂÃÂÃÂÃÂ·&nbsp; EPS: ${_esc(data.eps || "--")}</p>
+                    )} aÃÂÃÂ±os &nbsp;ÃÂÃÂ·&nbsp; EPS: ${_esc(data.eps || "--")}</p>
                       <table>
                         <thead><tr style="background:#ede9fe;">
-                          <th>Medicamento</th><th>PresentaciÃÂÃÂÃÂÃÂ³n</th><th>Dosis</th><th>Frecuencia</th><th>DuraciÃÂÃÂÃÂÃÂ³n</th><th>Indicaciones</th>
+                          <th>Medicamento</th><th>PresentaciÃÂÃÂ³n</th><th>Dosis</th><th>Frecuencia</th><th>DuraciÃÂÃÂ³n</th><th>Indicaciones</th>
                         </tr></thead>
                         <tbody>${medRows}</tbody>
                       </table>
@@ -1099,7 +1079,7 @@ export function createRenderHelpers(state) {
                       </div>
                     </div>`;
 
-                    // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ 4. DERIVACIONES / INTERCONSULTAS ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+                    // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ 4. DERIVACIONES / INTERCONSULTAS ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
                     const derivs = data.derivaciones || [];
                     const derivRows =
                       derivs.length > 0
@@ -1118,17 +1098,17 @@ export function createRenderHelpers(state) {
                       <div class="hdr">
                         <div class="hdr-left">
                           <div class="doc-name">${_esc(
-                            docData.nombre || "MÃÂÃÂÃÂÃÂDICO OCUPACIONAL"
+                            docData.nombre || "MÃÂÃÂDICO OCUPACIONAL"
                           )}</div>
-                          <p>${_esc(docData.titulo || "")} ÃÂÃÂÃÂÃÂ· Lic: ${_esc(
+                          <p>${_esc(docData.titulo || "")} ÃÂÃÂ· Lic: ${_esc(
                       docData.licencia || ""
                     )}</p>
-                          <p>Tel: ${_esc(docData.celular || "")} ÃÂÃÂÃÂÃÂ· ${_esc(
+                          <p>Tel: ${_esc(docData.celular || "")} ÃÂÃÂ· ${_esc(
                       docData.ciudad || ""
                     )}</p>
                         </div>
                         <div class="hdr-right">
-                          <div class="doc-title">FÃÂÃÂÃÂÃÂ³rmula de DerivaciÃÂÃÂÃÂÃÂ³n / Interconsulta</div>
+                          <div class="doc-title">FÃÂÃÂ³rmula de DerivaciÃÂÃÂ³n / Interconsulta</div>
                           <p>Fecha: ${_esc(
                             data.fechaExamen ||
                               new Date().toLocaleDateString("es-CO")
@@ -1139,10 +1119,10 @@ export function createRenderHelpers(state) {
                         data.nombres
                       )}</strong> (${_esc(data.docTipo || "CC")} ${_esc(
                       data.docNumero
-                    )}) para valoraciÃÂÃÂÃÂÃÂ³n especializada:</p>
+                    )}) para valoraciÃÂÃÂ³n especializada:</p>
                       <table>
                         <thead><tr style="background:#d1fae5;">
-                          <th>Especialidad / Servicio</th><th>Motivo de consulta / Hallazgo clÃÂÃÂÃÂÃÂ­nico</th><th>Prioridad</th>
+                          <th>Especialidad / Servicio</th><th>Motivo de consulta / Hallazgo clÃÂÃÂ­nico</th><th>Prioridad</th>
                         </tr></thead>
                         <tbody>${derivRows}</tbody>
                       </table>
@@ -1163,7 +1143,7 @@ export function createRenderHelpers(state) {
                       </div>
                     </div>`;
 
-                    // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Ensamblar ventana ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+                    // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Ensamblar ventana ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
                     const w = window.open(
                       "",
                       "_blank",
@@ -1171,23 +1151,23 @@ export function createRenderHelpers(state) {
                     );
                     if (!w) {
                       showAlert(
-                        "El navegador bloqueÃÂÃÂÃÂÃÂ³ la ventana emergente. Permita los popups e intente de nuevo."
+                        "El navegador bloqueÃÂÃÂ³ la ventana emergente. Permita los popups e intente de nuevo."
                       );
                       return;
                     }
                     w.document
                       .write(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>
-                    <title>Documentos - ${_esc(data.nombres)} ÃÂÃÂÃÂÃÂ· ${_esc(
+                    <title>Documentos - ${_esc(data.nombres)} ÃÂÃÂ· ${_esc(
                       data.fechaExamen || ""
                     )}</title>
                     <style>${sharedCss}</style>
                     </head><body>
                     <div class="dl-bar">
-                      <span class="title">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ 4 documentos - ${_esc(
+                      <span class="title">ÃÂ°ÃÂÃÂÃÂ 4 documentos - ${_esc(
                         data.nombres
-                      )} ÃÂÃÂÃÂÃÂ· ${_esc(data.fechaExamen || "")}</span>
-                      <button class="btn-print" onclick="window.print()">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¥ Guardar / Imprimir PDF</button>
-                      <button class="btn-close" onclick="window.close()">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Cerrar</button>
+                      )} ÃÂÃÂ· ${_esc(data.fechaExamen || "")}</span>
+                      <button class="btn-print" onclick="window.print()">ÃÂ°ÃÂÃÂÃÂ¥ Guardar / Imprimir PDF</button>
+                      <button class="btn-close" onclick="window.close()">ÃÂ¢ÃÂÃÂ Cerrar</button>
                     </div>
                     ${certSec}${incapSec}${formulaSec}${derivSec}
                     </body></html>`);
@@ -1195,7 +1175,7 @@ export function createRenderHelpers(state) {
                     w.focus();
                   }}
                   className="bg-cyan-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 no-print hover:bg-cyan-800"
-                  title="Descargar todos los documentos: certificado + incapacidad + fÃÂÃÂÃÂÃÂ³rmula + derivaciones"
+                  title="Descargar todos los documentos: certificado + incapacidad + fÃÂÃÂ³rmula + derivaciones"
                 >
                   <Download className="w-3 h-3" /> Todo
                 </button>
@@ -1206,7 +1186,7 @@ export function createRenderHelpers(state) {
                   <button
                     onClick={async () => {
                       try {
-                        showAlert("ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ³ Generando paquete SHA-256...");
+                        showAlert("ÃÂ¢ÃÂÃÂ³ Generando paquete SHA-256...");
                         const pkg = await _generarPaqueteRetencion(
                           data,
                           activeDoctorData
@@ -1239,7 +1219,7 @@ export function createRenderHelpers(state) {
                           return n;
                         });
                         showAlert(
-                          "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ HC preservada.\nHash SHA-256: " +
+                          "ÃÂ¢ÃÂÃÂ HC preservada.\nHash SHA-256: " +
                             pkg.hashSHA256.substring(0, 16) +
                             "...\nVigente hasta: " +
                             pkg.metadata.anioVencimientoLegal
@@ -1249,9 +1229,9 @@ export function createRenderHelpers(state) {
                       }
                     }}
                     className="bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 no-print hover:bg-purple-800"
-                    title="Preservar HC (Res.1995/1999 - 20 aÃÂÃÂÃÂÃÂ±os)"
+                    title="Preservar HC (Res.1995/1999 - 20 aÃÂÃÂ±os)"
                   >
-                    <HardDrive className="w-3 h-3" /> 20 aÃÂÃÂÃÂÃÂ±os
+                    <HardDrive className="w-3 h-3" /> 20 aÃÂÃÂ±os
                   </button>
                 )}
               <button
@@ -1262,14 +1242,14 @@ export function createRenderHelpers(state) {
                 className="bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 no-print hover:bg-green-700"
                 title="Notificar resultado al paciente (Res. 1552/2013)"
               >
-                ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ² Notificar
+                ÃÂ°ÃÂÃÂÃÂ² Notificar
               </button>
-              {/* FASE 2: Indicador HC de otro mÃÂÃÂÃÂÃÂ©dico (modo lectura) */}
+              {/* FASE 2: Indicador HC de otro mÃÂÃÂ©dico (modo lectura) */}
               {currentUser?.role === "medico" &&
                 data._medicoId &&
                 data._medicoId !== currentUser?.user && (
                   <span className="bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1">
-                    ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Lectura ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ HC del Dr.{" "}
+                    ÃÂ°ÃÂÃÂÃÂ Lectura ÃÂ¢ÃÂÃÂ HC del Dr.{" "}
                     {usersList.find((u) => u.user === data._medicoId)?.name ||
                       data._medicoId}
                   </span>
@@ -1305,7 +1285,7 @@ export function createRenderHelpers(state) {
               >
                 <HardDrive className="w-3 h-3 mr-1" /> Backup
               </button>
-              {/* NORMATIVO: Res. 2275/2023 - ExportaciÃÂÃÂÃÂÃÂ³n RIPS JSON */}
+              {/* NORMATIVO: Res. 2275/2023 - ExportaciÃÂÃÂ³n RIPS JSON */}
               <button
                 onClick={() => {
                   try {
@@ -1321,13 +1301,13 @@ export function createRenderHelpers(state) {
                     // B-25: Validar antes de generar
                     const ripsErrs = validarRIPSLote(pats);
                     if (ripsErrs.length > 0) {
-                      const msg = `ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ ${
+                      const msg = `ÃÂ¢ÃÂÃÂ ÃÂ¯ÃÂ¸ÃÂ ${
                         ripsErrs.length
                       } paciente(s) con datos incompletos para RIPS:\n\n${ripsErrs
                         .slice(0, 5)
                         .join("\n")}${
-                        ripsErrs.length > 5 ? "\n...y mÃÂÃÂÃÂÃÂ¡s" : ""
-                      }\n\nÃÂÃÂÃÂÃÂ¿Generar RIPS de todas formas?`;
+                        ripsErrs.length > 5 ? "\n...y mÃÂÃÂ¡s" : ""
+                      }\n\nÃÂÃÂ¿Generar RIPS de todas formas?`;
                       if (!window.confirm(msg)) return;
                     }
                     const rips = _generarRIPSJson(
@@ -1405,7 +1385,7 @@ export function createRenderHelpers(state) {
               }
               title="Habeas Data - Ley 1581/2012"
             >
-              ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Privacidad
+              ÃÂ°ÃÂÃÂÃÂ Privacidad
             </button>
           )}
           {(_isAdmin(currentUser?.role) ||
@@ -1421,14 +1401,14 @@ export function createRenderHelpers(state) {
               }
               title="Telemedicina - Res. 2654/2019"
             >
-              ÃÂÃÂ°ÃÂÃÂÃÂÃÂ©ÃÂÃÂº Tele
+              ÃÂ°ÃÂÃÂ©ÃÂº Tele
             </button>
           )}
           {["administrador", "secretaria", "medico", "super_admin"].includes(
             currentUser?.role
           ) && (
             <button onClick={() => goTo("agenda")} className={_agCls}>
-              {"ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Agenda"}
+              {"ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ Agenda"}
               {_agN > 0 && (
                 <span className="ml-1 bg-red-500 text-white text-[8px] font-black px-1 rounded-full">
                   {_agN}
@@ -1448,7 +1428,7 @@ export function createRenderHelpers(state) {
               </span>
             )}
           </button>
-          {/* ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ VER PLANES ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ */}
+          {/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ VER PLANES ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */}
           <button
             onClick={() => goTo("planes")}
             className={
@@ -1458,7 +1438,7 @@ export function createRenderHelpers(state) {
             }
             title="Ver planes y precios"
           >
-            ÃÂÃÂ¢ÃÂÃÂ­ÃÂÃÂ Planes
+            ÃÂ¢ÃÂ­ÃÂ Planes
           </button>
           <button
             onClick={() => {
@@ -1476,17 +1456,17 @@ export function createRenderHelpers(state) {
     );
   };
 
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ renderTabAdjuntos ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ renderTabAdjuntos ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const renderTabAdjuntos = () => {
     const TIPOS_ADJUNTO = [
-      { valor: "espirometria", etiqueta: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂ«ÃÂÃÂ EspirometrÃÂÃÂÃÂÃÂ­a" },
-      { valor: "audiometria", etiqueta: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ AudiometrÃÂÃÂÃÂÃÂ­a" },
-      { valor: "rayos_x", etiqueta: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂ©ÃÂÃÂ» Rayos X / ImÃÂÃÂÃÂÃÂ¡genes" },
-      { valor: "laboratorio", etiqueta: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂ§ÃÂÃÂª Laboratorio" },
-      { valor: "optometria", etiqueta: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ OptometrÃÂÃÂÃÂÃÂ­a" },
-      { valor: "ecg", etiqueta: "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¤ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ ECG / Holter" },
-      { valor: "vacunacion", etiqueta: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Carnet VacunaciÃÂÃÂÃÂÃÂ³n" },
-      { valor: "otro", etiqueta: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Otro documento" },
+      { valor: "espirometria", etiqueta: "ÃÂ°ÃÂÃÂ«ÃÂ EspirometrÃÂÃÂ­a" },
+      { valor: "audiometria", etiqueta: "ÃÂ°ÃÂÃÂÃÂ AudiometrÃÂÃÂ­a" },
+      { valor: "rayos_x", etiqueta: "ÃÂ°ÃÂÃÂ©ÃÂ» Rayos X / ImÃÂÃÂ¡genes" },
+      { valor: "laboratorio", etiqueta: "ÃÂ°ÃÂÃÂ§ÃÂª Laboratorio" },
+      { valor: "optometria", etiqueta: "ÃÂ°ÃÂÃÂÃÂ OptometrÃÂÃÂ­a" },
+      { valor: "ecg", etiqueta: "ÃÂ¢ÃÂÃÂ¤ÃÂ¯ÃÂ¸ÃÂ ECG / Holter" },
+      { valor: "vacunacion", etiqueta: "ÃÂ°ÃÂÃÂÃÂ Carnet VacunaciÃÂÃÂ³n" },
+      { valor: "otro", etiqueta: "ÃÂ°ÃÂÃÂÃÂ Otro documento" },
     ];
     const adjuntos = data.adjuntos || [];
     const MAX_MB = 10;
@@ -1503,11 +1483,11 @@ export function createRenderHelpers(state) {
       const file = e.target.files?.[0];
       if (!file) return;
       if (!TIPOS_MIME.includes(file.type)) {
-        showAlert("ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Solo se permiten PDF, PNG, JPG, TIFF o WebP.");
+        showAlert("ÃÂ¢ÃÂÃÂ ÃÂ¯ÃÂ¸ÃÂ Solo se permiten PDF, PNG, JPG, TIFF o WebP.");
         return;
       }
       if (file.size > MAX_BYTES) {
-        showAlert(`ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ El archivo supera el lÃÂÃÂÃÂÃÂ­mite de ${MAX_MB} MB.`);
+        showAlert(`ÃÂ¢ÃÂÃÂ ÃÂ¯ÃÂ¸ÃÂ El archivo supera el lÃÂÃÂ­mite de ${MAX_MB} MB.`);
         return;
       }
 
@@ -1525,14 +1505,14 @@ export function createRenderHelpers(state) {
         file.name
       }`;
 
-      showAlert("ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ³ Subiendo archivo a Supabase Storage...");
+      showAlert("ÃÂ¢ÃÂÃÂ³ Subiendo archivo a Supabase Storage...");
 
       const result = await _sbStorageUpload(storagePath, file);
       if (!result.ok) {
         showAlert(
-          `ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Error al subir: ${
+          `ÃÂ¢ÃÂÃÂ Error al subir: ${
             result.error ||
-            "Verifica que el bucket siso-adjuntos estÃÂÃÂÃÂÃÂ© habilitado en Supabase."
+            "Verifica que el bucket siso-adjuntos estÃÂÃÂ© habilitado en Supabase."
           }`
         );
         return;
@@ -1552,7 +1532,7 @@ export function createRenderHelpers(state) {
 
       const nuevosAdjuntos = [...adjuntos, nuevoAdj];
       setData((prev) => ({ ...prev, adjuntos: nuevosAdjuntos }));
-      showAlert(`ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ "${file.name}" subido correctamente como ${tipoLabel}.`);
+      showAlert(`ÃÂ¢ÃÂÃÂ "${file.name}" subido correctamente como ${tipoLabel}.`);
       if (tipoSelect) tipoSelect.value = "otro";
       e.target.value = "";
     };
@@ -1563,19 +1543,19 @@ export function createRenderHelpers(state) {
         window.open(url, "_blank");
       } else {
         showAlert(
-          "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ No se pudo obtener el enlace. Verifica la conexiÃÂÃÂÃÂÃÂ³n con Supabase."
+          "ÃÂ¢ÃÂÃÂ ÃÂ¯ÃÂ¸ÃÂ No se pudo obtener el enlace. Verifica la conexiÃÂÃÂ³n con Supabase."
         );
       }
     };
 
     const handleEliminarAdjunto = async (adj) => {
       if (data.estadoHistoria === "Cerrada") {
-        showAlert("ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¹ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ No se pueden eliminar adjuntos de una HC cerrada.");
+        showAlert("ÃÂ¢ÃÂÃÂ¹ÃÂ¯ÃÂ¸ÃÂ No se pueden eliminar adjuntos de una HC cerrada.");
         return;
       }
       const ok = await new Promise((res) =>
         setConfirmConfig({
-          msg: `ÃÂÃÂÃÂÃÂ¿Eliminar "${adj.nombre}"? Esta acciÃÂÃÂÃÂÃÂ³n no se puede deshacer.`,
+          msg: `ÃÂÃÂ¿Eliminar "${adj.nombre}"? Esta acciÃÂÃÂ³n no se puede deshacer.`,
           onConfirm: () => res(true),
           onCancel: () => res(false),
         })
@@ -1584,7 +1564,7 @@ export function createRenderHelpers(state) {
       await _sbStorageDelete(adj.path);
       const filtrados = adjuntos.filter((a) => a.id !== adj.id);
       setData((prev) => ({ ...prev, adjuntos: filtrados }));
-      showAlert("ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Adjunto eliminado.");
+      showAlert("ÃÂ°ÃÂÃÂÃÂ Adjunto eliminado.");
     };
 
     const formatBytes = (b) =>
@@ -1597,10 +1577,10 @@ export function createRenderHelpers(state) {
         {/* Header */}
         <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 bg-teal-50">
           <span className="text-sm font-black text-teal-800">
-            ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Adjuntos de ParaclÃÂÃÂÃÂÃÂ­nicos
+            ÃÂ°ÃÂÃÂÃÂ Adjuntos de ParaclÃÂÃÂ­nicos
           </span>
           <span className="text-[10px] text-teal-600 bg-teal-100 px-2 py-0.5 rounded-full">
-            Res. 1843/2025 ÃÂÃÂÃÂÃÂ· Supabase Storage
+            Res. 1843/2025 ÃÂÃÂ· Supabase Storage
           </span>
           <span className="ml-auto text-[10px] text-gray-400">
             {adjuntos.length} archivo{adjuntos.length !== 1 ? "s" : ""}
@@ -1632,7 +1612,7 @@ export function createRenderHelpers(state) {
                   </select>
                 </div>
                 <label className="cursor-pointer px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-black rounded-lg flex items-center gap-2">
-                  <span>ÃÂÃÂ¢ÃÂÃÂ¬ÃÂÃÂ Seleccionar archivo</span>
+                  <span>ÃÂ¢ÃÂ¬ÃÂ Seleccionar archivo</span>
                   <input
                     type="file"
                     className="hidden"
@@ -1642,7 +1622,7 @@ export function createRenderHelpers(state) {
                 </label>
               </div>
               <p className="text-[10px] text-gray-400">
-                Formatos: PDF, PNG, JPG, TIFF, WebP ÃÂÃÂÃÂÃÂ· MÃÂÃÂÃÂÃÂ¡x. {MAX_MB} MB ÃÂÃÂÃÂÃÂ· Se
+                Formatos: PDF, PNG, JPG, TIFF, WebP ÃÂÃÂ· MÃÂÃÂ¡x. {MAX_MB} MB ÃÂÃÂ· Se
                 almacena en Supabase Storage
               </p>
             </div>
@@ -1651,11 +1631,11 @@ export function createRenderHelpers(state) {
           {/* Lista de adjuntos */}
           {adjuntos.length === 0 ? (
             <div className="text-center py-10 text-gray-400">
-              <p className="text-3xl mb-2">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ</p>
+              <p className="text-3xl mb-2">ÃÂ°ÃÂÃÂÃÂ</p>
               <p className="text-sm font-bold">Sin adjuntos</p>
               <p className="text-xs mt-1">
-                Suba espirometrÃÂÃÂÃÂÃÂ­as, audiometrÃÂÃÂÃÂÃÂ­as, resultados de laboratorio u
-                otros documentos clÃÂÃÂÃÂÃÂ­nicos
+                Suba espirometrÃÂÃÂ­as, audiometrÃÂÃÂ­as, resultados de laboratorio u
+                otros documentos clÃÂÃÂ­nicos
               </p>
             </div>
           ) : (
@@ -1667,15 +1647,15 @@ export function createRenderHelpers(state) {
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <span className="text-2xl flex-shrink-0">
-                      {adj.mimeType === "application/pdf" ? "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ" : "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¼ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ"}
+                      {adj.mimeType === "application/pdf" ? "ÃÂ°ÃÂÃÂÃÂ" : "ÃÂ°ÃÂÃÂÃÂ¼ÃÂ¯ÃÂ¸ÃÂ"}
                     </span>
                     <div className="min-w-0">
                       <p className="text-xs font-bold text-gray-800 truncate">
                         {adj.nombre}
                       </p>
                       <p className="text-[10px] text-gray-400 mt-0.5">
-                        {formatBytes(adj.tamano)} ÃÂÃÂÃÂÃÂ·{" "}
-                        {new Date(adj.fecha).toLocaleDateString("es-CO")} ÃÂÃÂÃÂÃÂ·{" "}
+                        {formatBytes(adj.tamano)} ÃÂÃÂ·{" "}
+                        {new Date(adj.fecha).toLocaleDateString("es-CO")} ÃÂÃÂ·{" "}
                         {adj.subidoPor}
                       </p>
                     </div>
@@ -1685,14 +1665,14 @@ export function createRenderHelpers(state) {
                       onClick={() => handleVerAdjunto(adj)}
                       className="px-3 py-1.5 text-[10px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg"
                     >
-                      ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Ver
+                      ÃÂ°ÃÂÃÂÃÂ Ver
                     </button>
                     {data.estadoHistoria !== "Cerrada" && (
                       <button
                         onClick={() => handleEliminarAdjunto(adj)}
                         className="px-3 py-1.5 text-[10px] font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg"
                       >
-                        ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ
+                        ÃÂ°ÃÂÃÂÃÂ
                       </button>
                     )}
                   </div>
@@ -1704,14 +1684,14 @@ export function createRenderHelpers(state) {
           {/* Nota normativa */}
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
             <p className="text-[10px] text-amber-800 font-bold">
-              ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Normativa aplicable
+              ÃÂ°ÃÂÃÂÃÂ Normativa aplicable
             </p>
             <p className="text-[10px] text-amber-700 mt-0.5">
-              Los resultados de paraclÃÂÃÂÃÂÃÂ­nicos forman parte integral de la
-              Historia ClÃÂÃÂÃÂÃÂ­nica Ocupacional segÃÂÃÂÃÂÃÂºn la Res. 1843/2025 Art. 12 y la
-              Res. 1995/1999 (retenciÃÂÃÂÃÂÃÂ³n 20 aÃÂÃÂÃÂÃÂ±os). Los archivos se almacenan en
+              Los resultados de paraclÃÂÃÂ­nicos forman parte integral de la
+              Historia ClÃÂÃÂ­nica Ocupacional segÃÂÃÂºn la Res. 1843/2025 Art. 12 y la
+              Res. 1995/1999 (retenciÃÂÃÂ³n 20 aÃÂÃÂ±os). Los archivos se almacenan en
               Supabase Storage con acceso restringido por credenciales del
-              mÃÂÃÂÃÂÃÂ©dico.
+              mÃÂÃÂ©dico.
             </p>
           </div>
         </div>
@@ -1719,10 +1699,10 @@ export function createRenderHelpers(state) {
     );
   };
 
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ROUTER ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ RENDER: GESTIÃÂÃÂÃÂÃÂN DE USUARIOS ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ ROUTER ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ RENDER: GESTIÃÂÃÂN DE USUARIOS ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
 
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ renderTabSolicitudExamenes ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ renderTabSolicitudExamenes ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const renderTabSolicitudExamenes = () => {
     // FIX: definir _billDocData/_billDocSig en scope de renderTabSolicitudExamenes
     const _examDocUser2 =
@@ -1732,25 +1712,25 @@ export function createRenderHelpers(state) {
     const _billDocData = _examDocUser2?.doctorData || activeDoctorData;
     const _billDocSig = _examDocUser2?.doctorData?.firma || activeSignature;
     const EXAMENES_DB = [
-      // Laboratorio ClÃÂÃÂÃÂÃÂ­nico
+      // Laboratorio ClÃÂÃÂ­nico
       "Hemograma completo (CBC)",
-      "Cuadro hemÃÂÃÂÃÂÃÂ¡tico",
+      "Cuadro hemÃÂÃÂ¡tico",
       "Hemograma con diferencial",
       "Hematocrito y hemoglobina",
       "Glicemia en ayunas",
       "Glicemia posprandial",
       "Hemoglobina glicosilada (HbA1c)",
-      "Glucosa sÃÂÃÂÃÂÃÂ©rica",
-      "Creatinina sÃÂÃÂÃÂÃÂ©rica",
-      "BUN (nitrÃÂÃÂÃÂÃÂ³geno ureico)",
-      "ÃÂÃÂÃÂÃÂcido ÃÂÃÂÃÂÃÂºrico",
+      "Glucosa sÃÂÃÂ©rica",
+      "Creatinina sÃÂÃÂ©rica",
+      "BUN (nitrÃÂÃÂ³geno ureico)",
+      "ÃÂÃÂcido ÃÂÃÂºrico",
       "Urea",
-      "Perfil lipÃÂÃÂÃÂÃÂ­dico completo",
+      "Perfil lipÃÂÃÂ­dico completo",
       "Colesterol total",
       "Colesterol HDL",
       "Colesterol LDL",
-      "TriglicÃÂÃÂÃÂÃÂ©ridos",
-      "Pruebas de funciÃÂÃÂÃÂÃÂ³n hepÃÂÃÂÃÂÃÂ¡tica",
+      "TriglicÃÂÃÂ©ridos",
+      "Pruebas de funciÃÂÃÂ³n hepÃÂÃÂ¡tica",
       "ALT (TGP)",
       "AST (TGO)",
       "Fosfatasa alcalina",
@@ -1759,42 +1739,42 @@ export function createRenderHelpers(state) {
       "T3 libre",
       "T4 libre",
       "Perfil tiroideo",
-      "Sodio sÃÂÃÂÃÂÃÂ©rico",
-      "Potasio sÃÂÃÂÃÂÃÂ©rico",
-      "Cloro sÃÂÃÂÃÂÃÂ©rico",
-      "Calcio sÃÂÃÂÃÂÃÂ©rico",
-      "Magnesio sÃÂÃÂÃÂÃÂ©rico",
-      "FÃÂÃÂÃÂÃÂ³sforo sÃÂÃÂÃÂÃÂ©rico",
-      "ProteÃÂÃÂÃÂÃÂ­na C reactiva (PCR)",
+      "Sodio sÃÂÃÂ©rico",
+      "Potasio sÃÂÃÂ©rico",
+      "Cloro sÃÂÃÂ©rico",
+      "Calcio sÃÂÃÂ©rico",
+      "Magnesio sÃÂÃÂ©rico",
+      "FÃÂÃÂ³sforo sÃÂÃÂ©rico",
+      "ProteÃÂÃÂ­na C reactiva (PCR)",
       "PCR ultrasensible",
-      "VSG (velocidad de sedimentaciÃÂÃÂÃÂÃÂ³n globular)",
-      "Parcial de orina (uroanÃÂÃÂÃÂÃÂ¡lisis)",
+      "VSG (velocidad de sedimentaciÃÂÃÂ³n globular)",
+      "Parcial de orina (uroanÃÂÃÂ¡lisis)",
       "Urocultivo",
       "Coprocultivo",
-      "CoproscÃÂÃÂÃÂÃÂ³pico",
+      "CoproscÃÂÃÂ³pico",
       "Tiempo de protrombina (TP)",
       "Tiempo de tromboplastina (PTT)",
       "INR",
-      "Tiempo de sangrÃÂÃÂÃÂÃÂ­a",
+      "Tiempo de sangrÃÂÃÂ­a",
       "Ferritina",
-      "Hierro sÃÂÃÂÃÂÃÂ©rico",
+      "Hierro sÃÂÃÂ©rico",
       "Transferrina",
-      "SaturaciÃÂÃÂÃÂÃÂ³n de transferrina",
+      "SaturaciÃÂÃÂ³n de transferrina",
       "Vitamina B12",
-      "ÃÂÃÂÃÂÃÂcido fÃÂÃÂÃÂÃÂ³lico",
+      "ÃÂÃÂcido fÃÂÃÂ³lico",
       "Vitamina D (25-OH)",
-      "Calcio iÃÂÃÂÃÂÃÂ³nico",
+      "Calcio iÃÂÃÂ³nico",
       "Parathormona (PTH)",
-      "PSA (antÃÂÃÂÃÂÃÂ­geno prostÃÂÃÂÃÂÃÂ¡tico)",
+      "PSA (antÃÂÃÂ­geno prostÃÂÃÂ¡tico)",
       "PSA libre",
-      "AFP (alfa fetoproteÃÂÃÂÃÂÃÂ­na)",
+      "AFP (alfa fetoproteÃÂÃÂ­na)",
       "CEA",
       "CA 19-9",
       "CA 125",
       "VDRL",
       "FTA-ABS",
       "Prueba de VIH (ELISA)",
-      "AntÃÂÃÂÃÂÃÂ­geno de superficie hepatitis B (HBsAg)",
+      "AntÃÂÃÂ­geno de superficie hepatitis B (HBsAg)",
       "Anti-HBs",
       "Anti-HBc total",
       "Anti-VHC",
@@ -1808,123 +1788,123 @@ export function createRenderHelpers(state) {
       "Testosterona total",
       "Prolactina",
       "DHEA-S",
-      "Cortisol sÃÂÃÂÃÂÃÂ©rico (8am)",
+      "Cortisol sÃÂÃÂ©rico (8am)",
       "Cortisol en orina 24h",
       "Espermograma",
-      "ProteÃÂÃÂÃÂÃÂ­na en orina 24h",
+      "ProteÃÂÃÂ­na en orina 24h",
       "Creatinuria en orina 24h",
-      // ImagenologÃÂÃÂÃÂÃÂ­a
-      "RadiografÃÂÃÂÃÂÃÂ­a de tÃÂÃÂÃÂÃÂ³rax PA y lateral",
-      "RadiografÃÂÃÂÃÂÃÂ­a columna lumbosacra AP y lateral",
-      "RadiografÃÂÃÂÃÂÃÂ­a columna cervical AP y lateral",
-      "RadiografÃÂÃÂÃÂÃÂ­a de manos AP bilateral",
-      "RadiografÃÂÃÂÃÂÃÂ­a de pelvis AP",
-      "RadiografÃÂÃÂÃÂÃÂ­a de rodilla AP y lateral",
-      "RadiografÃÂÃÂÃÂÃÂ­a de pies bilateral",
-      "RadiografÃÂÃÂÃÂÃÂ­a de crÃÂÃÂÃÂÃÂ¡neo",
-      "RadiografÃÂÃÂÃÂÃÂ­a de senos paranasales",
-      "EcografÃÂÃÂÃÂÃÂ­a abdominal total",
-      "EcografÃÂÃÂÃÂÃÂ­a pÃÂÃÂÃÂÃÂ©lvica transabdominal",
-      "EcografÃÂÃÂÃÂÃÂ­a pÃÂÃÂÃÂÃÂ©lvica transvaginal",
-      "EcografÃÂÃÂÃÂÃÂ­a de tiroides",
-      "EcografÃÂÃÂÃÂÃÂ­a de mama bilateral",
-      "EcografÃÂÃÂÃÂÃÂ­a de partes blandas",
-      "EcografÃÂÃÂÃÂÃÂ­a renal y vÃÂÃÂÃÂÃÂ­as urinarias",
-      "EcografÃÂÃÂÃÂÃÂ­a Doppler venoso miembros inferiores",
-      "EcografÃÂÃÂÃÂÃÂ­a Doppler arterial miembros inferiores",
-      "EcografÃÂÃÂÃÂÃÂ­a de cuello",
-      "TAC de crÃÂÃÂÃÂÃÂ¡neo simple",
-      "TAC de crÃÂÃÂÃÂÃÂ¡neo con contraste",
-      "TAC de tÃÂÃÂÃÂÃÂ³rax simple",
-      "TAC de tÃÂÃÂÃÂÃÂ³rax con contraste",
+      // ImagenologÃÂÃÂ­a
+      "RadiografÃÂÃÂ­a de tÃÂÃÂ³rax PA y lateral",
+      "RadiografÃÂÃÂ­a columna lumbosacra AP y lateral",
+      "RadiografÃÂÃÂ­a columna cervical AP y lateral",
+      "RadiografÃÂÃÂ­a de manos AP bilateral",
+      "RadiografÃÂÃÂ­a de pelvis AP",
+      "RadiografÃÂÃÂ­a de rodilla AP y lateral",
+      "RadiografÃÂÃÂ­a de pies bilateral",
+      "RadiografÃÂÃÂ­a de crÃÂÃÂ¡neo",
+      "RadiografÃÂÃÂ­a de senos paranasales",
+      "EcografÃÂÃÂ­a abdominal total",
+      "EcografÃÂÃÂ­a pÃÂÃÂ©lvica transabdominal",
+      "EcografÃÂÃÂ­a pÃÂÃÂ©lvica transvaginal",
+      "EcografÃÂÃÂ­a de tiroides",
+      "EcografÃÂÃÂ­a de mama bilateral",
+      "EcografÃÂÃÂ­a de partes blandas",
+      "EcografÃÂÃÂ­a renal y vÃÂÃÂ­as urinarias",
+      "EcografÃÂÃÂ­a Doppler venoso miembros inferiores",
+      "EcografÃÂÃÂ­a Doppler arterial miembros inferiores",
+      "EcografÃÂÃÂ­a de cuello",
+      "TAC de crÃÂÃÂ¡neo simple",
+      "TAC de crÃÂÃÂ¡neo con contraste",
+      "TAC de tÃÂÃÂ³rax simple",
+      "TAC de tÃÂÃÂ³rax con contraste",
       "TAC de abdomen y pelvis con contraste",
       "TAC de columna lumbosacra",
       "TAC de columna cervical",
       "TAC de huesos y articulaciones",
-      "Resonancia magnÃÂÃÂÃÂÃÂ©tica de crÃÂÃÂÃÂÃÂ¡neo",
-      "Resonancia magnÃÂÃÂÃÂÃÂ©tica de columna lumbar",
-      "Resonancia magnÃÂÃÂÃÂÃÂ©tica de columna cervical",
-      "Resonancia magnÃÂÃÂÃÂÃÂ©tica de rodilla",
-      "Resonancia magnÃÂÃÂÃÂÃÂ©tica de hombro",
-      "Resonancia magnÃÂÃÂÃÂÃÂ©tica de cadera",
-      "GamagrafÃÂÃÂÃÂÃÂ­a ÃÂÃÂÃÂÃÂ³sea",
-      "GamagrafÃÂÃÂÃÂÃÂ­a tiroidea",
-      "DensitometrÃÂÃÂÃÂÃÂ­a ÃÂÃÂÃÂÃÂ³sea (DXA)",
-      "MamografÃÂÃÂÃÂÃÂ­a bilateral",
-      "MamografÃÂÃÂÃÂÃÂ­a digital bilateral",
-      // CardiologÃÂÃÂÃÂÃÂ­a / FisiologÃÂÃÂÃÂÃÂ­a
+      "Resonancia magnÃÂÃÂ©tica de crÃÂÃÂ¡neo",
+      "Resonancia magnÃÂÃÂ©tica de columna lumbar",
+      "Resonancia magnÃÂÃÂ©tica de columna cervical",
+      "Resonancia magnÃÂÃÂ©tica de rodilla",
+      "Resonancia magnÃÂÃÂ©tica de hombro",
+      "Resonancia magnÃÂÃÂ©tica de cadera",
+      "GamagrafÃÂÃÂ­a ÃÂÃÂ³sea",
+      "GamagrafÃÂÃÂ­a tiroidea",
+      "DensitometrÃÂÃÂ­a ÃÂÃÂ³sea (DXA)",
+      "MamografÃÂÃÂ­a bilateral",
+      "MamografÃÂÃÂ­a digital bilateral",
+      // CardiologÃÂÃÂ­a / FisiologÃÂÃÂ­a
       "Electrocardiograma (ECG) de 12 derivaciones",
       "Electrocardiograma en reposo",
-      "Ecocardiograma transtorÃÂÃÂÃÂÃÂ¡cico",
+      "Ecocardiograma transtorÃÂÃÂ¡cico",
       "Ecocardiograma con Doppler",
-      "Prueba de esfuerzo (ergometrÃÂÃÂÃÂÃÂ­a)",
+      "Prueba de esfuerzo (ergometrÃÂÃÂ­a)",
       "Holter de ritmo 24 horas",
-      "Holter de presiÃÂÃÂÃÂÃÂ³n arterial (MAPA)",
-      "EspirometrÃÂÃÂÃÂÃÂ­a simple",
-      "EspirometrÃÂÃÂÃÂÃÂ­a con broncodilatador",
+      "Holter de presiÃÂÃÂ³n arterial (MAPA)",
+      "EspirometrÃÂÃÂ­a simple",
+      "EspirometrÃÂÃÂ­a con broncodilatador",
       "Pleuroscopia",
-      "AudiometrÃÂÃÂÃÂÃÂ­a",
-      "AudiometrÃÂÃÂÃÂÃÂ­a tonal",
-      "AudiometrÃÂÃÂÃÂÃÂ­a de palabras",
-      "ImpedanciometrÃÂÃÂÃÂÃÂ­a",
-      "OptometrÃÂÃÂÃÂÃÂ­a",
+      "AudiometrÃÂÃÂ­a",
+      "AudiometrÃÂÃÂ­a tonal",
+      "AudiometrÃÂÃÂ­a de palabras",
+      "ImpedanciometrÃÂÃÂ­a",
+      "OptometrÃÂÃÂ­a",
       "Agudeza visual",
-      "TonometrÃÂÃÂÃÂÃÂ­a ocular",
-      "CampimetrÃÂÃÂÃÂÃÂ­a",
+      "TonometrÃÂÃÂ­a ocular",
+      "CampimetrÃÂÃÂ­a",
       "Electroencefalograma (EEG)",
-      "ElectromiografÃÂÃÂÃÂÃÂ­a (EMG)",
-      "Velocidad de conducciÃÂÃÂÃÂÃÂ³n nerviosa",
+      "ElectromiografÃÂÃÂ­a (EMG)",
+      "Velocidad de conducciÃÂÃÂ³n nerviosa",
       // Procedimientos
       "Endoscopia digestiva alta",
       "Colonoscopia",
       "Colonoscopia con toma de biopsia",
       "Gastroscopia",
       "Rectosigmoidoscopia",
-      "CPRE (colangiopancreatografÃÂÃÂÃÂÃÂ­a retrÃÂÃÂÃÂÃÂ³grada)",
+      "CPRE (colangiopancreatografÃÂÃÂ­a retrÃÂÃÂ³grada)",
       "Culdocentesis",
       "Amniocentesis",
       "Biopsia de piel",
       "Biopsia de ganglio",
-      "Biopsia de prÃÂÃÂÃÂÃÂ³stata guiada por ecografÃÂÃÂÃÂÃÂ­a",
+      "Biopsia de prÃÂÃÂ³stata guiada por ecografÃÂÃÂ­a",
       "Biopsia de mama guiada",
-      "PunciÃÂÃÂÃÂÃÂ³n lumbar",
-      "PunciÃÂÃÂÃÂÃÂ³n aspiraciÃÂÃÂÃÂÃÂ³n con aguja fina (PAAF) tiroides",
+      "PunciÃÂÃÂ³n lumbar",
+      "PunciÃÂÃÂ³n aspiraciÃÂÃÂ³n con aguja fina (PAAF) tiroides",
       "Drenaje de absceso",
-      "CuraciÃÂÃÂÃÂÃÂ³n de herida",
-      "CitologÃÂÃÂÃÂÃÂ­a cervicouterina (PAP)",
+      "CuraciÃÂÃÂ³n de herida",
+      "CitologÃÂÃÂ­a cervicouterina (PAP)",
       "Colposcopia",
       "Histeroscopia",
-      "Laparoscopia diagnÃÂÃÂÃÂÃÂ³stica",
+      "Laparoscopia diagnÃÂÃÂ³stica",
       // Medicina Laboral / Ocupacional
-      "EspirometrÃÂÃÂÃÂÃÂ­a ocupacional",
-      "AudiometrÃÂÃÂÃÂÃÂ­a ocupacional",
-      "OptometrÃÂÃÂÃÂÃÂ­a ocupacional",
-      "VisiometrÃÂÃÂÃÂÃÂ­a",
-      "Examen de optometrÃÂÃÂÃÂÃÂ­a y visiometrÃÂÃÂÃÂÃÂ­a",
+      "EspirometrÃÂÃÂ­a ocupacional",
+      "AudiometrÃÂÃÂ­a ocupacional",
+      "OptometrÃÂÃÂ­a ocupacional",
+      "VisiometrÃÂÃÂ­a",
+      "Examen de optometrÃÂÃÂ­a y visiometrÃÂÃÂ­a",
       "Perfil de columna ocupacional",
-      "EvaluaciÃÂÃÂÃÂÃÂ³n osteomuscular",
+      "EvaluaciÃÂÃÂ³n osteomuscular",
       "Test de Wells",
       "Test de Phalen",
       "Test de Tinel",
-      "ValoraciÃÂÃÂÃÂÃÂ³n de riesgo cardiovascular (Framingham)",
-      "ÃÂÃÂÃÂÃÂndice tobillo-brazo (ITB)",
+      "ValoraciÃÂÃÂ³n de riesgo cardiovascular (Framingham)",
+      "ÃÂÃÂndice tobillo-brazo (ITB)",
       "Glicemia en ayunas (preocupacional)",
-      "Perfil lipÃÂÃÂÃÂÃÂ­dico (preocupacional)",
+      "Perfil lipÃÂÃÂ­dico (preocupacional)",
       "Hemograma (preocupacional)",
-      "Cuadro hemÃÂÃÂÃÂÃÂ¡tico (preocupacional)",
-      "Hepatitis B antÃÂÃÂÃÂÃÂ­geno (HBsAg)",
-      "SerologÃÂÃÂÃÂÃÂ­a completa",
+      "Cuadro hemÃÂÃÂ¡tico (preocupacional)",
+      "Hepatitis B antÃÂÃÂ­geno (HBsAg)",
+      "SerologÃÂÃÂ­a completa",
       "Tamizaje VIH",
-      // PsicologÃÂÃÂÃÂÃÂ­a / NeuropsicologÃÂÃÂÃÂÃÂ­a
+      // PsicologÃÂÃÂ­a / NeuropsicologÃÂÃÂ­a
       "Test de Minnesota (MMPI)",
       "Test de Bender",
       "Test de matrices de Raven",
-      "EvaluaciÃÂÃÂÃÂÃÂ³n neuropsicolÃÂÃÂÃÂÃÂ³gica",
-      "EvaluaciÃÂÃÂÃÂÃÂ³n psicolÃÂÃÂÃÂÃÂ³gica forense",
+      "EvaluaciÃÂÃÂ³n neuropsicolÃÂÃÂ³gica",
+      "EvaluaciÃÂÃÂ³n psicolÃÂÃÂ³gica forense",
       "Test de personalidad",
-      "EvaluaciÃÂÃÂÃÂÃÂ³n de aptitudes laborales",
-      "EvaluaciÃÂÃÂÃÂÃÂ³n de estrÃÂÃÂÃÂÃÂ©s laboral (Bonn)",
-      "EvaluaciÃÂÃÂÃÂÃÂ³n del riesgo psicosocial",
+      "EvaluaciÃÂÃÂ³n de aptitudes laborales",
+      "EvaluaciÃÂÃÂ³n de estrÃÂÃÂ©s laboral (Bonn)",
+      "EvaluaciÃÂÃÂ³n del riesgo psicosocial",
     ];
     // States moved to component level (no hooks in conditionals - React rule)
     const showSuggs = showExamSuggs;
@@ -1935,7 +1915,7 @@ export function createRenderHelpers(state) {
             e.toLowerCase().includes(examSearch.toLowerCase())
           ).slice(0, 12)
         : [];
-    // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ B-11: Pruebas prohibidas como requisito laboral - Res. 1843/2025 Art. 10 ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+    // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ B-11: Pruebas prohibidas como requisito laboral - Res. 1843/2025 Art. 10 ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
     const _PRUEBAS_PROHIBIDAS_RES1843 = [
       {
         terminos: [
@@ -1964,13 +1944,13 @@ export function createRenderHelpers(state) {
       {
         terminos: [
           "serologia",
-          "serolÃÂÃÂÃÂÃÂ³gico",
+          "serolÃÂÃÂ³gico",
           "vdrl",
           "rpr",
           "sifilis",
           "treponema",
         ],
-        nombre: "Prueba serolÃÂÃÂÃÂÃÂ³gica (sÃÂÃÂÃÂÃÂ­filis/treponema)",
+        nombre: "Prueba serolÃÂÃÂ³gica (sÃÂÃÂ­filis/treponema)",
       },
     ];
     const _esPruebaProhibida = (nombre) => {
@@ -1980,18 +1960,18 @@ export function createRenderHelpers(state) {
       );
     };
     const addExam = (nombre) => {
-      // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Verificar si es prueba prohibida como requisito laboral ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+      // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Verificar si es prueba prohibida como requisito laboral ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
       const prohibida = _esPruebaProhibida(nombre);
       const tipoExActual = data?.tipoExamen || "";
       const esEvalOcupacional = ["INGRESO", "PERIODICO", "RETIRO"].includes(
         tipoExActual
       );
       if (prohibida && esEvalOcupacional) {
-        // Mostrar advertencia - el mÃÂÃÂÃÂÃÂ©dico PUEDE agregarla con justificaciÃÂÃÂÃÂÃÂ³n clÃÂÃÂÃÂÃÂ­nica
+        // Mostrar advertencia - el mÃÂÃÂ©dico PUEDE agregarla con justificaciÃÂÃÂ³n clÃÂÃÂ­nica
         showPrompt(
-          `ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Res. 1843/2025 Art. 10 - PRUEBA RESTRINGIDA\n\n"${prohibida.nombre}" estÃÂÃÂÃÂÃÂ¡ prohibida como requisito de ingreso o permanencia laboral.\n\nSi hay indicaciÃÂÃÂÃÂÃÂ³n CLÃÂÃÂÃÂÃÂNICA justificada, escriba la justificaciÃÂÃÂÃÂÃÂ³n aquÃÂÃÂÃÂÃÂ­. De lo contrario, cancele.\n\nJustificaciÃÂÃÂÃÂÃÂ³n clÃÂÃÂÃÂÃÂ­nica (requerida):`,
+          `ÃÂ¢ÃÂÃÂ ÃÂ¯ÃÂ¸ÃÂ Res. 1843/2025 Art. 10 - PRUEBA RESTRINGIDA\n\n"${prohibida.nombre}" estÃÂÃÂ¡ prohibida como requisito de ingreso o permanencia laboral.\n\nSi hay indicaciÃÂÃÂ³n CLÃÂÃÂNICA justificada, escriba la justificaciÃÂÃÂ³n aquÃÂÃÂ­. De lo contrario, cancele.\n\nJustificaciÃÂÃÂ³n clÃÂÃÂ­nica (requerida):`,
           (justificacion) => {
-            if (!justificacion || !justificacion.trim()) return; // cancelÃÂÃÂÃÂÃÂ³
+            if (!justificacion || !justificacion.trim()) return; // cancelÃÂÃÂ³
             const nuevo = {
               nombre,
               fecha: new Date().toISOString().split("T")[0],
@@ -2013,9 +1993,9 @@ export function createRenderHelpers(state) {
             setShowExamSuggs(false);
           }
         );
-        return; // espera confirmaciÃÂÃÂÃÂÃÂ³n del mÃÂÃÂÃÂÃÂ©dico
+        return; // espera confirmaciÃÂÃÂ³n del mÃÂÃÂ©dico
       }
-      // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Examen sin restricciÃÂÃÂÃÂÃÂ³n - agregar normalmente ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+      // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Examen sin restricciÃÂÃÂ³n - agregar normalmente ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
       const nuevo = {
         nombre,
         fecha: new Date().toISOString().split("T")[0],
@@ -2044,134 +2024,134 @@ export function createRenderHelpers(state) {
         solicitudExamenesJust: justExamen,
       }));
     };
-    // Paquetes de exÃÂÃÂÃÂÃÂ¡menes por grupo/frecuencia
+    // Paquetes de exÃÂÃÂ¡menes por grupo/frecuencia
     const EXAM_PACKAGES = [
       {
         id: "ocup_ingreso",
-        nombre: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Ingreso Ocupacional",
+        nombre: "ÃÂ°ÃÂÃÂÃÂ Ingreso Ocupacional",
         frecuencia: "Por evento",
         examenes: [
           "Hemograma completo (CBC)",
           "Glicemia en ayunas",
-          "Perfil lipÃÂÃÂÃÂÃÂ­dico completo",
-          "Creatinina sÃÂÃÂÃÂÃÂ©rica",
-          "Parcial de orina (uroanÃÂÃÂÃÂÃÂ¡lisis)",
-          "RadiografÃÂÃÂÃÂÃÂ­a de tÃÂÃÂÃÂÃÂ³rax PA y lateral",
+          "Perfil lipÃÂÃÂ­dico completo",
+          "Creatinina sÃÂÃÂ©rica",
+          "Parcial de orina (uroanÃÂÃÂ¡lisis)",
+          "RadiografÃÂÃÂ­a de tÃÂÃÂ³rax PA y lateral",
           "Electrocardiograma (ECG) de 12 derivaciones",
-          "AudiometrÃÂÃÂÃÂÃÂ­a ocupacional",
-          "OptometrÃÂÃÂÃÂÃÂ­a ocupacional",
-          "VisiometrÃÂÃÂÃÂÃÂ­a",
+          "AudiometrÃÂÃÂ­a ocupacional",
+          "OptometrÃÂÃÂ­a ocupacional",
+          "VisiometrÃÂÃÂ­a",
         ],
       },
       {
         id: "ocup_periodico",
-        nombre: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ PeriÃÂÃÂÃÂÃÂ³dico Ocupacional",
+        nombre: "ÃÂ°ÃÂÃÂÃÂ PeriÃÂÃÂ³dico Ocupacional",
         frecuencia: "Anual",
         examenes: [
           "Hemograma completo (CBC)",
           "Glicemia en ayunas",
-          "Perfil lipÃÂÃÂÃÂÃÂ­dico completo",
-          "Creatinina sÃÂÃÂÃÂÃÂ©rica",
-          "Parcial de orina (uroanÃÂÃÂÃÂÃÂ¡lisis)",
-          "AudiometrÃÂÃÂÃÂÃÂ­a ocupacional",
-          "OptometrÃÂÃÂÃÂÃÂ­a ocupacional",
+          "Perfil lipÃÂÃÂ­dico completo",
+          "Creatinina sÃÂÃÂ©rica",
+          "Parcial de orina (uroanÃÂÃÂ¡lisis)",
+          "AudiometrÃÂÃÂ­a ocupacional",
+          "OptometrÃÂÃÂ­a ocupacional",
         ],
       },
       {
         id: "alturas",
-        nombre: "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ°ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Trabajo en Alturas (Res. 4272/2021)",
+        nombre: "ÃÂ¢ÃÂÃÂ°ÃÂ¯ÃÂ¸ÃÂ Trabajo en Alturas (Res. 4272/2021)",
         frecuencia: "Anual",
         examenes: [
           "Electrocardiograma (ECG) de 12 derivaciones",
-          "EspirometrÃÂÃÂÃÂÃÂ­a simple",
-          "AudiometrÃÂÃÂÃÂÃÂ­a ocupacional",
-          "OptometrÃÂÃÂÃÂÃÂ­a ocupacional",
-          "Glucosa sÃÂÃÂÃÂÃÂ©rica",
+          "EspirometrÃÂÃÂ­a simple",
+          "AudiometrÃÂÃÂ­a ocupacional",
+          "OptometrÃÂÃÂ­a ocupacional",
+          "Glucosa sÃÂÃÂ©rica",
           "Hemograma completo (CBC)",
-          "RadiografÃÂÃÂÃÂÃÂ­a de tÃÂÃÂÃÂÃÂ³rax PA y lateral",
+          "RadiografÃÂÃÂ­a de tÃÂÃÂ³rax PA y lateral",
         ],
       },
       {
         id: "alimentos",
-        nombre: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ½ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ ManipulaciÃÂÃÂÃÂÃÂ³n Alimentos (Res. 2674/2013)",
+        nombre: "ÃÂ°ÃÂÃÂÃÂ½ÃÂ¯ÃÂ¸ÃÂ ManipulaciÃÂÃÂ³n Alimentos (Res. 2674/2013)",
         frecuencia: "Anual",
         examenes: [
-          "CoproscÃÂÃÂÃÂÃÂ³pico",
+          "CoproscÃÂÃÂ³pico",
           "Coprocultivo",
           "VDRL",
-          "Parcial de orina (uroanÃÂÃÂÃÂÃÂ¡lisis)",
+          "Parcial de orina (uroanÃÂÃÂ¡lisis)",
           "Hemograma completo (CBC)",
-          "CitologÃÂÃÂÃÂÃÂ­a cervicouterina (PAP)",
+          "CitologÃÂÃÂ­a cervicouterina (PAP)",
         ],
       },
       {
         id: "cardiovascular",
-        nombre: "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¤ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Riesgo Cardiovascular",
+        nombre: "ÃÂ¢ÃÂÃÂ¤ÃÂ¯ÃÂ¸ÃÂ Riesgo Cardiovascular",
         frecuencia: "Semestral",
         examenes: [
-          "Perfil lipÃÂÃÂÃÂÃÂ­dico completo",
+          "Perfil lipÃÂÃÂ­dico completo",
           "Glicemia en ayunas",
           "Hemoglobina glicosilada (HbA1c)",
           "Electrocardiograma (ECG) de 12 derivaciones",
-          "ProteÃÂÃÂÃÂÃÂ­na C reactiva (PCR) ultrasensible",
-          "Creatinina sÃÂÃÂÃÂÃÂ©rica",
+          "ProteÃÂÃÂ­na C reactiva (PCR) ultrasensible",
+          "Creatinina sÃÂÃÂ©rica",
         ],
       },
       {
         id: "respiratorio",
-        nombre: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂ«ÃÂÃÂ Riesgo Respiratorio (SVE)",
+        nombre: "ÃÂ°ÃÂÃÂ«ÃÂ Riesgo Respiratorio (SVE)",
         frecuencia: "Anual",
         examenes: [
-          "EspirometrÃÂÃÂÃÂÃÂ­a simple",
-          "EspirometrÃÂÃÂÃÂÃÂ­a con broncodilatador",
-          "RadiografÃÂÃÂÃÂÃÂ­a de tÃÂÃÂÃÂÃÂ³rax PA y lateral",
+          "EspirometrÃÂÃÂ­a simple",
+          "EspirometrÃÂÃÂ­a con broncodilatador",
+          "RadiografÃÂÃÂ­a de tÃÂÃÂ³rax PA y lateral",
           "Hemograma completo (CBC)",
         ],
       },
       {
         id: "osteomuscular",
-        nombre: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂ¦ÃÂÃÂ´ Riesgo Osteomuscular (SVE)",
+        nombre: "ÃÂ°ÃÂÃÂ¦ÃÂ´ Riesgo Osteomuscular (SVE)",
         frecuencia: "Anual",
         examenes: [
-          "RadiografÃÂÃÂÃÂÃÂ­a columna lumbosacra AP y lateral",
-          "RadiografÃÂÃÂÃÂÃÂ­a columna cervical AP y lateral",
-          "RadiografÃÂÃÂÃÂÃÂ­a de manos AP bilateral",
-          "ElectromiografÃÂÃÂÃÂÃÂ­a (EMG)",
+          "RadiografÃÂÃÂ­a columna lumbosacra AP y lateral",
+          "RadiografÃÂÃÂ­a columna cervical AP y lateral",
+          "RadiografÃÂÃÂ­a de manos AP bilateral",
+          "ElectromiografÃÂÃÂ­a (EMG)",
         ],
       },
       {
         id: "ruido",
-        nombre: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ ExposiciÃÂÃÂÃÂÃÂ³n a Ruido (SVE)",
+        nombre: "ÃÂ°ÃÂÃÂÃÂ ExposiciÃÂÃÂ³n a Ruido (SVE)",
         frecuencia: "Anual",
         examenes: [
-          "AudiometrÃÂÃÂÃÂÃÂ­a ocupacional",
-          "AudiometrÃÂÃÂÃÂÃÂ­a tonal",
-          "AudiometrÃÂÃÂÃÂÃÂ­a de palabras",
-          "ImpedanciometrÃÂÃÂÃÂÃÂ­a",
+          "AudiometrÃÂÃÂ­a ocupacional",
+          "AudiometrÃÂÃÂ­a tonal",
+          "AudiometrÃÂÃÂ­a de palabras",
+          "ImpedanciometrÃÂÃÂ­a",
         ],
       },
       {
         id: "quimico",
-        nombre: "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Riesgo QuÃÂÃÂÃÂÃÂ­mico",
+        nombre: "ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ Riesgo QuÃÂÃÂ­mico",
         frecuencia: "Anual",
         examenes: [
           "Hemograma completo (CBC)",
-          "Pruebas de funciÃÂÃÂÃÂÃÂ³n hepÃÂÃÂÃÂÃÂ¡tica",
-          "Creatinina sÃÂÃÂÃÂÃÂ©rica",
-          "Parcial de orina (uroanÃÂÃÂÃÂÃÂ¡lisis)",
-          "Plomo en sangre (si exposiciÃÂÃÂÃÂÃÂ³n)",
+          "Pruebas de funciÃÂÃÂ³n hepÃÂÃÂ¡tica",
+          "Creatinina sÃÂÃÂ©rica",
+          "Parcial de orina (uroanÃÂÃÂ¡lisis)",
+          "Plomo en sangre (si exposiciÃÂÃÂ³n)",
         ],
       },
       {
         id: "visual",
-        nombre: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Riesgo Visual",
+        nombre: "ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ Riesgo Visual",
         frecuencia: "Anual",
         examenes: [
-          "OptometrÃÂÃÂÃÂÃÂ­a ocupacional",
+          "OptometrÃÂÃÂ­a ocupacional",
           "Agudeza visual",
-          "TonometrÃÂÃÂÃÂÃÂ­a ocular",
-          "CampimetrÃÂÃÂÃÂÃÂ­a",
-          "VisiometrÃÂÃÂÃÂÃÂ­a",
+          "TonometrÃÂÃÂ­a ocular",
+          "CampimetrÃÂÃÂ­a",
+          "VisiometrÃÂÃÂ­a",
         ],
       },
     ];
@@ -2198,24 +2178,24 @@ export function createRenderHelpers(state) {
         {/* Encabezado */}
         <div className="bg-white rounded-2xl shadow-sm border border-teal-100 p-5">
           <h3 className="text-base font-black text-teal-800 flex items-center gap-2 mb-1">
-            ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¬ Solicitud de ExÃÂÃÂÃÂÃÂ¡menes y Procedimientos
+            ÃÂ°ÃÂÃÂÃÂ¬ Solicitud de ExÃÂÃÂ¡menes y Procedimientos
           </h3>
           <p className="text-xs text-gray-400">
-            Busque el examen o escrÃÂÃÂÃÂÃÂ­balo libremente ÃÂÃÂÃÂÃÂ· Se imprimirÃÂÃÂÃÂÃÂ¡ con los datos
+            Busque el examen o escrÃÂÃÂ­balo libremente ÃÂÃÂ· Se imprimirÃÂÃÂ¡ con los datos
             del paciente
           </p>
         </div>
-        {/* ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ PAQUETES DE EXÃÂÃÂÃÂÃÂMENES ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ */}
+        {/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ PAQUETES DE EXÃÂÃÂMENES ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */}
         <div className="bg-white rounded-2xl shadow-sm border border-indigo-100 p-5">
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs font-black text-indigo-800 uppercase">
-              ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¦ Paquetes por Grupo / Frecuencia
+              ÃÂ°ÃÂÃÂÃÂ¦ Paquetes por Grupo / Frecuencia
             </p>
             <button
               onClick={() => setShowPackages((v) => !v)}
               className="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-indigo-700"
             >
-              {showPackages ? "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Cerrar" : "+ Seleccionar Paquete"}
+              {showPackages ? "ÃÂ¢ÃÂÃÂ Cerrar" : "+ Seleccionar Paquete"}
             </button>
           </div>
           {showPackages && (
@@ -2238,7 +2218,7 @@ export function createRenderHelpers(state) {
                   >
                     <p className="font-black text-gray-800">{pkg.nombre}</p>
                     <p className="text-[10px] text-gray-400 mt-0.5">
-                      ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ {pkg.frecuencia} ÃÂÃÂÃÂÃÂ· {pkg.examenes.length} exÃÂÃÂÃÂÃÂ¡menes
+                      ÃÂ°ÃÂÃÂÃÂ {pkg.frecuencia} ÃÂÃÂ· {pkg.examenes.length} exÃÂÃÂ¡menes
                     </p>
                   </button>
                 ))}
@@ -2251,7 +2231,7 @@ export function createRenderHelpers(state) {
                   return (
                     <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3">
                       <p className="text-xs font-black text-indigo-800 mb-2">
-                        {pkg.nombre} - Seleccione los exÃÂÃÂÃÂÃÂ¡menes a agregar:
+                        {pkg.nombre} - Seleccione los exÃÂÃÂ¡menes a agregar:
                       </p>
                       <div className="grid grid-cols-2 gap-1 max-h-48 overflow-y-auto mb-3">
                         {pkg.examenes.map((ex) => (
@@ -2279,7 +2259,7 @@ export function createRenderHelpers(state) {
                           onClick={applyPackage}
                           className="px-4 py-2 bg-indigo-600 text-white text-xs font-black rounded-lg hover:bg-indigo-700"
                         >
-                          ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Agregar seleccionados
+                          ÃÂ¢ÃÂÃÂ Agregar seleccionados
                         </button>
                         <button
                           onClick={() => {
@@ -2300,12 +2280,12 @@ export function createRenderHelpers(state) {
         {/* Buscador */}
         <div className="bg-white rounded-2xl shadow-sm border border-teal-200 p-5">
           <label className="block text-xs font-black text-teal-700 uppercase mb-2">
-            Buscar o aÃÂÃÂÃÂÃÂ±adir examen / procedimiento
+            Buscar o aÃÂÃÂ±adir examen / procedimiento
           </label>
           <div className="relative">
             <div className="flex gap-2">
               <div className="flex-1 relative">
-                {/* Buscador CUPS integrado + bÃÂÃÂÃÂÃÂºsqueda libre */}
+                {/* Buscador CUPS integrado + bÃÂÃÂºsqueda libre */}
                 <input
                   value={examSearch}
                   onChange={(e) => {
@@ -2313,7 +2293,7 @@ export function createRenderHelpers(state) {
                     setShowExamSuggs(true);
                   }}
                   onFocus={() => setShowSuggs(true)}
-                  placeholder="Buscar CUPS o examen - Ej: 903001 hemograma, 912701 espirometrÃÂÃÂÃÂÃÂ­a, audiometrÃÂÃÂÃÂÃÂ­a..."
+                  placeholder="Buscar CUPS o examen - Ej: 903001 hemograma, 912701 espirometrÃÂÃÂ­a, audiometrÃÂÃÂ­a..."
                   className="w-full p-2.5 border-2 border-teal-200 rounded-xl text-sm focus:border-teal-500 outline-none"
                 />
                 {showSuggs && suggestions.length > 0 && (
@@ -2367,7 +2347,7 @@ export function createRenderHelpers(state) {
                           onClick={() => addExam(s)}
                           className="w-full text-left px-3 py-2 text-xs hover:bg-teal-50 border-b border-gray-50 last:border-none font-medium text-gray-800"
                         >
-                          ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¬ {s}
+                          ÃÂ°ÃÂÃÂÃÂ¬ {s}
                         </button>
                       ))}
                     {examSearch.trim() &&
@@ -2379,7 +2359,7 @@ export function createRenderHelpers(state) {
                           onClick={addFreeText}
                           className="w-full text-left px-3 py-2 text-xs bg-teal-50 text-teal-700 font-black border-t"
                         >
-                          ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Agregar "{examSearch}" como texto libre
+                          ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ Agregar "{examSearch}" como texto libre
                         </button>
                       )}
                   </div>
@@ -2393,23 +2373,23 @@ export function createRenderHelpers(state) {
               </button>
             </div>
           </div>
-          {/* Lista de exÃÂÃÂÃÂÃÂ¡menes agregados */}
+          {/* Lista de exÃÂÃÂ¡menes agregados */}
           {examList.length > 0 && (
             <div className="mt-4 space-y-2">
               <p className="text-xs font-bold text-gray-500 uppercase">
-                ExÃÂÃÂÃÂÃÂ¡menes solicitados ({examList.length})
+                ExÃÂÃÂ¡menes solicitados ({examList.length})
               </p>
               {examList.map((ex, i) => (
                 <div
                   key={i}
                   className="flex items-center gap-2 bg-teal-50 border border-teal-200 rounded-lg px-3 py-2"
                 >
-                  <span className="text-teal-500 font-black text-sm">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¬</span>
+                  <span className="text-teal-500 font-black text-sm">ÃÂ°ÃÂÃÂÃÂ¬</span>
                   <span className="flex-1 text-xs font-semibold text-gray-800">
                     {ex.nombre}
                     {ex.alertaRes1843 && (
                       <span className="ml-1 text-[9px] bg-amber-100 text-amber-800 border border-amber-300 px-1 rounded font-black">
-                        ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Justif. clÃÂÃÂÃÂÃÂ­nica - Res.1843 Art.10
+                        ÃÂ¢ÃÂÃÂ ÃÂ¯ÃÂ¸ÃÂ Justif. clÃÂÃÂ­nica - Res.1843 Art.10
                       </span>
                     )}
                   </span>
@@ -2431,18 +2411,18 @@ export function createRenderHelpers(state) {
                     onClick={() => removeExam(i)}
                     className="text-red-400 hover:text-red-600 font-black text-sm"
                   >
-                    ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+                    ÃÂ¢ÃÂÃÂ
                   </button>
                 </div>
               ))}
             </div>
           )}
         </div>
-        {/* DiagnÃÂÃÂÃÂÃÂ³stico y justificaciÃÂÃÂÃÂÃÂ³n */}
+        {/* DiagnÃÂÃÂ³stico y justificaciÃÂÃÂ³n */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-3">
           <div>
             <label className="block text-xs font-black text-gray-600 uppercase mb-1">
-              DiagnÃÂÃÂÃÂÃÂ³stico / ImpresiÃÂÃÂÃÂÃÂ³n DiagnÃÂÃÂÃÂÃÂ³stica
+              DiagnÃÂÃÂ³stico / ImpresiÃÂÃÂ³n DiagnÃÂÃÂ³stica
             </label>
             <input
               value={diagExamen}
@@ -2453,13 +2433,13 @@ export function createRenderHelpers(state) {
                   solicitudExamenesDiag: e.target.value,
                 }));
               }}
-              placeholder="Ej: HipertensiÃÂÃÂÃÂÃÂ³n arterial esencial (I10), Diabetes tipo 2 (E11)..."
+              placeholder="Ej: HipertensiÃÂÃÂ³n arterial esencial (I10), Diabetes tipo 2 (E11)..."
               className="w-full p-2.5 border-2 border-gray-200 rounded-xl text-sm focus:border-blue-400 outline-none"
             />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-600 uppercase mb-1">
-              JustificaciÃÂÃÂÃÂÃÂ³n / Motivo del examen
+              JustificaciÃÂÃÂ³n / Motivo del examen
             </label>
             <textarea
               rows={3}
@@ -2471,7 +2451,7 @@ export function createRenderHelpers(state) {
                   solicitudExamenesJust: e.target.value,
                 }));
               }}
-              placeholder="Explique el motivo clÃÂÃÂÃÂÃÂ­nico por el cual se solicitan los exÃÂÃÂÃÂÃÂ¡menes..."
+              placeholder="Explique el motivo clÃÂÃÂ­nico por el cual se solicitan los exÃÂÃÂ¡menes..."
               className="w-full p-2.5 border-2 border-gray-200 rounded-xl text-sm resize-none focus:border-blue-400 outline-none"
             />
           </div>
@@ -2479,7 +2459,7 @@ export function createRenderHelpers(state) {
             <button
               onClick={() => {
                 saveLocal();
-                showAlert("ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Solicitud de exÃÂÃÂÃÂÃÂ¡menes guardada correctamente.");
+                showAlert("ÃÂ¢ÃÂÃÂ Solicitud de exÃÂÃÂ¡menes guardada correctamente.");
               }}
               className="bg-teal-600 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-teal-700 flex items-center gap-2"
             >
@@ -2487,7 +2467,7 @@ export function createRenderHelpers(state) {
             </button>
           </div>
         </div>
-        {/* Preview de impresiÃÂÃÂÃÂÃÂ³n */}
+        {/* Preview de impresiÃÂÃÂ³n */}
         {examList.length > 0 && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
             <div className="flex items-center justify-between mb-3">
@@ -2520,23 +2500,23 @@ export function createRenderHelpers(state) {
                       null
                     : null;
                   w.document.write(
-                    `<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Solicitud de ExÃÂÃÂÃÂÃÂ¡menes</title><style>@page{size:letter portrait;margin:1.2cm 1.5cm;}body{font-family:Arial,sans-serif;font-size:9pt;color:#222;}h2{margin:0;font-size:13pt;color:#0d9488;text-transform:uppercase;}table{width:100%;border-collapse:collapse;margin-top:8px;}th{background:#0d9488;color:white;padding:7px 10px;font-size:8.5pt;text-align:left;}td{border-bottom:1px solid #e5e7eb;}p{margin:3px 0;font-size:9pt;}.sig{margin-top:40px;display:flex;justify-content:space-between;}.sig-line{border-top:1.5px solid #222;width:200px;text-align:center;padding-top:4px;font-size:8pt;font-weight:bold;}</style></head><body><div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #0d9488;padding-bottom:10px;margin-bottom:14px;">${_ipsDocLeftHtml(
+                    `<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Solicitud de ExÃÂÃÂ¡menes</title><style>@page{size:letter portrait;margin:1.2cm 1.5cm;}body{font-family:Arial,sans-serif;font-size:9pt;color:#222;}h2{margin:0;font-size:13pt;color:#0d9488;text-transform:uppercase;}table{width:100%;border-collapse:collapse;margin-top:8px;}th{background:#0d9488;color:white;padding:7px 10px;font-size:8.5pt;text-align:left;}td{border-bottom:1px solid #e5e7eb;}p{margin:3px 0;font-size:9pt;}.sig{margin-top:40px;display:flex;justify-content:space-between;}.sig-line{border-top:1.5px solid #222;width:200px;text-align:center;padding-top:4px;font-size:8pt;font-weight:bold;}</style></head><body><div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #0d9488;padding-bottom:10px;margin-bottom:14px;">${_ipsDocLeftHtml(
                       _miIPSExam,
                       _billDocData,
                       "#0d9488"
-                    )}<div style="text-align:right;"><h2>Solicitud de ExÃÂÃÂÃÂÃÂ¡menes</h2><p>Fecha: ${fd}</p></div></div><div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:4px;padding:10px;margin-bottom:10px;"><p><b>Paciente:</b> ${
+                    )}<div style="text-align:right;"><h2>Solicitud de ExÃÂÃÂ¡menes</h2><p>Fecha: ${fd}</p></div></div><div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:4px;padding:10px;margin-bottom:10px;"><p><b>Paciente:</b> ${
                       data.nombres || ""
                     } &nbsp; <b>Doc:</b> ${data.docTipo || "CC"} ${
                       data.docNumero || ""
                     } &nbsp; <b>Edad:</b> ${
                       data.edad || "--"
-                    } aÃÂÃÂÃÂÃÂ±os &nbsp; <b>EPS:</b> ${data.eps || "--"}</p>${
+                    } aÃÂÃÂ±os &nbsp; <b>EPS:</b> ${data.eps || "--"}</p>${
                       diagExamen
-                        ? `<p style="margin-top:4px;"><b>DiagnÃÂÃÂÃÂÃÂ³stico:</b> ${diagExamen}</p>`
+                        ? `<p style="margin-top:4px;"><b>DiagnÃÂÃÂ³stico:</b> ${diagExamen}</p>`
                         : ""
                     }</div><table><thead><tr><th>Examen / Procedimiento Solicitado</th></tr></thead><tbody>${exHtml}</tbody></table>${
                       justExamen
-                        ? `<div style="margin-top:12px;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:8px;"><p style="font-weight:bold;font-size:8.5pt;color:#92400e;text-transform:uppercase;margin-bottom:4px;">JustificaciÃÂÃÂÃÂÃÂ³n clÃÂÃÂÃÂÃÂ­nica:</p><p style="white-space:pre-wrap;">${justExamen}</p></div>`
+                        ? `<div style="margin-top:12px;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:8px;"><p style="font-weight:bold;font-size:8.5pt;color:#92400e;text-transform:uppercase;margin-bottom:4px;">JustificaciÃÂÃÂ³n clÃÂÃÂ­nica:</p><p style="white-space:pre-wrap;">${justExamen}</p></div>`
                         : ""
                     }<div class="sig"><div class="sig-line">Firma Paciente / Responsable</div><div style="text-align:center;"><img src="${
                       _billDocSig || ""
@@ -2560,7 +2540,7 @@ export function createRenderHelpers(state) {
             </div>
             <div className="border border-gray-200 rounded-xl overflow-hidden">
               <div className="bg-teal-700 text-white px-4 py-2 text-xs font-bold uppercase">
-                ExÃÂÃÂÃÂÃÂ¡menes Solicitados - {data.nombres || "Paciente"}
+                ExÃÂÃÂ¡menes Solicitados - {data.nombres || "Paciente"}
               </div>
               {examList.map((ex, i) => (
                 <div
@@ -2584,9 +2564,9 @@ export function createRenderHelpers(state) {
       </div>
     );
   };
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ RENDER: TAB INCAPACIDAD GENERAL ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ RENDER: TAB INCAPACIDAD GENERAL ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
 
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ renderTabIncapacidadGeneral ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ renderTabIncapacidadGeneral ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const renderTabIncapacidadGeneral = () => {
     const diasCalc = (() => {
       if (!data.incapacidad?.desde || !data.incapacidad?.hasta)
@@ -2608,11 +2588,11 @@ export function createRenderHelpers(state) {
       const headerHtml = `<div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #dc2626;padding-bottom:10px;margin-bottom:14px;">
     ${_ipsDocLeftHtml(_miIPSIncap, doc, "#dc2626")}
     <div style="text-align:right;">
-      <h2 style="margin:0;font-size:13pt;font-weight:900;color:#dc2626;text-transform:uppercase;">Certificado de Incapacidad MÃÂÃÂÃÂÃÂ©dica</h2>
-      <p style="font-size:8.5pt;color:#555;">Fecha de expediciÃÂÃÂÃÂÃÂ³n: ${_sanitize(
+      <h2 style="margin:0;font-size:13pt;font-weight:900;color:#dc2626;text-transform:uppercase;">Certificado de Incapacidad MÃÂÃÂ©dica</h2>
+      <p style="font-size:8.5pt;color:#555;">Fecha de expediciÃÂÃÂ³n: ${_sanitize(
         data.fechaConsulta || new Date().toLocaleDateString("es-CO")
       )}</p>
-      <p style="font-size:7.5pt;color:#888;">Res. 1995/1999 ÃÂÃÂÃÂÃÂ· Ley 100/1993 Art. 227 ÃÂÃÂÃÂÃÂ· Dec. 2943/2013</p>
+      <p style="font-size:7.5pt;color:#888;">Res. 1995/1999 ÃÂÃÂ· Ley 100/1993 Art. 227 ÃÂÃÂ· Dec. 2943/2013</p>
     </div>
   </div>`;
       const bodyHtml = `
@@ -2623,18 +2603,18 @@ export function createRenderHelpers(state) {
       )}: ${_sanitize(data.docNumero || "")}</td></tr>
     <tr><th>Edad</th><td>${_sanitize(
       String(data.edad || "--")
-    )} aÃÂÃÂÃÂÃÂ±os</td><th>Fecha de nacimiento</th><td>${_sanitize(
+    )} aÃÂÃÂ±os</td><th>Fecha de nacimiento</th><td>${_sanitize(
         data.fechaNacimiento || "--"
       )}</td></tr>
     <tr><th>EPS / Aseguradora</th><td>${_sanitize(
       data.eps || "--"
-    )}</td><th>GÃÂÃÂÃÂÃÂ©nero</th><td>${_sanitize(data.genero || "--")}</td></tr>
-    <tr><th>DiagnÃÂÃÂÃÂÃÂ³stico (CIE-10)</th><td colspan="3">${_sanitize(
+    )}</td><th>GÃÂÃÂ©nero</th><td>${_sanitize(data.genero || "--")}</td></tr>
+    <tr><th>DiagnÃÂÃÂ³stico (CIE-10)</th><td colspan="3">${_sanitize(
       data.incapacidad?.diagnosticoCIE || data.incapacidad?.diagnostico || "--"
     )}</td></tr>
     <tr><th>Origen de la incapacidad</th><td>${_sanitize(
       data.incapacidad?.origen || "Enfermedad General"
-    )}</td><th>PrÃÂÃÂÃÂÃÂ³rroga NÃÂÃÂÃÂÃÂ°</th><td>${_sanitize(
+    )}</td><th>PrÃÂÃÂ³rroga NÃÂÃÂ°</th><td>${_sanitize(
         data.incapacidad?.prorroga || "N/A"
       )}</td></tr>
     <tr><th>Fecha de inicio</th><td>${_sanitize(
@@ -2642,17 +2622,17 @@ export function createRenderHelpers(state) {
     )}</td><th>Fecha de fin</th><td>${_sanitize(
         data.incapacidad?.hasta || "--"
       )}</td></tr>
-    <tr><th colspan="2" style="background:#dc2626;color:white;text-align:center;font-size:12pt;">DÃÂÃÂÃÂÃÂAS DE INCAPACIDAD: ${dias}</th>
+    <tr><th colspan="2" style="background:#dc2626;color:white;text-align:center;font-size:12pt;">DÃÂÃÂAS DE INCAPACIDAD: ${dias}</th>
         <th colspan="2" style="text-align:center;font-size:11pt;">${_sanitize(
           numeroALetras(dias)
-        )} (${dias}) DÃÂÃÂÃÂÃÂAS</th></tr>
+        )} (${dias}) DÃÂÃÂAS</th></tr>
     <tr><th>Restricciones durante la incapacidad</th><td colspan="3">${_sanitize(
       data.incapacidad?.restricciones ||
-        "Reposo relativo en casa. Evitar esfuerzo fÃÂÃÂÃÂÃÂ­sico intenso."
+        "Reposo relativo en casa. Evitar esfuerzo fÃÂÃÂ­sico intenso."
     )}</td></tr>
     <tr><th>Recomendaciones al paciente</th><td colspan="3">${_sanitize(
       data.incapacidad?.recoIncapacidad ||
-        "Consultar nuevamente si no hay mejorÃÂÃÂÃÂÃÂ­a o si los sÃÂÃÂÃÂÃÂ­ntomas empeoran."
+        "Consultar nuevamente si no hay mejorÃÂÃÂ­a o si los sÃÂÃÂ­ntomas empeoran."
     )}</td></tr>
     </table>
     <p class="legal">La presente incapacidad es expedida conforme a la Ley 100/1993 Art. 227, Decreto 2943/2013, y la normatividad vigente del SGSSS. Para incapacidades por accidente de trabajo o enfermedad laboral aplica el Decreto 1295/1994.</p>
@@ -2666,7 +2646,7 @@ export function createRenderHelpers(state) {
         }
         <div class="sig-line">${_sanitize(doc.nombre || "")}<br/>${_sanitize(
         doc.titulo || ""
-      )} ÃÂÃÂÃÂÃÂ· Lic: ${_sanitize(doc.licencia || "")}</div>
+      )} ÃÂÃÂ· Lic: ${_sanitize(doc.licencia || "")}</div>
       </div>
     </div>`;
       w.document
@@ -2694,29 +2674,29 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
 @media print{.print-toolbar{display:none!important;}[contenteditable]{outline:none!important;background:transparent!important;}body{padding-top:0;}}
 </style></head><body>
 <div class="print-toolbar">
-  <span class="ptitle">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¥ Certificado de Incapacidad - ${_sanitize(
+  <span class="ptitle">ÃÂ°ÃÂÃÂÃÂ¥ Certificado de Incapacidad - ${_sanitize(
     data.nombres || ""
   )}</span>
-  <span class="hint">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Haz clic en cualquier celda para editar</span>
-  <button class="btn-print" onclick="window.print()">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¨ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Imprimir certificado</button>
-  <button class="btn-close" onclick="window.close()">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Cerrar</button>
+  <span class="hint">ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ Haz clic en cualquier celda para editar</span>
+  <button class="btn-print" onclick="window.print()">ÃÂ°ÃÂÃÂÃÂ¨ÃÂ¯ÃÂ¸ÃÂ Imprimir certificado</button>
+  <button class="btn-close" onclick="window.close()">ÃÂ¢ÃÂÃÂ Cerrar</button>
 </div>
 <div contenteditable="false">${headerHtml}</div>
 <div contenteditable="true" spellcheck="false">${bodyHtml}</div>
 </body></html>`);
       w.document.close();
       w.focus();
-      // No auto-print - el mÃÂÃÂÃÂÃÂ©dico edita y luego hace clic en "Imprimir certificado"
+      // No auto-print - el mÃÂÃÂ©dico edita y luego hace clic en "Imprimir certificado"
     };
     return (
       <div className="max-w-4xl mx-auto space-y-4">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-sm border border-red-100 p-5">
           <h3 className="text-base font-black text-red-800 flex items-center gap-2 mb-1">
-            ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¥ Certificado de Incapacidad MÃÂÃÂÃÂÃÂ©dica
+            ÃÂ°ÃÂÃÂÃÂ¥ Certificado de Incapacidad MÃÂÃÂ©dica
           </h3>
           <p className="text-xs text-gray-400">
-            Ley 100/1993 Art. 227 ÃÂÃÂÃÂÃÂ· Decreto 2943/2013 ÃÂÃÂÃÂÃÂ· Res. 1995/1999 ÃÂÃÂÃÂÃÂ· Decreto
+            Ley 100/1993 Art. 227 ÃÂÃÂ· Decreto 2943/2013 ÃÂÃÂ· Res. 1995/1999 ÃÂÃÂ· Decreto
             1295/1994
           </p>
         </div>
@@ -2732,10 +2712,10 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 "Documento",
                 `${data.docTipo || "CC"}: ${data.docNumero || "--"}`,
               ],
-              ["Edad", `${data.edad || "--"} aÃÂÃÂÃÂÃÂ±os`],
+              ["Edad", `${data.edad || "--"} aÃÂÃÂ±os`],
               ["Fecha Nac.", data.fechaNacimiento || "--"],
               ["EPS", data.eps || "--"],
-              ["GÃÂÃÂÃÂÃÂ©nero", data.genero || "--"],
+              ["GÃÂÃÂ©nero", data.genero || "--"],
             ].map(([k, v]) => (
               <div key={k} className="bg-gray-50 rounded-lg p-2">
                 <p className="text-[10px] font-bold text-gray-400 uppercase">
@@ -2754,7 +2734,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">
-                DiagnÃÂÃÂÃÂÃÂ³stico Principal (CIE-10)
+                DiagnÃÂÃÂ³stico Principal (CIE-10)
               </label>
               <CIE10Input
                 value={
@@ -2771,7 +2751,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     incapacidad: { ...p.incapacidad, diagnosticoCIE: v },
                   }))
                 }
-                placeholder="Buscar CIE-10 - J06.9, lumbalgia, tÃÂÃÂÃÂÃÂºnel carpo..."
+                placeholder="Buscar CIE-10 - J06.9, lumbalgia, tÃÂÃÂºnel carpo..."
                 className="w-full p-2 border-2 border-gray-200 rounded-xl text-xs focus:border-red-400 outline-none"
               />
             </div>
@@ -2793,8 +2773,8 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 <option>Accidente de Trabajo</option>
                 <option>Enfermedad Laboral</option>
                 <option>Maternidad</option>
-                <option>Accidente de TrÃÂÃÂÃÂÃÂ¡nsito</option>
-                <option>LesiÃÂÃÂÃÂÃÂ³n ComÃÂÃÂÃÂÃÂºn</option>
+                <option>Accidente de TrÃÂÃÂ¡nsito</option>
+                <option>LesiÃÂÃÂ³n ComÃÂÃÂºn</option>
               </select>
             </div>
             <div>
@@ -2857,7 +2837,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">
-                Prorroga NÃÂÃÂÃÂÃÂ°
+                Prorroga NÃÂÃÂ°
               </label>
               <input
                 value={data.incapacidad?.prorroga || ""}
@@ -2873,13 +2853,13 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
             </div>
             <div className="flex flex-col justify-center items-center bg-red-50 border-2 border-red-200 rounded-xl p-4">
               <p className="text-[10px] font-black text-red-600 uppercase">
-                DÃÂÃÂÃÂÃÂ­as de Incapacidad
+                DÃÂÃÂ­as de Incapacidad
               </p>
               <p className="text-5xl font-black text-red-900">
                 {data.incapacidad?.dias || diasCalc}
               </p>
               <p className="text-[10px] text-red-700 font-bold text-center">
-                {numeroALetras(data.incapacidad?.dias || diasCalc)} DÃÂÃÂÃÂÃÂAS
+                {numeroALetras(data.incapacidad?.dias || diasCalc)} DÃÂÃÂAS
               </p>
             </div>
           </div>
@@ -2891,7 +2871,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               rows={2}
               value={
                 data.incapacidad?.restricciones ||
-                "Reposo relativo en casa. Evitar esfuerzo fÃÂÃÂÃÂÃÂ­sico y exposiciÃÂÃÂÃÂÃÂ³n al frÃÂÃÂÃÂÃÂ­o."
+                "Reposo relativo en casa. Evitar esfuerzo fÃÂÃÂ­sico y exposiciÃÂÃÂ³n al frÃÂÃÂ­o."
               }
               onChange={(e) =>
                 setData((p) => ({
@@ -2913,7 +2893,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               rows={2}
               value={
                 data.incapacidad?.recoIncapacidad ||
-                "Consultar nuevamente si no hay mejorÃÂÃÂÃÂÃÂ­a o si presenta sÃÂÃÂÃÂÃÂ­ntomas de alarma."
+                "Consultar nuevamente si no hay mejorÃÂÃÂ­a o si presenta sÃÂÃÂ­ntomas de alarma."
               }
               onChange={(e) =>
                 setData((p) => ({
@@ -2929,7 +2909,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           </div>
           <div className="flex justify-between items-center pt-2 border-t border-gray-100">
             <p className="text-[10px] text-gray-400 italic">
-              Ley 100/1993 Art. 227 ÃÂÃÂÃÂÃÂ· Decreto 2943/2013 ÃÂÃÂÃÂÃÂ· Decreto 1295/1994 (AT)
+              Ley 100/1993 Art. 227 ÃÂÃÂ· Decreto 2943/2013 ÃÂÃÂ· Decreto 1295/1994 (AT)
             </p>
             <div className="flex gap-2">
               <button
@@ -2944,9 +2924,9 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       </div>
     );
   };
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ RENDER: AGENDA / SALA DE ESPERA ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ RENDER: AGENDA / SALA DE ESPERA ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
 
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ renderEvolucionModal ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ renderEvolucionModal ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const renderEvolucionModal = () => {
     if (!showEvolucionModal) return null;
     const evoluciones = data.evoluciones || [];
@@ -2960,7 +2940,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
 
     const guardarEvolucion = () => {
       if (!evolucionForm.texto.trim() && !evolucionForm.motivoConsulta.trim()) {
-        showAlert("Ingrese al menos la nota clÃÂÃÂÃÂÃÂ­nica o el motivo de consulta.");
+        showAlert("Ingrese al menos la nota clÃÂÃÂ­nica o el motivo de consulta.");
         return;
       }
       const nuevaEv = {
@@ -3006,7 +2986,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
         incapacidad: {
           aplica: false,
           dias: 0,
-          origen: "ComÃÂÃÂÃÂÃÂºn",
+          origen: "ComÃÂÃÂºn",
           diagnostico: "",
           desde: "",
           hasta: "",
@@ -3019,7 +2999,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
         activeEvTab: "nota",
       }));
       showAlert(
-        `ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ EvoluciÃÂÃÂÃÂÃÂ³n ${nuevaEv.codigoEvolucion} guardada correctamente.`
+        `ÃÂ¢ÃÂÃÂ EvoluciÃÂÃÂ³n ${nuevaEv.codigoEvolucion} guardada correctamente.`
       );
     };
 
@@ -3030,17 +3010,17 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           <div className="bg-gradient-to-r from-purple-700 to-indigo-700 p-4 flex justify-between items-start flex-shrink-0">
             <div>
               <h2 className="text-white font-black text-base flex items-center gap-2">
-                <ClipboardList className="w-4 h-4" /> EvoluciÃÂÃÂÃÂÃÂ³n ClÃÂÃÂÃÂÃÂ­nica
+                <ClipboardList className="w-4 h-4" /> EvoluciÃÂÃÂ³n ClÃÂÃÂ­nica
               </h2>
               <p className="text-purple-200 text-xs mt-0.5">
-                {data.nombres} ÃÂÃÂÃÂÃÂ· HC:{" "}
+                {data.nombres} ÃÂÃÂ· HC:{" "}
                 <strong className="text-white">
-                  {data.codigoVerificacion || "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ"}
+                  {data.codigoVerificacion || "ÃÂ¢ÃÂÃÂ"}
                 </strong>
                 {evolucionForm.codigoEvolucion && (
                   <>
                     {" "}
-                    ÃÂÃÂÃÂÃÂ· Nuevo cÃÂÃÂÃÂÃÂ³digo:{" "}
+                    ÃÂÃÂ· Nuevo cÃÂÃÂ³digo:{" "}
                     <strong className="text-yellow-300">
                       {evolucionForm.codigoEvolucion}
                     </strong>
@@ -3052,7 +3032,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               onClick={() => setShowEvolucionModal(false)}
               className="text-white hover:text-purple-200 text-xl font-black mt-0.5"
             >
-              ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+              ÃÂ¢ÃÂÃÂ
             </button>
           </div>
 
@@ -3060,7 +3040,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           {evoluciones.length > 0 && (
             <div className="px-4 pt-3 pb-0 flex-shrink-0 max-h-36 overflow-y-auto border-b border-gray-100">
               <p className="text-[10px] font-black text-gray-500 uppercase mb-1.5">
-                ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Historial ({evoluciones.length} evoluciones previas)
+                ÃÂ°ÃÂÃÂÃÂ Historial ({evoluciones.length} evoluciones previas)
               </p>
               <div className="space-y-1.5">
                 {evoluciones
@@ -3073,7 +3053,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     >
                       <div className="flex justify-between items-center mb-0.5">
                         <span className="font-black text-purple-800">
-                          {ev.fecha} ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ {ev.medico || "Dr."}
+                          {ev.fecha} ÃÂ¢ÃÂÃÂ {ev.medico || "Dr."}
                         </span>
                         <div className="flex gap-1.5 items-center">
                           {ev.codigoEvolucion && (
@@ -3089,16 +3069,16 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                         </div>
                       </div>
                       <p className="text-gray-700 text-[10px] leading-snug line-clamp-2">
-                        {ev.texto || ev.motivoConsulta || "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ"}
+                        {ev.texto || ev.motivoConsulta || "ÃÂ¢ÃÂÃÂ"}
                       </p>
                       {ev.formulaMedicamentos?.length > 0 && (
                         <p className="text-[9px] text-blue-600 mt-0.5">
-                          ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ {ev.formulaMedicamentos.length} medicamento(s)
+                          ÃÂ°ÃÂÃÂÃÂ {ev.formulaMedicamentos.length} medicamento(s)
                         </p>
                       )}
                       {ev.incapacidad?.aplica && (
                         <p className="text-[9px] text-red-600 mt-0.5">
-                          ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¥ Incapacidad: {ev.incapacidad.dias} dÃÂÃÂÃÂÃÂ­as
+                          ÃÂ°ÃÂÃÂÃÂ¥ Incapacidad: {ev.incapacidad.dias} dÃÂÃÂ­as
                         </p>
                       )}
                     </div>
@@ -3107,15 +3087,15 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
             </div>
           )}
 
-          {/* Tabs navegaciÃÂÃÂÃÂÃÂ³n */}
+          {/* Tabs navegaciÃÂÃÂ³n */}
           <div className="flex gap-1 px-4 pt-3 pb-1 flex-shrink-0 flex-wrap">
             {[
-              { id: "nota", label: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Nota ClÃÂÃÂÃÂÃÂ­nica" },
-              { id: "dx", label: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂ©ÃÂÃÂº DiagnÃÂÃÂÃÂÃÂ³sticos" },
-              { id: "plan", label: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Plan" },
-              { id: "formula", label: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ FÃÂÃÂÃÂÃÂ³rmula" },
-              { id: "incapacidad", label: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¥ Incapacidad" },
-                          { id: "concepto", label: "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Concepto MÃÂÃÂÃÂÃÂ©dico" },
+              { id: "nota", label: "ÃÂ°ÃÂÃÂÃÂ Nota ClÃÂÃÂ­nica" },
+              { id: "dx", label: "ÃÂ°ÃÂÃÂ©ÃÂº DiagnÃÂÃÂ³sticos" },
+              { id: "plan", label: "ÃÂ°ÃÂÃÂÃÂ Plan" },
+              { id: "formula", label: "ÃÂ°ÃÂÃÂÃÂ FÃÂÃÂ³rmula" },
+              { id: "incapacidad", label: "ÃÂ°ÃÂÃÂÃÂ¥ Incapacidad" },
+                          { id: "concepto", label: "ÃÂ°ÃÂÃÂÃÂ Concepto MÃÂÃÂ©dico" },
             ].map((t) => (
               <button
                 key={t.id}
@@ -3131,7 +3111,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
 
           {/* Contenido scrollable */}
           <div className="flex-1 overflow-y-auto px-4 pb-4 pt-2">
-            {/* TAB: Nota ClÃÂÃÂÃÂÃÂ­nica */}
+            {/* TAB: Nota ClÃÂÃÂ­nica */}
             {evTab === "nota" && (
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
@@ -3165,14 +3145,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       }
                       className="w-full p-2 border border-purple-200 rounded-lg text-xs"
                     >
-                      <option value="">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Sin cambio ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</option>
+                      <option value="">ÃÂ¢ÃÂÃÂ Sin cambio ÃÂ¢ÃÂÃÂ</option>
                       {[
                         "APTO",
                         "APTO CON RESTRICCIONES",
                         "NO APTO TEMPORAL",
                         "NO APTO DEFINITIVO",
                         "EN SEGUIMIENTO",
-                        "PENDIENTE EXÃÂÃÂÃÂÃÂMENES",
+                        "PENDIENTE EXÃÂÃÂMENES",
                       ].map((o) => (
                         <option key={o}>{o}</option>
                       ))}
@@ -3181,7 +3161,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 </div>
                 <div>
                   <label className="text-[10px] font-black text-gray-600 uppercase block mb-1">
-                    Motivo de Consulta / EvoluciÃÂÃÂÃÂÃÂ³n
+                    Motivo de Consulta / EvoluciÃÂÃÂ³n
                   </label>
                   <textarea
                     value={evolucionForm.motivoConsulta}
@@ -3192,13 +3172,13 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       }))
                     }
                     rows={2}
-                    placeholder="RazÃÂÃÂÃÂÃÂ³n de la consulta o seguimiento..."
+                    placeholder="RazÃÂÃÂ³n de la consulta o seguimiento..."
                     className="w-full p-2 border border-purple-200 rounded-lg text-xs resize-none"
                   />
                 </div>
                 <div>
                   <label className="text-[10px] font-black text-gray-600 uppercase block mb-1">
-                    Nota ClÃÂÃÂÃÂÃÂ­nica / Hallazgos *
+                    Nota ClÃÂÃÂ­nica / Hallazgos *
                   </label>
                   <textarea
                     value={evolucionForm.texto}
@@ -3206,18 +3186,18 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       setEvolucionForm((p) => ({ ...p, texto: e.target.value }))
                     }
                     rows={5}
-                    placeholder="DescripciÃÂÃÂÃÂÃÂ³n clÃÂÃÂÃÂÃÂ­nica, hallazgos, seguimiento, cambios observados..."
+                    placeholder="DescripciÃÂÃÂ³n clÃÂÃÂ­nica, hallazgos, seguimiento, cambios observados..."
                     className="w-full p-2 border border-purple-200 rounded-lg text-xs resize-none"
                   />
                 </div>
               </div>
             )}
 
-            {/* TAB: DiagnÃÂÃÂÃÂÃÂ³sticos */}
+            {/* TAB: DiagnÃÂÃÂ³sticos */}
             {evTab === "dx" && (
               <div className="space-y-2">
                 <p className="text-[10px] font-black text-gray-500 uppercase">
-                  DiagnÃÂÃÂÃÂÃÂ³sticos CIE-10
+                  DiagnÃÂÃÂ³sticos CIE-10
                 </p>
                 {(evolucionForm.diagnosticos || []).map((diag, i) => (
                   <div key={i} className="flex gap-2 items-center">
@@ -3239,7 +3219,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                         setEvolucionForm((p) => ({ ...p, diagnosticos: d }));
                       }}
                       className="flex-1 p-1.5 border rounded text-xs"
-                      placeholder="DescripciÃÂÃÂÃÂÃÂ³n diagnÃÂÃÂÃÂÃÂ³stico..."
+                      placeholder="DescripciÃÂÃÂ³n diagnÃÂÃÂ³stico..."
                     />
                     <select
                       value={diag.tipo}
@@ -3283,7 +3263,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                   }
                   className="text-purple-600 text-[11px] font-bold flex items-center gap-1 hover:underline"
                 >
-                  <Plus className="w-3 h-3" /> Agregar diagnÃÂÃÂÃÂÃÂ³stico
+                  <Plus className="w-3 h-3" /> Agregar diagnÃÂÃÂ³stico
                 </button>
               </div>
             )}
@@ -3304,7 +3284,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       }))
                     }
                     rows={4}
-                    placeholder="Tratamiento, conducta mÃÂÃÂÃÂÃÂ©dica, decisiones clÃÂÃÂÃÂÃÂ­nicas..."
+                    placeholder="Tratamiento, conducta mÃÂÃÂ©dica, decisiones clÃÂÃÂ­nicas..."
                     className="w-full p-2 border border-purple-200 rounded-lg text-xs resize-none"
                   />
                 </div>
@@ -3321,7 +3301,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       }))
                     }
                     rows={3}
-                    placeholder="Indicaciones, cuidados, prÃÂÃÂÃÂÃÂ³xima cita..."
+                    placeholder="Indicaciones, cuidados, prÃÂÃÂ³xima cita..."
                     className="w-full p-2 border border-purple-200 rounded-lg text-xs resize-none"
                   />
                 </div>
@@ -3404,7 +3384,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               </div>
             )}
 
-            {/* TAB: FÃÂÃÂÃÂÃÂ³rmula MÃÂÃÂÃÂÃÂ©dica */}
+            {/* TAB: FÃÂÃÂ³rmula MÃÂÃÂ©dica */}
             {evTab === "formula" && (
               <div className="space-y-2">
                 <div className="flex justify-between items-center mb-2">
@@ -3435,7 +3415,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 </div>
                 {(evolucionForm.formulaMedicamentos || []).length === 0 && (
                   <p className="text-center text-gray-400 text-xs py-6 border border-dashed rounded-xl">
-                    Sin medicamentos. Use el botÃÂÃÂÃÂÃÂ³n + para agregar.
+                    Sin medicamentos. Use el botÃÂÃÂ³n + para agregar.
                   </p>
                 )}
                 {(evolucionForm.formulaMedicamentos || []).map((med, i) => (
@@ -3486,7 +3466,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                           }));
                         }}
                         className="p-1.5 border rounded text-xs"
-                        placeholder="PresentaciÃÂÃÂÃÂÃÂ³n (mg, ml...)"
+                        placeholder="PresentaciÃÂÃÂ³n (mg, ml...)"
                       />
                       <input
                         value={med.dosis}
@@ -3525,7 +3505,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                           }));
                         }}
                         className="p-1.5 border rounded text-xs"
-                        placeholder="DuraciÃÂÃÂÃÂÃÂ³n (5 dÃÂÃÂÃÂÃÂ­as...)"
+                        placeholder="DuraciÃÂÃÂ³n (5 dÃÂÃÂ­as...)"
                       />
                       <input
                         value={med.indicaciones}
@@ -3569,14 +3549,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     htmlFor="evIncapCheck"
                     className="text-sm font-black text-red-700 cursor-pointer"
                   >
-                    Aplica incapacidad mÃÂÃÂÃÂÃÂ©dica
+                    Aplica incapacidad mÃÂÃÂ©dica
                   </label>
                 </div>
                 {evolucionForm.incapacidad?.aplica && (
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-[10px] font-black text-gray-600 uppercase block mb-1">
-                        DÃÂÃÂÃÂÃÂ­as de incapacidad
+                        DÃÂÃÂ­as de incapacidad
                       </label>
                       <input
                         type="number"
@@ -3601,7 +3581,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                         Origen
                       </label>
                       <select
-                        value={evolucionForm.incapacidad?.origen || "ComÃÂÃÂÃÂÃÂºn"}
+                        value={evolucionForm.incapacidad?.origen || "ComÃÂÃÂºn"}
                         onChange={(e) =>
                           setEvolucionForm((p) => ({
                             ...p,
@@ -3613,7 +3593,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                         }
                         className="w-full p-2 border border-red-200 rounded-lg text-xs"
                       >
-                        <option>ComÃÂÃÂÃÂÃÂºn</option>
+                        <option>ComÃÂÃÂºn</option>
                         <option>Laboral</option>
                         <option>Accidente de Trabajo</option>
                         <option>Enfermedad Profesional</option>
@@ -3659,7 +3639,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     </div>
                     <div className="col-span-2">
                       <label className="text-[10px] font-black text-gray-600 uppercase block mb-1">
-                        DiagnÃÂÃÂÃÂÃÂ³stico (CIE-10)
+                        DiagnÃÂÃÂ³stico (CIE-10)
                       </label>
                       <input
                         value={evolucionForm.incapacidad?.diagnostico || ""}
@@ -3673,7 +3653,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                           }))
                         }
                         className="w-full p-2 border rounded-lg text-xs"
-                        placeholder="CÃÂÃÂÃÂÃÂ³digo CIE-10 y descripciÃÂÃÂÃÂÃÂ³n..."
+                        placeholder="CÃÂÃÂ³digo CIE-10 y descripciÃÂÃÂ³n..."
                       />
                     </div>
                   </div>
@@ -3681,11 +3661,11 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               </div>
             )}
           </div>
-                    {/* TAB: Concepto MÃÂÃÂÃÂÃÂ©dico + Certificado */}
+                    {/* TAB: Concepto MÃÂÃÂ©dico + Certificado */}
           {evTab === "concepto" && (
             <div className="space-y-3">
               <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
-                <h4 className="text-xs font-bold text-emerald-800 mb-2">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Concepto MÃÂÃÂÃÂÃÂ©dico Ocupacional</h4>
+                <h4 className="text-xs font-bold text-emerald-800 mb-2">ÃÂ°ÃÂÃÂÃÂ Concepto MÃÂÃÂ©dico Ocupacional</h4>
                 <div className="space-y-2">
                   <div>
                     <label className="text-[10px] font-black text-gray-600 block mb-1">Concepto de Aptitud</label>
@@ -3699,7 +3679,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       <option value="APTO CON RESTRICCIONES">APTO CON RESTRICCIONES</option>
                       <option value="NO APTO">NO APTO</option>
                       <option value="APTO CON LIMITACIONES">APTO CON LIMITACIONES</option>
-                      <option value="PENDIENTE">PENDIENTE - Requiere evaluaciÃÂÃÂÃÂÃÂ³n adicional</option>
+                      <option value="PENDIENTE">PENDIENTE - Requiere evaluaciÃÂÃÂ³n adicional</option>
                     </select>
                   </div>
                   <div>
@@ -3719,7 +3699,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       value={evolucionForm.texto || ""}
                       onChange={(e) => setEvolucionForm((p) => ({ ...p, texto: e.target.value }))}
                       className="w-full p-2 border border-emerald-300 rounded text-xs"
-                      placeholder="Observaciones del mÃÂÃÂÃÂÃÂ©dico..."
+                      placeholder="Observaciones del mÃÂÃÂ©dico..."
                     />
                   </div>
                 </div>
@@ -3734,7 +3714,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                   }}
                   className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg text-xs flex items-center justify-center gap-2"
                 >
-                  ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Expedir Nuevo Certificado MÃÂÃÂÃÂÃÂ©dico
+                  ÃÂ°ÃÂÃÂÃÂ Expedir Nuevo Certificado MÃÂÃÂ©dico
                 </button>
               )}
             </div>
@@ -3743,7 +3723,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           {/* Footer: guardar */}
           <div className="border-t border-gray-100 px-4 py-3 flex justify-between items-center flex-shrink-0 bg-gray-50 rounded-b-2xl">
             <div className="text-[10px] text-gray-400">
-              MÃÂÃÂÃÂÃÂ©dico:{" "}
+              MÃÂÃÂ©dico:{" "}
               <span className="font-bold text-gray-600">
                 {activeDoctorData?.nombre || currentUser?.name}
               </span>
@@ -3764,7 +3744,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                 onClick={guardarEvolucion}
                 className="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white text-xs font-black rounded-xl flex items-center gap-1.5"
               >
-                <Save className="w-3.5 h-3.5" /> Guardar EvoluciÃÂÃÂÃÂÃÂ³n
+                <Save className="w-3.5 h-3.5" /> Guardar EvoluciÃÂÃÂ³n
               </button>
             </div>
           </div>
@@ -3773,14 +3753,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
     );
   };
 
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ RENDER: MENSAJERÃÂÃÂÃÂÃÂA INTERNA ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ RENDER: MENSAJERÃÂÃÂA INTERNA ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   // Called inline as overlay + floating panel - not a full-page view
 
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ renderMensajesOverlay ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ renderMensajesOverlay ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const renderMensajesOverlay = () => {
     if (!showMensajePanel) return null;
     const esMensajeAdmin = _isAdmin(currentUser?.role);
-    // Mensajes que me corresponden (como destinatario) o que yo enviÃÂÃÂÃÂÃÂ©
+    // Mensajes que me corresponden (como destinatario) o que yo enviÃÂÃÂ©
     const misMensajes = mensajes
       .filter(
         (m) =>
@@ -3819,7 +3799,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       saveMensajes([...mensajes, nm]);
       setComposeMensaje({ destinatarios: [], texto: "" });
       setShowComposeMensaje(false);
-      showAlert("ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Aviso enviado.");
+      showAlert("ÃÂ¢ÃÂÃÂ Aviso enviado.");
     };
     const responderMensaje = (msg) => {
       if (!mensajeRespuesta.trim()) {
@@ -3840,7 +3820,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       );
       saveMensajes(upd);
       setMensajeRespuesta("");
-      showAlert("ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Respuesta enviada.");
+      showAlert("ÃÂ¢ÃÂÃÂ Respuesta enviada.");
     };
     const marcarLeido = (msgId) => {
       const upd = mensajes.map((m) =>
@@ -3880,14 +3860,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                   onClick={() => setShowComposeMensaje((v) => !v)}
                   className="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-lg text-xs font-black flex items-center gap-1"
                 >
-                  ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Nuevo
+                  ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ Nuevo
                 </button>
               )}
               <button
                 onClick={() => setShowMensajePanel(false)}
                 className="text-white/80 hover:text-white text-lg font-black leading-none"
               >
-                ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+                ÃÂ¢ÃÂÃÂ
               </button>
             </div>
           </div>
@@ -3931,7 +3911,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                     }
                     className="text-[9px] px-2 py-1 rounded-full font-bold border bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100"
                   >
-                    ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Todos
+                    ÃÂ¢ÃÂÃÂ Todos
                   </button>
                 </div>
               </div>
@@ -3964,7 +3944,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           <div className="flex-1 overflow-y-auto p-3 space-y-3">
             {misMensajes.length === 0 && (
               <div className="text-center py-10 text-gray-400">
-                <p className="text-3xl mb-2">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¬</p>
+                <p className="text-3xl mb-2">ÃÂ°ÃÂÃÂÃÂ¬</p>
                 <p className="text-xs font-bold">Sin mensajes</p>
               </div>
             )}
@@ -3986,14 +3966,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                   <div className="flex justify-between items-start gap-2 mb-1">
                     <p className="text-[10px] font-black text-gray-600">
                       {esMio
-                        ? `ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤ TÃÂÃÂÃÂÃÂº ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ${
+                        ? `ÃÂ°ÃÂÃÂÃÂ¤ TÃÂÃÂº ÃÂ¢ÃÂÃÂ ${
                             msg.destinatarios?.length > 1
                               ? "Varios"
                               : usersList.find(
                                   (u) => u.user === msg.destinatarios?.[0]
                                 )?.name || "?"
                           }`
-                        : `ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¥ ${msg.fromName || msg.from}`}
+                        : `ÃÂ°ÃÂÃÂÃÂ¥ ${msg.fromName || msg.from}`}
                     </p>
                     <p className="text-[9px] text-gray-400 flex-shrink-0">
                       {new Date(msg.fecha).toLocaleDateString("es-CO", {
@@ -4018,7 +3998,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                       </p>
                     </div>
                   )}
-                  {/* Form responder (si es para mÃÂÃÂÃÂÃÂ­ y no ha sido respondido) */}
+                  {/* Form responder (si es para mÃÂÃÂ­ y no ha sido respondido) */}
                   {esParaMi && !msg.respondido && (
                     <div className="mt-2 space-y-1.5">
                       <textarea
@@ -4057,7 +4037,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
                           }}
                           className="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-[10px] font-black hover:bg-red-200"
                         >
-                          ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+                          ÃÂ¢ÃÂÃÂ
                         </button>
                       </div>
                     </div>
@@ -4070,14 +4050,14 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       </div>
     );
   };
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ B-F1-03: Persistir portafolio ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ B-F1-03: Persistir portafolio ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const savePortafolio = (items) => {
     setPortafolioItems(items);
     try {
       localStorage.setItem("siso_portafolio", JSON.stringify(items));
     } catch {}
   };
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ B-F1-04: Persistir cotizaciones ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ B-F1-04: Persistir cotizaciones ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const saveCotizaciones = (list) => {
     setCotizaciones(list);
     try {
@@ -4091,7 +4071,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
     );
     return String(max + 1).padStart(4, "0");
   };
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ B-F2-01: Persistir caja ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ B-F2-01: Persistir caja ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const saveCaja = (movs) => {
     setCajaMovimientos(movs);
     try {
@@ -4103,7 +4083,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
       _sbSet(`siso_caja_movs_${suf}`, movs); // Bloque 3: sync Supabase
     } catch {}
   };
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ B-F2-01/02: Generar comprobante ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ B-F2-01/02: Generar comprobante ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const openComprobanteWindow = (tipo, mov) => {
     const doc = activeDoctorData;
     const _miIPSComp = currentUser?.empresaId
@@ -4139,7 +4119,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
               ? `<div style="font-size:9px;color:#555;">${_sanitize(
                   _miIPSComp.direccion
                 )}${
-                  _miIPSComp.ciudad ? " ÃÂÃÂÃÂÃÂ· " + _sanitize(_miIPSComp.ciudad) : ""
+                  _miIPSComp.ciudad ? " ÃÂÃÂ· " + _sanitize(_miIPSComp.ciudad) : ""
                 }</div>`
               : ""
           }
@@ -4160,7 +4140,7 @@ th{background:#fee2e2;font-weight:900;text-align:left;color:#7f1d1d;}
           )}</div>
           <div style="font-size:9px;color:#555;">Lic: ${_sanitize(
             doc?.licencia || ""
-          )} ÃÂÃÂÃÂÃÂ· ${_sanitize(doc?.ciudad || "")}</div>
+          )} ÃÂÃÂ· ${_sanitize(doc?.ciudad || "")}</div>
         </div>`;
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
 <title>${tipoLabel}</title>
@@ -4182,7 +4162,7 @@ td{padding:5px 8px;border-bottom:1px solid #ddd;font-size:11px}
 ${_compLeftHtml}
 <div>
 <div class="title">${tipoLabel}</div>
-<div class="sub">No. ${num} ÃÂÃÂÃÂÃÂ· Fecha: ${fecha}</div>
+<div class="sub">No. ${num} ÃÂÃÂ· Fecha: ${fecha}</div>
 </div>
 </div>
 <table>
@@ -4199,8 +4179,8 @@ ${_compLeftHtml}
     )}<br/>Lic: ${_sanitize(doc?.licencia || "")}</div>
 </div>
 <div class="no-print">
-<button onclick="window.print()" style="background:#1a1a1a;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:900;cursor:pointer">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¨ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Imprimir</button>
-<button onclick="window.close()" style="background:#666;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:900;cursor:pointer">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Cerrar</button>
+<button onclick="window.print()" style="background:#1a1a1a;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:900;cursor:pointer">ÃÂ°ÃÂÃÂÃÂ¨ÃÂ¯ÃÂ¸ÃÂ Imprimir</button>
+<button onclick="window.close()" style="background:#666;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:900;cursor:pointer">ÃÂ¢ÃÂÃÂ Cerrar</button>
 </div></body></html>`;
     const w = window.open("", "_blank", "width=560,height=620");
     if (w) {
@@ -4208,7 +4188,7 @@ ${_compLeftHtml}
       w.document.close();
     }
   };
-  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ B-F1-05: CarnÃÂÃÂÃÂÃÂ© manipulaciÃÂÃÂÃÂÃÂ³n alimentos ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ B-F1-05: CarnÃÂÃÂ© manipulaciÃÂÃÂ³n alimentos ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
   const openCarnetAlimentos = (paciente, docData) => {
     const doc = docData || activeDoctorData;
     const p = paciente || {};
@@ -4218,9 +4198,9 @@ ${_compLeftHtml}
           new Date(p.fechaConsulta || Date.now()).getTime() +
             parseInt(p.vigencia) * 24 * 60 * 60 * 1000
         ).toLocaleDateString("es-CO")
-      : "Ver concepto mÃÂÃÂÃÂÃÂ©dico";
+      : "Ver concepto mÃÂÃÂ©dico";
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
-<title>CarnÃÂÃÂÃÂÃÂ© ManipulaciÃÂÃÂÃÂÃÂ³n de Alimentos</title>
+<title>CarnÃÂÃÂ© ManipulaciÃÂÃÂ³n de Alimentos</title>
 <style>
 @media print{body{margin:0}@page{size:8.5cm 5.5cm;margin:0}}
 body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5}
@@ -4244,10 +4224,10 @@ body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5}
 @media print{.no-print{display:none}}
 </style></head><body>
 <div class="carne">
-<div class="hdr"><h1>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ½ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ CarnÃÂÃÂÃÂÃÂ© MÃÂÃÂÃÂÃÂ©dico - ManipulaciÃÂÃÂÃÂÃÂ³n de Alimentos</h1></div>
+<div class="hdr"><h1>ÃÂ°ÃÂÃÂÃÂ½ÃÂ¯ÃÂ¸ÃÂ CarnÃÂÃÂ© MÃÂÃÂ©dico - ManipulaciÃÂÃÂ³n de Alimentos</h1></div>
 <div class="body">
 <div class="foto">${
-      p.fotoPaciente ? `<img src="${p.fotoPaciente}" alt="Foto"/>` : "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ·"
+      p.fotoPaciente ? `<img src="${p.fotoPaciente}" alt="Foto"/>` : "ÃÂ°ÃÂÃÂÃÂ·"
     }</div>
 <div class="info">
 <div class="nom">${p.nombres || "Paciente"}</div>
@@ -4263,11 +4243,11 @@ body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5}
 <div class="firma">${doc?.nombre || ""}<br/>${doc?.titulo || ""}<br/>Lic: ${
       doc?.licencia || ""
     }</div>
-<div class="valid">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ VÃÂÃÂÃÂÃÂLIDO<br/>Hasta: ${fechaVig}</div>
+<div class="valid">ÃÂ¢ÃÂÃÂ VÃÂÃÂLIDO<br/>Hasta: ${fechaVig}</div>
 </div></div>
 <div class="no-print">
-<button onclick="window.print()" style="background:#1a6b2f;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-weight:900;cursor:pointer">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¨ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Imprimir CarnÃÂÃÂÃÂÃÂ©</button>
-<button onclick="window.close()" style="background:#666;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-weight:900;cursor:pointer">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Cerrar</button>
+<button onclick="window.print()" style="background:#1a6b2f;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-weight:900;cursor:pointer">ÃÂ°ÃÂÃÂÃÂ¨ÃÂ¯ÃÂ¸ÃÂ Imprimir CarnÃÂÃÂ©</button>
+<button onclick="window.close()" style="background:#666;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-weight:900;cursor:pointer">ÃÂ¢ÃÂÃÂ Cerrar</button>
 </div></body></html>`;
     const w = window.open("", "_blank", "width=380,height=320");
     if (w) {
