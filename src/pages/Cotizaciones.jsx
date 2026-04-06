@@ -406,7 +406,13 @@ export const Cotizaciones = (props) => {
     PortalPublicoTrabajador,
     AgendaFieldF,
     ...rest
-  } = props;
+    // ─── Role guard helpers from sharedProps ───
+  _isAdmin,
+  _isAdminEmpresa,
+  _secretariaPuede,
+  _canUse,
+  _contarHC,
+} = props;
 
     const cotizSel = cotizaciones.find((c) => c.id === cotizacionSelId);
     const handleNewItem = () => {
