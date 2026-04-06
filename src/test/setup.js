@@ -1,38 +1,33 @@
-import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import "@testing-library/jest-dom";
+import { vi } from "vitest";
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store = {};
-  return {
-    getItem: (k) => store[k] ?? null,
-    setItem: (k, v) => { store[k] = String(v); },
-    removeItem: (k) => { delete store[k]; },
-    clear: () => { store = {}; },
-  };
-})();
-Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock });
+// Mock de window.__SISO_CONFIG para tests
+window.__SISO_CONFIG = {
+  sbUrl: "https://test.supabase.co",
+  sbKey: "test-key-mock-longer-than-twenty-chars",
+};
 
-// Mock sessionStorage
-const sessionStorageMock = (() => {
-  let store = {};
-  return {
-    getItem: (k) => store[k] ?? null,
-    setItem: (k, v) => { store[k] = String(v); },
-    removeItem: (k) => { delete store[k]; },
-    clear: () => { store = {}; },
-  };
-})();
-Object.defineProperty(globalThis, 'sessionStorage', { value: sessionStorageMock });
+// Mock de localStorage
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+Object.defineProperty(window, "localStorage", { value: localStorageMock });
 
-// Web Crypto API via Node
-const { webcrypto } = require('crypto');
-Object.defineProperty(globalThis, 'crypto', { value: webcrypto });
+// Mock de sessionStorage
+const sessionStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+Object.defineProperty(window, "sessionStorage", { value: sessionStorageMock });
 
-// navigator.userAgent
-Object.defineProperty(navigator, 'userAgent', { value: 'test-agent', configurable: true });
-
-beforeEach(() => {
-  localStorage.clear();
-  sessionStorage.clear();
-});
+// Silenciar console.error en tests (errores esperados de React)
+const originalError = console.error;
+console.error = (...args) => {
+  if (typeof args[0] === "string" && args[0].includes("act(")) return;
+  originalError.call(console, ...args);
+};
