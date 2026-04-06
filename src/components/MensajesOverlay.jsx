@@ -6,7 +6,19 @@ import { useAuthStore } from '../stores/authStore.js';
 import { useUIStore } from '../stores/uiStore.js';
 import { usePatientsStore } from '../stores/patientsStore.js';
 import { useCompaniesStore } from '../stores/companiesStore.js';
-import { _isAdmin } from './AppComponents.jsx';
+
+// ─── Role helpers locales ─────────────────────────────────────────────────────
+const _isAdmin = (role) => role === "administrador" || role === "super_admin";
+const _isAdminEmpresa = (role) => role === "admin_empresa";
+const _secretariaPuede = (feature, currentUser, usersList) => {
+  if (!currentUser) return false;
+  if (_isAdmin(currentUser.role)) return true;
+  if (_isAdminEmpresa(currentUser.role)) return true;
+  if (currentUser.role === "medico") return true;
+  if (currentUser.role !== "secretaria") return false;
+  const u = (usersList || []).find(u => u.user === currentUser.user);
+  return u?.permisos?.[feature] === true;
+};
 
 export const MensajesOverlay = (props) => {
   const { currentUser, setCurrentUser, privacidadAceptada, setPrivacidadAceptada } = useAuthStore();
