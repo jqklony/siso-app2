@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App 2.jsx";
 
+// COD-04: ErrorBoundary previene pantalla blanca ante errores no capturados
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -12,42 +12,36 @@ class ErrorBoundary extends React.Component {
     return { hasError: true, error };
   }
   componentDidCatch(error, info) {
-    console.error('[SISO ErrorBoundary]', error, info);
+    console.error("[SISO ErrorBoundary]", error, info.componentStack);
   }
   render() {
     if (this.state.hasError) {
-      return (
-        React.createElement('div', {
-          style: {
-            padding: '2rem', fontFamily: 'sans-serif',
-            color: '#dc2626', background: '#fff', minHeight: '100vh'
-          }
-        },
-          React.createElement('h2', null, 'Error en la aplicacion'),
-          React.createElement('pre', {
-            style: {
-              fontSize: '12px', background: '#fee2e2',
-              padding: '1rem', borderRadius: '8px',
-              whiteSpace: 'pre-wrap', wordBreak: 'break-all'
-            }
-          }, String(this.state.error)),
-          React.createElement('button', {
-            onClick: () => window.location.reload(),
-            style: {
-              marginTop: '1rem', padding: '8px 16px',
-              background: '#dc2626', color: '#fff',
-              border: 'none', borderRadius: '6px', cursor: 'pointer'
-            }
-          }, 'Recargar')
-        )
+      return React.createElement("div", {
+        style: {
+          minHeight: "100vh", display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center", fontFamily: "system-ui",
+          background: "#f8fafc", color: "#1e293b", padding: "2rem", textAlign: "center"
+        }
+      },
+        React.createElement("h1", { style: { fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.5rem" } }, "SISO — Error inesperado"),
+        React.createElement("p", { style: { color: "#64748b", fontSize: "0.875rem", maxWidth: "400px", marginBottom: "1rem" } },
+          "La aplicación encontró un error. Sus datos están seguros en la nube."),
+        React.createElement("pre", { style: { background: "#fee2e2", color: "#991b1b", padding: "1rem", borderRadius: "0.5rem", fontSize: "0.75rem", maxWidth: "500px", overflow: "auto", marginBottom: "1rem" } },
+          String(this.state.error)),
+        React.createElement("button", {
+          onClick: () => window.location.reload(),
+          style: { background: "#0d9488", color: "white", border: "none", padding: "0.75rem 2rem", borderRadius: "0.75rem", fontWeight: 700, cursor: "pointer", fontSize: "0.875rem" }
+        }, "Recargar aplicación")
       );
     }
     return this.props.children;
   }
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <ErrorBoundary>
-    <App />
-  </ErrorBoundary>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  </React.StrictMode>
 );
