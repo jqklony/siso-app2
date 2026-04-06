@@ -6,6 +6,7 @@ import { useAuthStore } from '../stores/authStore.js';
 import { useUIStore } from '../stores/uiStore.js';
 import { usePatientsStore } from '../stores/patientsStore.js';
 import { useCompaniesStore } from '../stores/companiesStore.js';
+import { _isAdmin } from './AppComponents.jsx';
 
 export const MensajesOverlay = (props) => {
   const { currentUser, setCurrentUser, privacidadAceptada, setPrivacidadAceptada } = useAuthStore();
