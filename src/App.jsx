@@ -500,6 +500,12 @@ export default function App() {
       LoginForm,
       PortalPublicoTrabajador,
       AgendaFieldF,
+      // ─── Helper functions (role guards) — needed by all pages ───
+      _isAdmin,
+      _isAdminEmpresa,
+      _secretariaPuede,
+      _canUse,
+      _contarHC,
     };
 
     // NORMATIVO: Ley 1581/2012 - mostrar aviso si no ha sido aceptado
