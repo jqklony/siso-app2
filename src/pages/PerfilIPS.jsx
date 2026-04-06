@@ -409,7 +409,13 @@ export const PerfilIPS = (props) => {
     PortalPublicoTrabajador,
     AgendaFieldF,
     ...rest
-  } = props;
+    // ─── Role guard helpers from sharedProps ───
+  _isAdmin,
+  _isAdminEmpresa,
+  _secretariaPuede,
+  _canUse,
+  _contarHC,
+} = props;
 
     if (currentUser?.role !== "admin_empresa") {
       return (
