@@ -2,7 +2,20 @@ import React from 'react';
 import {
   BrainCircuit, ClipboardList, Cloud, Download, FileCheck, FileSignature, HardDrive, Lock, LogOut, MessageSquare, Plus, Printer, Save, Unlock, UploadCloud, Wifi, WifiOff
 } from "lucide-react";
-import { BrandLogo, _isAdmin, _secretariaPuede } from './AppComponents.jsx';
+import { BrandLogo } from './AppComponents.jsx';
+// ─── Role helpers definidos localmente para evitar circular imports ───────────
+const _isAdmin = (role) => role === "administrador" || role === "super_admin";
+const _isAdminEmpresa = (role) => role === "admin_empresa";
+const _isAdminOrEmpresa = (role) => _isAdmin(role) || _isAdminEmpresa(role);
+const _secretariaPuede = (feature, currentUser, usersList) => {
+  if (!currentUser) return false;
+  if (_isAdmin(currentUser.role)) return true;
+  if (_isAdminEmpresa(currentUser.role)) return true;
+  if (currentUser.role === "medico") return true;
+  if (currentUser.role !== "secretaria") return false;
+  const u = (usersList || []).find(u => u.user === currentUser.user);
+  return u?.permisos?.[feature] === true;
+};
 
 const _sbSet = async (key, value) => false; // stub - persistence handled in useAppState
 
