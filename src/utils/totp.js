@@ -1,8 +1,7 @@
-// TOTP / 2FA utilities
+// MODULO: TOTP 2FA (RFC 6238)
+const _totpBase32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
-export const _totpBase32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-
-export const _totpBase32ToBytes = (base32) => {
+const _totpBase32ToBytes = (base32) => {
   const s = base32
     .toUpperCase()
     .replace(/=+$/, "")
@@ -23,7 +22,7 @@ export const _totpBase32ToBytes = (base32) => {
   return new Uint8Array(bytes);
 };
 
-export const _totpGenSecret = () => {
+const _totpGenSecret = () => {
   const raw = crypto.getRandomValues(new Uint8Array(20));
   let s = "";
   for (let i = 0; i < raw.length; i++) {
@@ -34,7 +33,7 @@ export const _totpGenSecret = () => {
   return s.substring(0, 32);
 };
 
-export const _totpVerify = async (secret, token, window = 1) => {
+const _totpVerify = async (secret, token, window = 1) => {
   try {
     const keyBytes = _totpBase32ToBytes(secret);
     const cryptoKey = await crypto.subtle.importKey(
@@ -42,7 +41,7 @@ export const _totpVerify = async (secret, token, window = 1) => {
       keyBytes,
       { name: "HMAC", hash: "SHA-1" },
       false,
-      ["sign"]
+      ["sign"],
     );
     const now = Math.floor(Date.now() / 30000);
     for (let delta = -window; delta <= window; delta++) {
@@ -67,7 +66,7 @@ export const _totpVerify = async (secret, token, window = 1) => {
   }
 };
 
-export const _totpGetOtpAuthUrl = (secret, user, issuer = "SISOOcupaSalud") =>
+const _totpGetOtpAuthUrl = (secret, user, issuer = "SISOOcupaSalud") =>
   "otpauth://totp/" +
   encodeURIComponent(issuer + ":" + user) +
   "?secret=" +
@@ -76,6 +75,7 @@ export const _totpGetOtpAuthUrl = (secret, user, issuer = "SISOOcupaSalud") =>
   encodeURIComponent(issuer) +
   "&algorithm=SHA1&digits=6&period=30";
 
-export const _totpGetQRCodeUrl = (secret, user) =>
+const _totpGetQRCodeUrl = (secret, user) =>
   "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
   encodeURIComponent(_totpGetOtpAuthUrl(secret, user));
+export { _totpBase32Chars, _totpBase32ToBytes, _totpGenSecret, _totpVerify, _totpGetOtpAuthUrl, _totpGetQRCodeUrl };
