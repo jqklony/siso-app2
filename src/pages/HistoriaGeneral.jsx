@@ -1,4 +1,5 @@
 import React from 'react';
+import { CIE10Input } from '../components/AppComponents.jsx';
 import { DoctorSignature, BrandLogo } from '../components/medico/DoctorSignature.jsx';
 import { analyzeBP, analyzeBMI, NORMAL_DESCRIPTIONS_SYSTEMS } from '../utils/helpers.js';
 import {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { PlanGate } from '../components/AppComponents.jsx';
 import { DoctorSignature, BrandLogo } from '../components/medico/DoctorSignature.jsx';
 import {
   FileText, LogOut, Plus, Printer, Save

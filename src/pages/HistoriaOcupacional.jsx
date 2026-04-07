@@ -1,4 +1,5 @@
 import React from 'react';
+import { CIE11Badge, CIE10Input } from '../components/AppComponents.jsx';
 import { DoctorSignature, BrandLogo } from '../components/medico/DoctorSignature.jsx';
 import { ARL_LIST, AFP_LIST, EPS_LIST, CONTRATO_LIST, TURNO_LIST } from '../data/dropdowns.js';
 import { analyzeBP, analyzeHR, analyzeBMI, NORMAL_DESCRIPTIONS_SYSTEMS } from '../utils/helpers.js';
