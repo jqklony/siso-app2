@@ -1,4 +1,5 @@
 import React from 'react';
+import { analyzeBP, analyzeHR, analyzeBMI, NORMAL_DESCRIPTIONS_SYSTEMS } from '../utils/helpers.js';
 import {
   ClipboardList, History, ShieldAlert, Sparkles
 } from "lucide-react";

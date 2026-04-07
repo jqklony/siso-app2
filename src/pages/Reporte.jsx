@@ -1,4 +1,5 @@
 import React from 'react';
+import { analyzeBP, analyzeBMI } from '../utils/helpers.js';
 import {
   BrainCircuit, FileText, HardDrive, LogOut, Printer, Receipt, ShieldCheck, Sparkles, UserCheck
 } from "lucide-react";

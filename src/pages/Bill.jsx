@@ -1,4 +1,5 @@
 import React from 'react';
+import { getSpanishDate } from '../utils/helpers.js';
 import {
   LogOut, Printer, Receipt, Save
 } from "lucide-react";

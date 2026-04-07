@@ -1,4 +1,5 @@
 import React from 'react';
+import { getSpanishDate } from '../utils/helpers.js';
 import {
   AlertTriangle, Clock, Eye, FileCheck, FileSearch, FileText, HardDrive, Heart, Receipt, Shield, Stethoscope, UserCheck, Users
 } from "lucide-react";
