@@ -407,14 +407,14 @@ export const Agenda = (props) => {
     NotificacionModal,
     LoginForm,
     PortalPublicoTrabajador,
-    AgendaFieldF,
-    ...rest
-    // ─── Role guard helpers from sharedProps ───
+    AgendaFieldF,    // ─── Role guard helpers from sharedProps ───
   _isAdmin,
   _isAdminEmpresa,
   _secretariaPuede,
   _canUse,
   _contarHC,
+
+    ...rest
 } = props;
 
     if (!_canUse("agenda", currentUser))
