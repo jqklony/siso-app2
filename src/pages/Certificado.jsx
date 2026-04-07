@@ -1,10 +1,10 @@
 import React from 'react';
-import { DoctorSignature, BrandLogo } from '../components/ui/DoctorSignature.jsx';
+import { DoctorSignature, BrandLogo } from '../components/medico/DoctorSignature.jsx';
 import {
   FileText, Lock
 } from "lucide-react";
 
-// âââ Certificado Page Component âââââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Certificado Page Component Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 // Auto-extracted from App.jsx monolith
 export const Certificado = (props) => {
   const {
@@ -439,7 +439,7 @@ export const Certificado = (props) => {
           Certificado de Aptitud Laboral
         </h2>
         <p className="text-xs font-medium text-gray-500">
-          ResoluciÃ³n 1843 de 2025 (vigente) - Deroga Res. 2346 de 2007
+          ResoluciÃÂ³n 1843 de 2025 (vigente) - Deroga Res. 2346 de 2007
         </p>
       </div>
       <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-5 print:bg-transparent print:border-gray-400">
@@ -463,7 +463,7 @@ export const Certificado = (props) => {
               Edad
             </span>
             <span className="font-semibold text-gray-800">
-              {data.edad || "--"} aÃ±os
+              {data.edad || "--"} aÃÂ±os
             </span>
           </div>
           <div className="flex gap-2 items-baseline">
@@ -500,7 +500,7 @@ export const Certificado = (props) => {
           </div>
           <div className="flex gap-2 items-baseline">
             <span className="text-[10px] font-black uppercase text-gray-400 w-24 flex-shrink-0">
-              Ãnfasis
+              ÃÂnfasis
             </span>
             <span className="font-semibold text-gray-800">
               {data.enfasisExamen || "--"}
@@ -508,7 +508,7 @@ export const Certificado = (props) => {
           </div>
           <div className="flex gap-2 items-baseline">
             <span className="text-[10px] font-black uppercase text-gray-400 w-24 flex-shrink-0">
-              Tipo EvaluaciÃ³n
+              Tipo EvaluaciÃÂ³n
             </span>
             <span className="font-semibold text-gray-800">
               {data.tipoExamen || "--"}
@@ -524,7 +524,7 @@ export const Certificado = (props) => {
           </div>
           <div className="flex gap-2 items-baseline">
             <span className="text-[10px] font-black uppercase text-gray-400 w-24 flex-shrink-0">
-              MÃ©dico Evaluador
+              MÃÂ©dico Evaluador
             </span>
             <span className="font-semibold text-gray-800">
               {activeDoctorData?.nombre || data.medicoNombre || "--"}
@@ -532,10 +532,10 @@ export const Certificado = (props) => {
           </div>
           <div className="col-span-2 flex gap-2 items-baseline mt-1 border-t border-gray-200 pt-1">
             <span className="text-[10px] font-black uppercase text-gray-400 w-24 flex-shrink-0">
-              DiagnÃ³stico Ppal.
+              DiagnÃÂ³stico Ppal.
             </span>
             <span className="font-semibold text-gray-800">
-              {"Z10.0 - EXAMEN MÃDICO OCUPACIONAL"}
+              {"Z10.0 - EXAMEN MÃÂDICO OCUPACIONAL"}
             </span>
           </div>
           {(data.diagnosticoSecundario1 || data.diagnosticoSecundario2) && (
@@ -555,7 +555,7 @@ export const Certificado = (props) => {
           )}
         </div>
       </div>
-      {/* ââ RESULTADOS ÃNFASIS ESPECIALIZADO en certificado ââ */}
+      {/* Ã¢ÂÂÃ¢ÂÂ RESULTADOS ÃÂNFASIS ESPECIALIZADO en certificado Ã¢ÂÂÃ¢ÂÂ */}
       {data.enfasisExamen &&
         data.enfasisExamen !== "GENERAL" &&
         (() => {
@@ -580,11 +580,11 @@ export const Certificado = (props) => {
                     : "bg-rose-100 text-rose-800")
                 }
               >
-                Hallazgos Examen Ãnfasis:{" "}
+                Hallazgos Examen ÃÂnfasis:{" "}
                 {enf === "ALTURAS"
                   ? "Trabajo en Alturas (Res. 4272/2021)"
                   : enf === "ALIMENTOS"
-                  ? "ManipulaciÃ³n de Alimentos (Res. 2674/2013)"
+                  ? "ManipulaciÃÂ³n de Alimentos (Res. 2674/2013)"
                   : enf === "CONFINADOS"
                   ? "Espacios Confinados (Res. 0491/2020)"
                   : enf === "OSTEOMUSCULAR"
@@ -601,7 +601,7 @@ export const Certificado = (props) => {
                       </span>
                     </div>
                     <div className={rowCls}>
-                      <span className="text-gray-500">VÃ©rtigo</span>
+                      <span className="text-gray-500">VÃÂ©rtigo</span>
                       <span
                         className={badNorm(
                           data.examenAlturas?.vertigo,
@@ -612,7 +612,7 @@ export const Certificado = (props) => {
                       </span>
                     </div>
                     <div className={rowCls}>
-                      <span className="text-gray-500">CoordinaciÃ³n</span>
+                      <span className="text-gray-500">CoordinaciÃÂ³n</span>
                       <span
                         className={badNorm(data.examenAlturas?.coordinacion)}
                       >
@@ -710,7 +710,7 @@ export const Certificado = (props) => {
                       </span>
                     </div>
                     <div className={rowCls}>
-                      <span className="text-gray-500">NeurolÃ³gico</span>
+                      <span className="text-gray-500">NeurolÃÂ³gico</span>
                       <span
                         className={badNorm(data.examenConfinados?.neurologico)}
                       >
@@ -718,7 +718,7 @@ export const Certificado = (props) => {
                       </span>
                     </div>
                     <div className={rowCls}>
-                      <span className="text-gray-500">PsicolÃ³gico</span>
+                      <span className="text-gray-500">PsicolÃÂ³gico</span>
                       <span
                         className={badNorm(
                           data.examenConfinados?.psicologico,
@@ -729,7 +729,7 @@ export const Certificado = (props) => {
                       </span>
                     </div>
                     <div className={rowCls}>
-                      <span className="text-gray-500">ORL / OÃ­do</span>
+                      <span className="text-gray-500">ORL / OÃÂ­do</span>
                       <span
                         className={badNorm(data.examenConfinados?.otorrino)}
                       >
@@ -808,7 +808,7 @@ export const Certificado = (props) => {
                       </span>
                     </div>
                     <div className={rowCls}>
-                      <span className="text-gray-500">EvaluaciÃ³n Postural</span>
+                      <span className="text-gray-500">EvaluaciÃÂ³n Postural</span>
                       <span
                         className={badNorm(data.examenOsteomuscular?.postural)}
                       >
@@ -859,7 +859,7 @@ export const Certificado = (props) => {
                       </span>
                     </div>
                     <div className={rowCls}>
-                      <span className="text-gray-500">PresiÃ³n Arterial</span>
+                      <span className="text-gray-500">PresiÃÂ³n Arterial</span>
                       <span
                         className={badNorm(data.examenCorazon?.presionArterial)}
                       >
@@ -875,7 +875,7 @@ export const Certificado = (props) => {
                       </span>
                     </div>
                     <div className={rowCls}>
-                      <span className="text-gray-500">Pulsos PerifÃ©ricos</span>
+                      <span className="text-gray-500">Pulsos PerifÃÂ©ricos</span>
                       <span className={badNorm(data.examenCorazon?.pulsos)}>
                         {data.examenCorazon?.pulsos || "--"}
                       </span>
@@ -893,7 +893,7 @@ export const Certificado = (props) => {
                     </div>
                     <div className={rowCls}>
                       <span className="text-gray-500">
-                        PerfusiÃ³n PerifÃ©rica
+                        PerfusiÃÂ³n PerifÃÂ©rica
                       </span>
                       <span
                         className={badNorm(
@@ -911,7 +911,7 @@ export const Certificado = (props) => {
                     )}
                     {data.examenCorazon?.imc && (
                       <div className="col-span-2 text-gray-700">
-                        <span className="font-bold">AntropometrÃ­a: </span>
+                        <span className="font-bold">AntropometrÃÂ­a: </span>
                         {data.examenCorazon.imc}
                       </div>
                     )}
@@ -957,7 +957,7 @@ export const Certificado = (props) => {
           </div>
         ) : (
           <p className="text-[10px] text-red-500 font-bold mt-1">
-            â ï¸ Vigencia no registrada - Res. 1843/2025
+            Ã¢ÂÂ Ã¯Â¸Â Vigencia no registrada - Res. 1843/2025
           </p>
         )}
       </div>
@@ -988,10 +988,10 @@ export const Certificado = (props) => {
           </div>
           <div>
             <p className="text-xs font-black text-emerald-800">
-              Historia ClÃ­nica Firmada y Cerrada
+              Historia ClÃÂ­nica Firmada y Cerrada
             </p>
             <p className="text-[10px] text-emerald-600">
-              CÃ³digo de verificaciÃ³n:{" "}
+              CÃÂ³digo de verificaciÃÂ³n:{" "}
               <span className="font-mono font-bold">
                 {data.codigoVerificacion || "--"}
               </span>
@@ -1006,7 +1006,7 @@ export const Certificado = (props) => {
           </div>
         </div>
         <div className="text-center w-1/3">
-          {/* ââ B-08: Panel de Notas Aclaratorias - Res. 1995/1999 ââ */}
+          {/* Ã¢ÂÂÃ¢ÂÂ B-08: Panel de Notas Aclaratorias - Res. 1995/1999 Ã¢ÂÂÃ¢ÂÂ */}
           {data.notasAclaratorias && data.notasAclaratorias.length > 0 && (
             <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4 print:bg-transparent">
               <h4 className="text-xs font-black text-amber-800 uppercase mb-3 flex items-center gap-1">
@@ -1036,7 +1036,7 @@ export const Certificado = (props) => {
               </div>
             </div>
           )}
-          {/* ââ B-13: BotÃ³n descarga RDA - Res. 1888/2025 ââ */}
+          {/* Ã¢ÂÂÃ¢ÂÂ B-13: BotÃÂ³n descarga RDA - Res. 1888/2025 Ã¢ÂÂÃ¢ÂÂ */}
           {data.estadoHistoria === "Cerrada" && data.codigoVerificacion && (
             <button
               onClick={() => {
@@ -1047,16 +1047,16 @@ export const Certificado = (props) => {
                 );
                 if (ok)
                   showAlert(
-                    "â RDA descargado.\nRes. 1888/2025 - Para transmisiÃ³n IHCE se requiere firma electrÃ³nica."
+                    "Ã¢ÂÂ RDA descargado.\nRes. 1888/2025 - Para transmisiÃÂ³n IHCE se requiere firma electrÃÂ³nica."
                   );
-                else showAlert("â No se pudo generar el RDA.");
+                else showAlert("Ã¢ÂÂ No se pudo generar el RDA.");
               }}
               className="mb-2 flex items-center gap-1.5 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-700 no-print"
             >
               <FileText className="w-3 h-3" /> Descargar RDA - Res. 1888/2025
             </button>
           )}
-          {/* CÃ³digo de verificaciÃ³n integrado en la firma del certificado */}
+          {/* CÃÂ³digo de verificaciÃÂ³n integrado en la firma del certificado */}
         </div>
         <div className="text-center w-1/3">
           <DoctorSignature
@@ -1066,25 +1066,25 @@ export const Certificado = (props) => {
           />
         </div>
       </div>
-      {/* ââ NORMATIVO: Res. 1843/2025 Art. 25 - Registro entrega certificado ââ */}
-      {/* Evoluciones clÃ­nicas: se gestionan desde la HC, no aparecen en el certificado */}
+      {/* Ã¢ÂÂÃ¢ÂÂ NORMATIVO: Res. 1843/2025 Art. 25 - Registro entrega certificado Ã¢ÂÂÃ¢ÂÂ */}
+      {/* Evoluciones clÃÂ­nicas: se gestionan desde la HC, no aparecen en el certificado */}
       {renderEvolucionModal()}
-      {/* ââ B-F1-05: CarnÃ© manipulaciÃ³n alimentos ââ */}
+      {/* Ã¢ÂÂÃ¢ÂÂ B-F1-05: CarnÃÂ© manipulaciÃÂ³n alimentos Ã¢ÂÂÃ¢ÂÂ */}
       {data.enfasisExamen === "ALIMENTOS" && (
         <div className="no-print my-3 bg-green-50 border border-green-300 rounded-xl p-3 flex items-center justify-between">
           <div>
             <p className="text-xs font-black text-green-800">
-              ð½ï¸ CarnÃ© de ManipulaciÃ³n de Alimentos
+              Ã°ÂÂÂ½Ã¯Â¸Â CarnÃÂ© de ManipulaciÃÂ³n de Alimentos
             </p>
             <p className="text-[10px] text-green-600">
-              CarnÃ© imprimible 8.5Ã5.5 cm con foto y datos del trabajador
+              CarnÃÂ© imprimible 8.5ÃÂ5.5 cm con foto y datos del trabajador
             </p>
           </div>
           <button
             onClick={() => openCarnetAlimentos(data, activeDoctorData)}
             className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-xs font-black rounded-lg"
           >
-            ð¨ï¸ Imprimir CarnÃ©
+            Ã°ÂÂÂ¨Ã¯Â¸Â Imprimir CarnÃÂ©
           </button>
         </div>
       )}
@@ -1119,7 +1119,7 @@ export const Certificado = (props) => {
               }`}
             >
               {data.certificadoEntregado
-                ? "â Copia entregada al trabajador"
+                ? "Ã¢ÂÂ Copia entregada al trabajador"
                 : "Registrar entrega de copia al trabajador"}
             </span>
           </label>
@@ -1148,10 +1148,10 @@ export const Certificado = (props) => {
             </div>
             <div className="flex flex-col gap-0.5">
               <label className="text-[9px] font-bold text-gray-500 uppercase">
-                MÃ©todo de entrega
+                MÃÂ©todo de entrega
               </label>
               <select
-                value={data.metodoEntregaCertificado || "FÃ­sica"}
+                value={data.metodoEntregaCertificado || "FÃÂ­sica"}
                 onChange={(e) =>
                   setData((p) => ({
                     ...p,
@@ -1161,7 +1161,7 @@ export const Certificado = (props) => {
                 disabled={data.estadoHistoria === "Cerrada"}
                 className="p-1 border border-emerald-300 rounded text-xs bg-white"
               >
-                <option>FÃ­sica</option>
+                <option>FÃÂ­sica</option>
                 <option>Email</option>
                 <option>WhatsApp</option>
               </select>

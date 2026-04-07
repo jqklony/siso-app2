@@ -1,11 +1,11 @@
 import React from 'react';
-import { DoctorSignature, BrandLogo } from '../components/ui/DoctorSignature.jsx';
+import { DoctorSignature, BrandLogo } from '../components/medico/DoctorSignature.jsx';
 import { analyzeBP, analyzeBMI, NORMAL_DESCRIPTIONS_SYSTEMS } from '../utils/helpers.js';
 import {
   Plus, Search, Sparkles
 } from "lucide-react";
 
-// âââ HistoriaGeneral Page Component âââââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ HistoriaGeneral Page Component Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 // Auto-extracted from App.jsx monolith
 export const HistoriaGeneral = (props) => {
   const {
@@ -409,7 +409,7 @@ export const HistoriaGeneral = (props) => {
     NotificacionModal,
     LoginForm,
     PortalPublicoTrabajador,
-    AgendaFieldF,    // âââ Role guard helpers from sharedProps âââ
+    AgendaFieldF,    // Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Role guard helpers from sharedProps Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ
   _isAdmin,
   _isAdminEmpresa,
   _secretariaPuede,
@@ -437,7 +437,7 @@ export const HistoriaGeneral = (props) => {
             .slice(0, 8)
         : [];
     const loadGenPatient = (p) => {
-      // Memoria de antecedentes: carga datos clÃ­nicos previos del paciente
+      // Memoria de antecedentes: carga datos clÃÂ­nicos previos del paciente
       const prevHCs = patientsList
         .filter((h) => h.docNumero === p.docNumero && h.fechaExamen)
         .sort(
@@ -461,7 +461,7 @@ export const HistoriaGeneral = (props) => {
         afp: p.afp || "",
         grupoSanguineo: p.grupoSanguineo || "",
         foto: p.foto || "",
-        // ANTECEDENTES POR MEMORIA (desde HC mÃ¡s reciente)
+        // ANTECEDENTES POR MEMORIA (desde HC mÃÂ¡s reciente)
         antecedentes: latest.antecedentes
           ? { ...latest.antecedentes }
           : prev.antecedentes,
@@ -509,7 +509,7 @@ export const HistoriaGeneral = (props) => {
                 >
                   <p className="text-xs font-bold text-blue-900">{p.nombres}</p>
                   <p className="text-[10px] text-gray-500">
-                    {p.docNumero} Â· {p.eps || "Sin EPS"} Â· {p.edad || "?"} aÃ±os
+                    {p.docNumero} ÃÂ· {p.eps || "Sin EPS"} ÃÂ· {p.edad || "?"} aÃÂ±os
                   </p>
                 </button>
               ))}
@@ -521,7 +521,7 @@ export const HistoriaGeneral = (props) => {
             <BrandLogo data={activeDoctorData} />
             {activeDoctorData?.licencia && (
               <p className="text-[8px] text-gray-400 mt-0.5 no-print">
-                Reg. MÃ©dico:{" "}
+                Reg. MÃÂ©dico:{" "}
                 <span className="font-bold text-gray-600">
                   {activeDoctorData.licencia}
                 </span>
@@ -530,9 +530,9 @@ export const HistoriaGeneral = (props) => {
           </div>
           <div className="w-1/3 text-center">
             <h1 className="text-sm font-black text-gray-800 uppercase">
-              Historia ClÃ­nica -- Medicina General
+              Historia ClÃÂ­nica -- Medicina General
             </h1>
-            <p className="text-[9px] text-gray-500">ResoluciÃ³n 1995 de 1999</p>
+            <p className="text-[9px] text-gray-500">ResoluciÃÂ³n 1995 de 1999</p>
           </div>
           <div className="w-1/3 text-right text-[9px] font-bold text-gray-400">
             <p>FOR-MG-001 v1.0</p>
@@ -543,7 +543,7 @@ export const HistoriaGeneral = (props) => {
           disabled={data.estadoHistoria === "Cerrada"}
           className="disabled:opacity-75"
         >
-          {/* Datos bÃ¡sicos */}
+          {/* Datos bÃÂ¡sicos */}
           <SectionTitle title="Datos del Paciente" icon={User} color="blue" />
           <div className="flex flex-wrap -mx-1.5">
             <InputGroup
@@ -585,7 +585,7 @@ export const HistoriaGeneral = (props) => {
               width="w-1/8 min-w-[80px]"
             />
             <SelectGroup
-              label="GÃ©nero"
+              label="GÃÂ©nero"
               name="genero"
               value={data.genero}
               onChange={handleChange}
@@ -609,14 +609,14 @@ export const HistoriaGeneral = (props) => {
               list="eps-list"
             />
             <InputGroup
-              label="TelÃ©fono"
+              label="TelÃÂ©fono"
               name="telefono"
               value={data.telefono}
               onChange={handleChange}
               width="w-1/4"
             />
             <InputGroup
-              label="Grupo SanguÃ­neo"
+              label="Grupo SanguÃÂ­neo"
               name="grupoSanguineo"
               value={data.grupoSanguineo}
               onChange={handleChange}
@@ -651,7 +651,7 @@ export const HistoriaGeneral = (props) => {
             rows={2}
           />
           <TextAreaGroup
-            label="Enfermedad Actual (CronologÃ­a, localizaciÃ³n, intensidad, factores modificadores)"
+            label="Enfermedad Actual (CronologÃÂ­a, localizaciÃÂ³n, intensidad, factores modificadores)"
             name="enfermedadActual"
             value={data.enfermedadActual}
             onChange={handleChange}
@@ -661,13 +661,13 @@ export const HistoriaGeneral = (props) => {
           <SectionTitle title="Antecedentes" icon={History} color="blue" />
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-2">
             {[
-              { k: "personales", l: "PatolÃ³gicos" },
+              { k: "personales", l: "PatolÃÂ³gicos" },
               { k: "familiares", l: "Familiares" },
-              { k: "quirurgicos", l: "QuirÃºrgicos" },
-              { k: "traumaticos", l: "TraumÃ¡ticos" },
-              { k: "farmacologicos", l: "FarmacolÃ³gicos" },
-              { k: "alergicos", l: "AlÃ©rgicos" },
-              { k: "ginecologicos", l: "Gineco-ObstÃ©tricos" },
+              { k: "quirurgicos", l: "QuirÃÂºrgicos" },
+              { k: "traumaticos", l: "TraumÃÂ¡ticos" },
+              { k: "farmacologicos", l: "FarmacolÃÂ³gicos" },
+              { k: "alergicos", l: "AlÃÂ©rgicos" },
+              { k: "ginecologicos", l: "Gineco-ObstÃÂ©tricos" },
             ].map((a) => {
               const val = data.antecedentes?.[a.k];
               const hasContent =
@@ -687,7 +687,7 @@ export const HistoriaGeneral = (props) => {
                     <span className="font-bold uppercase text-gray-700">
                       {a.l}
                     </span>
-                    {/* Pantalla: radios No / SÃ­ */}
+                    {/* Pantalla: radios No / SÃÂ­ */}
                     <div className="flex gap-2 no-print">
                       <label className="cursor-pointer flex items-center gap-0.5">
                         <input
@@ -718,16 +718,16 @@ export const HistoriaGeneral = (props) => {
                           }
                           className="w-3 h-3"
                         />
-                        <span>SÃ­</span>
+                        <span>SÃÂ­</span>
                       </label>
                     </div>
-                    {/* ImpresiÃ³n: solo el estado seleccionado */}
+                    {/* ImpresiÃÂ³n: solo el estado seleccionado */}
                     <span
                       className={`hidden print:inline text-[8.5pt] font-bold ${
                         hasContent ? "text-red-600" : "text-gray-400"
                       }`}
                     >
-                      {hasContent ? "â Positivo" : "â Niega"}
+                      {hasContent ? "Ã¢ÂÂ Positivo" : "Ã¢ÂÂ Niega"}
                     </span>
                   </div>
                   {hasContent && (
@@ -747,7 +747,7 @@ export const HistoriaGeneral = (props) => {
                       className="w-full p-0.5 border-b border-red-300 bg-transparent outline-none text-[9px] resize-none"
                     />
                   )}
-                  {/* ImpresiÃ³n: antecedente negativo â mostrar "Niega" en texto */}
+                  {/* ImpresiÃÂ³n: antecedente negativo Ã¢ÂÂ mostrar "Niega" en texto */}
                   {!hasContent && (
                     <p className="hidden print:block text-[8pt] text-gray-400 italic leading-tight">
                       Niega
@@ -759,7 +759,7 @@ export const HistoriaGeneral = (props) => {
           </div>
           <div className="print-section-break" />
           <SectionTitle
-            title="RevisiÃ³n por Sistemas"
+            title="RevisiÃÂ³n por Sistemas"
             icon={Activity}
             color="blue"
           />
@@ -769,7 +769,7 @@ export const HistoriaGeneral = (props) => {
                 k: "general",
                 l: "General",
                 normal:
-                  "Sin sÃ­ntomas constitucionales. Niega pÃ©rdida de peso, fiebre ni astenia.",
+                  "Sin sÃÂ­ntomas constitucionales. Niega pÃÂ©rdida de peso, fiebre ni astenia.",
               },
               {
                 k: "cardiovascular",
@@ -780,13 +780,13 @@ export const HistoriaGeneral = (props) => {
               {
                 k: "respiratorio",
                 l: "Respiratorio",
-                normal: "Niega tos, disnea, expectoraciÃ³n ni hemoptisis.",
+                normal: "Niega tos, disnea, expectoraciÃÂ³n ni hemoptisis.",
               },
               {
                 k: "digestivo",
                 l: "Digestivo",
                 normal:
-                  "Niega dolor abdominal, nÃ¡useas, vÃ³mito, diarrea ni rectorragia.",
+                  "Niega dolor abdominal, nÃÂ¡useas, vÃÂ³mito, diarrea ni rectorragia.",
               },
               {
                 k: "genitourinario",
@@ -795,27 +795,27 @@ export const HistoriaGeneral = (props) => {
               },
               {
                 k: "musculoesqueletico",
-                l: "MusculoesquelÃ©tico",
+                l: "MusculoesquelÃÂ©tico",
                 normal:
-                  "Niega artralgias, mialgias, rigidez ni limitaciÃ³n funcional.",
+                  "Niega artralgias, mialgias, rigidez ni limitaciÃÂ³n funcional.",
               },
               {
                 k: "neurologico",
-                l: "NeurolÃ³gico",
+                l: "NeurolÃÂ³gico",
                 normal:
                   "Niega cefalea, mareos, convulsiones, alteraciones visuales ni parestesias.",
               },
               {
                 k: "dermatologico",
-                l: "DermatolÃ³gico",
+                l: "DermatolÃÂ³gico",
                 normal:
-                  "Niega lesiones cutÃ¡neas, prurito, cambios de coloraciÃ³n ni rash.",
+                  "Niega lesiones cutÃÂ¡neas, prurito, cambios de coloraciÃÂ³n ni rash.",
               },
               {
                 k: "endocrinologico",
-                l: "EndocrinolÃ³gico",
+                l: "EndocrinolÃÂ³gico",
                 normal:
-                  "Niega poliuria, polidipsia, intolerancia al calor/frÃ­o ni cambios de peso.",
+                  "Niega poliuria, polidipsia, intolerancia al calor/frÃÂ­o ni cambios de peso.",
               },
             ].map((s) => {
               const val = data.revisionSistemas?.[s.k] || "";
@@ -823,7 +823,7 @@ export const HistoriaGeneral = (props) => {
                 val &&
                 val.trim() !== "" &&
                 val.trim().toLowerCase() !== "niega" &&
-                !val.toLowerCase().includes("sin sÃ­ntomas") &&
+                !val.toLowerCase().includes("sin sÃÂ­ntomas") &&
                 !val.toLowerCase().includes("niega");
               return (
                 <div
@@ -875,13 +875,13 @@ export const HistoriaGeneral = (props) => {
                         <span className="text-red-600 font-bold">Anormal</span>
                       </label>
                     </div>
-                    {/* ImpresiÃ³n: solo el estado seleccionado */}
+                    {/* ImpresiÃÂ³n: solo el estado seleccionado */}
                     <span
                       className={`hidden print:inline text-[8.5pt] font-bold ${
                         isAbnormal ? "text-red-600" : "text-emerald-700"
                       }`}
                     >
-                      {isAbnormal ? "â Anormal" : "â Normal"}
+                      {isAbnormal ? "Ã¢ÂÂ Anormal" : "Ã¢ÂÂ Normal"}
                     </span>
                   </div>
                   {isAbnormal ? (
@@ -897,7 +897,7 @@ export const HistoriaGeneral = (props) => {
                           },
                         }))
                       }
-                      placeholder="Describa sÃ­ntomas..."
+                      placeholder="Describa sÃÂ­ntomas..."
                       className="w-full text-[10px] p-1 border border-red-300 rounded bg-white resize-none"
                     />
                   ) : (
@@ -910,7 +910,7 @@ export const HistoriaGeneral = (props) => {
             })}
           </div>
           <div className="print-section-break" />
-          <SectionTitle title="Examen FÃ­sico" icon={Activity} color="blue" />
+          <SectionTitle title="Examen FÃÂ­sico" icon={Activity} color="blue" />
           <div className="bg-blue-50 p-2 rounded-lg border border-blue-100 mb-2 print:bg-transparent">
             <div className="grid grid-cols-4 gap-1 mb-2">
               <InputGroup
@@ -948,7 +948,7 @@ export const HistoriaGeneral = (props) => {
                 }
               />
               <InputGroup
-                label="Temp (Â°C)"
+                label="Temp (ÃÂ°C)"
                 name="exFTemp"
                 value={data.examenFisico?.temp || ""}
                 onChange={(e) =>
@@ -1049,7 +1049,7 @@ export const HistoriaGeneral = (props) => {
                 }
                 className="text-[10px] bg-emerald-600 text-white px-3 py-1 rounded-lg font-bold hover:bg-emerald-700 flex items-center gap-1"
               >
-                â Todos Normal
+                Ã¢ÂÂ Todos Normal
               </button>
             </div>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
@@ -1118,7 +1118,7 @@ export const HistoriaGeneral = (props) => {
                         <span className="text-red-600 font-bold">Anormal</span>
                       </label>
                     </div>
-                    {/* ImpresiÃ³n: solo el estado seleccionado */}
+                    {/* ImpresiÃÂ³n: solo el estado seleccionado */}
                     <span
                       className={`hidden print:inline text-[8.5pt] font-bold ${
                         data.sistemasPorExamen[sys].estado === "Anormal"
@@ -1127,11 +1127,11 @@ export const HistoriaGeneral = (props) => {
                       }`}
                     >
                       {data.sistemasPorExamen[sys].estado === "Anormal"
-                        ? "â Anormal"
-                        : "â Normal"}
+                        ? "Ã¢ÂÂ Anormal"
+                        : "Ã¢ÂÂ Normal"}
                     </span>
                   </div>
-                  {/* Pantalla: descripciÃ³n normal en gris */}
+                  {/* Pantalla: descripciÃÂ³n normal en gris */}
                   <p
                     className={`text-[9px] leading-relaxed print:hidden ${
                       data.sistemasPorExamen[sys].estado === "Anormal"
@@ -1145,7 +1145,7 @@ export const HistoriaGeneral = (props) => {
                     <textarea
                       rows={2}
                       className="w-full text-[10px] p-1 border border-red-300 rounded bg-white resize-none"
-                      placeholder="Describa el hallazgo patolÃ³gico..."
+                      placeholder="Describa el hallazgo patolÃÂ³gico..."
                       value={data.sistemasPorExamen[sys].hallazgo}
                       onChange={(e) =>
                         setData((p) => ({
@@ -1167,7 +1167,7 @@ export const HistoriaGeneral = (props) => {
           </div>
           <div className="print-section-break" />
           <SectionTitle
-            title="ImpresiÃ³n DiagnÃ³stica y Plan de Manejo"
+            title="ImpresiÃÂ³n DiagnÃÂ³stica y Plan de Manejo"
             icon={FileCheck}
             color="blue"
           />
@@ -1183,12 +1183,12 @@ export const HistoriaGeneral = (props) => {
                 ) : (
                   <Sparkles className="w-3.5 h-3.5" />
                 )}{" "}
-                AnÃ¡lisis IA
+                AnÃÂ¡lisis IA
               </button>
             </div>
             <div className="mb-2">
               <label className="block text-[10px] font-bold text-gray-600 mb-1 uppercase">
-                DiagnÃ³sticos (CIE-10)
+                DiagnÃÂ³sticos (CIE-10)
               </label>
               {(data.diagnosticos || []).map((diag, i) => (
                 <div key={i} className="flex gap-2 mb-1">
@@ -1203,7 +1203,7 @@ export const HistoriaGeneral = (props) => {
                       }
                       onChange={(v) => {
                         const d = [...data.diagnosticos];
-                        // Detectar si seleccionÃ³ un item completo "CÃDIGO - descripciÃ³n"
+                        // Detectar si seleccionÃÂ³ un item completo "CÃÂDIGO - descripciÃÂ³n"
                         const match = v.match(
                           /^([A-Z][0-9]{2}[\.0-9]*)\s+-\s+(.+)$/
                         );
@@ -1218,7 +1218,7 @@ export const HistoriaGeneral = (props) => {
                         }
                         setData((p) => ({ ...p, diagnosticos: d }));
                       }}
-                      placeholder="Buscar CIE-10 - cÃ³digo o descripciÃ³n..."
+                      placeholder="Buscar CIE-10 - cÃÂ³digo o descripciÃÂ³n..."
                       className="w-full p-1 border rounded text-xs focus:ring-2 focus:ring-blue-400 outline-none"
                     />
                   </div>
@@ -1264,7 +1264,7 @@ export const HistoriaGeneral = (props) => {
                 }
                 className="text-blue-600 text-[11px] font-bold flex items-center gap-1 hover:underline mt-1"
               >
-                <Plus className="w-3 h-3" /> Agregar diagnÃ³stico
+                <Plus className="w-3 h-3" /> Agregar diagnÃÂ³stico
               </button>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -1292,7 +1292,7 @@ export const HistoriaGeneral = (props) => {
               />
             </div>
           </div>
-          {/* ââ Firma y VerificaciÃ³n ââ */}
+          {/* Ã¢ÂÂÃ¢ÂÂ Firma y VerificaciÃÂ³n Ã¢ÂÂÃ¢ÂÂ */}
           <div
             className={`mt-6 px-4 print-break-avoid transition-all ${
               data.estadoHistoria === "Cerrada" ? "block" : "hidden print:block"
@@ -1311,7 +1311,7 @@ export const HistoriaGeneral = (props) => {
                   </div>
                 </div>
                 <div className="text-center w-1/3">
-                  {/* Firma Digital movida al Ã¡rea inferior del certificado */}
+                  {/* Firma Digital movida al ÃÂ¡rea inferior del certificado */}
                 </div>
                 <div className="text-center w-1/3">
                   <DoctorSignature
