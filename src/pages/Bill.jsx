@@ -1,5 +1,6 @@
 import React from 'react';
 import { DoctorSignature, BrandLogo } from '../components/medico/DoctorSignature.jsx';
+import { ORG_DEFAULT_ID } from '../data/initialState.js';
 import { getSpanishDate } from '../utils/helpers.js';
 import {
   LogOut, Printer, Receipt, Save

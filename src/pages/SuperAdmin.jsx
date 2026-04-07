@@ -1,6 +1,6 @@
 import React from 'react';
 import { PLAN_CONFIG } from '../data/planConfig.js';
-import { DEFAULT_DOCTOR_DATA } from '../data/initialState.js';
+import { DEFAULT_DOCTOR_DATA, ORG_DEFAULT_ID } from '../data/initialState.js';
 
 // âââ SuperAdmin Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith

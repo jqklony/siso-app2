@@ -1,5 +1,5 @@
 import React from 'react';
-import { DEFAULT_DOCTOR_DATA } from '../data/initialState.js';
+import { DEFAULT_DOCTOR_DATA, ORG_DEFAULT_ID } from '../data/initialState.js';
 
 // âââ PortalEmpresa Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith

@@ -1,5 +1,5 @@
 import React from 'react';
-import { initialCompanyState } from '../data/initialState.js';
+import { initialCompanyState, ORG_DEFAULT_ID } from '../data/initialState.js';
 import { ARL_LIST } from '../data/dropdowns.js';
 import {
   LogOut

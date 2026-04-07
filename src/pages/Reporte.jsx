@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrandLogo } from '../components/medico/DoctorSignature.jsx';
+import { DoctorSignature, BrandLogo } from '../components/medico/DoctorSignature.jsx';
 import { analyzeBP, analyzeBMI } from '../utils/helpers.js';
 import {
   BrainCircuit, FileText, HardDrive, LogOut, Printer, Receipt, ShieldCheck, Sparkles, UserCheck
