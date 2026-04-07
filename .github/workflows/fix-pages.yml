@@ -1,0 +1,40 @@
+name: Fix Damaged Page Files
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-pages.yml'
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Restore damaged files from good commit
+        run: |
+          GOOD=bed8b51c073f1366a0cc2449b90428c9307568f1
+          git checkout $GOOD -- src/pages/ARL.jsx src/pages/Agenda.jsx src/pages/SVE.jsx src/pages/Users.jsx
+          
+      - name: Add missing imports
+        run: |
+          for f in src/pages/ARL.jsx src/pages/Agenda.jsx src/pages/SVE.jsx src/pages/Propuestas.jsx src/pages/Bill.jsx; do
+            sed -i "s|import React from 'react';|import React from 'react';\nimport { PlanGate } from '../components/AppComponents.jsx';|" $f
+          done
+          sed -i "s|import React from 'react';|import React from 'react';\nimport { CIE10Input } from '../components/AppComponents.jsx';|" src/pages/HistoriaGeneral.jsx
+          sed -i "s|import React from 'react';|import React from 'react';\nimport { CIE11Badge, CIE10Input } from '../components/AppComponents.jsx';|" src/pages/HistoriaOcupacional.jsx
+          sed -i "s|import React from 'react';|import React from 'react';\nimport { LicenciasTab } from '../components/AppComponents.jsx';|" src/pages/Users.jsx
+          sed -i "s|import { DEFAULT_DOCTOR_DATA, ORG_DEFAULT_ID, SECRETARIA_PERMISOS_DEFAULT } from '../data/initialState.js';|import { DEFAULT_DOCTOR_DATA, ORG_DEFAULT_ID, SECRETARIA_PERMISOS_DEFAULT, _genOrgId } from '../data/initialState.js';|" src/pages/SuperAdmin.jsx
+          
+      - name: Commit fixes and remove workflow
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add src/pages/
+          git commit -m "fix: restore 4 damaged pages + add missing imports to 9 files"
+          git rm .github/workflows/fix-pages.yml
+          git commit -m "chore: remove fix workflow"
+          git push
