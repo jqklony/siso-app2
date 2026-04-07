@@ -1,9 +1,10 @@
 import React from 'react';
+import { DEFAULT_DOCTOR_DATA } from '../data/initialState.js';
 import {
   Activity, Banknote, FileSignature, GraduationCap, HardDrive, Lock, LogOut, Pencil, Receipt, Save, Shield, UploadCloud, UserCheck, UserPlus
 } from "lucide-react";
 
-// ─── Users Page Component ─────────────────────────────────────────────
+// âââ Users Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const Users = (props) => {
   const {
@@ -407,7 +408,7 @@ export const Users = (props) => {
     NotificacionModal,
     LoginForm,
     PortalPublicoTrabajador,
-    AgendaFieldF,    // ─── Role guard helpers from sharedProps ───
+    AgendaFieldF,    // âââ Role guard helpers from sharedProps âââ
   _isAdmin,
   _isAdminEmpresa,
   _secretariaPuede,
@@ -417,7 +418,7 @@ export const Users = (props) => {
     ...rest
 } = props;
 
-    // Médico (sin empresa): solo puede ver/editar su propio perfil
+    // MÃ©dico (sin empresa): solo puede ver/editar su propio perfil
     if (currentUser?.role === "medico" && !currentUser?.empresaId) {
       const me = usersList.find((u) => u.user === currentUser?.user);
       if (me && !userEditId) {
@@ -432,7 +433,7 @@ export const Users = (props) => {
       if (activeUserMgmtTab !== "list")
         setTimeout(() => setActiveUserMgmtTab("list"), 0);
     }
-    // Médico de empresa: puede ver su perfil y la lista de usuarios de su empresa (solo lectura)
+    // MÃ©dico de empresa: puede ver su perfil y la lista de usuarios de su empresa (solo lectura)
     if (currentUser?.role === "medico" && currentUser?.empresaId) {
       if (activeUserMgmtTab !== "list")
         setTimeout(() => setActiveUserMgmtTab("list"), 0);
@@ -445,7 +446,7 @@ export const Users = (props) => {
       });
     };
     const saveEdit = () => {
-      // FIX M-06: validar complejidad de contraseña si se cambia
+      // FIX M-06: validar complejidad de contraseÃ±a si se cambia
       const saveUser = async () => {
         let userData = { ...editForm };
         if (editForm.pass && editForm.pass.length > 0) {
@@ -453,7 +454,7 @@ export const Users = (props) => {
           const { valida: pwVal2, errores: pwErr2 } = _validarContrasena(pw);
           if (!pwVal2) {
             showAlert(
-              "⚠️ Contraseña no cumple la política:\n• " + pwErr2.join("\n• ")
+              "â ï¸ ContraseÃ±a no cumple la polÃ­tica:\nâ¢ " + pwErr2.join("\nâ¢ ")
             );
             return;
           }
@@ -466,7 +467,7 @@ export const Users = (props) => {
         setUsersList(upd);
         _sync("siso_users", JSON.stringify(upd));
         _sbSet("siso_users", upd); // Bloque 1: sync inmediato a Supabase
-        // Si el usuario editó su propio perfil, actualizar currentUser en memoria para reflejo inmediato
+        // Si el usuario editÃ³ su propio perfil, actualizar currentUser en memoria para reflejo inmediato
         if (
           userData.id === currentUser?.id ||
           userData.user === currentUser?.user
@@ -476,7 +477,7 @@ export const Users = (props) => {
           if (userData.doctorData) {
             _sbSet(`siso_doctor_data_${userData.user}`, userData.doctorData);
           }
-          // También actualizar firma global si cambió
+          // TambiÃ©n actualizar firma global si cambiÃ³
           if (userData.doctorData?.signature) {
             setDoctorSignature(userData.doctorData.signature);
             _sync("siso_doctor_signature", userData.doctorData.signature);
@@ -484,7 +485,7 @@ export const Users = (props) => {
           }
         }
         setUserEditId(null);
-        showAlert("✅ Perfil guardado. Los cambios se aplican de inmediato.");
+        showAlert("â Perfil guardado. Los cambios se aplican de inmediato.");
       };
       saveUser();
     };
@@ -501,9 +502,9 @@ export const Users = (props) => {
             <h2 className="text-xl font-black text-violet-900 flex items-center gap-2">
               <UserCheck className="w-5 h-5" />{" "}
               {_isAdmin(currentUser?.role)
-                ? "Gestión de Usuarios y Perfiles Médicos"
+                ? "GestiÃ³n de Usuarios y Perfiles MÃ©dicos"
                 : currentUser?.role === "admin_empresa"
-                ? "Gestión de Equipo IPS"
+                ? "GestiÃ³n de Equipo IPS"
                 : "Mi Perfil Profesional"}
             </h2>
             <button
@@ -525,15 +526,15 @@ export const Users = (props) => {
                 k: "list",
                 l:
                   currentUser?.role === "admin_empresa"
-                    ? "👥 Equipo IPS"
+                    ? "ð¥ Equipo IPS"
                     : "Mi Perfil",
                 showFor: "all",
               },
-              { k: "new", l: "➕ Crear Usuario", showFor: "admin" },
-              { k: "reasignacion", l: "🔀 Reasignación", showFor: "admin" },
-              { k: "licencias", l: "💼 Licencias", showFor: "admin" },
-              { k: "auditoria", l: "📋 Auditoría", showFor: "admin" },
-              { k: "storage", l: "💾 Almacenamiento", showFor: "admin" },
+              { k: "new", l: "â Crear Usuario", showFor: "admin" },
+              { k: "reasignacion", l: "ð ReasignaciÃ³n", showFor: "admin" },
+              { k: "licencias", l: "ð¼ Licencias", showFor: "admin" },
+              { k: "auditoria", l: "ð AuditorÃ­a", showFor: "admin" },
+              { k: "storage", l: "ð¾ Almacenamiento", showFor: "admin" },
             ]
               .filter(
                 ({ showFor }) =>
@@ -558,7 +559,7 @@ export const Users = (props) => {
                 </button>
               ))}
           </div>
-          {/* ── LISTA USUARIOS ── */}
+          {/* ââ LISTA USUARIOS ââ */}
           {activeUserMgmtTab === "list" &&
             !userEditId &&
             currentUser?.role === "medico" &&
@@ -583,7 +584,7 @@ export const Users = (props) => {
             !userEditId &&
             (currentUser?.role !== "medico" || currentUser?.empresaId) && (
               <div className="space-y-3">
-                {/* ── IPS banner en lista de usuarios ── */}
+                {/* ââ IPS banner en lista de usuarios ââ */}
                 {currentUser?.role === "admin_empresa" &&
                   (() => {
                     const _miEmpU = companies.find(
@@ -592,10 +593,10 @@ export const Users = (props) => {
                     return (
                       <div className="bg-teal-50 border border-teal-200 rounded-xl p-3 mb-2">
                         <p className="text-xs font-black text-teal-700">
-                          🏥 Equipo IPS: {_miEmpU?.nombre || "Empresa"}
+                          ð¥ Equipo IPS: {_miEmpU?.nombre || "Empresa"}
                         </p>
                         <p className="text-[10px] text-teal-500">
-                          Cree médicos y secretarias que ingresarán al sistema
+                          Cree mÃ©dicos y secretarias que ingresarÃ¡n al sistema
                           con sus propias credenciales, vinculados a esta
                           empresa.
                         </p>
@@ -604,7 +605,7 @@ export const Users = (props) => {
                   })()}
                 {usersList
                   .filter((u) =>
-                    // ── IPS: admin_empresa solo ve usuarios de su empresa ──
+                    // ââ IPS: admin_empresa solo ve usuarios de su empresa ââ
                     currentUser?.role === "admin_empresa"
                       ? u.empresaId === currentUser.empresaId ||
                         u.user === currentUser.user
@@ -645,24 +646,24 @@ export const Users = (props) => {
                               }`}
                             >
                               {u.role === "super_admin"
-                                ? "⭐ Super Admin"
+                                ? "â­ Super Admin"
                                 : u.role === "admin_empresa"
-                                ? "🏥 Admin IPS"
+                                ? "ð¥ Admin IPS"
                                 : u.role === "administrador"
                                 ? "Administrador"
                                 : u.role === "secretaria"
                                 ? "Secretaria"
-                                : "Médico"}
+                                : "MÃ©dico"}
                             </span>
                             {u.activo === false && (
                               <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-gray-200 text-gray-500 ml-1">
-                                ⏸ Inactivo
+                                â¸ Inactivo
                               </span>
                             )}
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          {/* Médico puede editar su propio perfil; admin puede editar cualquiera */}
+                          {/* MÃ©dico puede editar su propio perfil; admin puede editar cualquiera */}
                           {(u.user === currentUser?.user ||
                             _isAdmin(currentUser?.role)) && (
                             <button
@@ -675,11 +676,11 @@ export const Users = (props) => {
                             >
                               <Pencil className="w-3 h-3" />
                               {u.user === currentUser?.user
-                                ? "✏️ Mi Perfil"
-                                : "✏️ Editar perfil"}
+                                ? "âï¸ Mi Perfil"
+                                : "âï¸ Editar perfil"}
                             </button>
                           )}
-                          {/* Solo admin puede activar/desactivar y eliminar usuarios (no a sí mismo) */}
+                          {/* Solo admin puede activar/desactivar y eliminar usuarios (no a sÃ­ mismo) */}
                           {_isAdmin(currentUser?.role) &&
                             u.user !== currentUser?.user && (
                               <button
@@ -702,8 +703,8 @@ export const Users = (props) => {
                                   _sync("siso_users", JSON.stringify(upd));
                                   showAlert(
                                     u.activo === false
-                                      ? `✅ Usuario @${u.user} activado.`
-                                      : `⏸️ Usuario @${u.user} desactivado. No podrá iniciar sesión.`
+                                      ? `â Usuario @${u.user} activado.`
+                                      : `â¸ï¸ Usuario @${u.user} desactivado. No podrÃ¡ iniciar sesiÃ³n.`
                                   );
                                 }}
                                 className={`p-1.5 rounded-lg text-xs font-bold flex items-center gap-1 ${
@@ -713,10 +714,10 @@ export const Users = (props) => {
                                 }`}
                               >
                                 {u.activo === false ? (
-                                  <span className="text-[10px]">▶ Activar</span>
+                                  <span className="text-[10px]">â¶ Activar</span>
                                 ) : (
                                   <span className="text-[10px]">
-                                    ⏸ Desactivar
+                                    â¸ Desactivar
                                   </span>
                                 )}
                               </button>
@@ -726,7 +727,7 @@ export const Users = (props) => {
                             usersList.length > 1 && (
                               <button
                                 onClick={() =>
-                                  showConfirm("¿Eliminar usuario?", () => {
+                                  showConfirm("Â¿Eliminar usuario?", () => {
                                     const upd = usersList.filter(
                                       (x) => x.id !== u.id
                                     );
@@ -787,14 +788,14 @@ export const Users = (props) => {
                   ))}
               </div>
             )}
-          {/* ── EDITAR USUARIO (perfil completo) ── */}
+          {/* ââ EDITAR USUARIO (perfil completo) ââ */}
           {activeUserMgmtTab === "list" && userEditId && (
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              {/* Banner: quién se está editando */}
+              {/* Banner: quiÃ©n se estÃ¡ editando */}
               {_isAdmin(currentUser?.role) &&
                 editForm.user !== currentUser?.user && (
                   <div className="mb-4 flex items-center gap-3 bg-amber-50 border-2 border-amber-300 rounded-xl px-4 py-3">
-                    <span className="text-amber-600 text-xl">⚙️</span>
+                    <span className="text-amber-600 text-xl">âï¸</span>
                     <div>
                       <p className="text-xs font-black text-amber-800 uppercase">
                         Editando perfil de otro usuario
@@ -807,7 +808,7 @@ export const Users = (props) => {
                       onClick={() => setUserEditId(null)}
                       className="ml-auto text-amber-500 hover:text-amber-700 text-xs font-bold underline"
                     >
-                      ← Volver a la lista
+                      â Volver a la lista
                     </button>
                   </div>
                 )}
@@ -828,7 +829,7 @@ export const Users = (props) => {
                   <Lock className="w-3 h-3" /> Datos de Acceso
                   {!_isAdmin(currentUser?.role) && (
                     <span className="text-[9px] font-normal text-violet-500 normal-case ml-1">
-                      (Solo puedes cambiar tu contraseña y datos profesionales)
+                      (Solo puedes cambiar tu contraseÃ±a y datos profesionales)
                     </span>
                   )}
                 </p>
@@ -864,7 +865,7 @@ export const Users = (props) => {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-600 mb-1">
-                      Nueva Contraseña
+                      Nueva ContraseÃ±a
                     </label>
                     <input
                       type="password"
@@ -886,11 +887,11 @@ export const Users = (props) => {
                         }`}
                       >
                         {editForm.pass.length < 8
-                          ? `⚠ Mín. 8 caracteres`
+                          ? `â  MÃ­n. 8 caracteres`
                           : !/[A-Z]/.test(editForm.pass) &&
                             !/[0-9]/.test(editForm.pass)
-                          ? "⚠ Agrega mayúscula o número"
-                          : "✅ Contraseña segura"}
+                          ? "â  Agrega mayÃºscula o nÃºmero"
+                          : "â ContraseÃ±a segura"}
                       </p>
                     )}
                   </div>
@@ -907,19 +908,19 @@ export const Users = (props) => {
                       className="w-full p-2 border rounded-lg text-sm disabled:bg-gray-100 disabled:text-gray-400"
                     >
                       {currentUser?.role === "super_admin" && (
-                        <option value="super_admin">⭐ Super Admin</option>
+                        <option value="super_admin">â­ Super Admin</option>
                       )}
                       <option value="administrador">Administrador</option>
-                      <option value="medico">Médico</option>
+                      <option value="medico">MÃ©dico</option>
                       <option value="secretaria">Secretaria</option>
                     </select>
                   </div>
                 </div>
-                {/* FASE 2 Componente 10: % Honorarios (solo para médicos) */}
+                {/* FASE 2 Componente 10: % Honorarios (solo para mÃ©dicos) */}
                 {editForm.role === "medico" && _isAdmin(currentUser?.role) && (
                   <div className="bg-teal-50 rounded-xl p-3 border border-teal-200 mt-2">
                     <p className="text-xs font-black text-teal-700 mb-1">
-                      💰 Distribución de Honorarios (hook futuro)
+                      ð° DistribuciÃ³n de Honorarios (hook futuro)
                     </p>
                     <div className="flex items-center gap-3">
                       <input
@@ -936,12 +937,12 @@ export const Users = (props) => {
                         className="flex-1 accent-teal-600"
                       />
                       <span className="font-black text-teal-700 text-sm w-16 text-right">
-                        {editForm.porcentajeHonorarios ?? 100}% médico
+                        {editForm.porcentajeHonorarios ?? 100}% mÃ©dico
                       </span>
                     </div>
                     <p className="text-[10px] text-teal-500 mt-1">
-                      Clínica: {100 - (editForm.porcentajeHonorarios ?? 100)}% —
-                      El cálculo automático se activará en fase futura.
+                      ClÃ­nica: {100 - (editForm.porcentajeHonorarios ?? 100)}% â
+                      El cÃ¡lculo automÃ¡tico se activarÃ¡ en fase futura.
                     </p>
                   </div>
                 )}
@@ -949,7 +950,7 @@ export const Users = (props) => {
                 {currentUser?.role === "super_admin" && (
                   <div className="mt-2">
                     <label className="block text-xs font-bold text-gray-600 mb-1">
-                      🏢 Organización
+                      ð¢ OrganizaciÃ³n
                     </label>
                     <select
                       value={editForm.orgId || ORG_DEFAULT_ID}
@@ -968,70 +969,70 @@ export const Users = (props) => {
                 )}
               </div>
 
-              {/* ── 🔐 PERMISOS DE SECRETARIA - solo admin puede ver/editar ── */}
+              {/* ââ ð PERMISOS DE SECRETARIA - solo admin puede ver/editar ââ */}
               {_isAdmin(currentUser?.role) &&
                 editForm.role === "secretaria" && (
                   <div className="bg-amber-50 rounded-xl p-4 mb-4 border-2 border-amber-300">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-lg">🔐</span>
+                      <span className="text-lg">ð</span>
                       <div>
                         <p className="text-xs font-black text-amber-800 uppercase">
                           Permisos de Secretaria
                         </p>
                         <p className="text-[10px] text-amber-600">
                           Solo el administrador puede activar o desactivar
-                          módulos. Por defecto todo está BLOQUEADO.
+                          mÃ³dulos. Por defecto todo estÃ¡ BLOQUEADO.
                         </p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                       {Object.entries({
                         agenda: {
-                          label: "🗓️ Agenda del Día",
+                          label: "ðï¸ Agenda del DÃ­a",
                           desc: "Ver y gestionar citas",
                         },
                         bill: {
-                          label: "🧾 Cuentas de Cobro",
+                          label: "ð§¾ Cuentas de Cobro",
                           desc: "Generar y ver facturas",
                         },
                         propuestas: {
-                          label: "📄 Propuestas Económicas",
+                          label: "ð Propuestas EconÃ³micas",
                           desc: "Crear cotizaciones",
                         },
                         telemedicina: {
-                          label: "🩺 Telemedicina",
+                          label: "ð©º Telemedicina",
                           desc: "Acceder a teleconsultas",
                         },
                         empresas: {
-                          label: "🏢 Empresas",
+                          label: "ð¢ Empresas",
                           desc: "Ver y editar clientes",
                         },
                         pacientes_lista: {
-                          label: "👥 Lista de Pacientes",
+                          label: "ð¥ Lista de Pacientes",
                           desc: "Ver expedientes (solo lectura)",
                         },
                         pacientes_crear: {
-                          label: "➕ Crear Pacientes",
+                          label: "â Crear Pacientes",
                           desc: "Registrar nuevos pacientes",
                         },
                         reporte: {
-                          label: "📊 Reportes",
-                          desc: "Ver reportes epidemiológicos",
+                          label: "ð Reportes",
+                          desc: "Ver reportes epidemiolÃ³gicos",
                         },
                         sve: {
-                          label: "🔬 SVE",
-                          desc: "Ver vigilancia epidemiológica",
+                          label: "ð¬ SVE",
+                          desc: "Ver vigilancia epidemiolÃ³gica",
                         },
                         caja: {
-                          label: "💰 Módulo Financiero",
+                          label: "ð° MÃ³dulo Financiero",
                           desc: "Caja diaria e ingresos",
                         },
                         adjuntos: {
-                          label: "📎 Adjuntos HC",
+                          label: "ð Adjuntos HC",
                           desc: "Subir archivos a HC",
                         },
                         cuentas_cobro: {
-                          label: "💳 Estado Cuentas",
+                          label: "ð³ Estado Cuentas",
                           desc: "Ver cuentas pendientes",
                         },
                       }).map(([key, { label, desc }]) => {
@@ -1078,17 +1079,17 @@ export const Users = (props) => {
                       })}
                     </div>
                     <p className="text-[10px] text-amber-700 mt-3 font-bold">
-                      ⚠️ Recuerda guardar los cambios para que los permisos
+                      â ï¸ Recuerda guardar los cambios para que los permisos
                       tengan efecto.
                     </p>
-                    {/* Médicos asignados */}
+                    {/* MÃ©dicos asignados */}
                     <div className="mt-4 pt-3 border-t border-amber-200">
                       <p className="text-xs font-black text-amber-800 mb-2">
-                        👨‍⚕️ Médicos asignados a esta secretaria
+                        ð¨ââï¸ MÃ©dicos asignados a esta secretaria
                       </p>
                       <p className="text-[10px] text-amber-600 mb-2">
-                        Si no selecciona ninguno, la secretaria verá pacientes
-                        de TODOS los médicos.
+                        Si no selecciona ninguno, la secretaria verÃ¡ pacientes
+                        de TODOS los mÃ©dicos.
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {usersList
@@ -1125,7 +1126,7 @@ export const Users = (props) => {
                                     : "border-gray-200 bg-white text-gray-600 hover:border-blue-300"
                                 }`}
                               >
-                                {seleccionado ? "✅ " : ""}
+                                {seleccionado ? "â " : ""}
                                 {med.name || med.user}
                               </button>
                             );
@@ -1135,22 +1136,22 @@ export const Users = (props) => {
                   </div>
                 )}
 
-              {/* B-18: Configuración 2FA */}
+              {/* B-18: ConfiguraciÃ³n 2FA */}
               {(_isAdmin(currentUser?.role) ||
                 currentUser?.user === editForm.user) && (
                 <div className="bg-indigo-50 rounded-xl p-4 mb-4 border border-indigo-100">
                   <p className="text-xs font-black text-indigo-800 uppercase mb-3 flex items-center gap-2">
-                    <Lock className="w-3.5 h-3.5" /> Autenticación 2FA (TOTP) -
+                    <Lock className="w-3.5 h-3.5" /> AutenticaciÃ³n 2FA (TOTP) -
                     Res. 3100/2019
                   </p>
                   {editForm.twoFA?.enabled ? (
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-xs font-bold text-emerald-700">
-                          ✅ 2FA Activo
+                          â 2FA Activo
                         </p>
                         <p className="text-[10px] text-gray-500">
-                          Código requerido en cada inicio de sesión
+                          CÃ³digo requerido en cada inicio de sesiÃ³n
                         </p>
                       </div>
                       <button
@@ -1162,7 +1163,7 @@ export const Users = (props) => {
                         }
                         className="px-3 py-1.5 bg-red-100 text-red-700 text-xs font-bold rounded-lg hover:bg-red-200"
                       >
-                        🔓 Desactivar 2FA
+                        ð Desactivar 2FA
                       </button>
                     </div>
                   ) : (
@@ -1178,14 +1179,14 @@ export const Users = (props) => {
                             twoFA: { enabled: true, secret },
                           }));
                           showAlert(
-                            "✅ 2FA activado. Secret: " +
+                            "â 2FA activado. Secret: " +
                               secret +
-                              "\n\nEscanee el código QR con Google Authenticator / Authy.\n\n⚠ Guarde este código en lugar seguro."
+                              "\n\nEscanee el cÃ³digo QR con Google Authenticator / Authy.\n\nâ  Guarde este cÃ³digo en lugar seguro."
                           );
                         }}
                         className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black rounded-lg"
                       >
-                        🔐 Activar 2FA
+                        ð Activar 2FA
                       </button>
                     </div>
                   )}
@@ -1233,7 +1234,7 @@ export const Users = (props) => {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-600 mb-1">
-                      Cédula
+                      CÃ©dula
                     </label>
                     <input
                       value={dd.cedula || ""}
@@ -1244,7 +1245,7 @@ export const Users = (props) => {
                   </div>
                   <div className="col-span-2">
                     <label className="block text-xs font-bold text-gray-600 mb-1">
-                      Título / Especialidad
+                      TÃ­tulo / Especialidad
                     </label>
                     <input
                       value={dd.titulo || ""}
@@ -1255,7 +1256,7 @@ export const Users = (props) => {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-600 mb-1">
-                      Registro Médico (RM / Tarjeta Profesional)
+                      Registro MÃ©dico (RM / Tarjeta Profesional)
                     </label>
                     <input
                       value={dd.licencia || ""}
@@ -1296,7 +1297,7 @@ export const Users = (props) => {
                   </div>
                   <div className="col-span-2">
                     <label className="block text-xs font-bold text-gray-600 mb-1">
-                      Dirección consultorio
+                      DirecciÃ³n consultorio
                     </label>
                     <input
                       value={dd.direccion || ""}
@@ -1304,17 +1305,17 @@ export const Users = (props) => {
                       className="w-full p-2 border rounded-lg text-sm"
                     />
                   </div>
-                  {/* B-F1-02: Foto del médico */}
+                  {/* B-F1-02: Foto del mÃ©dico */}
                   <div className="col-span-2">
                     <label className="block text-xs font-bold text-gray-600 mb-2">
-                      📷 Foto de perfil del médico
+                      ð· Foto de perfil del mÃ©dico
                     </label>
                     <div className="flex items-center gap-4">
                       {dd.fotoPerfil ? (
                         <div className="relative">
                           <img
                             src={dd.fotoPerfil}
-                            alt="Foto médico"
+                            alt="Foto mÃ©dico"
                             className="w-20 h-20 rounded-full object-cover border-2 border-blue-300 shadow"
                           />
                           <button
@@ -1322,17 +1323,17 @@ export const Users = (props) => {
                             onClick={() => setDD("fotoPerfil", null)}
                             className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full text-[10px] font-black flex items-center justify-center hover:bg-red-600"
                           >
-                            ✕
+                            â
                           </button>
                         </div>
                       ) : (
                         <div className="w-20 h-20 rounded-full border-2 border-dashed border-blue-300 flex items-center justify-center bg-white text-2xl">
-                          👤
+                          ð¤
                         </div>
                       )}
                       <label className="cursor-pointer">
                         <span className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-lg">
-                          {dd.fotoPerfil ? "🔄 Cambiar foto" : "📁 Subir foto"}
+                          {dd.fotoPerfil ? "ð Cambiar foto" : "ð Subir foto"}
                         </span>
                         <input
                           type="file"
@@ -1376,7 +1377,7 @@ export const Users = (props) => {
                         />
                       </label>
                       <p className="text-[10px] text-gray-500">
-                        JPG/PNG · Máx 200×200px · Se guarda en el perfil
+                        JPG/PNG Â· MÃ¡x 200Ã200px Â· Se guarda en el perfil
                       </p>
                     </div>
                   </div>
@@ -1417,7 +1418,7 @@ export const Users = (props) => {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-600 mb-1">
-                      Número de Cuenta
+                      NÃºmero de Cuenta
                     </label>
                     <input
                       value={dd.numeroCuenta || ""}
@@ -1439,7 +1440,7 @@ export const Users = (props) => {
                   </div>
                   <div className="col-span-2">
                     <label className="block text-xs font-bold text-gray-600 mb-1">
-                      Régimen tributario
+                      RÃ©gimen tributario
                     </label>
                     <input
                       value={dd.regimen || ""}
@@ -1454,13 +1455,13 @@ export const Users = (props) => {
               <div className="bg-orange-50 rounded-xl p-4 mb-5 border border-orange-100">
                 <p className="text-xs font-black text-orange-800 uppercase mb-3 flex items-center gap-1">
                   <Receipt className="w-3 h-3" /> Tarifas para Propuestas
-                  Económicas
+                  EconÃ³micas
                 </p>
                 <div className="grid grid-cols-4 gap-3">
                   {[
                     { f: "tarifaExamenOcup", l: "Examen ocupacional" },
                     { f: "tarifaInforme", l: "Informe de salud" },
-                    { f: "tarifaDiaPVE", l: "PVE / día" },
+                    { f: "tarifaDiaPVE", l: "PVE / dÃ­a" },
                     { f: "tarifaHora", l: "Hora consulta" },
                   ].map((t) => (
                     <div key={t.f}>
@@ -1482,13 +1483,13 @@ export const Users = (props) => {
                   ))}
                 </div>
               </div>
-              {/* ── Firma Digital ── */}
+              {/* ââ Firma Digital ââ */}
               <div className="bg-violet-50 rounded-xl p-4 mb-5 border border-violet-200">
                 <p className="text-xs font-black text-violet-800 uppercase mb-3 flex items-center gap-2">
                   <FileSignature className="w-3.5 h-3.5" /> Firma Digital del
                   Profesional
                   <span className="text-[9px] font-normal text-violet-500 normal-case">
-                    (aparece en HC, Certificados, Fórmulas, Informes y
+                    (aparece en HC, Certificados, FÃ³rmulas, Informes y
                     Propuestas)
                   </span>
                 </p>
@@ -1530,7 +1531,7 @@ export const Users = (props) => {
                               signature: sig,
                             },
                           }));
-                          // Si es el usuario actual, actualizar firma activa también
+                          // Si es el usuario actual, actualizar firma activa tambiÃ©n
                           if (
                             currentUser?.id === editForm.id ||
                             currentUser?.user === editForm.user
@@ -1576,7 +1577,7 @@ export const Users = (props) => {
                       </button>
                     )}
                     <p className="text-[9px] text-gray-400 text-center">
-                      Recomendado: PNG fondo transparente · máx. 2 MB
+                      Recomendado: PNG fondo transparente Â· mÃ¡x. 2 MB
                     </p>
                   </div>
                 </div>
@@ -1589,7 +1590,7 @@ export const Users = (props) => {
               </button>
             </div>
           )}
-          {/* ── TAB LICENCIAS (solo admin) ── */}
+          {/* ââ TAB LICENCIAS (solo admin) ââ */}
           {activeUserMgmtTab === "licencias" && _isAdmin(currentUser?.role) && (
             <LicenciasTab
               usersList={usersList}
@@ -1602,33 +1603,33 @@ export const Users = (props) => {
               setPendingActivationPlan={setPendingActivationPlan}
             />
           )}
-          {/* ── CREAR USUARIO ── */}
-          {/* ── NORMATIVO: Res. 1918/2009 Art.8 - Registro de Auditoría ── */}
+          {/* ââ CREAR USUARIO ââ */}
+          {/* ââ NORMATIVO: Res. 1918/2009 Art.8 - Registro de AuditorÃ­a ââ */}
           {activeUserMgmtTab === "auditoria" && (
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <div>
                   <h3 className="text-sm font-black text-gray-800 flex items-center gap-2">
                     <Shield className="w-4 h-4 text-violet-600" /> Registro de
-                    Auditoría de Accesos
+                    AuditorÃ­a de Accesos
                   </h3>
                   <p className="text-[10px] text-gray-400 mt-0.5">
-                    Res. 1918/2009 Art. 8 · {auditLog.length} registros · Máximo
+                    Res. 1918/2009 Art. 8 Â· {auditLog.length} registros Â· MÃ¡ximo
                     500
                   </p>
                 </div>
                 <button
                   onClick={() => {
-                    // FIX M-05: solo admin puede borrar el log de auditoría
+                    // FIX M-05: solo admin puede borrar el log de auditorÃ­a
                     if (currentUser?.role !== "administrador") {
                       showAlert(
-                        "⛔ Solo el administrador puede limpiar el registro de auditoría."
+                        "â Solo el administrador puede limpiar el registro de auditorÃ­a."
                       );
                       return;
                     }
                     if (
                       window.confirm(
-                        "¿Limpiar el log de auditoría? Esta acción quedará registrada y no se puede deshacer."
+                        "Â¿Limpiar el log de auditorÃ­a? Esta acciÃ³n quedarÃ¡ registrada y no se puede deshacer."
                       )
                     ) {
                       // Registrar el evento de borrado ANTES de ejecutarlo
@@ -1649,17 +1650,17 @@ export const Users = (props) => {
                 >
                   {_isAdmin(currentUser?.role)
                     ? "Limpiar log"
-                    : "🔒 Solo admin"}
+                    : "ð Solo admin"}
                 </button>
               </div>
               {auditLog.length === 0 ? (
                 <div className="text-center py-12 text-gray-400">
                   <Shield className="w-10 h-10 mx-auto mb-2 opacity-30" />
                   <p className="font-bold text-sm">
-                    Sin registros de auditoría aún
+                    Sin registros de auditorÃ­a aÃºn
                   </p>
                   <p className="text-xs">
-                    Las acciones se registran automáticamente
+                    Las acciones se registran automÃ¡ticamente
                   </p>
                 </div>
               ) : (
@@ -1674,7 +1675,7 @@ export const Users = (props) => {
                           Usuario
                         </th>
                         <th className="p-2 text-left font-bold text-gray-500 uppercase">
-                          Acción
+                          AcciÃ³n
                         </th>
                         <th className="p-2 text-left font-bold text-gray-500 uppercase">
                           ID Paciente
@@ -1699,7 +1700,7 @@ export const Users = (props) => {
                             </p>
                             {entry.nombreUsuario && (
                               <p className="text-[9px] text-gray-400">
-                                {entry.nombreUsuario} · {entry.rol || ""}
+                                {entry.nombreUsuario} Â· {entry.rol || ""}
                               </p>
                             )}
                           </td>
@@ -1722,7 +1723,7 @@ export const Users = (props) => {
                           </td>
                           <td className="p-2 font-mono text-[10px] text-gray-400">
                             {entry.pacienteId
-                              ? "···" + String(entry.pacienteId).slice(-6)
+                              ? "Â·Â·Â·" + String(entry.pacienteId).slice(-6)
                               : "-"}
                           </td>
                           <td className="p-2 text-gray-500">
@@ -1739,14 +1740,14 @@ export const Users = (props) => {
           {activeUserMgmtTab === "new" && (
             <div className="bg-white rounded-2xl shadow-lg p-6 max-w-3xl overflow-y-auto max-h-[90vh]">
               <h3 className="font-black text-base text-violet-800 mb-4 flex items-center gap-2">
-                <UserPlus className="w-4 h-4" /> Nuevo Usuario Médico -- Perfil
+                <UserPlus className="w-4 h-4" /> Nuevo Usuario MÃ©dico -- Perfil
                 Completo
               </h3>
               <p className="text-xs text-blue-600 bg-blue-50 rounded-lg p-2 mb-4">
                 Complete todos los datos ahora para que Cuentas de Cobro y
-                Propuesta Económica queden prellenadas automáticamente.
+                Propuesta EconÃ³mica queden prellenadas automÃ¡ticamente.
               </p>
-              {/* ── Acceso ── */}
+              {/* ââ Acceso ââ */}
               <p className="text-[10px] font-black text-violet-700 uppercase border-b border-violet-200 pb-1 mb-3">
                 Datos de Acceso
               </p>
@@ -1779,7 +1780,7 @@ export const Users = (props) => {
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 mb-1">
-                    Contraseña *
+                    ContraseÃ±a *
                   </label>
                   <input
                     type="password"
@@ -1788,7 +1789,7 @@ export const Users = (props) => {
                       setNewUserForm((p) => ({ ...p, pass: e.target.value }))
                     }
                     className="w-full p-2 border rounded-lg text-sm"
-                    placeholder="••••••••"
+                    placeholder="â¢â¢â¢â¢â¢â¢â¢â¢"
                   />
                   {newUserForm.pass && (
                     <p
@@ -1801,11 +1802,11 @@ export const Users = (props) => {
                       }`}
                     >
                       {newUserForm.pass.length < 8
-                        ? `⚠ Mín. 8 caracteres (${newUserForm.pass.length}/8)`
+                        ? `â  MÃ­n. 8 caracteres (${newUserForm.pass.length}/8)`
                         : !/[A-Z]/.test(newUserForm.pass) &&
                           !/[0-9]/.test(newUserForm.pass)
-                        ? "⚠ Agrega mayúscula o número"
-                        : "✅ Contraseña segura"}
+                        ? "â  Agrega mayÃºscula o nÃºmero"
+                        : "â ContraseÃ±a segura"}
                     </p>
                   )}
                 </div>
@@ -1822,16 +1823,16 @@ export const Users = (props) => {
                   >
                     {currentUser?.role === "admin_empresa" ? (
                       <>
-                        <option value="medico">Médico</option>
+                        <option value="medico">MÃ©dico</option>
                         <option value="secretaria">Secretaria</option>
                       </>
                     ) : (
                       <>
                         {currentUser?.role === "super_admin" && (
-                          <option value="super_admin">⭐ Super Admin</option>
+                          <option value="super_admin">â­ Super Admin</option>
                         )}
                         <option value="administrador">Administrador</option>
-                        <option value="medico">Médico</option>
+                        <option value="medico">MÃ©dico</option>
                         <option value="secretaria">Secretaria</option>
                       </>
                     )}
@@ -1841,7 +1842,7 @@ export const Users = (props) => {
                 {currentUser?.role === "super_admin" && (
                   <div>
                     <label className="block text-xs font-bold text-gray-600 mb-1">
-                      🏢 Organización
+                      ð¢ OrganizaciÃ³n
                     </label>
                     <select
                       value={newUserForm.orgId || ORG_DEFAULT_ID}
@@ -1859,30 +1860,30 @@ export const Users = (props) => {
                   </div>
                 )}
               </div>
-              {/* ── Permisos de Secretaria - nueva secretaria ── */}
+              {/* ââ Permisos de Secretaria - nueva secretaria ââ */}
               {newUserForm.role === "secretaria" && (
                 <div className="bg-amber-50 rounded-xl p-4 mb-4 border-2 border-amber-300">
                   <p className="text-xs font-black text-amber-800 uppercase mb-1">
-                    🔐 Permisos de Secretaria
+                    ð Permisos de Secretaria
                   </p>
                   <p className="text-[10px] text-amber-600 mb-3">
-                    Seleccione los módulos a los que tendrá acceso. Todo
+                    Seleccione los mÃ³dulos a los que tendrÃ¡ acceso. Todo
                     bloqueado por defecto.
                   </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
                     {Object.entries({
-                      agenda: "🗓️ Agenda",
-                      bill: "🧾 Cuentas de Cobro",
-                      propuestas: "📄 Propuestas",
-                      telemedicina: "🩺 Telemedicina",
-                      empresas: "🏢 Empresas",
-                      pacientes_lista: "👥 Lista Pacientes",
-                      pacientes_crear: "➕ Crear Pacientes",
-                      reporte: "📊 Reportes",
-                      sve: "🔬 SVE",
-                      caja: "💰 Financiero",
-                      adjuntos: "📎 Adjuntos",
-                      cuentas_cobro: "💳 Cuentas",
+                      agenda: "ðï¸ Agenda",
+                      bill: "ð§¾ Cuentas de Cobro",
+                      propuestas: "ð Propuestas",
+                      telemedicina: "ð©º Telemedicina",
+                      empresas: "ð¢ Empresas",
+                      pacientes_lista: "ð¥ Lista Pacientes",
+                      pacientes_crear: "â Crear Pacientes",
+                      reporte: "ð Reportes",
+                      sve: "ð¬ SVE",
+                      caja: "ð° Financiero",
+                      adjuntos: "ð Adjuntos",
+                      cuentas_cobro: "ð³ Cuentas",
                     }).map(([key, label]) => {
                       const permisos =
                         newUserForm.secretariaPermisos ||
@@ -1907,13 +1908,13 @@ export const Users = (props) => {
                               : "border-gray-200 bg-white text-gray-500 hover:border-amber-300"
                           }`}
                         >
-                          {label} {isOn ? "✅" : ""}
+                          {label} {isOn ? "â" : ""}
                         </button>
                       );
                     })}
                   </div>
                   <p className="text-[10px] text-amber-700 font-black mb-2">
-                    👨‍⚕️ Médicos asignados (dejar vacío = todos):
+                    ð¨ââï¸ MÃ©dicos asignados (dejar vacÃ­o = todos):
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {usersList
@@ -1946,7 +1947,7 @@ export const Users = (props) => {
                                 : "border-gray-200 bg-white text-gray-500"
                             }`}
                           >
-                            {sel ? "✅ " : ""}
+                            {sel ? "â " : ""}
                             {med.name || med.user}
                           </button>
                         );
@@ -1954,7 +1955,7 @@ export const Users = (props) => {
                   </div>
                 </div>
               )}
-              {/* ── Datos Profesionales ── */}
+              {/* ââ Datos Profesionales ââ */}
               {(["medico", "administrador", "super_admin"].includes(
                 newUserForm.role
               ) ||
@@ -1966,7 +1967,7 @@ export const Users = (props) => {
                   <div className="grid grid-cols-2 gap-3 mb-4">
                     <div className="col-span-2">
                       <label className="block text-xs font-bold text-gray-600 mb-1">
-                        Cédula
+                        CÃ©dula
                       </label>
                       <input
                         value={newUserForm.doctorData?.cedula || ""}
@@ -1985,7 +1986,7 @@ export const Users = (props) => {
                     </div>
                     <div className="col-span-2">
                       <label className="block text-xs font-bold text-gray-600 mb-1">
-                        Título / Especialidad
+                        TÃ­tulo / Especialidad
                       </label>
                       <input
                         value={newUserForm.doctorData?.titulo || ""}
@@ -1999,12 +2000,12 @@ export const Users = (props) => {
                           }))
                         }
                         className="w-full p-2 border rounded-lg text-sm"
-                        placeholder="Esp. Gerencia SST / Médico Ocupacional..."
+                        placeholder="Esp. Gerencia SST / MÃ©dico Ocupacional..."
                       />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-gray-600 mb-1">
-                        Registro Médico (RM / Tarjeta Profesional)
+                        Registro MÃ©dico (RM / Tarjeta Profesional)
                       </label>
                       <input
                         value={newUserForm.doctorData?.licencia || ""}
@@ -2080,7 +2081,7 @@ export const Users = (props) => {
                     </div>
                     <div className="col-span-2">
                       <label className="block text-xs font-bold text-gray-600 mb-1">
-                        Dirección
+                        DirecciÃ³n
                       </label>
                       <input
                         value={newUserForm.doctorData?.direccion || ""}
@@ -2094,13 +2095,13 @@ export const Users = (props) => {
                           }))
                         }
                         className="w-full p-2 border rounded-lg text-sm"
-                        placeholder="Calle XX N° X-XX, Ciudad"
+                        placeholder="Calle XX NÂ° X-XX, Ciudad"
                       />
                     </div>
                   </div>
-                  {/* ── Datos Financieros (Cuentas de Cobro / Propuesta Económica) ── */}
+                  {/* ââ Datos Financieros (Cuentas de Cobro / Propuesta EconÃ³mica) ââ */}
                   <p className="text-[10px] font-black text-violet-700 uppercase border-b border-violet-200 pb-1 mb-3">
-                    Datos Financieros (Cuentas de Cobro y Propuesta Económica)
+                    Datos Financieros (Cuentas de Cobro y Propuesta EconÃ³mica)
                   </p>
                   <div className="grid grid-cols-2 gap-3 mb-4">
                     <div>
@@ -2183,7 +2184,7 @@ export const Users = (props) => {
                     </div>
                     <div className="col-span-2">
                       <label className="block text-xs font-bold text-gray-600 mb-1">
-                        Régimen Tributario
+                        RÃ©gimen Tributario
                       </label>
                       <input
                         value={newUserForm.doctorData?.regimen || ""}
@@ -2262,7 +2263,7 @@ export const Users = (props) => {
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-gray-600 mb-1">
-                        Tarifa Día PVE ($)
+                        Tarifa DÃ­a PVE ($)
                       </label>
                       <input
                         type="number"
@@ -2283,7 +2284,7 @@ export const Users = (props) => {
                   </div>
                 </>
               )}
-              {/* ── Firma del médico ── */}
+              {/* ââ Firma del mÃ©dico ââ */}
               {(["medico", "administrador", "super_admin"].includes(
                 newUserForm.role
               ) ||
@@ -2373,17 +2374,17 @@ export const Users = (props) => {
                     showAlert("Complete los campos obligatorios (*).");
                     return;
                   }
-                  // FIX M-06: validar complejidad de contraseña
+                  // FIX M-06: validar complejidad de contraseÃ±a
                   const pw = newUserForm.pass;
                   if (pw.length < 8) {
                     showAlert(
-                      "⚠️ La contraseña debe tener mínimo 8 caracteres."
+                      "â ï¸ La contraseÃ±a debe tener mÃ­nimo 8 caracteres."
                     );
                     return;
                   }
                   if (!/[A-Z]/.test(pw) && !/[0-9]/.test(pw)) {
                     showAlert(
-                      "⚠️ La contraseña debe incluir al menos una mayúscula o un número."
+                      "â ï¸ La contraseÃ±a debe incluir al menos una mayÃºscula o un nÃºmero."
                     );
                     return;
                   }
@@ -2396,11 +2397,11 @@ export const Users = (props) => {
                     nombre: newUserForm.name.toUpperCase(),
                     ...(newUserForm.doctorData || {}),
                   };
-                  // SEGURIDAD: hashear contraseña antes de guardar
+                  // SEGURIDAD: hashear contraseÃ±a antes de guardar
                   _sha256(newUserForm.pass).then((hash) => {
                     const secureUser = { ...newUserForm, passHash: hash };
                     delete secureUser.pass;
-                    // ── IPS: admin_empresa auto-asigna empresaId + orgId a los usuarios que crea ──
+                    // ââ IPS: admin_empresa auto-asigna empresaId + orgId a los usuarios que crea ââ
                     if (
                       currentUser?.role === "admin_empresa" &&
                       currentUser.empresaId
@@ -2408,7 +2409,7 @@ export const Users = (props) => {
                       secureUser.empresaId = currentUser.empresaId;
                       secureUser.orgId = currentUser.orgId || ORG_DEFAULT_ID;
                       secureUser.mustChangePassword = true;
-                      // Agregar médico al medicoIds de la empresa
+                      // Agregar mÃ©dico al medicoIds de la empresa
                       if (secureUser.role === "medico") {
                         const _empIdx = companies.findIndex(
                           (c) => c.id === currentUser.empresaId
@@ -2439,11 +2440,11 @@ export const Users = (props) => {
                     _sbSet("siso_users", updSec).then((ok) => {
                       if (ok)
                         showAlert(
-                          "✅ Usuario creado y guardado en la nube correctamente."
+                          "â Usuario creado y guardado en la nube correctamente."
                         );
                       else
                         showAlert(
-                          "✅ Usuario creado localmente. Se sincronizará cuando haya conexión."
+                          "â Usuario creado localmente. Se sincronizarÃ¡ cuando haya conexiÃ³n."
                         );
                     });
                   });
@@ -2459,7 +2460,7 @@ export const Users = (props) => {
                   });
                   setActiveUserMgmtTab("list");
                   showAlert(
-                    "✅ Usuario creado con todos sus datos profesionales y financieros."
+                    "â Usuario creado con todos sus datos profesionales y financieros."
                   );
                 }}
                 className="w-full bg-violet-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-violet-700 mt-2 flex items-center justify-center gap-2"
@@ -2468,7 +2469,7 @@ export const Users = (props) => {
               </button>
             </div>
           )}
-          {/* ══ FASE 2 — PANEL REASIGNACIÓN DE PACIENTES ══ */}
+          {/* ââ FASE 2 â PANEL REASIGNACIÃN DE PACIENTES ââ */}
           {activeUserMgmtTab === "reasignacion" &&
             _isAdmin(currentUser?.role) &&
             (() => {
@@ -2496,7 +2497,7 @@ export const Users = (props) => {
                   (currentUser?.role === "super_admin" ||
                     (u.orgId || ORG_DEFAULT_ID) === myOrgId)
               );
-              // Distribución equitativa: calcula cuántos le tocan a cada médico
+              // DistribuciÃ³n equitativa: calcula cuÃ¡ntos le tocan a cada mÃ©dico
               const distribuirEquitativamente = () => {
                 if (!medicos.length || !sinMedico.length) return;
                 const updated = patientsList.map((p) => {
@@ -2510,7 +2511,7 @@ export const Users = (props) => {
                 });
                 let idx = 0;
                 const asignados = sinMedico.map((p) => {
-                  // Preferir médico que ya trató al paciente (misma empresa o historial)
+                  // Preferir mÃ©dico que ya tratÃ³ al paciente (misma empresa o historial)
                   const medAnterior = patientsList.find(
                     (hp) =>
                       hp._medicoId && hp.cedula === p.cedula && hp.id !== p.id
@@ -2529,7 +2530,7 @@ export const Users = (props) => {
                 setPatientsList(final);
                 _syncPatients(final);
                 showAlert(
-                  `✅ ${sinMedico.length} pacientes distribuidos entre ${medicos.length} médicos.`
+                  `â ${sinMedico.length} pacientes distribuidos entre ${medicos.length} mÃ©dicos.`
                 );
               };
               return (
@@ -2537,11 +2538,11 @@ export const Users = (props) => {
                   {/* Cabecera */}
                   <div className="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-2xl p-5 border border-teal-200">
                     <h3 className="font-black text-teal-800 text-lg flex items-center gap-2 mb-1">
-                      🔀 Panel de Reasignación de Pacientes
+                      ð Panel de ReasignaciÃ³n de Pacientes
                     </h3>
                     <p className="text-sm text-teal-700">
-                      Asigna pacientes sin médico, redistribuye equitativamente
-                      y gestiona la continuidad del cuidado. · Org:{" "}
+                      Asigna pacientes sin mÃ©dico, redistribuye equitativamente
+                      y gestiona la continuidad del cuidado. Â· Org:{" "}
                       <strong>
                         {orgsList.find((o) => o.orgId === myOrgId)?.orgName ||
                           myOrgId}
@@ -2552,7 +2553,7 @@ export const Users = (props) => {
                         <p className="text-2xl font-black text-red-600">
                           {sinMedico.length}
                         </p>
-                        <p className="text-[10px] text-gray-500">Sin médico</p>
+                        <p className="text-[10px] text-gray-500">Sin mÃ©dico</p>
                       </div>
                       <div className="bg-white rounded-xl px-4 py-2 border border-teal-200 text-center">
                         <p className="text-2xl font-black text-green-600">
@@ -2565,7 +2566,7 @@ export const Users = (props) => {
                           {medicos.length}
                         </p>
                         <p className="text-[10px] text-gray-500">
-                          Médicos activos
+                          MÃ©dicos activos
                         </p>
                       </div>
                       {sinMedico.length > 0 && (
@@ -2573,16 +2574,16 @@ export const Users = (props) => {
                           onClick={distribuirEquitativamente}
                           className="ml-auto bg-teal-600 text-white px-4 py-2 rounded-xl text-sm font-black hover:bg-teal-700 flex items-center gap-2"
                         >
-                          ⚖️ Distribuir equitativamente
+                          âï¸ Distribuir equitativamente
                         </button>
                       )}
                     </div>
                   </div>
 
-                  {/* Médico de Turno */}
+                  {/* MÃ©dico de Turno */}
                   <div className="bg-amber-50 rounded-xl p-4 border border-amber-200">
                     <p className="text-xs font-black text-amber-700 mb-2">
-                      🩺 Médico de Turno Activo
+                      ð©º MÃ©dico de Turno Activo
                     </p>
                     <div className="flex gap-2 flex-wrap">
                       <select
@@ -2600,7 +2601,7 @@ export const Users = (props) => {
                         }}
                         className="flex-1 p-2 border rounded-lg text-sm min-w-[200px]"
                       >
-                        <option value="">— Sin turno activo —</option>
+                        <option value="">â Sin turno activo â</option>
                         {medicos.map((m) => (
                           <option key={m.user} value={m.user}>
                             {m.name}
@@ -2615,7 +2616,7 @@ export const Users = (props) => {
                         }`}
                       >
                         {medicoTurnoActivo
-                          ? `✅ Turno: ${
+                          ? `â Turno: ${
                               medicos.find((m) => m.user === medicoTurnoActivo)
                                 ?.name || medicoTurnoActivo
                             }`
@@ -2623,23 +2624,23 @@ export const Users = (props) => {
                       </span>
                     </div>
                     <p className="text-[10px] text-amber-600 mt-1">
-                      Los pacientes nuevos se sugerirán para asignar a este
-                      médico.
+                      Los pacientes nuevos se sugerirÃ¡n para asignar a este
+                      mÃ©dico.
                     </p>
                   </div>
 
-                  {/* Tabla pacientes sin médico */}
+                  {/* Tabla pacientes sin mÃ©dico */}
                   {sinMedico.length === 0 ? (
                     <div className="text-center py-10 text-gray-400">
-                      <p className="text-3xl mb-2">✅</p>
+                      <p className="text-3xl mb-2">â</p>
                       <p className="font-bold">
-                        Todos los pacientes tienen médico asignado
+                        Todos los pacientes tienen mÃ©dico asignado
                       </p>
                     </div>
                   ) : (
                     <div>
                       <h4 className="font-black text-red-700 mb-3 text-sm">
-                        ⚠️ Pacientes sin médico asignado ({sinMedico.length})
+                        â ï¸ Pacientes sin mÃ©dico asignado ({sinMedico.length})
                       </h4>
                       <div className="overflow-x-auto rounded-xl border border-red-100">
                         <table className="w-full text-sm">
@@ -2661,7 +2662,7 @@ export const Users = (props) => {
                           </thead>
                           <tbody>
                             {sinMedico.slice(0, 50).map((p) => {
-                              // Detectar si este paciente ya fue atendido por algún médico antes (continuidad)
+                              // Detectar si este paciente ya fue atendido por algÃºn mÃ©dico antes (continuidad)
                               const medPrevio = patientsList.find(
                                 (hp) =>
                                   hp._medicoId &&
@@ -2678,7 +2679,7 @@ export const Users = (props) => {
                                       {p.nombre || p.paciente || "Sin nombre"}
                                     </p>
                                     <p className="text-[10px] text-gray-400">
-                                      {p.cedula || "Sin cédula"}
+                                      {p.cedula || "Sin cÃ©dula"}
                                     </p>
                                     {medPrevio && (
                                       <span className="text-[9px] bg-blue-100 text-blue-700 px-1 rounded">
@@ -2690,10 +2691,10 @@ export const Users = (props) => {
                                     )}
                                   </td>
                                   <td className="p-2 text-xs text-gray-600">
-                                    {p.empresa || "—"}
+                                    {p.empresa || "â"}
                                   </td>
                                   <td className="p-2 text-xs text-gray-600">
-                                    {p.tipoExamen || p.type || "—"}
+                                    {p.tipoExamen || p.type || "â"}
                                   </td>
                                   <td className="p-2">
                                     <select
@@ -2716,7 +2717,7 @@ export const Users = (props) => {
                                       }}
                                       className="w-full text-xs p-1 border rounded"
                                     >
-                                      <option value="">— Sin asignar —</option>
+                                      <option value="">â Sin asignar â</option>
                                       {medicos.map((m) => (
                                         <option key={m.user} value={m.user}>
                                           {m.name}
@@ -2736,7 +2737,7 @@ export const Users = (props) => {
               );
             })()}
 
-          {/* ── GESTIÓN DE ALMACENAMIENTO ── */}
+          {/* ââ GESTIÃN DE ALMACENAMIENTO ââ */}
           {activeUserMgmtTab === "storage" &&
             (() => {
               // Cargar datos reales desde Supabase al abrir el panel
@@ -2756,7 +2757,7 @@ export const Users = (props) => {
               const stats = usersList.map((u) => {
                 const cloudKey = `siso_patients_${u.user}`;
                 const localKey = `siso_db_patients_${u.user}`;
-                // Preferir Supabase; si no hay datos cargados aún, usar localStorage
+                // Preferir Supabase; si no hay datos cargados aÃºn, usar localStorage
                 let pats = [];
                 let source = "local";
                 if (sbCloudData && sbCloudData[cloudKey]?.value) {
@@ -2771,7 +2772,7 @@ export const Users = (props) => {
                   } catch {}
                   source = "local";
                 }
-                // También revisar si tiene pacientes con la clave genérica legacy
+                // TambiÃ©n revisar si tiene pacientes con la clave genÃ©rica legacy
                 if (pats.length === 0 && sbCloudData) {
                   const legacyKey = "siso_db_patients";
                   if (sbCloudData[legacyKey]?.value) {
@@ -2816,18 +2817,18 @@ export const Users = (props) => {
                 .slice(0, 100);
               return (
                 <div className="space-y-5">
-                  {/* Encabezado + botón recargar */}
+                  {/* Encabezado + botÃ³n recargar */}
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-black text-violet-900 flex items-center gap-2 text-sm">
-                        <HardDrive className="w-4 h-4" /> Gestión del
+                        <HardDrive className="w-4 h-4" /> GestiÃ³n del
                         Almacenamiento - Supabase
                       </h3>
                       <p className="text-[10px] text-gray-400 mt-0.5">
                         {sbCloudData
                           ? `${
                               Object.keys(sbCloudData).length
-                            } claves en Supabase · datos reales`
+                            } claves en Supabase Â· datos reales`
                           : "Cargando desde Supabase..."}
                       </p>
                     </div>
@@ -2837,7 +2838,7 @@ export const Users = (props) => {
                         disabled={sbLoading}
                         className="flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 text-white rounded-lg text-xs font-bold hover:bg-violet-700 disabled:opacity-50"
                       >
-                        {sbLoading ? "⏳ Cargando..." : "🔄 Recargar Supabase"}
+                        {sbLoading ? "â³ Cargando..." : "ð Recargar Supabase"}
                       </button>
                       {!sbCloudData && !sbLoading && (
                         <button onClick={loadSbData} className="hidden" />
@@ -2858,7 +2859,7 @@ export const Users = (props) => {
                   {/* Aviso si no ha cargado Supabase */}
                   {!sbCloudData && !sbLoading && (
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-3">
-                      <span className="text-2xl">☁️</span>
+                      <span className="text-2xl">âï¸</span>
                       <div>
                         <p className="font-black text-amber-800 text-sm">
                           Datos de Supabase no cargados
@@ -2878,21 +2879,21 @@ export const Users = (props) => {
                         label: "Total usuarios",
                         value: usersList.length,
                         color: "violet",
-                        icon: "👥",
+                        icon: "ð¥",
                       },
                       {
                         label: "Activos",
                         value: usersList.filter((u) => u.activo !== false)
                           .length,
                         color: "emerald",
-                        icon: "✅",
+                        icon: "â",
                       },
                       {
                         label: "Inactivos",
                         value: usersList.filter((u) => u.activo === false)
                           .length,
                         color: "gray",
-                        icon: "⏸️",
+                        icon: "â¸ï¸",
                       },
                     ].map((card) => (
                       <div
@@ -2956,22 +2957,22 @@ export const Users = (props) => {
                                 }`}
                               >
                                 {u.role === "super_admin"
-                                  ? "⭐ Super Admin"
+                                  ? "â­ Super Admin"
                                   : u.role === "administrador"
                                   ? "Administrador"
                                   : u.role === "secretaria"
                                   ? "Secretaria"
-                                  : "Médico"}
+                                  : "MÃ©dico"}
                               </span>
                             </td>
                             <td className="p-3 text-center">
                               {u.activo === false ? (
                                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-200 text-gray-500 font-bold">
-                                  ⏸ Inactivo
+                                  â¸ Inactivo
                                 </span>
                               ) : (
                                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-bold">
-                                  ✅ Activo
+                                  â Activo
                                 </span>
                               )}
                             </td>
@@ -3032,10 +3033,10 @@ export const Users = (props) => {
                                 }`}
                               >
                                 {u.source === "supabase"
-                                  ? "☁️ Supabase"
+                                  ? "âï¸ Supabase"
                                   : u.source === "supabase-legacy"
-                                  ? "☁️ Legacy"
-                                  : "💾 Local"}
+                                  ? "âï¸ Legacy"
+                                  : "ð¾ Local"}
                               </span>
                             </td>
                             <td className="p-3 text-center">
@@ -3044,13 +3045,13 @@ export const Users = (props) => {
                                   title="Descargar base de datos de pacientes"
                                   onClick={() => {
                                     showPrompt(
-                                      "Código de administrador (9207) para descargar:",
+                                      "CÃ³digo de administrador (9207) para descargar:",
                                       (inputCode) => {
                                         if (
                                           (inputCode || "").trim() !== "9207"
                                         ) {
                                           showAlert(
-                                            "⛔ Código incorrecto. Use el código 9207."
+                                            "â CÃ³digo incorrecto. Use el cÃ³digo 9207."
                                           );
                                           return;
                                         }
@@ -3117,24 +3118,24 @@ export const Users = (props) => {
                                   }}
                                   className="px-2 py-1 bg-blue-50 text-blue-700 rounded-lg text-[10px] font-bold hover:bg-blue-100 flex items-center gap-1 whitespace-nowrap"
                                 >
-                                  ⬇ Descargar
+                                  â¬ Descargar
                                 </button>
                                 <button
                                   title="Eliminar TODOS los datos de este usuario (pacientes, empresas, facturas)"
                                   onClick={() => {
                                     showPrompt(
-                                      `⚠️ ELIMINACIÓN TOTAL de @${u.user}. Ingrese código 9207 para confirmar:`,
+                                      `â ï¸ ELIMINACIÃN TOTAL de @${u.user}. Ingrese cÃ³digo 9207 para confirmar:`,
                                       (inputCode) => {
                                         if (
                                           (inputCode || "").trim() !== "9207"
                                         ) {
                                           showAlert(
-                                            "⛔ Código incorrecto. El código de eliminación es 9207."
+                                            "â CÃ³digo incorrecto. El cÃ³digo de eliminaciÃ³n es 9207."
                                           );
                                           return;
                                         }
                                         showConfirm(
-                                          `¿Eliminar ABSOLUTAMENTE TODOS los datos de @${u.user}? Pacientes, empresas, facturas. Esta acción NO se puede deshacer.`,
+                                          `Â¿Eliminar ABSOLUTAMENTE TODOS los datos de @${u.user}? Pacientes, empresas, facturas. Esta acciÃ³n NO se puede deshacer.`,
                                           () => {
                                             // Claves locales a eliminar
                                             const localKeys = [
@@ -3184,13 +3185,13 @@ export const Users = (props) => {
                                                   });
                                                   return updated;
                                                 });
-                                                // 5. Registrar en auditoría
+                                                // 5. Registrar en auditorÃ­a
                                                 const entry = {
                                                   id: Date.now(),
                                                   fecha:
                                                     new Date().toISOString(),
                                                   usuario: currentUser?.user,
-                                                  accion: "Eliminación Total",
+                                                  accion: "EliminaciÃ³n Total",
                                                   pacienteId: `usuario:${u.user}`,
                                                   tipo: "admin",
                                                 };
@@ -3207,8 +3208,8 @@ export const Users = (props) => {
                                                 });
                                                 showAlert(
                                                   ok
-                                                    ? `✅ Todos los datos de @${u.user} eliminados de Supabase y memoria.`
-                                                    : `⚠️ Eliminación parcial: algunos datos en Supabase no pudieron borrarse. Reintente.`
+                                                    ? `â Todos los datos de @${u.user} eliminados de Supabase y memoria.`
+                                                    : `â ï¸ EliminaciÃ³n parcial: algunos datos en Supabase no pudieron borrarse. Reintente.`
                                                 );
                                               }
                                             );
@@ -3219,7 +3220,7 @@ export const Users = (props) => {
                                   }}
                                   className="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 flex items-center gap-1 whitespace-nowrap"
                                 >
-                                  🗑 Eliminar todo
+                                  ð Eliminar todo
                                 </button>
                               </div>
                             </td>
@@ -3232,12 +3233,12 @@ export const Users = (props) => {
                   <div>
                     <h4 className="text-xs font-black text-gray-700 mb-3 flex items-center gap-1.5">
                       <Activity className="w-3.5 h-3.5 text-violet-500" />{" "}
-                      Últimos movimientos por usuario
+                      Ãltimos movimientos por usuario
                     </h4>
                     <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
                       {allMoves.length === 0 ? (
                         <p className="text-center text-gray-400 text-xs py-6">
-                          Sin movimientos registrados aún
+                          Sin movimientos registrados aÃºn
                         </p>
                       ) : (
                         allMoves.map((m, idx) => (

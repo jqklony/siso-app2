@@ -1,9 +1,10 @@
 import React from 'react';
+import { initialOccupPatientState } from '../data/initialState.js';
 import {
   Eye, FileCheck, History, LogOut, PlusCircle, Search, Users
 } from "lucide-react";
 
-// ─── Patients Page Component ─────────────────────────────────────────────
+// âââ Patients Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const Patients = (props) => {
   const {
@@ -407,7 +408,7 @@ export const Patients = (props) => {
     NotificacionModal,
     LoginForm,
     PortalPublicoTrabajador,
-    AgendaFieldF,    // ─── Role guard helpers from sharedProps ───
+    AgendaFieldF,    // âââ Role guard helpers from sharedProps âââ
   _isAdmin,
   _isAdminEmpresa,
   _secretariaPuede,
@@ -436,7 +437,7 @@ export const Patients = (props) => {
       ...x.data,
       historyCount: x.historyCount,
     }));
-    // ── IPS: usuarios con empresaId ven todos los pacientes de su empresa ──
+    // ââ IPS: usuarios con empresaId ven todos los pacientes de su empresa ââ
     const _miEmpresaP = currentUser?.empresaId
       ? companies.find((c) => c.id === currentUser.empresaId)
       : null;
@@ -459,7 +460,7 @@ export const Patients = (props) => {
         <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-black text-teal-900 flex items-center gap-2">
-              <Users className="w-5 h-5" /> Gestión de Pacientes ({list.length})
+              <Users className="w-5 h-5" /> GestiÃ³n de Pacientes ({list.length})
             </h2>
             <button
               onClick={() => goBack()}
@@ -496,7 +497,7 @@ export const Patients = (props) => {
                   >
                     <td className="p-3 font-bold text-teal-900">
                       {p.nombres}
-                      {/* ══ B-12: Badge periodicidad - Res. 1843/2025 Art. 4 ══ */}
+                      {/* ââ B-12: Badge periodicidad - Res. 1843/2025 Art. 4 ââ */}
                       {(() => {
                         const ps = _getPeriodicidadStatus(p);
                         if (ps.nivel === "vigente") return null;
@@ -535,9 +536,9 @@ export const Patients = (props) => {
                             handleOpenHistoryModal(p.docNumero, true)
                           }
                           className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-violet-50 text-violet-600 hover:bg-violet-100 border border-violet-200"
-                          title="Consultar certificados de todos los médicos"
+                          title="Consultar certificados de todos los mÃ©dicos"
                         >
-                          🔍 Todos médicos
+                          ð Todos mÃ©dicos
                         </button>
                       </div>
                     </td>
@@ -607,7 +608,7 @@ export const Patients = (props) => {
               <div className="flex justify-between items-center mb-4 border-b pb-2">
                 <h3 className="text-lg font-black text-gray-800 flex items-center gap-2">
                   <History className="w-5 h-5 text-blue-600" /> Historial
-                  Clínico
+                  ClÃ­nico
                 </h3>
                 <button onClick={() => setShowHistoryModal(false)}>
                   <X className="w-5 h-5 text-gray-400 hover:text-red-500" />

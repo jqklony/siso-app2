@@ -1,6 +1,7 @@
 import React from 'react';
+import { DEFAULT_DOCTOR_DATA } from '../data/initialState.js';
 
-// ─── SuperAdmin Page Component ─────────────────────────────────────────────
+// âââ SuperAdmin Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const SuperAdmin = (props) => {
   const {
@@ -404,7 +405,7 @@ export const SuperAdmin = (props) => {
     NotificacionModal,
     LoginForm,
     PortalPublicoTrabajador,
-    AgendaFieldF,    // ─── Role guard helpers from sharedProps ───
+    AgendaFieldF,    // âââ Role guard helpers from sharedProps âââ
   _isAdmin,
   _isAdminEmpresa,
   _secretariaPuede,
@@ -418,7 +419,7 @@ export const SuperAdmin = (props) => {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <div className="bg-white rounded-2xl p-8 shadow text-center">
-            <p className="text-4xl mb-3">🔒</p>
+            <p className="text-4xl mb-3">ð</p>
             <p className="font-black text-gray-700">
               Acceso restringido a Super Admin
             </p>
@@ -436,7 +437,7 @@ export const SuperAdmin = (props) => {
     const crearOrganizacion = async () => {
       if (!newOrgForm.orgName.trim() || !newOrgForm.adminUser.trim()) {
         showAlert(
-          "⚠️ Nombre de la organización y usuario administrador son obligatorios."
+          "â ï¸ Nombre de la organizaciÃ³n y usuario administrador son obligatorios."
         );
         return;
       }
@@ -487,15 +488,15 @@ export const SuperAdmin = (props) => {
         plan: "pro",
       });
       showAlert(
-        `✅ Organización "${newOrg.orgName}" creada.\n\n` +
+        `â OrganizaciÃ³n "${newOrg.orgName}" creada.\n\n` +
           `Org ID: ${orgId}\n` +
           `Usuario admin: ${newAdmin.user}\n` +
-          `Contraseña temporal: ${adminPass}\n\n` +
-          `⚠️ Anote la contraseña — no se mostrará de nuevo.`
+          `ContraseÃ±a temporal: ${adminPass}\n\n` +
+          `â ï¸ Anote la contraseÃ±a â no se mostrarÃ¡ de nuevo.`
       );
     };
 
-    // Estadísticas por org
+    // EstadÃ­sticas por org
     const statsOrg = (orgId) => ({
       usuarios: usersList.filter((u) => u.orgId === orgId).length,
       pacientes: patientsList.filter(
@@ -512,12 +513,12 @@ export const SuperAdmin = (props) => {
           <div className="flex justify-between items-center mb-6">
             <div>
               <h2 className="text-2xl font-black text-purple-900 flex items-center gap-2">
-                ⭐ Panel Global — Super Admin
+                â­ Panel Global â Super Admin
               </h2>
               <p className="text-sm text-purple-600 mt-1">
-                {orgsList.length} organización
+                {orgsList.length} organizaciÃ³n
                 {orgsList.length !== 1 ? "es" : ""} registrada
-                {orgsList.length !== 1 ? "s" : ""}· {usersList.length} usuarios
+                {orgsList.length !== 1 ? "s" : ""}Â· {usersList.length} usuarios
                 totales
               </p>
             </div>
@@ -525,17 +526,17 @@ export const SuperAdmin = (props) => {
               onClick={() => goTo("dashboard")}
               className="flex items-center gap-2 text-sm font-bold text-purple-700 hover:text-purple-900 bg-white px-3 py-2 rounded-lg shadow-sm"
             >
-              ← Volver al dashboard
+              â Volver al dashboard
             </button>
           </div>
 
           {/* Tabs */}
           <div className="flex gap-2 mb-6 border-b border-purple-200 flex-wrap">
             {[
-              { k: "orgs", l: "🏢 Organizaciones" },
-              { k: "nueva", l: "➕ Nueva Org" },
-              { k: "ips", l: "🏥 IPS / Empresas" },
-              { k: "usuarios", l: "👥 Todos los usuarios" },
+              { k: "orgs", l: "ð¢ Organizaciones" },
+              { k: "nueva", l: "â Nueva Org" },
+              { k: "ips", l: "ð¥ IPS / Empresas" },
+              { k: "usuarios", l: "ð¥ Todos los usuarios" },
             ].map(({ k, l }) => (
               <button
                 key={k}
@@ -580,7 +581,7 @@ export const SuperAdmin = (props) => {
                       </div>
                       {isDefault && (
                         <span className="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-bold">
-                          ⭐ Principal
+                          â­ Principal
                         </span>
                       )}
                     </div>
@@ -617,7 +618,7 @@ export const SuperAdmin = (props) => {
                         Creada: {org.createdAt}
                       </span>
                     </div>
-                    {/* FASE 2: Empresas de esta org con multi-médico */}
+                    {/* FASE 2: Empresas de esta org con multi-mÃ©dico */}
                     {(() => {
                       const orgsEmpresas = companies.filter(
                         (c) => (c.orgId || ORG_DEFAULT_ID) === org.orgId
@@ -626,7 +627,7 @@ export const SuperAdmin = (props) => {
                       return (
                         <div className="mt-3 border-t border-purple-100 pt-3">
                           <p className="text-[10px] font-black text-purple-700 uppercase mb-2">
-                            🏢 Empresas ({orgsEmpresas.length})
+                            ð¢ Empresas ({orgsEmpresas.length})
                           </p>
                           <div className="space-y-1.5">
                             {orgsEmpresas.slice(0, 5).map((emp) => {
@@ -645,13 +646,13 @@ export const SuperAdmin = (props) => {
                                       </p>
                                       <p className="text-[10px] text-gray-500">
                                         NIT: {emp.nit}
-                                        {emp.ciudad && ` · ${emp.ciudad}`}
+                                        {emp.ciudad && ` Â· ${emp.ciudad}`}
                                       </p>
                                     </div>
                                     <div className="flex gap-1 flex-wrap justify-end">
                                       {emp.portalActivo && (
                                         <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-bold">
-                                          🌐 Portal
+                                          ð Portal
                                         </span>
                                       )}
                                       {(emp.sedes || []).length > 0 && (
@@ -672,13 +673,13 @@ export const SuperAdmin = (props) => {
                                             key={uid}
                                             className="text-[10px] bg-indigo-50 text-indigo-600 px-1.5 py-0.5 rounded-full"
                                           >
-                                            👨‍⚕️ {m?.name || uid}
+                                            ð¨ââï¸ {m?.name || uid}
                                           </span>
                                         );
                                       })}
                                       {emMedicos.length > 3 && (
                                         <span className="text-[10px] text-gray-400">
-                                          +{emMedicos.length - 3} más
+                                          +{emMedicos.length - 3} mÃ¡s
                                         </span>
                                       )}
                                     </div>
@@ -688,25 +689,25 @@ export const SuperAdmin = (props) => {
                             })}
                             {orgsEmpresas.length > 5 && (
                               <p className="text-[10px] text-gray-400 text-center">
-                                +{orgsEmpresas.length - 5} empresas más
+                                +{orgsEmpresas.length - 5} empresas mÃ¡s
                               </p>
                             )}
                           </div>
                         </div>
                       );
                     })()}
-                    {/* Auditoría: log acceso super_admin a org ajena */}
+                    {/* AuditorÃ­a: log acceso super_admin a org ajena */}
                     {!isDefault && (
                       <button
                         onClick={() => {
                           logAccess("SuperAdmin-AccesoOrg", org.orgId, "admin");
                           showAlert(
-                            `🔍 Accediendo a datos de "${org.orgName}". Acción registrada en auditoría.`
+                            `ð Accediendo a datos de "${org.orgName}". AcciÃ³n registrada en auditorÃ­a.`
                           );
                         }}
                         className="mt-3 w-full text-xs bg-purple-50 text-purple-700 py-1.5 rounded-lg font-bold hover:bg-purple-100"
                       >
-                        👁 Ver datos (auditado)
+                        ð Ver datos (auditado)
                       </button>
                     )}
                   </div>
@@ -715,26 +716,26 @@ export const SuperAdmin = (props) => {
             </div>
           )}
 
-          {/* TAB: Nueva Organización */}
+          {/* TAB: Nueva OrganizaciÃ³n */}
           {superAdminTab === "nueva" && (
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-purple-100 max-w-xl">
               <h3 className="font-black text-purple-800 text-lg mb-4">
-                ➕ Crear Nueva Organización
+                â Crear Nueva OrganizaciÃ³n
               </h3>
               <p className="text-xs text-gray-500 mb-4">
-                Se generará automáticamente un <code>org_id</code> único y un
-                usuario administrador con contraseña temporal.
+                Se generarÃ¡ automÃ¡ticamente un <code>org_id</code> Ãºnico y un
+                usuario administrador con contraseÃ±a temporal.
               </p>
               <div className="space-y-3">
                 {[
                   {
                     field: "orgName",
-                    label: "Nombre de la organización *",
-                    placeholder: "Ej: Clínica San José Pasto",
+                    label: "Nombre de la organizaciÃ³n *",
+                    placeholder: "Ej: ClÃ­nica San JosÃ© Pasto",
                   },
                   {
                     field: "orgNit",
-                    label: "NIT de la organización",
+                    label: "NIT de la organizaciÃ³n",
                     placeholder: "Ej: 900123456-1",
                   },
                   {
@@ -745,7 +746,7 @@ export const SuperAdmin = (props) => {
                   {
                     field: "adminName",
                     label: "Nombre completo del admin",
-                    placeholder: "Ej: Dr. Juan García",
+                    placeholder: "Ej: Dr. Juan GarcÃ­a",
                   },
                   {
                     field: "adminEmail",
@@ -783,7 +784,7 @@ export const SuperAdmin = (props) => {
                   >
                     {Object.entries(PLAN_CONFIG).map(([k, v]) => (
                       <option key={k} value={k}>
-                        {v.label} — {v.priceLabel}
+                        {v.label} â {v.priceLabel}
                       </option>
                     ))}
                   </select>
@@ -792,23 +793,23 @@ export const SuperAdmin = (props) => {
                   onClick={crearOrganizacion}
                   className="w-full bg-purple-600 text-white py-3 rounded-xl font-black text-sm hover:bg-purple-700 mt-2"
                 >
-                  ✅ Crear organización
+                  â Crear organizaciÃ³n
                 </button>
               </div>
             </div>
           )}
 
-          {/* TAB: IPS / Empresas — crear credenciales de acceso para empresas */}
+          {/* TAB: IPS / Empresas â crear credenciales de acceso para empresas */}
           {superAdminTab === "ips" && (
             <div className="space-y-4">
               <div className="bg-teal-50 border border-teal-200 rounded-xl p-4 mb-4">
                 <p className="font-black text-teal-800 text-sm">
-                  🏥 Gestión de IPS / Empresas
+                  ð¥ GestiÃ³n de IPS / Empresas
                 </p>
                 <p className="text-xs text-teal-600 mt-1">
                   Cree credenciales de acceso para que las empresas (IPS)
                   ingresen al sistema desde el login principal. El admin de cada
-                  empresa podrá crear médicos y secretarias vinculados a ella.
+                  empresa podrÃ¡ crear mÃ©dicos y secretarias vinculados a ella.
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -833,25 +834,25 @@ export const SuperAdmin = (props) => {
                           {emp.nombre}
                         </h4>
                         <p className="text-xs text-gray-400">
-                          NIT: {emp.nit} · {emp.ciudad || ""}
+                          NIT: {emp.nit} Â· {emp.ciudad || ""}
                         </p>
                       </div>
                       {/* Estado actual */}
                       {adminUser ? (
                         <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2 mb-3">
                           <p className="text-xs font-bold text-emerald-700">
-                            ✅ Admin IPS: @{adminUser.user}
+                            â Admin IPS: @{adminUser.user}
                           </p>
                           <p className="text-[10px] text-emerald-500">
                             {adminUser.name}
                           </p>
                           <div className="flex gap-2 mt-1 flex-wrap">
                             <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold">
-                              👨‍⚕️ {medicosEmp.length} médico
+                              ð¨ââï¸ {medicosEmp.length} mÃ©dico
                               {medicosEmp.length !== 1 ? "s" : ""}
                             </span>
                             <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded font-bold">
-                              🗂️ {secresEmp.length} secretaria
+                              ðï¸ {secresEmp.length} secretaria
                               {secresEmp.length !== 1 ? "s" : ""}
                             </span>
                           </div>
@@ -859,7 +860,7 @@ export const SuperAdmin = (props) => {
                       ) : (
                         <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 mb-3">
                           <p className="text-xs text-amber-600 font-bold">
-                            ⚠️ Sin credenciales IPS
+                            â ï¸ Sin credenciales IPS
                           </p>
                         </div>
                       )}
@@ -900,7 +901,7 @@ export const SuperAdmin = (props) => {
                               }))
                             }
                             className="w-full p-2 border rounded-lg text-xs"
-                            placeholder="Contraseña (mín. 8 caracteres)"
+                            placeholder="ContraseÃ±a (mÃ­n. 8 caracteres)"
                           />
                           <div className="flex gap-2">
                             <button
@@ -911,13 +912,13 @@ export const SuperAdmin = (props) => {
                                   !ipsCredForm.pass.trim()
                                 ) {
                                   showAlert(
-                                    "⚠️ Complete nombre, usuario y contraseña."
+                                    "â ï¸ Complete nombre, usuario y contraseÃ±a."
                                   );
                                   return;
                                 }
                                 if (ipsCredForm.pass.length < 8) {
                                   showAlert(
-                                    "⚠️ La contraseña debe tener mínimo 8 caracteres."
+                                    "â ï¸ La contraseÃ±a debe tener mÃ­nimo 8 caracteres."
                                   );
                                   return;
                                 }
@@ -927,7 +928,7 @@ export const SuperAdmin = (props) => {
                                   )
                                 ) {
                                   showAlert(
-                                    "⚠️ Ese nombre de usuario ya existe en el sistema."
+                                    "â ï¸ Ese nombre de usuario ya existe en el sistema."
                                   );
                                   return;
                                 }
@@ -978,15 +979,15 @@ export const SuperAdmin = (props) => {
                                   empresaId: null,
                                 });
                                 showAlert(
-                                  `✅ Credenciales IPS creadas para "${emp.nombre}".\n\n` +
+                                  `â Credenciales IPS creadas para "${emp.nombre}".\n\n` +
                                     `Usuario: ${ipsCredForm.user.trim()}\n` +
-                                    `Contraseña: ${ipsCredForm.pass}\n\n` +
-                                    `⚠️ Anote la contraseña — se pedirá cambiarla en el primer login.`
+                                    `ContraseÃ±a: ${ipsCredForm.pass}\n\n` +
+                                    `â ï¸ Anote la contraseÃ±a â se pedirÃ¡ cambiarla en el primer login.`
                                 );
                               }}
                               className="flex-1 py-2 bg-teal-600 text-white text-xs font-black rounded-lg hover:bg-teal-700"
                             >
-                              ✅ Crear Admin IPS
+                              â Crear Admin IPS
                             </button>
                             <button
                               onClick={() => {
@@ -1022,8 +1023,8 @@ export const SuperAdmin = (props) => {
                           }`}
                         >
                           {adminUser
-                            ? "🔄 Crear nuevo admin"
-                            : "🏥 Crear Credenciales IPS"}
+                            ? "ð Crear nuevo admin"
+                            : "ð¥ Crear Credenciales IPS"}
                         </button>
                       )}
                     </div>
@@ -1043,7 +1044,7 @@ export const SuperAdmin = (props) => {
                       "Usuario",
                       "Nombre",
                       "Rol",
-                      "Organización",
+                      "OrganizaciÃ³n",
                       "Plan",
                       "Activo",
                     ].map((h) => (
@@ -1083,21 +1084,21 @@ export const SuperAdmin = (props) => {
                             }`}
                           >
                             {u.role === "super_admin"
-                              ? "⭐ Super Admin"
+                              ? "â­ Super Admin"
                               : u.role === "admin_empresa"
-                              ? "🏥 Admin IPS"
+                              ? "ð¥ Admin IPS"
                               : u.role === "administrador"
                               ? "Admin"
                               : u.role === "secretaria"
                               ? "Secretaria"
-                              : "Médico"}
+                              : "MÃ©dico"}
                           </span>
                         </td>
                         <td className="p-3 text-xs text-gray-600">
                           {uOrg?.orgName || u.orgId || ORG_DEFAULT_ID}
                         </td>
                         <td className="p-3 text-xs text-gray-600">
-                          {PLAN_CONFIG[u.license]?.label || u.license || "—"}
+                          {PLAN_CONFIG[u.license]?.label || u.license || "â"}
                         </td>
                         <td className="p-3">
                           <span

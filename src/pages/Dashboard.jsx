@@ -1,10 +1,11 @@
 import React from 'react';
+import { DEFAULT_DOCTOR_DATA } from '../data/initialState.js';
 import { getSpanishDate } from '../utils/helpers.js';
 import {
   AlertTriangle, Clock, Eye, FileCheck, FileSearch, FileText, HardDrive, Heart, Receipt, Shield, Stethoscope, UserCheck, Users
 } from "lucide-react";
 
-// ─── Dashboard Page Component ─────────────────────────────────────────────
+// âââ Dashboard Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const Dashboard = (props) => {
   const {
@@ -408,7 +409,7 @@ export const Dashboard = (props) => {
     NotificacionModal,
     LoginForm,
     PortalPublicoTrabajador,
-    AgendaFieldF,    // ─── Role guard helpers from sharedProps ───
+    AgendaFieldF,    // âââ Role guard helpers from sharedProps âââ
   _isAdmin,
   _isAdminEmpresa,
   _secretariaPuede,
@@ -423,7 +424,7 @@ export const Dashboard = (props) => {
       {renderNavbar()}
       <div className="max-w-6xl mx-auto p-8">
         <div className="mb-8">
-          {/* ── IPS: Banner de empresa cuando el usuario tiene empresaId ── */}
+          {/* ââ IPS: Banner de empresa cuando el usuario tiene empresaId ââ */}
           {currentUser?.empresaId &&
             (() => {
               const _miEmpBanner = companies.find(
@@ -440,12 +441,12 @@ export const Dashboard = (props) => {
                         {_miEmpBanner?.nombre || "IPS"}
                       </p>
                       <p className="text-teal-100 text-xs">
-                        NIT: {_miEmpBanner?.nit || "—"} ·{" "}
-                        {_miEmpBanner?.ciudad || ""} ·{" "}
+                        NIT: {_miEmpBanner?.nit || "â"} Â·{" "}
+                        {_miEmpBanner?.ciudad || ""} Â·{" "}
                         {currentUser.role === "admin_empresa"
                           ? "Admin IPS"
                           : currentUser.role === "medico"
-                          ? "Médico IPS"
+                          ? "MÃ©dico IPS"
                           : "Secretaria IPS"}
                       </p>
                     </div>
@@ -457,7 +458,7 @@ export const Dashboard = (props) => {
             <h2 className="text-2xl font-black text-gray-800">
               {currentUser?.empresaId ? "Panel IPS" : "Panel Principal"}
             </h2>
-            {/* FASE 2: Indicador médico de turno */}
+            {/* FASE 2: Indicador mÃ©dico de turno */}
             {_isAdmin(currentUser?.role) && (
               <div className="flex items-center gap-2">
                 {medicoTurnoActivo ? (
@@ -467,11 +468,11 @@ export const Dashboard = (props) => {
                       setTimeout(() => setActiveUserMgmtTab("reasignacion"), 50)
                     }
                     className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-1.5 cursor-pointer hover:bg-green-100 transition"
-                    title="Click para cambiar médico de turno"
+                    title="Click para cambiar mÃ©dico de turno"
                   >
                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                     <span className="text-xs font-black text-green-700">
-                      🩺 Turno:{" "}
+                      ð©º Turno:{" "}
                       {usersList.find((u) => u.user === medicoTurnoActivo)
                         ?.name || medicoTurnoActivo}
                     </span>
@@ -485,7 +486,7 @@ export const Dashboard = (props) => {
                     className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-1.5 cursor-pointer hover:bg-amber-100 transition"
                   >
                     <span className="text-xs text-amber-600 font-bold">
-                      ⚠️ Sin médico de turno
+                      â ï¸ Sin mÃ©dico de turno
                     </span>
                   </div>
                 )}
@@ -496,11 +497,11 @@ export const Dashboard = (props) => {
             {getSpanishDate(null)} -- {currentUser?.name}
             {currentUser?.role === "super_admin" && (
               <span className="ml-2 text-purple-600 font-bold">
-                ⭐ Super Admin · {orgsList.length} orgs
+                â­ Super Admin Â· {orgsList.length} orgs
               </span>
             )}
           </p>
-          {/* ── PLAN STATUS BANNER ── */}
+          {/* ââ PLAN STATUS BANNER ââ */}
           {(() => {
             const plan = PLAN_CONFIG[currentUser?.license || "libre"];
             const hcUsadas = _contarHC(patientsList, currentUser?.user);
@@ -531,7 +532,7 @@ export const Dashboard = (props) => {
                 <span className={`font-black text-${col}-700 text-sm`}>
                   {plan.label}
                 </span>
-                <span className="text-gray-400 text-xs">·</span>
+                <span className="text-gray-400 text-xs">Â·</span>
                 {plan.maxHC < 9999 ? (
                   <span
                     className={`text-xs font-bold ${
@@ -542,16 +543,16 @@ export const Dashboard = (props) => {
                         : "text-gray-600"
                     }`}
                   >
-                    📋 {hcUsadas}/{plan.maxHC} HC {pct >= 80 && "⚠️"}
+                    ð {hcUsadas}/{plan.maxHC} HC {pct >= 80 && "â ï¸"}
                   </span>
                 ) : (
                   <span className="text-xs text-gray-500">
-                    📋 HC ilimitadas
+                    ð HC ilimitadas
                   </span>
                 )}
                 {isExpiring !== false && isExpiring >= 0 && (
                   <span className="text-xs font-bold text-amber-600">
-                    ⏰ Vence en {isExpiring}d
+                    â° Vence en {isExpiring}d
                   </span>
                 )}
                 {plan.price === 0 && (
@@ -559,7 +560,7 @@ export const Dashboard = (props) => {
                     onClick={() => goTo("planes")}
                     className={`ml-auto text-xs font-black bg-${col}-600 text-white px-3 py-1 rounded-lg hover:opacity-90 transition`}
                   >
-                    ⬆️ Ver planes
+                    â¬ï¸ Ver planes
                   </button>
                 )}
               </div>
@@ -569,7 +570,7 @@ export const Dashboard = (props) => {
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {(() => {
-            // ── IPS: scope stats to empresa patients ──
+            // ââ IPS: scope stats to empresa patients ââ
             const _scopedPats = currentUser?.empresaId
               ? patientsList.filter((p) => {
                   const _scEmp = companies.find(
@@ -616,8 +617,8 @@ export const Dashboard = (props) => {
                 ? [
                     {
                       label: currentUser?.empresaId
-                        ? "Médicos IPS"
-                        : "Médicos activos",
+                        ? "MÃ©dicos IPS"
+                        : "MÃ©dicos activos",
                       value: currentUser?.empresaId
                         ? usersList.filter(
                             (u) =>
@@ -680,7 +681,7 @@ export const Dashboard = (props) => {
             </div>
           ))}
         </div>
-        {/* ── ACCIONES PRINCIPALES ── */}
+        {/* ââ ACCIONES PRINCIPALES ââ */}
         {["medico", "administrador", "secretaria", "admin_empresa", "super_admin"].includes(
           currentUser?.role
         ) && (
@@ -699,7 +700,7 @@ export const Dashboard = (props) => {
                   Nueva HC Ocupacional
                 </h3>
                 <p className="text-emerald-100 text-[11px] mt-0.5">
-                  Evaluación médica del trabajo
+                  EvaluaciÃ³n mÃ©dica del trabajo
                 </p>
               </div>
             </button>
@@ -724,12 +725,12 @@ export const Dashboard = (props) => {
           </div>
         )}
 
-        {/* ── MÓDULOS AGRUPADOS ── */}
+        {/* ââ MÃDULOS AGRUPADOS ââ */}
         <div className="space-y-4 mb-6">
-          {/* Gestión Clínica */}
+          {/* GestiÃ³n ClÃ­nica */}
           <div>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
-              🩺 Gestión Clínica
+              ð©º GestiÃ³n ClÃ­nica
             </p>
             <div className="grid grid-cols-3 gap-2">
               <button
@@ -753,7 +754,7 @@ export const Dashboard = (props) => {
                 className="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-2.5 hover:border-blue-200 hover:bg-blue-50/40 transition group shadow-sm"
               >
                 <div className="bg-blue-50 p-2 rounded-lg group-hover:bg-blue-100 transition flex-shrink-0 text-base leading-none flex items-center justify-center w-8 h-8">
-                  🗓️
+                  ðï¸
                 </div>
                 <div className="text-left min-w-0">
                   <p className="font-black text-gray-800 text-xs leading-tight">
@@ -783,10 +784,10 @@ export const Dashboard = (props) => {
             </div>
           </div>
 
-          {/* Administración */}
+          {/* AdministraciÃ³n */}
           <div>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
-              💼 Administración
+              ð¼ AdministraciÃ³n
             </p>
             <div className="grid grid-cols-3 gap-2">
               <button
@@ -838,7 +839,7 @@ export const Dashboard = (props) => {
                   </p>
                   <p className="text-[10px] text-gray-400 truncate">
                     {currentUser?.role === "admin_empresa"
-                      ? "Médicos IPS"
+                      ? "MÃ©dicos IPS"
                       : "Accesos"}
                   </p>
                 </div>
@@ -856,7 +857,7 @@ export const Dashboard = (props) => {
                       Mi Empresa
                     </p>
                     <p className="text-[10px] text-gray-400 truncate">
-                      Logo · NIT · IPS
+                      Logo Â· NIT Â· IPS
                     </p>
                   </div>
                 </button>
@@ -866,14 +867,14 @@ export const Dashboard = (props) => {
                   className="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-2.5 hover:border-indigo-200 hover:bg-indigo-50/40 transition group shadow-sm"
                 >
                   <div className="bg-indigo-50 p-2 rounded-lg group-hover:bg-indigo-100 transition flex-shrink-0 text-base leading-none flex items-center justify-center w-8 h-8">
-                    💼
+                    ð¼
                   </div>
                   <div className="text-left min-w-0">
                     <p className="font-black text-gray-800 text-xs leading-tight">
                       Portafolio
                     </p>
                     <p className="text-[10px] text-gray-400 truncate">
-                      Precios · Servicios
+                      Precios Â· Servicios
                     </p>
                   </div>
                 </button>
@@ -884,7 +885,7 @@ export const Dashboard = (props) => {
           {/* Financiero y Reportes */}
           <div>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
-              💰 Financiero & Reportes
+              ð° Financiero & Reportes
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               <button
@@ -892,7 +893,7 @@ export const Dashboard = (props) => {
                   _canUse("factura_basica", currentUser)
                     ? goTo("bill")
                     : showAlert(
-                        "🔒 Cuentas de Cobro está disponible en el plan 🌱 Starter ($45.000/mes).\n\nMenú → ⭐ Ver Planes"
+                        "ð Cuentas de Cobro estÃ¡ disponible en el plan ð± Starter ($45.000/mes).\n\nMenÃº â â­ Ver Planes"
                       )
                 }
                 className="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-2.5 hover:border-orange-200 hover:bg-orange-50/40 transition group shadow-sm"
@@ -917,12 +918,12 @@ export const Dashboard = (props) => {
                     Cuentas de Cobro{" "}
                     {!_canUse("factura_basica", currentUser) && (
                       <span className="text-[8px] bg-amber-100 text-amber-700 px-0.5 rounded">
-                        🔒
+                        ð
                       </span>
                     )}
                   </p>
                   <p className="text-[10px] text-gray-400 truncate">
-                    Facturación
+                    FacturaciÃ³n
                   </p>
                 </div>
               </button>
@@ -933,14 +934,14 @@ export const Dashboard = (props) => {
                   className="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-2.5 hover:border-green-200 hover:bg-green-50/40 transition group shadow-sm"
                 >
                   <div className="bg-green-50 p-2 rounded-lg group-hover:bg-green-100 transition flex-shrink-0 text-base leading-none flex items-center justify-center w-8 h-8">
-                    💰
+                    ð°
                   </div>
                   <div className="text-left min-w-0">
                     <p className="font-black text-gray-800 text-xs leading-tight">
-                      Módulo Financiero
+                      MÃ³dulo Financiero
                     </p>
                     <p className="text-[10px] text-gray-400 truncate">
-                      Caja · Cuentas
+                      Caja Â· Cuentas
                     </p>
                   </div>
                 </button>
@@ -949,7 +950,7 @@ export const Dashboard = (props) => {
                 onClick={() =>
                   _canUse("reportes_basicos", currentUser)
                     ? goTo("reporte")
-                    : showAlert("🔒 Reportes disponible en plan Starter+")
+                    : showAlert("ð Reportes disponible en plan Starter+")
                 }
                 className="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-2.5 hover:border-indigo-200 hover:bg-indigo-50/40 transition group shadow-sm"
               >
@@ -967,12 +968,12 @@ export const Dashboard = (props) => {
                     Reportes{" "}
                     {!_canUse("reportes_basicos", currentUser) && (
                       <span className="text-[8px] bg-amber-100 text-amber-700 px-0.5 rounded">
-                        🔒
+                        ð
                       </span>
                     )}
                   </p>
                   <p className="text-[10px] text-gray-400 truncate">
-                    Diagnóstico
+                    DiagnÃ³stico
                   </p>
                 </div>
               </button>
@@ -981,7 +982,7 @@ export const Dashboard = (props) => {
                   _canUse("propuestas", currentUser)
                     ? goTo("propuestas")
                     : showAlert(
-                        "🔒 Propuestas Económicas está disponible en el plan 🌱 Starter ($45.000/mes).\n\nMenú → ⭐ Ver Planes"
+                        "ð Propuestas EconÃ³micas estÃ¡ disponible en el plan ð± Starter ($45.000/mes).\n\nMenÃº â â­ Ver Planes"
                       )
                 }
                 className="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-2.5 hover:border-teal-200 hover:bg-teal-50/40 transition group shadow-sm"
@@ -1006,7 +1007,7 @@ export const Dashboard = (props) => {
                     Propuestas{" "}
                     {!_canUse("propuestas", currentUser) && (
                       <span className="text-[8px] bg-amber-100 text-amber-700 px-0.5 rounded">
-                        🔒
+                        ð
                       </span>
                     )}
                   </p>
@@ -1028,7 +1029,7 @@ export const Dashboard = (props) => {
                       Contabilidad
                     </p>
                     <p className="text-[10px] text-gray-400 truncate">
-                      P&L · KPIs · Fiscal
+                      P&L Â· KPIs Â· Fiscal
                     </p>
                   </div>
                 </button>
@@ -1036,10 +1037,10 @@ export const Dashboard = (props) => {
             </div>
           </div>
 
-          {/* Módulos Especializados */}
+          {/* MÃ³dulos Especializados */}
           <div>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
-              ⚡ Módulos Especializados
+              â¡ MÃ³dulos Especializados
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               <button
@@ -1047,7 +1048,7 @@ export const Dashboard = (props) => {
                   _canUse("sve_starter", currentUser)
                     ? goTo("sve")
                     : showAlert(
-                        "🔒 SVE está disponible en el plan 🌱 Starter ($45.000/mes, 2 programas) o ⭐ Pro ($79.000/mes, 7 programas).\n\nMenú → ⭐ Ver Planes"
+                        "ð SVE estÃ¡ disponible en el plan ð± Starter ($45.000/mes, 2 programas) o â­ Pro ($79.000/mes, 7 programas).\n\nMenÃº â â­ Ver Planes"
                       )
                 }
                 className="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-2.5 hover:border-teal-200 hover:bg-teal-50/40 transition group shadow-sm"
@@ -1072,12 +1073,12 @@ export const Dashboard = (props) => {
                     SVE{" "}
                     {!_canUse("sve_starter", currentUser) && (
                       <span className="text-[8px] bg-amber-100 text-amber-700 px-0.5 rounded">
-                        🔒
+                        ð
                       </span>
                     )}
                   </p>
                   <p className="text-[10px] text-gray-400 truncate">
-                    Vigilancia epidemiológica
+                    Vigilancia epidemiolÃ³gica
                   </p>
                 </div>
               </button>
@@ -1086,7 +1087,7 @@ export const Dashboard = (props) => {
                   _canUse("arl", currentUser)
                     ? goTo("arl")
                     : showAlert(
-                        "🔒 Módulo ARL está disponible en el plan ⭐ Pro ($79.000/mes).\n\nMenú → ⭐ Ver Planes"
+                        "ð MÃ³dulo ARL estÃ¡ disponible en el plan â­ Pro ($79.000/mes).\n\nMenÃº â â­ Ver Planes"
                       )
                 }
                 className="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-2.5 hover:border-red-200 hover:bg-red-50/40 transition group shadow-sm"
@@ -1106,10 +1107,10 @@ export const Dashboard = (props) => {
                 </div>
                 <div className="text-left min-w-0">
                   <p className="font-black text-gray-800 text-xs leading-tight">
-                    Módulo ARL{" "}
+                    MÃ³dulo ARL{" "}
                     {!_canUse("arl", currentUser) && (
                       <span className="text-[8px] bg-amber-100 text-amber-700 px-0.5 rounded">
-                        🔒
+                        ð
                       </span>
                     )}
                   </p>
@@ -1123,14 +1124,14 @@ export const Dashboard = (props) => {
                 className="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-2.5 hover:border-indigo-200 hover:bg-indigo-50/40 transition group shadow-sm"
               >
                 <div className="bg-indigo-50 p-2 rounded-lg group-hover:bg-indigo-100 transition flex-shrink-0 text-base leading-none flex items-center justify-center w-8 h-8">
-                  💼
+                  ð¼
                 </div>
                 <div className="text-left min-w-0">
                   <p className="font-black text-gray-800 text-xs leading-tight">
                     Portafolio
                   </p>
                   <p className="text-[10px] text-gray-400 truncate">
-                    Precios · Servicios
+                    Precios Â· Servicios
                   </p>
                 </div>
               </button>
@@ -1140,7 +1141,7 @@ export const Dashboard = (props) => {
           {/* Portales y Acceso Externo */}
           <div>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
-              🌐 Portales & Acceso Externo
+              ð Portales & Acceso Externo
             </p>
             <div className="grid grid-cols-3 gap-2">
               <button
@@ -1155,7 +1156,7 @@ export const Dashboard = (props) => {
                     Portal Trabajador
                   </p>
                   <p className="text-[10px] text-gray-400 truncate">
-                    Consulta código
+                    Consulta cÃ³digo
                   </p>
                 </div>
               </button>
@@ -1198,7 +1199,7 @@ export const Dashboard = (props) => {
           {currentUser?.role === "super_admin" && (
             <div>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
-                ⭐ Super Admin
+                â­ Super Admin
               </p>
               <button
                 onClick={() => goTo("superadmin")}
@@ -1206,12 +1207,12 @@ export const Dashboard = (props) => {
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -translate-y-8 translate-x-8" />
                 <div className="bg-purple-500/40 p-2.5 rounded-xl flex-shrink-0 relative">
-                  <span className="text-xl">⭐</span>
+                  <span className="text-xl">â­</span>
                 </div>
                 <div className="relative">
                   <p className="font-black text-white text-sm">Panel Global</p>
                   <p className="text-purple-200 text-[11px]">
-                    Super Admin · {orgsList.length} organizaciones
+                    Super Admin Â· {orgsList.length} organizaciones
                   </p>
                 </div>
               </button>
@@ -1244,14 +1245,14 @@ export const Dashboard = (props) => {
             const alertas = [
               ...conveniosAlerta.map((c) => ({
                 tipo: "amber",
-                msg: `⚠️ Convenio próximo a vencer: ${c.nombre} (${c.convenioVencimiento})`,
+                msg: `â ï¸ Convenio prÃ³ximo a vencer: ${c.nombre} (${c.convenioVencimiento})`,
                 accion: () => goTo("companies"),
               })),
               ...(cuentasPend.length > 5
                 ? [
                     {
                       tipo: "red",
-                      msg: `💳 ${
+                      msg: `ð³ ${
                         cuentasPend.length
                       } cuentas de cobro pendientes por $ ${cuentasPend
                         .reduce((s, b) => s + Number(b.amount || 0), 0)
@@ -1267,14 +1268,14 @@ export const Dashboard = (props) => {
                 ? [
                     {
                       tipo: "blue",
-                      msg: `📋 ${hcAbiertas.length} HCs sin cerrar`,
+                      msg: `ð ${hcAbiertas.length} HCs sin cerrar`,
                       accion: () => {},
                     },
                   ]
                 : []),
               ...medsinFirma.map((m) => ({
                 tipo: "purple",
-                msg: `✍️ ${m.name || m.user} no tiene firma digital cargada`,
+                msg: `âï¸ ${m.name || m.user} no tiene firma digital cargada`,
                 accion: () => goTo("users"),
               })),
             ];
@@ -1295,14 +1296,14 @@ export const Dashboard = (props) => {
                     <span
                       className={`text-[10px] text-${a.tipo}-600 font-black`}
                     >
-                      Ver →
+                      Ver â
                     </span>
                   </div>
                 ))}
               </div>
             );
           })()}
-        {/* ── PRODUCTIVIDAD POR MÉDICO - admin + admin_empresa (FASE 5) ── */}
+        {/* ââ PRODUCTIVIDAD POR MÃDICO - admin + admin_empresa (FASE 5) ââ */}
         {_isAdminOrEmpresa(currentUser?.role) &&
           (() => {
             const medicosActivos = usersList.filter(
@@ -1335,7 +1336,7 @@ export const Dashboard = (props) => {
               <div className="mb-4 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="bg-gray-800 px-4 py-3 flex items-center justify-between">
                   <h3 className="text-white font-black text-sm flex items-center gap-2">
-                    📊 Productividad por Médico{" "}
+                    ð Productividad por MÃ©dico{" "}
                     <span className="text-gray-400 font-normal text-xs">
                       (mes actual)
                     </span>
@@ -1347,7 +1348,7 @@ export const Dashboard = (props) => {
                     }}
                     className="text-[10px] text-gray-300 hover:text-white font-black"
                   >
-                    Ver detalle →
+                    Ver detalle â
                   </button>
                 </div>
                 <div className="overflow-x-auto">
@@ -1355,7 +1356,7 @@ export const Dashboard = (props) => {
                     <thead className="bg-gray-100 text-gray-600">
                       <tr>
                         {[
-                          "Médico",
+                          "MÃ©dico",
                           "Atenciones",
                           "HCs cerradas",
                           "HCs abiertas",
@@ -1479,7 +1480,7 @@ export const Dashboard = (props) => {
                           {p.nombres}
                         </div>
                         <div className="text-[10px] text-gray-400">
-                          {p.docNumero} · {p.cargo || "Sin cargo"}
+                          {p.docNumero} Â· {p.cargo || "Sin cargo"}
                         </div>
                       </td>
                       <td className="p-3">
@@ -1520,7 +1521,7 @@ export const Dashboard = (props) => {
                             onClick={() => {
                               if (!canViewPatient(p)) {
                                 showAlert(
-                                  "⛔ Solo puede acceder a historias creadas por usted."
+                                  "â Solo puede acceder a historias creadas por usted."
                                 );
                                 return;
                               }
@@ -1568,7 +1569,7 @@ export const Dashboard = (props) => {
                                     a.click();
                                     URL.revokeObjectURL(url);
                                     showAlert(
-                                      "✅ Preservado.\nSHA-256: " +
+                                      "â Preservado.\nSHA-256: " +
                                         pkg.hashSHA256.substring(0, 16) +
                                         "..."
                                     );
@@ -1577,7 +1578,7 @@ export const Dashboard = (props) => {
                                   }
                                 }}
                                 className="p-1.5 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 border border-purple-200"
-                                title="Preservar HC 20 años (Res.1995/1999)"
+                                title="Preservar HC 20 aÃ±os (Res.1995/1999)"
                               >
                                 <HardDrive className="w-3.5 h-3.5" />
                               </button>
@@ -1626,7 +1627,7 @@ export const Dashboard = (props) => {
                       colSpan="6"
                       className="p-8 text-center text-gray-400 text-sm"
                     >
-                      No hay registros aún. Cree una nueva historia clínica.
+                      No hay registros aÃºn. Cree una nueva historia clÃ­nica.
                     </td>
                   </tr>
                 )}

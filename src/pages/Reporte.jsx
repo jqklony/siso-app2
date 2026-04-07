@@ -1,10 +1,11 @@
 import React from 'react';
+import { BrandLogo } from '../components/ui/DoctorSignature.jsx';
 import { analyzeBP, analyzeBMI } from '../utils/helpers.js';
 import {
   BrainCircuit, FileText, HardDrive, LogOut, Printer, Receipt, ShieldCheck, Sparkles, UserCheck
 } from "lucide-react";
 
-// ─── Reporte Page Component ─────────────────────────────────────────────
+// âââ Reporte Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const Reporte = (props) => {
   const {
@@ -408,7 +409,7 @@ export const Reporte = (props) => {
     NotificacionModal,
     LoginForm,
     PortalPublicoTrabajador,
-    AgendaFieldF,    // ─── Role guard helpers from sharedProps ───
+    AgendaFieldF,    // âââ Role guard helpers from sharedProps âââ
   _isAdmin,
   _isAdminEmpresa,
   _secretariaPuede,
@@ -418,7 +419,7 @@ export const Reporte = (props) => {
     ...rest
 } = props;
 
-    // ── SECRETARIA GATE: "Reportes Epidemiológicos" requiere autorización del admin ──
+    // ââ SECRETARIA GATE: "Reportes EpidemiolÃ³gicos" requiere autorizaciÃ³n del admin ââ
     if (
       currentUser?.role === "secretaria" &&
       !_secretariaPuede("reporte", currentUser, usersList)
@@ -428,32 +429,32 @@ export const Reporte = (props) => {
           {renderNavbar()}
           <div className="max-w-xl mx-auto px-4 py-16 text-center">
             <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-8 space-y-3">
-              <div className="text-5xl">🔐</div>
+              <div className="text-5xl">ð</div>
               <p className="font-black text-amber-800 text-xl">
-                Módulo restringido
+                MÃ³dulo restringido
               </p>
               <p className="text-amber-700 text-sm font-bold">
-                Reportes Epidemiológicos
+                Reportes EpidemiolÃ³gicos
               </p>
               <p className="text-amber-600 text-xs leading-relaxed">
-                Este módulo requiere autorización explícita del administrador.
+                Este mÃ³dulo requiere autorizaciÃ³n explÃ­cita del administrador.
                 <br />
                 Solicita que habilite el permiso{" "}
-                <strong>"Reportes Epidemiológicos"</strong> en tu perfil.
+                <strong>"Reportes EpidemiolÃ³gicos"</strong> en tu perfil.
                 <br />
-                (Usuarios → tu nombre → 🔐 Permisos de secretaria)
+                (Usuarios â tu nombre â ð Permisos de secretaria)
               </p>
               <button
                 onClick={() => goBack()}
                 className="mt-3 bg-amber-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-amber-700 transition"
               >
-                ← Volver al panel
+                â Volver al panel
               </button>
             </div>
           </div>
         </div>
       );
-    // ── IPS: auto-select empresa for empresa users ──
+    // ââ IPS: auto-select empresa for empresa users ââ
     const _reportEmpId = currentUser?.empresaId || selectedCompanyReport;
     if (currentUser?.empresaId && !selectedCompanyReport) {
       setTimeout(() => setSelectedCompanyReport(currentUser.empresaId), 0);
@@ -506,17 +507,17 @@ export const Reporte = (props) => {
       if (!v) return "N/R";
       const n = parseFloat((v.match(/\d+(\.\d+)?/) || [0])[0]);
       if (!n) return "N/R";
-      if (v.toLowerCase().includes("mes")) return "<1 año";
-      if (n < 1) return "<1 año";
-      if (n <= 3) return "1-3 años";
-      if (n <= 5) return "3-5 años";
-      if (n <= 10) return "5-10 años";
-      return ">10 años";
+      if (v.toLowerCase().includes("mes")) return "<1 aÃ±o";
+      if (n < 1) return "<1 aÃ±o";
+      if (n <= 3) return "1-3 aÃ±os";
+      if (n <= 5) return "3-5 aÃ±os";
+      if (n <= 10) return "5-10 aÃ±os";
+      return ">10 aÃ±os";
     };
     // Antecedentes por grupo
     const cntAntec = (grupo) =>
       filtered.filter((p) => p.antecedentesAgrupados?.[grupo]?.val).length;
-    // Revisión por sistemas anormal
+    // RevisiÃ³n por sistemas anormal
     const cntRevSis = (sis) =>
       filtered.filter((p) => {
         const s = p.revisionPorSistemas?.[sis];
@@ -570,7 +571,7 @@ export const Reporte = (props) => {
       fumadores: filtered.filter((p) => p.habitos?.fuma === "Si").length,
       alcohol: filtered.filter((p) => p.habitos?.alcohol === "Si").length,
       deporte: filtered.filter((p) => p.habitos?.deporte === "Si").length,
-      // Revisión por sistemas
+      // RevisiÃ³n por sistemas
       revCardio: cntRevSis("cardiovascular"),
       revResp: cntRevSis("respiratorio"),
       revOsteo: cntRevSis("osteoarticular"),
@@ -616,7 +617,7 @@ export const Reporte = (props) => {
               onClick={() => goBack()}
               className="text-blue-600 font-bold flex items-center gap-1"
             >
-              <LogOut className="rotate-180 w-4 h-4" /> ← Volver
+              <LogOut className="rotate-180 w-4 h-4" /> â Volver
             </button>
             <div className="flex items-center gap-3 flex-wrap">
               <input
@@ -659,12 +660,12 @@ export const Reporte = (props) => {
             </button>
           </div>
 
-          {/* ── TABS: Estadísticas | Certificados por empresa ── */}
+          {/* ââ TABS: EstadÃ­sticas | Certificados por empresa ââ */}
           {selectedCompanyReport && (
             <div className="flex gap-1 mb-6 border-b border-gray-200 no-print">
               {[
-                { k: "estadisticas", l: "📊 Estadísticas y Diagnóstico" },
-                { k: "certificados", l: "📄 Certificados por empresa" },
+                { k: "estadisticas", l: "ð EstadÃ­sticas y DiagnÃ³stico" },
+                { k: "certificados", l: "ð Certificados por empresa" },
               ].map((t) => (
                 <button
                   key={t.k}
@@ -691,7 +692,7 @@ export const Reporte = (props) => {
                   <BrandLogo data={activeDoctorData} />
                 </div>
                 <h1 className="text-xl font-black text-blue-900">
-                  DIAGNÓSTICO DE CONDICIONES DE SALUD
+                  DIAGNÃSTICO DE CONDICIONES DE SALUD
                 </h1>
                 {selectedCompanyReport && (
                   <div className="mt-2 inline-block p-3 bg-blue-50 rounded-lg border border-blue-100">
@@ -699,7 +700,7 @@ export const Reporte = (props) => {
                       {compName}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
-                      Población evaluada: <strong>{total} trabajadores</strong>
+                      PoblaciÃ³n evaluada: <strong>{total} trabajadores</strong>
                     </p>
                   </div>
                 )}
@@ -755,7 +756,7 @@ export const Reporte = (props) => {
                   <div className="grid grid-cols-2 gap-3 mb-4 no-print">
                     <div className="bg-violet-50 border border-violet-100 rounded-xl p-3">
                       <p className="text-[10px] font-black text-violet-600 uppercase mb-2">
-                        🏆 Top 5 Diagnósticos
+                        ð Top 5 DiagnÃ³sticos
                       </p>
                       {stats.topDx.length === 0 ? (
                         <p className="text-xs text-gray-400">Sin datos</p>
@@ -777,7 +778,7 @@ export const Reporte = (props) => {
                     </div>
                     <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
                       <p className="text-[10px] font-black text-blue-600 uppercase mb-2">
-                        📈 Tendencia Mensual
+                        ð Tendencia Mensual
                       </p>
                       {Object.entries(stats.tendenciaMensual)
                         .sort(([a], [b]) => a.localeCompare(b))
@@ -812,7 +813,7 @@ export const Reporte = (props) => {
                         <div className="text-center flex-1">
                           <p className="text-[9px] text-gray-400">Edad prom.</p>
                           <p className="text-xs font-black text-gray-700">
-                            {stats.promedioEdad} años
+                            {stats.promedioEdad} aÃ±os
                           </p>
                         </div>
                         <div className="text-center flex-1">
@@ -831,7 +832,7 @@ export const Reporte = (props) => {
                     <div className="flex flex-wrap items-center gap-3">
                       <div className="flex items-center gap-2">
                         <label className="text-xs font-bold text-gray-700 whitespace-nowrap">
-                          💰 Precio por paciente ($):
+                          ð° Precio por paciente ($):
                         </label>
                         <input
                           type="number"
@@ -851,7 +852,7 @@ export const Reporte = (props) => {
                             ).toLocaleString("es-CO")}
                           </div>
                           <div className="text-[10px] text-gray-500">
-                            {total} pacientes × $
+                            {total} pacientes Ã $
                             {parseFloat(precioPorPaciente).toLocaleString(
                               "es-CO"
                             )}
@@ -884,7 +885,7 @@ export const Reporte = (props) => {
                                 amount: String(total2),
                                 number: nextNum,
                                 date: new Date().toISOString().split("T")[0],
-                                concept: `EXAMENES MEDICOS OCUPACIONALES - ${total} trabajador(es) evaluado(s) · $${parseFloat(
+                                concept: `EXAMENES MEDICOS OCUPACIONALES - ${total} trabajador(es) evaluado(s) Â· $${parseFloat(
                                   precioPorPaciente
                                 ).toLocaleString("es-CO")} c/u`,
                               }));
@@ -899,7 +900,7 @@ export const Reporte = (props) => {
                       )}
                     </div>
                   </div>
-                  {/* Botones de exportación y tabla */}
+                  {/* Botones de exportaciÃ³n y tabla */}
                   <div className="flex flex-wrap gap-2 mb-4 no-print">
                     <button
                       onClick={() => exportPatientTable(filtered, compName)}
@@ -967,7 +968,7 @@ export const Reporte = (props) => {
                         }<br/>
                       ${
                         compData?.direccion
-                          ? "<b>Dirección:</b> " +
+                          ? "<b>DirecciÃ³n:</b> " +
                             compData.direccion +
                             " &nbsp;|&nbsp; "
                           : ""
@@ -991,7 +992,7 @@ export const Reporte = (props) => {
                         )}
                       ${
                         reportStartDate || reportEndDate
-                          ? " &nbsp;|&nbsp; <b>Período:</b> " +
+                          ? " &nbsp;|&nbsp; <b>PerÃ­odo:</b> " +
                             (reportStartDate || "...") +
                             " al " +
                             (reportEndDate || "...")
@@ -1004,7 +1005,7 @@ export const Reporte = (props) => {
                 <table>
                   <thead><tr>
                     <th>#</th><th>Nombre / Trabajador</th><th>Documento</th><th>Sexo</th><th>Edad</th>
-                    <th>Cargo</th><th>Empresa</th><th>EPS</th><th>ARL</th><th>Tipo Examen</th><th>Énfasis</th><th>Fecha</th>
+                    <th>Cargo</th><th>Empresa</th><th>EPS</th><th>ARL</th><th>Tipo Examen</th><th>Ãnfasis</th><th>Fecha</th>
                   </tr></thead>
                   <tbody>${filtered
                     .map(
@@ -1031,10 +1032,10 @@ export const Reporte = (props) => {
                     )
                     .join("")}</tbody>
                 </table>
-                <div class="footer">OCUPASALUD · Generado: ${new Date().toLocaleString(
+                <div class="footer">OCUPASALUD Â· Generado: ${new Date().toLocaleString(
                   "es-CO"
                 )}</div>
-                <br/><button onclick="window.print()" style="background:#1e293b;color:white;padding:6px 16px;border:none;border-radius:6px;cursor:pointer;font-size:11px;">🖨️ Imprimir / Guardar PDF</button>
+                <br/><button onclick="window.print()" style="background:#1e293b;color:white;padding:6px 16px;border:none;border-radius:6px;cursor:pointer;font-size:11px;">ð¨ï¸ Imprimir / Guardar PDF</button>
                 </body></html>`);
                         w.document.close();
                       }}
@@ -1054,7 +1055,7 @@ export const Reporte = (props) => {
                       {showExportTable ? "Ocultar" : "Ver"} Tabla Pantalla
                     </button>
                     <span className="ml-auto text-[10px] text-gray-400 italic flex items-center">
-                      ⚠ Res.1843/2025 Art.19 - Confidencial
+                      â  Res.1843/2025 Art.19 - Confidencial
                     </span>
                   </div>
                   {/* Tabla de pacientes (solo visible en pantalla, no exporta datos sensibles) */}
@@ -1065,7 +1066,7 @@ export const Reporte = (props) => {
                           Tabla de Trabajadores -- {filtered.length} registros
                         </span>
                         <span className="text-slate-400 text-[10px]">
-                          ID anonimizado · Res.1843/2025 Art.19 - Confidencial
+                          ID anonimizado Â· Res.1843/2025 Art.19 - Confidencial
                         </span>
                       </div>
                       <div className="overflow-x-auto">
@@ -1083,7 +1084,7 @@ export const Reporte = (props) => {
                                 "EPS",
                                 "ARL",
                                 "Tipo Examen",
-                                "Énfasis",
+                                "Ãnfasis",
                                 "Fecha",
                               ].map((h) => (
                                 <th
@@ -1159,14 +1160,14 @@ export const Reporte = (props) => {
                       </div>
                     </div>
                   )}
-                  {/* Tablas sociodemográficas ampliadas (20+ variables) */}
+                  {/* Tablas sociodemogrÃ¡ficas ampliadas (20+ variables) */}
                   <div className="mb-6">
                     <h3 className="font-black text-gray-700 uppercase text-xs mb-3 border-b pb-1">
-                      1. Perfil Sociodemográfico y Ocupacional
+                      1. Perfil SociodemogrÃ¡fico y Ocupacional
                     </h3>
                     <div className="grid grid-cols-3 gap-3 text-xs">
                       {[
-                        { title: "Género", data: stats.genero, color: "blue" },
+                        { title: "GÃ©nero", data: stats.genero, color: "blue" },
                         {
                           title: "Rango Etario",
                           data: stats.edad,
@@ -1193,7 +1194,7 @@ export const Reporte = (props) => {
                           color: "pink",
                         },
                         {
-                          title: "Grupo Étnico",
+                          title: "Grupo Ãtnico",
                           data: stats.grupoEtnico,
                           color: "rose",
                         },
@@ -1213,7 +1214,7 @@ export const Reporte = (props) => {
                           color: "yellow",
                         },
                         {
-                          title: "Antigüedad",
+                          title: "AntigÃ¼edad",
                           data: stats.antiguedad,
                           color: "lime",
                         },
@@ -1276,13 +1277,13 @@ export const Reporte = (props) => {
                   </div>
                   <div className="mb-6">
                     <h3 className="font-black text-gray-700 uppercase text-xs mb-3 border-b pb-1">
-                      2. Perfil Clínico y de Salud
+                      2. Perfil ClÃ­nico y de Salud
                     </h3>
                     <div className="grid grid-cols-3 gap-3 text-xs">
                       {[
                         { title: "IMC", data: stats.imc, color: "blue" },
                         {
-                          title: "Tensión Arterial",
+                          title: "TensiÃ³n Arterial",
                           data: stats.ta,
                           color: "red",
                         },
@@ -1292,7 +1293,7 @@ export const Reporte = (props) => {
                           color: "emerald",
                         },
                         {
-                          title: "Diagnóstico CIE-10",
+                          title: "DiagnÃ³stico CIE-10",
                           data: stats.diagnosticos,
                           color: "indigo",
                         },
@@ -1341,10 +1342,10 @@ export const Reporte = (props) => {
                             ))}
                         </div>
                       ))}
-                      {/* Hallazgos físicos anormales */}
+                      {/* Hallazgos fÃ­sicos anormales */}
                       <div className="bg-orange-50 rounded-xl p-3 border border-orange-100">
                         <h4 className="font-bold text-orange-800 mb-2 uppercase text-[10px]">
-                          Hallazgos Físicos Anormales
+                          Hallazgos FÃ­sicos Anormales
                         </h4>
                         {Object.entries(stats.hallazgos)
                           .sort(([, a], [, b]) => b - a)
@@ -1371,15 +1372,15 @@ export const Reporte = (props) => {
                       {/* Antecedentes */}
                       <div className="bg-yellow-50 rounded-xl p-3 border border-yellow-100">
                         <h4 className="font-bold text-yellow-800 mb-2 uppercase text-[10px]">
-                          Antecedentes Patológicos
+                          Antecedentes PatolÃ³gicos
                         </h4>
                         {[
                           ["Cardiovascular", stats.antecCardio],
                           ["Respiratorio", stats.antecResp],
                           ["Osteomuscular", stats.antecOsteo],
-                          ["Neuropsiquiátrico", stats.antecNeuro],
-                          ["Metabólico", stats.antecMetab],
-                          ["Quirúrgico", stats.antecQuirurg],
+                          ["NeuropsiquiÃ¡trico", stats.antecNeuro],
+                          ["MetabÃ³lico", stats.antecMetab],
+                          ["QuirÃºrgico", stats.antecQuirurg],
                         ]
                           .filter(([, v]) => v > 0)
                           .map(([k, v]) => (
@@ -1438,7 +1439,7 @@ export const Reporte = (props) => {
                     </div>
                     <div className="bg-teal-50 rounded-xl p-3 border border-teal-100">
                       <h4 className="font-bold text-teal-800 mb-2 uppercase text-[10px]">
-                        Estilos de Vida y Hábitos
+                        Estilos de Vida y HÃ¡bitos
                       </h4>
                       {[
                         {
@@ -1475,13 +1476,13 @@ export const Reporte = (props) => {
                       ))}
                       <div className="mt-2 pt-2 border-t border-teal-200">
                         <h5 className="font-bold text-teal-700 text-[10px] uppercase mb-1">
-                          Revisión por Sistemas (alterados)
+                          RevisiÃ³n por Sistemas (alterados)
                         </h5>
                         {[
                           ["Cardiovascular", stats.revCardio],
                           ["Respiratorio", stats.revResp],
                           ["Osteomuscular", stats.revOsteo],
-                          ["Neurológico", stats.revNeuro],
+                          ["NeurolÃ³gico", stats.revNeuro],
                           ["Gastrointestinal", stats.revGastro],
                         ]
                           .filter(([, v]) => v > 0)
@@ -1502,7 +1503,7 @@ export const Reporte = (props) => {
                   <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 mb-4">
                     <div className="flex justify-between items-center mb-3">
                       <h3 className="font-black text-indigo-900 flex items-center gap-2">
-                        <BrainCircuit className="w-4 h-4" /> Análisis
+                        <BrainCircuit className="w-4 h-4" /> AnÃ¡lisis
                         Inteligente IA
                       </h3>
                       <button
@@ -1515,7 +1516,7 @@ export const Reporte = (props) => {
                         ) : (
                           <Sparkles className="w-3.5 h-3.5" />
                         )}{" "}
-                        Generar Análisis IA
+                        Generar AnÃ¡lisis IA
                       </button>
                     </div>
                     {reportAIResult ? (
@@ -1534,7 +1535,7 @@ export const Reporte = (props) => {
                               <thead className="bg-white border-b">
                                 <tr>
                                   <th className="py-2 text-left">
-                                    Diagnóstico
+                                    DiagnÃ³stico
                                   </th>
                                   <th className="py-2 text-center">Casos</th>
                                   <th className="py-2 text-right">%</th>
@@ -1559,8 +1560,8 @@ export const Reporte = (props) => {
                       </div>
                     ) : (
                       <p className="text-center text-gray-400 text-xs py-4 italic">
-                        Haga clic en "Generar Análisis IA" para obtener el
-                        diagnóstico poblacional completo.
+                        Haga clic en "Generar AnÃ¡lisis IA" para obtener el
+                        diagnÃ³stico poblacional completo.
                       </p>
                     )}
                     {reportAIResult?.matrizLegalNormativa && (
@@ -1583,11 +1584,11 @@ export const Reporte = (props) => {
                       </div>
                       <div>
                         <h2 className="text-base font-black text-blue-900 uppercase">
-                          Matriz Legal de Condiciones de Salud y Tabulación
+                          Matriz Legal de Condiciones de Salud y TabulaciÃ³n
                         </h2>
                         <p className="text-xs text-gray-500">
-                          Cumplimiento Normativo SST - Res. 1843/2025 · Dec.
-                          1072/2015 · Res. 0312/2019 · Ley 1562/2012
+                          Cumplimiento Normativo SST - Res. 1843/2025 Â· Dec.
+                          1072/2015 Â· Res. 0312/2019 Â· Ley 1562/2012
                         </p>
                       </div>
                     </div>
@@ -1604,10 +1605,10 @@ export const Reporte = (props) => {
                               Riesgos Ocupacionales
                             </th>
                             <th className="p-2 font-bold text-left">
-                              Sintomatología / Motivo
+                              SintomatologÃ­a / Motivo
                             </th>
                             <th className="p-2 font-bold text-left">
-                              Diagnóstico (CIE-10)
+                              DiagnÃ³stico (CIE-10)
                             </th>
                             <th
                               className="p-2 font-bold text-left"
@@ -1721,7 +1722,7 @@ export const Reporte = (props) => {
                                   {p.recomendaciones && (
                                     <div className="mb-2">
                                       <p className="text-[9px] font-black text-emerald-700 uppercase mb-0.5">
-                                        ✓ Recomendaciones:
+                                        â Recomendaciones:
                                       </p>
                                       <p className="text-gray-700 leading-relaxed text-[10px] whitespace-pre-wrap">
                                         {p.recomendaciones}
@@ -1731,7 +1732,7 @@ export const Reporte = (props) => {
                                   {p.analisisRestricciones && (
                                     <div>
                                       <p className="text-[9px] font-black text-red-700 uppercase mb-0.5">
-                                        ⚠ Restricciones:
+                                        â  Restricciones:
                                       </p>
                                       <p className="text-red-800 leading-relaxed text-[10px] whitespace-pre-wrap">
                                         {p.analisisRestricciones}
@@ -1754,7 +1755,7 @@ export const Reporte = (props) => {
                                 colSpan="7"
                                 className="p-8 text-center text-gray-400 italic"
                               >
-                                No hay registros para esta empresa en el período
+                                No hay registros para esta empresa en el perÃ­odo
                                 seleccionado.
                               </td>
                             </tr>
@@ -1771,16 +1772,16 @@ export const Reporte = (props) => {
                       <div className="grid grid-cols-2 gap-2 text-[10px]">
                         {[
                           {
-                            ley: "Resolución 1843/2025",
-                            desc: "Evaluaciones médicas ocupacionales - Norma vigente (deroga Res. 2346/2007 y 1918/2009)",
+                            ley: "ResoluciÃ³n 1843/2025",
+                            desc: "Evaluaciones mÃ©dicas ocupacionales - Norma vigente (deroga Res. 2346/2007 y 1918/2009)",
                           },
                           {
                             ley: "Decreto 1072/2015 Art. 2.2.4.6",
-                            desc: "Obligaciones del empleador en el Sistema de Gestión SST",
+                            desc: "Obligaciones del empleador en el Sistema de GestiÃ³n SST",
                           },
                           {
-                            ley: "Resolución 0312/2019",
-                            desc: "Estándares mínimos del SG-SST -- exámenes de ingreso, periódicos y egreso",
+                            ley: "ResoluciÃ³n 0312/2019",
+                            desc: "EstÃ¡ndares mÃ­nimos del SG-SST -- exÃ¡menes de ingreso, periÃ³dicos y egreso",
                           },
                           {
                             ley: "Ley 1562/2012 Art. 11",
@@ -1788,27 +1789,27 @@ export const Reporte = (props) => {
                           },
                           {
                             ley: "GTC-45:2012",
-                            desc: "Identificación de peligros y valoración de riesgos laborales",
+                            desc: "IdentificaciÃ³n de peligros y valoraciÃ³n de riesgos laborales",
                           },
                           {
-                            ley: "Resolución 2404/2019",
-                            desc: "Guías técnicas de vigilancia epidemiológica",
+                            ley: "ResoluciÃ³n 2404/2019",
+                            desc: "GuÃ­as tÃ©cnicas de vigilancia epidemiolÃ³gica",
                           },
                           {
                             ley: "GATISO-DME (2015)",
-                            desc: "Desórdenes musculoesqueléticos relacionados con el trabajo",
+                            desc: "DesÃ³rdenes musculoesquelÃ©ticos relacionados con el trabajo",
                           },
                           {
                             ley: "Res. 1995/1999 Art. 15",
-                            desc: "Custodia y retención de historias clínicas - mínimo 20 años (Gestión 5 + Central 10 + Histórico 5)",
+                            desc: "Custodia y retenciÃ³n de historias clÃ­nicas - mÃ­nimo 20 aÃ±os (GestiÃ³n 5 + Central 10 + HistÃ³rico 5)",
                           },
                           {
-                            ley: "Resolución 1442/2024",
-                            desc: "CIE-11 Colombia - transición gradual desde CIE-10 (implementado en SISO en paralelo)",
+                            ley: "ResoluciÃ³n 1442/2024",
+                            desc: "CIE-11 Colombia - transiciÃ³n gradual desde CIE-10 (implementado en SISO en paralelo)",
                           },
                           {
                             ley: "Res. 2175/2015 CUPS-MSPS",
-                            desc: "Códigos Únicos de Procedimientos - integrados en solicitud de exámenes con autocomplete",
+                            desc: "CÃ³digos Ãnicos de Procedimientos - integrados en solicitud de exÃ¡menes con autocomplete",
                           },
                           ,
                         ].map((n, i) => (
@@ -1834,7 +1835,7 @@ export const Reporte = (props) => {
               )}
             </>
           )}
-          {/* ══ TAB: CERTIFICADOS POR EMPRESA ══ */}
+          {/* ââ TAB: CERTIFICADOS POR EMPRESA ââ */}
           {reporteActiveTab === "certificados" &&
             selectedCompanyReport &&
             (() => {
@@ -1844,16 +1845,16 @@ export const Reporte = (props) => {
               const someChecked = allIds.some((id) => certSelected[id]);
               const selectedList = filtered.filter((p) => certSelected[p.id]);
 
-              // ── CERT-FIX: Reportes usa EXACTAMENTE el mismo HTML que la HC ──────
-              // _generarCertificadoHTMLNormalizado produce el HTML canónico.
-              // Para 1 cert → abre el documento completo sin modificarlo.
-              // Para N certs → reutiliza el CSS del mismo generador + concatena cuerpos.
+              // ââ CERT-FIX: Reportes usa EXACTAMENTE el mismo HTML que la HC ââââââ
+              // _generarCertificadoHTMLNormalizado produce el HTML canÃ³nico.
+              // Para 1 cert â abre el documento completo sin modificarlo.
+              // Para N certs â reutiliza el CSS del mismo generador + concatena cuerpos.
               const printSelectedCerts = () => {
                 if (selectedList.length === 0) return;
                 const docData = activeDoctorData || {};
                 const sig = activeSignature || "";
                 if (selectedList.length === 1) {
-                  // ── Certificado individual: idéntico a "Ver Certificado" en la HC ──
+                  // ââ Certificado individual: idÃ©ntico a "Ver Certificado" en la HC ââ
                   const _miIPSCert = currentUser?.empresaId
                     ? companies.find((c) => c.id === currentUser.empresaId) ||
                       null
@@ -1867,20 +1868,20 @@ export const Reporte = (props) => {
                   const w = window.open("", "_blank", "width=920,height=1150");
                   if (!w) {
                     showAlert(
-                      "El navegador bloqueó la ventana emergente. Permita los popups."
+                      "El navegador bloqueÃ³ la ventana emergente. Permita los popups."
                     );
                     return;
                   }
                   const htmlBtn = html.replace(
                     "</body>",
-                    '<div class="np-dl"><button onclick="window.print()">📥 Guardar / Imprimir PDF</button>' +
-                      "<p>En el diálogo, selecciona <b>Guardar como PDF</b></p></div></body>"
+                    '<div class="np-dl"><button onclick="window.print()">ð¥ Guardar / Imprimir PDF</button>' +
+                      "<p>En el diÃ¡logo, selecciona <b>Guardar como PDF</b></p></div></body>"
                   );
                   w.document.write(htmlBtn);
                   w.document.close();
                   w.focus();
                 } else {
-                  // ── Múltiples certificados: mismo CSS, un <body> por página ─────
+                  // ââ MÃºltiples certificados: mismo CSS, un <body> por pÃ¡gina âââââ
                   const _miIPSCertM = currentUser?.empresaId
                     ? companies.find((c) => c.id === currentUser.empresaId) ||
                       null
@@ -1918,7 +1919,7 @@ export const Reporte = (props) => {
                   const w = window.open("", "_blank", "width=900,height=1100");
                   if (!w) {
                     showAlert(
-                      "El navegador bloqueó la ventana emergente. Permita los popups."
+                      "El navegador bloqueÃ³ la ventana emergente. Permita los popups."
                     );
                     return;
                   }
@@ -1935,13 +1936,13 @@ export const Reporte = (props) => {
                       "@media print{.np-bar{display:none!important;}body{padding-top:0!important;}}" +
                       "</style></head><body>" +
                       '<div class="np-bar">' +
-                      "<span>📄 Certificados - " +
+                      "<span>ð Certificados - " +
                       compName +
                       " (" +
                       selectedList.length +
                       " trabajadores)</span>" +
-                      '<button class="np-bp" onclick="window.print()">🖨️ Imprimir todos</button>' +
-                      '<button class="np-bc" onclick="window.close()">✕ Cerrar</button></div>' +
+                      '<button class="np-bp" onclick="window.print()">ð¨ï¸ Imprimir todos</button>' +
+                      '<button class="np-bc" onclick="window.close()">â Cerrar</button></div>' +
                       certs +
                       "</body></html>"
                   );
@@ -1956,14 +1957,14 @@ export const Reporte = (props) => {
                     <div className="flex items-center justify-between flex-wrap gap-3">
                       <div>
                         <h3 className="font-black text-blue-900 text-base flex items-center gap-2">
-                          📄 Certificados de Aptitud - {compName}
+                          ð Certificados de Aptitud - {compName}
                         </h3>
                         <p className="text-xs text-gray-400 mt-0.5">
                           {filtered.length} trabajador
-                          {filtered.length !== 1 ? "es" : ""} en el período
+                          {filtered.length !== 1 ? "es" : ""} en el perÃ­odo
                           {selectedList.length > 0 && (
                             <span className="ml-2 font-black text-blue-700">
-                              · {selectedList.length} seleccionado
+                              Â· {selectedList.length} seleccionado
                               {selectedList.length !== 1 ? "s" : ""}
                             </span>
                           )}
@@ -1986,8 +1987,8 @@ export const Reporte = (props) => {
                           }`}
                         >
                           {allChecked
-                            ? "☑ Deseleccionar todos"
-                            : "☐ Seleccionar todos"}
+                            ? "â Deseleccionar todos"
+                            : "â Seleccionar todos"}
                         </button>
                         <button
                           onClick={printSelectedCerts}
@@ -2003,7 +2004,7 @@ export const Reporte = (props) => {
                   {filtered.length === 0 ? (
                     <div className="text-center py-16 text-gray-400">
                       <p className="text-sm">
-                        No hay trabajadores en el período seleccionado.
+                        No hay trabajadores en el perÃ­odo seleccionado.
                       </p>
                     </div>
                   ) : (
@@ -2070,7 +2071,7 @@ export const Reporte = (props) => {
                                 </p>
                                 <p className="text-[10px] text-gray-500">
                                   {p.docTipo || "CC"}: {p.docNumero || "--"}{" "}
-                                  &nbsp;·&nbsp; {p.cargo || "--"} &nbsp;·&nbsp;{" "}
+                                  &nbsp;Â·&nbsp; {p.cargo || "--"} &nbsp;Â·&nbsp;{" "}
                                   {p.tipoExamen || "--"}
                                 </p>
                               </div>
@@ -2099,7 +2100,7 @@ export const Reporte = (props) => {
                                 onClick={() => {
                                   const doc = activeDoctorData || {};
                                   const sig = activeSignature || "";
-                                  // ── Usa el MISMO generador que la HC - certificado idéntico ──
+                                  // ââ Usa el MISMO generador que la HC - certificado idÃ©ntico ââ
                                   const _miIPSC2 = currentUser?.empresaId
                                     ? companies.find(
                                         (c) => c.id === currentUser.empresaId
@@ -2119,7 +2120,7 @@ export const Reporte = (props) => {
                                   );
                                   if (!w) {
                                     showAlert(
-                                      "El navegador bloqueó la ventana emergente. Permita los popups."
+                                      "El navegador bloqueÃ³ la ventana emergente. Permita los popups."
                                     );
                                     return;
                                   }
@@ -2144,20 +2145,20 @@ export const Reporte = (props) => {
       </div>
     );
   };
-  // ─── RENDER: PACIENTES ────────────────────────────────────────────────────
-  // ══ B-12: Helper de periodicidad - Res. 1843/2025 Art. 4 (max 3 años entre evaluaciones) ══
+  // âââ RENDER: PACIENTES ââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ââ B-12: Helper de periodicidad - Res. 1843/2025 Art. 4 (max 3 aÃ±os entre evaluaciones) ââ
   const _getPeriodicidadStatus = (p) => {
-    // Obtener la fecha del examen más reciente del paciente
+    // Obtener la fecha del examen mÃ¡s reciente del paciente
     const todasHC = patientsList.filter(
       (h) => h.docNumero === p.docNumero && h.fechaExamen
     );
     if (!todasHC.length)
-      return { nivel: "sin_eval", label: "⚠️ Sin evaluación", color: "red" };
+      return { nivel: "sin_eval", label: "â ï¸ Sin evaluaciÃ³n", color: "red" };
     const fechas = todasHC
       .map((h) => new Date(h.fechaExamen))
       .filter((d) => !isNaN(d));
     if (!fechas.length)
-      return { nivel: "sin_eval", label: "⚠️ Sin evaluación", color: "red" };
+      return { nivel: "sin_eval", label: "â ï¸ Sin evaluaciÃ³n", color: "red" };
     const ultima = new Date(Math.max(...fechas));
     const hoy = new Date();
     const diasDesde = Math.floor((hoy - ultima) / (1000 * 60 * 60 * 24));
@@ -2165,7 +2166,7 @@ export const Reporte = (props) => {
     if (aniosDesde > 3)
       return {
         nivel: "vencida",
-        label: `🔴 Vencida (${Math.floor(aniosDesde)}a ${Math.floor(
+        label: `ð´ Vencida (${Math.floor(aniosDesde)}a ${Math.floor(
           (aniosDesde % 1) * 12
         )}m)`,
         color: "red",
@@ -2173,10 +2174,10 @@ export const Reporte = (props) => {
     if (aniosDesde > 2.5)
       return {
         nivel: "proxima",
-        label: `🟡 Vence pronto (${Math.floor((3 - aniosDesde) * 12)}m)`,
+        label: `ð¡ Vence pronto (${Math.floor((3 - aniosDesde) * 12)}m)`,
         color: "yellow",
       };
-    return { nivel: "vigente", label: `✅ Vigente`, color: "green" };
+    return { nivel: "vigente", label: `â Vigente`, color: "green" };
 
 };
 

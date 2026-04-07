@@ -1,9 +1,10 @@
 import React from 'react';
+import { DoctorSignature, BrandLogo } from '../components/ui/DoctorSignature.jsx';
 import {
   FileText, LogOut, Plus, Printer, Save
 } from "lucide-react";
 
-// ─── Propuestas Page Component ─────────────────────────────────────────────
+// âââ Propuestas Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const Propuestas = (props) => {
   const {
@@ -426,13 +427,13 @@ export const Propuestas = (props) => {
                 onClick={() => goBack()}
                 className="text-sm text-gray-500 hover:text-gray-700"
               >
-                ← Volver
+                â Volver
               </button>
             </div>
           </div>
         </div>
       );
-    // ── SECRETARIA GATE: "Propuestas Económicas" requiere autorización del admin ──
+    // ââ SECRETARIA GATE: "Propuestas EconÃ³micas" requiere autorizaciÃ³n del admin ââ
     if (
       currentUser?.role === "secretaria" &&
       !_secretariaPuede("propuestas", currentUser, usersList)
@@ -442,26 +443,26 @@ export const Propuestas = (props) => {
           {renderNavbar()}
           <div className="max-w-xl mx-auto px-4 py-16 text-center">
             <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-8 space-y-3">
-              <div className="text-5xl">🔐</div>
+              <div className="text-5xl">ð</div>
               <p className="font-black text-amber-800 text-xl">
-                Módulo restringido
+                MÃ³dulo restringido
               </p>
               <p className="text-amber-700 text-sm font-bold">
-                Propuestas Económicas
+                Propuestas EconÃ³micas
               </p>
               <p className="text-amber-600 text-xs leading-relaxed">
-                Este módulo requiere autorización explícita del administrador.
+                Este mÃ³dulo requiere autorizaciÃ³n explÃ­cita del administrador.
                 <br />
                 Solicita que habilite el permiso{" "}
-                <strong>"Propuestas Económicas"</strong> en tu perfil.
+                <strong>"Propuestas EconÃ³micas"</strong> en tu perfil.
                 <br />
-                (Usuarios → tu nombre → 🔐 Permisos de secretaria)
+                (Usuarios â tu nombre â ð Permisos de secretaria)
               </p>
               <button
                 onClick={() => goBack()}
                 className="mt-3 bg-amber-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-amber-700 transition"
               >
-                ← Volver al panel
+                â Volver al panel
               </button>
             </div>
           </div>
@@ -475,44 +476,44 @@ export const Propuestas = (props) => {
     const SERVICIOS_CATALOGO = [
       {
         id: "s1",
-        nombre: "Examen Médico Ocupacional de Ingreso",
+        nombre: "Examen MÃ©dico Ocupacional de Ingreso",
         unidad: "Por trabajador",
         precioBase: parseInt(_billDocData.tarifaExamenOcup || 90000),
       },
       {
         id: "s2",
-        nombre: "Examen Médico Ocupacional Periódico",
+        nombre: "Examen MÃ©dico Ocupacional PeriÃ³dico",
         unidad: "Por trabajador",
         precioBase: parseInt(_billDocData.tarifaExamenOcup || 90000),
       },
       {
         id: "s3",
-        nombre: "Examen Médico Ocupacional de Egreso",
+        nombre: "Examen MÃ©dico Ocupacional de Egreso",
         unidad: "Por trabajador",
         precioBase: parseInt(_billDocData.tarifaExamenOcup || 90000),
       },
       {
         id: "s4",
-        nombre: "Informe Ejecutivo de Salud y Perfil Epidemiológico",
+        nombre: "Informe Ejecutivo de Salud y Perfil EpidemiolÃ³gico",
         unidad: "Por empresa",
         precioBase: parseInt(_billDocData.tarifaInforme || 250000),
       },
       {
         id: "s5",
-        nombre: "Programa de Vigilancia Epidemiológica (PVE)",
-        unidad: "Por día",
+        nombre: "Programa de Vigilancia EpidemiolÃ³gica (PVE)",
+        unidad: "Por dÃ­a",
         precioBase: parseInt(_billDocData.tarifaDiaPVE || 350000),
       },
       {
         id: "s6",
-        nombre: "Asesoría en Sistema de Gestión SST",
+        nombre: "AsesorÃ­a en Sistema de GestiÃ³n SST",
         unidad: "Por hora",
         precioBase: parseInt(_billDocData.tarifaHora || 120000),
       },
       {
         id: "s7",
-        nombre: "Capacitación en SST (grupos hasta 30 personas)",
-        unidad: "Por sesión",
+        nombre: "CapacitaciÃ³n en SST (grupos hasta 30 personas)",
+        unidad: "Por sesiÃ³n",
         precioBase: 280000,
       },
       {
@@ -523,13 +524,13 @@ export const Propuestas = (props) => {
       },
       {
         id: "s9",
-        nombre: "Análisis de Puesto de Trabajo",
+        nombre: "AnÃ¡lisis de Puesto de Trabajo",
         unidad: "Por cargo",
         precioBase: 180000,
       },
       {
         id: "s10",
-        nombre: "Restricciones y Recomendaciones Médico-Laborales",
+        nombre: "Restricciones y Recomendaciones MÃ©dico-Laborales",
         unidad: "Por trabajador",
         precioBase: 60000,
       },
@@ -564,7 +565,7 @@ export const Propuestas = (props) => {
     return (
       <div className="min-h-screen bg-gray-50 font-sans p-8 print:bg-white print:p-0">
         <div className="max-w-4xl mx-auto">
-          {/* ── TAB SELECTOR: Propuesta Económica ↔ Cotización Rápida ↔ Historial ── */}
+          {/* ââ TAB SELECTOR: Propuesta EconÃ³mica â CotizaciÃ³n RÃ¡pida â Historial ââ */}
           <div className="flex gap-2 mb-4 no-print border-b border-gray-200 pb-3 flex-wrap">
             <button
               onClick={() => setPropModulo("propuesta")}
@@ -574,7 +575,7 @@ export const Propuestas = (props) => {
                   : "bg-gray-100 text-gray-600 hover:bg-teal-50 hover:text-teal-700"
               }`}
             >
-              📄 Propuesta Económica
+              ð Propuesta EconÃ³mica
             </button>
             <button
               onClick={() => setPropModulo("cotizacion")}
@@ -584,7 +585,7 @@ export const Propuestas = (props) => {
                   : "bg-gray-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-700"
               }`}
             >
-              🧾 Cotización Rápida
+              ð§¾ CotizaciÃ³n RÃ¡pida
             </button>
             <button
               onClick={() => setPropModulo("historial")}
@@ -594,18 +595,18 @@ export const Propuestas = (props) => {
                   : "bg-gray-100 text-gray-600 hover:bg-amber-50 hover:text-amber-700"
               }`}
             >
-              🗂 Historial ({savedReports.filter(r => r._tipo === "propuesta" || r.servicios).length})
+              ð Historial ({savedReports.filter(r => r._tipo === "propuesta" || r.servicios).length})
             </button>
           </div>
           {propModulo === "cotizacion" && renderCotizacionesInline()}
-          {/* ── HISTORIAL DE PROPUESTAS GUARDADAS ── */}
+          {/* ââ HISTORIAL DE PROPUESTAS GUARDADAS ââ */}
           {propModulo === "historial" && (() => {
             const propsSaved = savedReports.filter(r => r._tipo === "propuesta" || r.servicios);
             return (
               <div className="bg-white shadow rounded-2xl p-6">
                 <div className="flex justify-between items-center mb-5">
                   <h2 className="text-lg font-black text-amber-800 flex items-center gap-2">
-                    🗂 Propuestas Guardadas
+                    ð Propuestas Guardadas
                     <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded-full">{propsSaved.length}</span>
                   </h2>
                   <button onClick={() => goBack()} className="text-gray-500 font-bold text-sm flex items-center gap-1">
@@ -615,7 +616,7 @@ export const Propuestas = (props) => {
                 {propsSaved.length === 0 ? (
                   <div className="text-center py-12 text-gray-400">
                     <FileText className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                    <p className="text-sm font-medium">No hay propuestas guardadas aún.</p>
+                    <p className="text-sm font-medium">No hay propuestas guardadas aÃºn.</p>
                     <p className="text-xs mt-1">Cree una propuesta y presione Guardar.</p>
                   </div>
                 ) : (
@@ -623,7 +624,7 @@ export const Propuestas = (props) => {
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="bg-amber-50 text-amber-800 text-xs font-black">
-                          <th className="px-3 py-2 text-left rounded-tl-lg">N.°</th>
+                          <th className="px-3 py-2 text-left rounded-tl-lg">N.Â°</th>
                           <th className="px-3 py-2 text-left">Empresa</th>
                           <th className="px-3 py-2 text-left">NIT</th>
                           <th className="px-3 py-2 text-left">Fecha</th>
@@ -635,15 +636,15 @@ export const Propuestas = (props) => {
                       <tbody>
                         {[...propsSaved].reverse().map((prop, idx) => {
                           const totalProp = (prop.servicios || []).reduce((s, x) => s + (x.precio || 0) * (x.cantidad || 1), 0);
-                          const fechaProp = prop.fecha || prop.savedAt?.split("T")[0] || "—";
+                          const fechaProp = prop.fecha || prop.savedAt?.split("T")[0] || "â";
                           const diasVig = parseInt(prop.validez || "30", 10);
                           const fechaVenc = prop.fecha ? new Date(new Date(prop.fecha).getTime() + diasVig * 86400000) : null;
                           const vencida = fechaVenc && fechaVenc < new Date();
                           return (
                             <tr key={prop.id || idx} className="border-b border-gray-100 hover:bg-amber-50 transition-colors">
-                              <td className="px-3 py-2 font-black text-teal-700">#{prop.numero || "—"}</td>
-                              <td className="px-3 py-2 font-medium text-gray-800 max-w-[160px] truncate">{prop.empresa || "—"}</td>
-                              <td className="px-3 py-2 text-gray-500 text-xs">{prop.nit || "—"}</td>
+                              <td className="px-3 py-2 font-black text-teal-700">#{prop.numero || "â"}</td>
+                              <td className="px-3 py-2 font-medium text-gray-800 max-w-[160px] truncate">{prop.empresa || "â"}</td>
+                              <td className="px-3 py-2 text-gray-500 text-xs">{prop.nit || "â"}</td>
                               <td className="px-3 py-2 text-gray-500 text-xs">{fechaProp}</td>
                               <td className="px-3 py-2 text-right font-black text-emerald-700">
                                 ${(totalProp).toLocaleString("es-CO")}
@@ -663,7 +664,7 @@ export const Propuestas = (props) => {
                                     Abrir
                                   </button>
                                   <button
-                                    onClick={() => showConfirm("¿Eliminar esta propuesta del historial?", () => {
+                                    onClick={() => showConfirm("Â¿Eliminar esta propuesta del historial?", () => {
                                       const upd = savedReports.filter(r => r.id !== prop.id);
                                       setSavedReports(upd);
                                       _sync("siso_saved_reports", JSON.stringify(upd));
@@ -672,7 +673,7 @@ export const Propuestas = (props) => {
                                     className="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold hover:bg-red-200"
                                     title="Eliminar"
                                   >
-                                    ✕
+                                    â
                                   </button>
                                 </div>
                               </td>
@@ -693,7 +694,7 @@ export const Propuestas = (props) => {
             <div className="bg-white shadow rounded-2xl p-6 mb-6 no-print">
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-xl font-black text-teal-800 flex items-center gap-2">
-                  <FileText className="w-5 h-5" /> Propuestas Económicas y
+                  <FileText className="w-5 h-5" /> Propuestas EconÃ³micas y
                   Cotizaciones
                 </h2>
                 <div className="flex gap-2">
@@ -732,7 +733,7 @@ export const Propuestas = (props) => {
                           "0"
                         ),
                       }));
-                      showAlert("✅ Propuesta guardada correctamente.");
+                      showAlert("â Propuesta guardada correctamente.");
                     }}
                     className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-1 hover:bg-emerald-700"
                   >
@@ -757,7 +758,7 @@ export const Propuestas = (props) => {
                   return (
                     <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4">
                       <p className="text-xs font-black text-blue-800 mb-2">
-                        👨‍⚕️ Médico que firma la propuesta
+                        ð¨ââï¸ MÃ©dico que firma la propuesta
                       </p>
                       <select
                         className="w-full p-2 border border-blue-200 rounded-lg text-sm bg-white"
@@ -792,7 +793,7 @@ export const Propuestas = (props) => {
                     }
                     placeholder={_nextPropNumCalc}
                     className="w-full p-2 border rounded-lg text-sm font-mono"
-                    title={`Próximo consecutivo sugerido: ${_nextPropNumCalc}`}
+                    title={`PrÃ³ximo consecutivo sugerido: ${_nextPropNumCalc}`}
                   />
                 </div>
                 <div>
@@ -810,7 +811,7 @@ export const Propuestas = (props) => {
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 mb-1">
-                    Validez (días)
+                    Validez (dÃ­as)
                   </label>
                   <input
                     type="number"
@@ -904,7 +905,7 @@ export const Propuestas = (props) => {
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 mb-1">
-                    Ciudad de Atención
+                    Ciudad de AtenciÃ³n
                   </label>
                   <input
                     value={
@@ -917,7 +918,7 @@ export const Propuestas = (props) => {
                       }))
                     }
                     className="w-full p-2 border rounded-lg text-sm"
-                    placeholder="Popayán - Cauca"
+                    placeholder="PopayÃ¡n - Cauca"
                   />
                 </div>
               </div>
@@ -1076,7 +1077,7 @@ export const Propuestas = (props) => {
                   fontSize: "9pt",
                 }}
               >
-                {/* ── ENCABEZADO ── */}
+                {/* ââ ENCABEZADO ââ */}
                 <div className="flex justify-between items-start border-b-2 border-gray-300 pb-3 mb-4">
                   <div className="scale-100 origin-left">
                     <BrandLogo data={_billDocData} />
@@ -1087,27 +1088,27 @@ export const Propuestas = (props) => {
                       suppressContentEditableWarning
                       className="text-[9px] font-bold text-yellow-600 uppercase tracking-widest mb-0.5 outline-none"
                     >
-                      PROPUESTA ECONÓMICA
+                      PROPUESTA ECONÃMICA
                     </p>
                     <h1
                       contentEditable
                       suppressContentEditableWarning
                       className="text-xl font-black text-gray-900 uppercase tracking-wide outline-none"
                     >
-                      SERVICIOS MÉDICOS OCUPACIONALES
+                      SERVICIOS MÃDICOS OCUPACIONALES
                     </h1>
                     <p
                       contentEditable
                       suppressContentEditableWarning
                       className="text-[9px] text-gray-500 mt-1 uppercase tracking-wide outline-none"
                     >
-                      No. {propForm.numero || _nextPropNumCalc} · Fecha:{" "}
-                      {propForm.fecha} · Validez: {propForm.validez || "30"}{" "}
-                      días
+                      No. {propForm.numero || _nextPropNumCalc} Â· Fecha:{" "}
+                      {propForm.fecha} Â· Validez: {propForm.validez || "30"}{" "}
+                      dÃ­as
                     </p>
                   </div>
                 </div>
-                {/* ── PREPARADO PARA ── */}
+                {/* ââ PREPARADO PARA ââ */}
                 <div className="border border-gray-200 rounded p-3 mb-4 bg-gray-50 print:bg-transparent">
                   <p
                     contentEditable
@@ -1128,7 +1129,7 @@ export const Propuestas = (props) => {
                     suppressContentEditableWarning
                     className="text-xs text-gray-600 mt-1 border-b border-gray-200 pb-1 mb-1 outline-none"
                   >
-                    NIT / CC: {propForm.nit || "---"} · Trabajadores:{" "}
+                    NIT / CC: {propForm.nit || "---"} Â· Trabajadores:{" "}
                     {propForm.numTrabajadores || "---"}
                   </p>
                   {propForm.contacto && (
@@ -1137,14 +1138,14 @@ export const Propuestas = (props) => {
                       suppressContentEditableWarning
                       className="text-[9px] text-gray-600 mt-1 outline-none"
                     >
-                      Atención: {propForm.contacto}
+                      AtenciÃ³n: {propForm.contacto}
                       {propForm.cargoPropuesta
-                        ? " · " + propForm.cargoPropuesta
+                        ? " Â· " + propForm.cargoPropuesta
                         : ""}
                     </p>
                   )}
                 </div>
-                {/* ── 1. OBJETIVO ── */}
+                {/* ââ 1. OBJETIVO ââ */}
                 <div className="mb-3">
                   <h3
                     contentEditable
@@ -1161,13 +1162,13 @@ export const Propuestas = (props) => {
                     suppressContentEditableWarning
                     className="text-[9pt] text-gray-700 leading-relaxed pl-5 outline-none"
                   >
-                    Establecer las condiciones para la realización de
-                    evaluaciones médicas ocupacionales (EMO) orientadas a
+                    Establecer las condiciones para la realizaciÃ³n de
+                    evaluaciones mÃ©dicas ocupacionales (EMO) orientadas a
                     determinar el estado de salud de los trabajadores, en
                     cumplimiento de la normativa vigente colombiana.
                   </p>
                 </div>
-                {/* ── 2. MARCO LEGAL ── */}
+                {/* ââ 2. MARCO LEGAL ââ */}
                 <div className="mb-3">
                   <h3
                     contentEditable
@@ -1185,25 +1186,25 @@ export const Propuestas = (props) => {
                     className="pl-5 space-y-1 outline-none text-[9px] text-gray-700"
                   >
                     <p>
-                      ✓ <strong>Resolución 1843 de 2025:</strong> Norma que
-                      establece los lineamientos para la realización y custodia
-                      de las historias clínicas ocupacionales.
+                      â <strong>ResoluciÃ³n 1843 de 2025:</strong> Norma que
+                      establece los lineamientos para la realizaciÃ³n y custodia
+                      de las historias clÃ­nicas ocupacionales.
                     </p>
                     <p>
-                      ✓ <strong>Resolución 2346 de 2007:</strong> Regulación de
-                      la práctica de evaluaciones médicas ocupacionales.
+                      â <strong>ResoluciÃ³n 2346 de 2007:</strong> RegulaciÃ³n de
+                      la prÃ¡ctica de evaluaciones mÃ©dicas ocupacionales.
                     </p>
                     <p>
-                      ✓ <strong>Resolución 0312 de 2019:</strong> Estándares
-                      mínimos del SG-SST.
+                      â <strong>ResoluciÃ³n 0312 de 2019:</strong> EstÃ¡ndares
+                      mÃ­nimos del SG-SST.
                     </p>
                     <p>
-                      ✓ <strong>Decreto 1072 de 2015:</strong> Decreto Único
+                      â <strong>Decreto 1072 de 2015:</strong> Decreto Ãnico
                       Reglamentario del Sector Trabajo.
                     </p>
                   </div>
                 </div>
-                {/* ── 3. ENTREGABLES ── */}
+                {/* ââ 3. ENTREGABLES ââ */}
                 <div className="mb-3">
                   <h3
                     contentEditable
@@ -1221,24 +1222,24 @@ export const Propuestas = (props) => {
                     className="pl-5 outline-none text-[9px] text-gray-700 grid grid-cols-2 gap-x-4"
                   >
                     <p className="mb-1">
-                      ✓ <strong>Certificado de Aptitud Laboral:</strong> Para el
-                      archivo de la empresa (según MinTrabajo).
+                      â <strong>Certificado de Aptitud Laboral:</strong> Para el
+                      archivo de la empresa (segÃºn MinTrabajo).
                     </p>
                     <p className="mb-1">
-                      ✓ <strong>Remisiones médicas:</strong> Cuando se requiera
-                      para trámite a la entidad correspondiente.
+                      â <strong>Remisiones mÃ©dicas:</strong> Cuando se requiera
+                      para trÃ¡mite a la entidad correspondiente.
                     </p>
                     <p className="mb-1">
-                      ✓ <strong>Informe de Condiciones de Salud:</strong> Perfil
-                      epidemiológico consolidado de la población evaluada.
+                      â <strong>Informe de Condiciones de Salud:</strong> Perfil
+                      epidemiolÃ³gico consolidado de la poblaciÃ³n evaluada.
                     </p>
                     <p className="mb-1">
-                      ✓ <strong>Historia Clínica:</strong> Custodiada bajo
+                      â <strong>Historia ClÃ­nica:</strong> Custodiada bajo
                       reserva legal (Res. 1995/1999).
                     </p>
                   </div>
                 </div>
-                {/* ── 4. METODOLOGÍA ── */}
+                {/* ââ 4. METODOLOGÃA ââ */}
                 <div className="mb-3">
                   <h3
                     contentEditable
@@ -1248,21 +1249,21 @@ export const Propuestas = (props) => {
                     <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[8px] font-black flex-shrink-0 no-edit">
                       4
                     </span>
-                    METODOLOGÍA
+                    METODOLOGÃA
                   </h3>
                   <p
                     contentEditable
                     suppressContentEditableWarning
                     className="text-[9pt] text-gray-700 leading-relaxed pl-5 outline-none"
                   >
-                    Las evaluaciones médicas se realizarán en las instalaciones
-                    acordadas, con historia clínica digital, examen físico
-                    completo y los paraclínicos indicados según el cargo. Se
+                    Las evaluaciones mÃ©dicas se realizarÃ¡n en las instalaciones
+                    acordadas, con historia clÃ­nica digital, examen fÃ­sico
+                    completo y los paraclÃ­nicos indicados segÃºn el cargo. Se
                     emite concepto de aptitud laboral de conformidad con la
-                    Resolución 1843 de 2025.
+                    ResoluciÃ³n 1843 de 2025.
                   </p>
                 </div>
-                {/* ── 5. PROPUESTA ECONÓMICA ── */}
+                {/* ââ 5. PROPUESTA ECONÃMICA ââ */}
                 <div className="mb-3">
                   <h3
                     contentEditable
@@ -1272,7 +1273,7 @@ export const Propuestas = (props) => {
                     <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[8px] font-black flex-shrink-0 no-edit">
                       5
                     </span>
-                    PROPUESTA ECONÓMICA
+                    PROPUESTA ECONÃMICA
                   </h3>
                   <div className="border border-gray-300 rounded overflow-hidden">
                     <div
@@ -1284,7 +1285,7 @@ export const Propuestas = (props) => {
                         suppressContentEditableWarning
                         className="px-3 py-2 outline-none"
                       >
-                        Ítem / Servicio Profesional
+                        Ãtem / Servicio Profesional
                       </div>
                       <div
                         contentEditable
@@ -1336,7 +1337,7 @@ export const Propuestas = (props) => {
                         suppressContentEditableWarning
                         className="px-3 py-4 text-center text-gray-400 text-[9px] italic outline-none"
                       >
-                        -- Agregue servicios desde el panel de configuración --
+                        -- Agregue servicios desde el panel de configuraciÃ³n --
                       </div>
                     )}
                     {propForm.servicios.length > 1 && (
@@ -1362,7 +1363,7 @@ export const Propuestas = (props) => {
                     )}
                   </div>
                 </div>
-                {/* ── 6. CONDICIONES COMERCIALES ── */}
+                {/* ââ 6. CONDICIONES COMERCIALES ââ */}
                 <div className="mb-4">
                   <h3
                     contentEditable
@@ -1385,17 +1386,17 @@ export const Propuestas = (props) => {
                     >
                       <div className="px-3 py-1.5">Forma de Pago</div>
                       <div className="px-3 py-1.5">Vigencia</div>
-                      <div className="px-3 py-1.5">Facturación</div>
+                      <div className="px-3 py-1.5">FacturaciÃ³n</div>
                     </div>
                     <div
                       className="grid text-[9pt] text-gray-700 bg-white print:bg-transparent"
                       style={{ gridTemplateColumns: "1fr 1fr 1fr" }}
                     >
-                      <div className="px-3 py-2">30 días factura vencida.</div>
+                      <div className="px-3 py-2">30 dÃ­as factura vencida.</div>
                       <div className="px-3 py-2">
-                        {propForm.validez || "30"} días calendario.
+                        {propForm.validez || "30"} dÃ­as calendario.
                       </div>
-                      <div className="px-3 py-2">Factura electrónica.</div>
+                      <div className="px-3 py-2">Factura electrÃ³nica.</div>
                     </div>
                   </div>
                   {propForm.observaciones && (
@@ -1409,7 +1410,7 @@ export const Propuestas = (props) => {
                     </div>
                   )}
                 </div>
-                {/* ── FIRMA ── */}
+                {/* ââ FIRMA ââ */}
                 <div className="mt-8 pt-4 border-t border-gray-200 flex justify-between items-end">
                   <div className="text-left">
                     <p

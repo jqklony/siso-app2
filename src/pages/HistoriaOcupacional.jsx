@@ -1,10 +1,12 @@
 import React from 'react';
+import { DoctorSignature, BrandLogo } from '../components/ui/DoctorSignature.jsx';
+import { ARL_LIST, AFP_LIST, EPS_LIST, CONTRATO_LIST, TURNO_LIST } from '../data/dropdowns.js';
 import { analyzeBP, analyzeHR, analyzeBMI, NORMAL_DESCRIPTIONS_SYSTEMS } from '../utils/helpers.js';
 import {
   ClipboardList, History, ShieldAlert, Sparkles
 } from "lucide-react";
 
-// ─── HistoriaOcupacional Page Component ─────────────────────────────────────────────
+// âââ HistoriaOcupacional Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const HistoriaOcupacional = (props) => {
   const {
@@ -422,14 +424,14 @@ export const HistoriaOcupacional = (props) => {
         boxSizing: "border-box",
       }}
     >
-      {/* Header: BrandLogo visible solo en impresión (en pantalla ya aparece en la nav) */}
+      {/* Header: BrandLogo visible solo en impresiÃ³n (en pantalla ya aparece en la nav) */}
       <div className="flex justify-between items-center border-b-2 border-emerald-500 pb-3 mb-3 print:border-black">
         <div className="w-1/3 hidden print:block">
           <BrandLogo data={activeDoctorData} />
         </div>
         <div className="w-1/3 text-center">
           <h1 className="text-sm font-black text-gray-800 uppercase">
-            Historia Clínica Ocupacional
+            Historia ClÃ­nica Ocupacional
           </h1>
           <p className="text-[9px] text-gray-500 font-medium">
             SEGURIDAD Y SALUD EN EL TRABAJO
@@ -439,7 +441,7 @@ export const HistoriaOcupacional = (props) => {
           <p>FOR-SST-001 v4.0</p>
           <p>Res. 1843/2025</p>
           <p className="text-[8px] text-gray-500">
-            Folio: {data.folioHC || "Auto"} · v{data.versionDocumento || 1}
+            Folio: {data.folioHC || "Auto"} Â· v{data.versionDocumento || 1}
           </p>
         </div>
       </div>
@@ -447,11 +449,11 @@ export const HistoriaOcupacional = (props) => {
         <div className="mb-3 bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded-xl flex justify-between items-center no-print">
           <div>
             <p className="text-xs font-black text-emerald-800">
-              📚 Antecedentes cargados automáticamente desde HC anterior
+              ð Antecedentes cargados automÃ¡ticamente desde HC anterior
             </p>
             <p className="text-[10px] text-emerald-600 mt-0.5">
-              {historyNotification} atención(es) previa(s) · Antecedentes,
-              hábitos y riesgos prellenos · Puede editarlos libremente
+              {historyNotification} atenciÃ³n(es) previa(s) Â· Antecedentes,
+              hÃ¡bitos y riesgos prellenos Â· Puede editarlos libremente
             </p>
           </div>
           <button
@@ -462,7 +464,7 @@ export const HistoriaOcupacional = (props) => {
           </button>
         </div>
       )}
-      {/* ── B-19: Consentimiento Informado Digital - Ley 23/1981 · Res.8430/1993 · Ley 1581/2012 · Res.1843/2025 Art.12 ── */}
+      {/* ââ B-19: Consentimiento Informado Digital - Ley 23/1981 Â· Res.8430/1993 Â· Ley 1581/2012 Â· Res.1843/2025 Art.12 ââ */}
       {showConsentModal && (
         <ConsentimientoModal
           data={data}
@@ -491,11 +493,11 @@ export const HistoriaOcupacional = (props) => {
               }`}
             >
               {data.consentimientoInformado
-                ? "✅ Consentimiento Informado Registrado"
-                : "⚠️ Consentimiento Informado Pendiente"}
+                ? "â Consentimiento Informado Registrado"
+                : "â ï¸ Consentimiento Informado Pendiente"}
             </span>
             <span className="text-[9px] text-gray-400 font-bold">
-              Res. 1843/2025 Art.12 · Ley 1581/2012
+              Res. 1843/2025 Art.12 Â· Ley 1581/2012
             </span>
           </div>
           {!data.consentimientoInformado &&
@@ -505,7 +507,7 @@ export const HistoriaOcupacional = (props) => {
                 onClick={() => setShowConsentModal(true)}
                 className="px-3 py-1 text-[11px] font-black text-white bg-amber-600 hover:bg-amber-700 rounded-lg no-print"
               >
-                📋 Registrar consentimiento
+                ð Registrar consentimiento
               </button>
             )}
           {data.consentimientoInformado &&
@@ -515,24 +517,24 @@ export const HistoriaOcupacional = (props) => {
                 onClick={() => setShowConsentModal(true)}
                 className="px-2 py-1 text-[10px] font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 rounded-lg no-print"
               >
-                👁 Ver / Editar
+                ð Ver / Editar
               </button>
             )}
         </div>
         {data.consentimientoInformado && (
           <div className="mt-2 flex flex-wrap gap-3 text-[10px] text-emerald-700">
             <span>
-              👤{" "}
+              ð¤{" "}
               <strong>
                 {data.consentimientoNombrePaciente ||
                   data.nombres ||
                   "Paciente"}
               </strong>
             </span>
-            <span>📅 {data.fechaConsentimiento}</span>
+            <span>ð {data.fechaConsentimiento}</span>
             {data.consentimientoTimestamp && (
               <span>
-                🕐{" "}
+                ð{" "}
                 {new Date(data.consentimientoTimestamp).toLocaleTimeString(
                   "es-CO",
                   { hour: "2-digit", minute: "2-digit" }
@@ -540,7 +542,7 @@ export const HistoriaOcupacional = (props) => {
               </span>
             )}
             <span className="text-[9px] text-gray-400">
-              🔖 {data.consentimientoVersion}
+              ð {data.consentimientoVersion}
             </span>
           </div>
         )}
@@ -570,7 +572,7 @@ export const HistoriaOcupacional = (props) => {
           </div>
           <div>
             <label className="block text-[10px] font-black text-emerald-800 mb-1">
-              ÉNFASIS
+              ÃNFASIS
             </label>
             <select
               name="enfasisExamen"
@@ -580,9 +582,9 @@ export const HistoriaOcupacional = (props) => {
             >
               <option value="GENERAL">General</option>
               <option value="OSTEOMUSCULAR">Osteomuscular</option>
-              <option value="CORAZON">Cardiovascular / Corazón</option>
+              <option value="CORAZON">Cardiovascular / CorazÃ³n</option>
               <option value="ALTURAS">Trabajo en Alturas</option>
-              <option value="ALIMENTOS">Manipulación de Alimentos</option>
+              <option value="ALIMENTOS">ManipulaciÃ³n de Alimentos</option>
               <option value="CONFINADOS">Espacios Confinados</option>
             </select>
           </div>
@@ -590,10 +592,10 @@ export const HistoriaOcupacional = (props) => {
         {/* Tipo de examen */}
         <div className="bg-gray-50 p-2 rounded-lg mb-2 border border-gray-200 print:bg-transparent print:border-gray-300">
           <label className="block text-[10px] font-black text-gray-700 mb-1 uppercase">
-            Tipo de Evaluación
+            Tipo de EvaluaciÃ³n
           </label>
           <div className="flex flex-wrap gap-3">
-            {/* NORMATIVO: Res. 1843/2025 - Tipos de evaluación actualizados */}
+            {/* NORMATIVO: Res. 1843/2025 - Tipos de evaluaciÃ³n actualizados */}
             {[
               "INGRESO",
               "PERIODICO",
@@ -618,7 +620,7 @@ export const HistoriaOcupacional = (props) => {
                   <span className="text-purple-700">
                     RETORNO LABORAL{" "}
                     <span className="text-[8px] font-normal text-purple-500">
-                      (Res.1843/2025 Art.13 - Ausencia &gt;90 días)
+                      (Res.1843/2025 Art.13 - Ausencia &gt;90 dÃ­as)
                     </span>
                   </span>
                 ) : (
@@ -643,7 +645,7 @@ export const HistoriaOcupacional = (props) => {
             )}
           </div>
         </div>
-        <SectionTitle title="Datos Sociodemográficos y Laborales" icon={User} />
+        <SectionTitle title="Datos SociodemogrÃ¡ficos y Laborales" icon={User} />
         <div className="relative">
           {patientSuggestions.length > 0 && (
             <div className="absolute z-50 top-16 left-0 w-full bg-white border border-emerald-200 shadow-xl rounded-lg max-h-52 overflow-y-auto no-print">
@@ -669,7 +671,7 @@ export const HistoriaOcupacional = (props) => {
             </div>
           )}
           <div className="flex flex-wrap -mx-1.5">
-            {/* Fila 1: Identificación */}
+            {/* Fila 1: IdentificaciÃ³n */}
             <InputGroup
               label="Nombres Completos"
               name="nombres"
@@ -720,7 +722,7 @@ export const HistoriaOcupacional = (props) => {
               width="w-1/8 min-w-[70px]"
             />
             <SelectGroup
-              label="Género"
+              label="GÃ©nero"
               name="genero"
               value={data.genero}
               onChange={handleChange}
@@ -775,8 +777,8 @@ export const HistoriaOcupacional = (props) => {
                 "Primaria Completa",
                 "Secundaria Incompleta",
                 "Secundaria Completa",
-                "Técnico",
-                "Tecnólogo",
+                "TÃ©cnico",
+                "TecnÃ³logo",
                 "Universitario",
                 "Postgrado",
                 "Ninguna",
@@ -791,7 +793,7 @@ export const HistoriaOcupacional = (props) => {
               options={[
                 "Soltero/a",
                 "Casado/a",
-                "Unión Libre",
+                "UniÃ³n Libre",
                 "Separado/a",
                 "Divorciado/a",
                 "Viudo/a",
@@ -800,7 +802,7 @@ export const HistoriaOcupacional = (props) => {
             />
             {/* Fila 3: Datos laborales */}
             <InputGroup
-              label="Dependencia / Área"
+              label="Dependencia / Ãrea"
               name="dependencia"
               value={data.dependencia}
               onChange={handleChange}
@@ -814,12 +816,12 @@ export const HistoriaOcupacional = (props) => {
               width="w-1/3"
             />
             <InputGroup
-              label="Antigüedad en Cargo"
+              label="AntigÃ¼edad en Cargo"
               name="antiguedadEmpresa"
               value={data.antiguedadEmpresa}
               onChange={handleChange}
               width="w-1/4"
-              placeholder="Ej: 2 años"
+              placeholder="Ej: 2 aÃ±os"
             />
             <SelectGroup
               label="Turno de Trabajo"
@@ -836,10 +838,10 @@ export const HistoriaOcupacional = (props) => {
               value={data.tipoContrato}
               onChange={handleChange}
               options={[
-                "Término Indefinido",
-                "Término Fijo",
+                "TÃ©rmino Indefinido",
+                "TÃ©rmino Fijo",
                 "Obra o Labor",
-                "Prestación de Servicios",
+                "PrestaciÃ³n de Servicios",
                 "Aprendizaje",
                 "Ocasional o Transitorio",
               ]}
@@ -848,7 +850,7 @@ export const HistoriaOcupacional = (props) => {
             />
             {/* Fila 4: Contacto y residencia */}
             <InputGroup
-              label="Teléfono Fijo"
+              label="TelÃ©fono Fijo"
               name="telefono"
               value={data.telefono}
               onChange={handleChange}
@@ -870,7 +872,7 @@ export const HistoriaOcupacional = (props) => {
               width="w-1/3"
             />
             <InputGroup
-              label="Dirección Residencia"
+              label="DirecciÃ³n Residencia"
               name="residencia"
               value={data.residencia}
               onChange={handleChange}
@@ -909,7 +911,7 @@ export const HistoriaOcupacional = (props) => {
               width="w-1/8 min-w-[90px]"
             />
             <InputGroup
-              label="Grupo Sanguíneo"
+              label="Grupo SanguÃ­neo"
               name="grupoSanguineo"
               value={data.grupoSanguineo}
               onChange={handleChange}
@@ -917,14 +919,14 @@ export const HistoriaOcupacional = (props) => {
               placeholder="Ej: O+"
             />
             <SelectGroup
-              label="Grupo Étnico"
+              label="Grupo Ãtnico"
               name="grupoEtnico"
               value={data.grupoEtnico}
               onChange={handleChange}
               options={[
                 "Mestizo",
                 "Afrocolombiano",
-                "Indígena",
+                "IndÃ­gena",
                 "Raizal",
                 "Palenquero",
                 "Gitano/Rrom",
@@ -933,26 +935,26 @@ export const HistoriaOcupacional = (props) => {
               width="w-1/4"
             />
             <SelectGroup
-              label="Identidad Género"
+              label="Identidad GÃ©nero"
               name="identidadGenero"
               value={data.identidadGenero}
               onChange={handleChange}
               options={[
-                "Cisgénero",
-                "Transgénero",
+                "CisgÃ©nero",
+                "TransgÃ©nero",
                 "No binario",
                 "Prefiere no decir",
               ]}
               width="w-1/4"
             />
-            {/* ══ B-10 Res. 1843/2025: Advertencia pruebas prohibidas como requisito laboral ══ */}
+            {/* ââ B-10 Res. 1843/2025: Advertencia pruebas prohibidas como requisito laboral ââ */}
             {(data.tipoExamen === "INGRESO" ||
               data.tipoExamen === "PERIODICO") && (
               <div className="w-full mb-1 bg-amber-50 border border-amber-300 rounded-lg p-2 text-[10px] text-amber-800 print:hidden">
-                <span className="font-black">⚠️ Res. 1843/2025 Art. 10:</span>{" "}
-                Está <strong>prohibido</strong> ordenar prueba de embarazo, VIH
-                o serología como requisito de ingreso o permanencia laboral. Si
-                hay indicación clínica, documente justificación en el campo
+                <span className="font-black">â ï¸ Res. 1843/2025 Art. 10:</span>{" "}
+                EstÃ¡ <strong>prohibido</strong> ordenar prueba de embarazo, VIH
+                o serologÃ­a como requisito de ingreso o permanencia laboral. Si
+                hay indicaciÃ³n clÃ­nica, documente justificaciÃ³n en el campo
                 correspondiente.
               </div>
             )}
@@ -968,7 +970,7 @@ export const HistoriaOcupacional = (props) => {
               data.tipoExamen === "RETORNO-LABORAL") && (
               <div className="flex gap-2 flex-wrap">
                 <InputGroup
-                  label="Días de Incapacidad / Ausencia"
+                  label="DÃ­as de Incapacidad / Ausencia"
                   name="diasIncapacidad"
                   value={data.diasIncapacidad}
                   onChange={handleChange}
@@ -978,23 +980,23 @@ export const HistoriaOcupacional = (props) => {
                 />
                 {data.tipoExamen === "RETORNO-LABORAL" && (
                   <InputGroup
-                    label="Días Ausencia No Médica (Res.1843 Art.13)"
+                    label="DÃ­as Ausencia No MÃ©dica (Res.1843 Art.13)"
                     name="diasAusenciaNoMedica"
                     value={data.diasAusenciaNoMedica}
                     onChange={handleChange}
                     width="w-1/2 min-w-[200px]"
-                    placeholder="Días ausencia por causas no médicas"
+                    placeholder="DÃ­as ausencia por causas no mÃ©dicas"
                   />
                 )}
               </div>
             )}
-            {/* ══ B-10 Res. 1843/2025 Art. 25 y 26 ══ */}
+            {/* ââ B-10 Res. 1843/2025 Art. 25 y 26 ââ */}
             <div className="w-full flex flex-wrap gap-2 mt-1 bg-green-50 border border-green-200 rounded-lg p-2">
               <div className="w-full text-[9px] font-black text-green-800 uppercase mb-1">
-                ⚕️ Res. 1843/2025 - Campos obligatorios adicionales
+                âï¸ Res. 1843/2025 - Campos obligatorios adicionales
               </div>
               <InputGroup
-                label="Plazo implem. recomend. (días) Art.25"
+                label="Plazo implem. recomend. (dÃ­as) Art.25"
                 name="plazoImplementacionRecomendaciones"
                 value={data.plazoImplementacionRecomendaciones || "20"}
                 onChange={handleChange}
@@ -1030,10 +1032,10 @@ export const HistoriaOcupacional = (props) => {
               </div>
             </div>
           </div>
-          {/* ══ B-F1-01: FOTO DEL PACIENTE ══ */}
+          {/* ââ B-F1-01: FOTO DEL PACIENTE ââ */}
           <div className="w-full mt-2 bg-blue-50 border border-blue-200 rounded-xl p-3">
             <p className="text-[10px] font-black text-blue-800 uppercase mb-2">
-              📷 Foto del Paciente (Opcional)
+              ð· Foto del Paciente (Opcional)
             </p>
             <div className="flex items-center gap-4">
               {data.fotoPaciente ? (
@@ -1050,18 +1052,18 @@ export const HistoriaOcupacional = (props) => {
                     }
                     className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full text-[10px] font-black flex items-center justify-center hover:bg-red-600"
                   >
-                    ✕
+                    â
                   </button>
                 </div>
               ) : (
                 <div className="w-20 h-20 rounded-xl border-2 border-dashed border-blue-300 flex items-center justify-center bg-white">
-                  <span className="text-2xl">📷</span>
+                  <span className="text-2xl">ð·</span>
                 </div>
               )}
               <div>
                 <label className="cursor-pointer">
                   <span className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black rounded-lg flex items-center gap-1 w-fit">
-                    📁 {data.fotoPaciente ? "Cambiar foto" : "Subir foto"}
+                    ð {data.fotoPaciente ? "Cambiar foto" : "Subir foto"}
                   </span>
                   <input
                     type="file"
@@ -1100,13 +1102,13 @@ export const HistoriaOcupacional = (props) => {
                   />
                 </label>
                 <p className="text-[9px] text-blue-600 mt-1">
-                  JPG/PNG · Se comprime a 200×200px · Se guarda en la HC
+                  JPG/PNG Â· Se comprime a 200Ã200px Â· Se guarda en la HC
                 </p>
               </div>
             </div>
           </div>
         </div>
-        {/* ── NORMATIVO: Res. 1843/2025 Art. 29 - PERFIL DEL CARGO (reemplaza profesiograma) ── */}
+        {/* ââ NORMATIVO: Res. 1843/2025 Art. 29 - PERFIL DEL CARGO (reemplaza profesiograma) ââ */}
         <SectionTitle
           title="Perfil del Cargo - Res. 1843/2025 Art. 29"
           icon={Stethoscope}
@@ -1123,7 +1125,7 @@ export const HistoriaOcupacional = (props) => {
               placeholder="Describa las funciones principales del cargo..."
             />
             <TextAreaGroup
-              label="Demandas Físicas del Cargo"
+              label="Demandas FÃ­sicas del Cargo"
               name="perfilCargo_demandasFisicas"
               value={data.perfilCargo_demandasFisicas}
               onChange={handleChange}
@@ -1138,31 +1140,31 @@ export const HistoriaOcupacional = (props) => {
               value={data.perfilCargo_demandasMentales}
               onChange={handleChange}
               rows={2}
-              placeholder="Ej: Alta concentración, atención al público, turnos nocturnos..."
+              placeholder="Ej: Alta concentraciÃ³n, atenciÃ³n al pÃºblico, turnos nocturnos..."
             />
             <TextAreaGroup
-              label="Factores de Riesgo Específicos del Cargo"
+              label="Factores de Riesgo EspecÃ­ficos del Cargo"
               name="perfilCargo_factoresRiesgo"
               value={data.perfilCargo_factoresRiesgo}
               onChange={handleChange}
               rows={2}
-              placeholder="Ej: Ruido >85dB, exposición a químicos, radiación..."
+              placeholder="Ej: Ruido >85dB, exposiciÃ³n a quÃ­micos, radiaciÃ³n..."
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             <InputGroup
-              label="Nivel de Exposición"
+              label="Nivel de ExposiciÃ³n"
               name="perfilCargo_nivelExposicion"
               value={data.perfilCargo_nivelExposicion}
               onChange={handleChange}
               placeholder="Ej: Alto, Medio, Bajo"
             />
             <InputGroup
-              label="Tiempo Acumulado Exposición"
+              label="Tiempo Acumulado ExposiciÃ³n"
               name="perfilCargo_tiempoAcumulado"
               value={data.perfilCargo_tiempoAcumulado}
               onChange={handleChange}
-              placeholder="Ej: 8h/día, 5 años"
+              placeholder="Ej: 8h/dÃ­a, 5 aÃ±os"
             />
             <TextAreaGroup
               label="Medidas de Control Existentes"
@@ -1174,7 +1176,7 @@ export const HistoriaOcupacional = (props) => {
             />
           </div>
           <p className="text-[9px] text-purple-500 mt-1 font-bold">
-            ⚖️ Campo obligatorio Res. 1843/2025 Art. 29 - Reemplaza el
+            âï¸ Campo obligatorio Res. 1843/2025 Art. 29 - Reemplaza el
             profesiograma tradicional
           </p>
         </div>
@@ -1259,7 +1261,7 @@ export const HistoriaOcupacional = (props) => {
                         }
                         className="mr-1 h-3 w-3"
                       />{" "}
-                      Sí
+                      SÃ­
                     </label>
                   </div>
                 </div>
@@ -1309,7 +1311,7 @@ export const HistoriaOcupacional = (props) => {
                 className="p-1 text-[10px] border rounded w-full print:border-none"
               >
                 <option value="No">No</option>
-                <option value="Si">Sí</option>
+                <option value="Si">SÃ­</option>
                 {h.k !== "psicoactivas" && (
                   <option value="Ocasional">Ocasional</option>
                 )}
@@ -1319,7 +1321,7 @@ export const HistoriaOcupacional = (props) => {
         </div>
         <div className="print-section-break" />
         <SectionTitle
-          title="Signos Vitales y Antropometría"
+          title="Signos Vitales y AntropometrÃ­a"
           icon={Activity}
           color="blue"
         />
@@ -1346,7 +1348,7 @@ export const HistoriaOcupacional = (props) => {
               alertInfo={analyzeBP(data.ta)}
             />
             <InputGroup
-              label="Temp. (°C)"
+              label="Temp. (Â°C)"
               name="temp"
               value={data.temp}
               onChange={handleChange}
@@ -1392,7 +1394,7 @@ export const HistoriaOcupacional = (props) => {
           </div>
           <div className="flex gap-2 flex-wrap border-t border-blue-200 pt-2">
             <InputGroup
-              label="Visión OD"
+              label="VisiÃ³n OD"
               name="av_od"
               value={data.agudezaVisual?.lejanaOD}
               onChange={(e) =>
@@ -1407,7 +1409,7 @@ export const HistoriaOcupacional = (props) => {
               width="w-1/5 min-w-[90px]"
             />
             <InputGroup
-              label="Visión OI"
+              label="VisiÃ³n OI"
               name="av_oi"
               value={data.agudezaVisual?.lejanaOI}
               onChange={(e) =>
@@ -1437,13 +1439,13 @@ export const HistoriaOcupacional = (props) => {
                   }
                   className="w-3 h-3"
                 />{" "}
-                Usa Corrección
+                Usa CorrecciÃ³n
               </label>
             </div>
           </div>
         </div>
         <div className="print-section-break" />
-        <SectionTitle title="Examen Físico por Sistemas" icon={Activity} />
+        <SectionTitle title="Examen FÃ­sico por Sistemas" icon={Activity} />
         <div className="bg-gray-50 p-2 rounded-lg border border-gray-200 mb-2 print:bg-transparent">
           <div className="flex justify-end mb-2 no-print">
             <button
@@ -1464,7 +1466,7 @@ export const HistoriaOcupacional = (props) => {
               }
               className="text-[10px] bg-emerald-600 text-white px-3 py-1 rounded-lg font-bold hover:bg-emerald-700 flex items-center gap-1"
             >
-              ✅ Todos Normal
+              â Todos Normal
             </button>
           </div>
           <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
@@ -1544,7 +1546,7 @@ export const HistoriaOcupacional = (props) => {
                   <textarea
                     rows={2}
                     className="w-full text-[10px] p-1 border border-red-300 rounded bg-white resize-none"
-                    placeholder="Describa el hallazgo patológico..."
+                    placeholder="Describa el hallazgo patolÃ³gico..."
                     value={data.examenFisicoSistemas[sys].hallazgo}
                     onChange={(e) =>
                       setData((p) => ({
@@ -1564,20 +1566,20 @@ export const HistoriaOcupacional = (props) => {
             ))}
           </div>
         </div>
-        {/* ══ BLOQUES ÉNFASIS ESPECIALIZADOS ══ */}
-        {/* Énfasis Alturas */}
+        {/* ââ BLOQUES ÃNFASIS ESPECIALIZADOS ââ */}
+        {/* Ãnfasis Alturas */}
         {data.enfasisExamen === "ALTURAS" && (
           <div className="mt-2 border-2 border-sky-400 p-2 rounded-xl animate-fade-in mb-2">
             <h3 className="font-black text-sky-800 text-xs mb-2 uppercase text-center">
-              Énfasis: Trabajo en Alturas (Res. 4272/2021)
+              Ãnfasis: Trabajo en Alturas (Res. 4272/2021)
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
               {[
                 { k: "romberg", l: "Romberg", opts: ["Normal", "Alterado"] },
-                { k: "vertigo", l: "Vértigo", opts: ["Negativo", "Positivo"] },
+                { k: "vertigo", l: "VÃ©rtigo", opts: ["Negativo", "Positivo"] },
                 {
                   k: "coordinacion",
-                  l: "Coordinación",
+                  l: "CoordinaciÃ³n",
                   opts: ["Normal", "Alterada"],
                 },
                 {
@@ -1648,11 +1650,11 @@ export const HistoriaOcupacional = (props) => {
             />
           </div>
         )}
-        {/* Énfasis Alimentos */}
+        {/* Ãnfasis Alimentos */}
         {data.enfasisExamen === "ALIMENTOS" && (
           <div className="mt-2 border-2 border-yellow-400 p-2 rounded-xl animate-fade-in mb-2">
             <h3 className="font-black text-yellow-800 text-xs mb-2 uppercase text-center">
-              Énfasis: Manipulación de Alimentos (Res. 2674/2013)
+              Ãnfasis: ManipulaciÃ³n de Alimentos (Res. 2674/2013)
             </h3>
             <div className="grid grid-cols-3 gap-2 text-xs">
               {[
@@ -1704,52 +1706,52 @@ export const HistoriaOcupacional = (props) => {
             </div>
           </div>
         )}
-        {/* Énfasis Espacios Confinados */}
+        {/* Ãnfasis Espacios Confinados */}
         {data.enfasisExamen === "CONFINADOS" && (
           <div className="mt-2 border-2 border-orange-400 p-2 rounded-xl animate-fade-in mb-2">
             <h3 className="font-black text-orange-800 text-xs mb-1 uppercase text-center">
-              Énfasis: Espacios Confinados (Res. 0491/2020 · NTC 5679)
+              Ãnfasis: Espacios Confinados (Res. 0491/2020 Â· NTC 5679)
             </h3>
             <p className="text-[9px] text-orange-600 text-center mb-2">
-              Evaluación médica para ingreso y trabajo en espacios con riesgo de
-              hipoxia, explosión o atrapamiento
+              EvaluaciÃ³n mÃ©dica para ingreso y trabajo en espacios con riesgo de
+              hipoxia, explosiÃ³n o atrapamiento
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
               {[
                 {
                   k: "cardiovascular",
                   l: "Sistema Cardiovascular",
-                  desc: "FC, PA, ritmo. Descartar arritmias, HTA no controlada, cardiopatía isquémica.",
+                  desc: "FC, PA, ritmo. Descartar arritmias, HTA no controlada, cardiopatÃ­a isquÃ©mica.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "respiratorio",
                   l: "Sistema Respiratorio",
-                  desc: "FR, SpO2, auscultación pulmonar. Descartar EPOC, asma, restricción ventilatoria.",
+                  desc: "FR, SpO2, auscultaciÃ³n pulmonar. Descartar EPOC, asma, restricciÃ³n ventilatoria.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "neurologico",
-                  l: "Sistema Neurológico",
-                  desc: "Nivel de conciencia, equilibrio, coordinación. Descartar epilepsia, vértigo crónico.",
+                  l: "Sistema NeurolÃ³gico",
+                  desc: "Nivel de conciencia, equilibrio, coordinaciÃ³n. Descartar epilepsia, vÃ©rtigo crÃ³nico.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "psicologico",
-                  l: "Evaluación Psicológica",
-                  desc: "Claustrofobia, manejo del estrés, reacciones ante confinamiento.",
+                  l: "EvaluaciÃ³n PsicolÃ³gica",
+                  desc: "Claustrofobia, manejo del estrÃ©s, reacciones ante confinamiento.",
                   opts: ["Apto", "No Apto"],
                 },
                 {
                   k: "otorrino",
-                  l: "ORL / Oído",
-                  desc: "Tímpanos íntegros, no sinusitis activa. Presión en espacios cerrados.",
+                  l: "ORL / OÃ­do",
+                  desc: "TÃ­mpanos Ã­ntegros, no sinusitis activa. PresiÃ³n en espacios cerrados.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "usoEpp",
                   l: "Capacidad uso EPP",
-                  desc: "Tolerancia a equipo de respiración autónoma (SCBA), máscaras de aire.",
+                  desc: "Tolerancia a equipo de respiraciÃ³n autÃ³noma (SCBA), mÃ¡scaras de aire.",
                   opts: ["Apto", "No Apto"],
                 },
               ].map((f) => (
@@ -1813,7 +1815,7 @@ export const HistoriaOcupacional = (props) => {
                     }))
                   }
                   className="w-full text-xs p-1 border border-orange-200 rounded outline-none resize-none"
-                  placeholder="FC: __/min  PA: __/__mmHg  SpO2: __%  FR: __/min  Auscultación: ..."
+                  placeholder="FC: __/min  PA: __/__mmHg  SpO2: __%  FR: __/min  AuscultaciÃ³n: ..."
                 />
               </div>
               <div>
@@ -1833,20 +1835,20 @@ export const HistoriaOcupacional = (props) => {
                     }))
                   }
                   className="w-full text-xs p-1 border border-orange-200 rounded outline-none resize-none"
-                  placeholder="Observaciones, restricciones específicas..."
+                  placeholder="Observaciones, restricciones especÃ­ficas..."
                 />
               </div>
             </div>
           </div>
         )}
-        {/* Énfasis Osteomuscular */}
+        {/* Ãnfasis Osteomuscular */}
         {data.enfasisExamen === "OSTEOMUSCULAR" && (
           <div className="mt-2 border-2 border-violet-400 p-2 rounded-xl animate-fade-in mb-2">
             <h3 className="font-black text-violet-800 text-xs mb-1 uppercase text-center">
-              Énfasis: Osteomuscular (Res. 1843/2025 · Res. 2404/2019)
+              Ãnfasis: Osteomuscular (Res. 1843/2025 Â· Res. 2404/2019)
             </h3>
             <p className="text-[9px] text-violet-600 text-center mb-2">
-              Evaluación de riesgo biomecánico y desórdenes músculo-esqueléticos
+              EvaluaciÃ³n de riesgo biomecÃ¡nico y desÃ³rdenes mÃºsculo-esquelÃ©ticos
               relacionados con el trabajo (DME)
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs mb-2">
@@ -1854,19 +1856,19 @@ export const HistoriaOcupacional = (props) => {
                 {
                   k: "columna",
                   l: "Columna Vertebral",
-                  desc: "Inspección, palpación, movilidad cervical/lumbar/dorsal. Escoliosis, cifosis, lordosis patológica.",
+                  desc: "InspecciÃ³n, palpaciÃ³n, movilidad cervical/lumbar/dorsal. Escoliosis, cifosis, lordosis patolÃ³gica.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "miembrosSup",
                   l: "Miembros Superiores",
-                  desc: "Hombros, codos, muñecas, manos. Rangos de movimiento, trofismo, fuerza prensil.",
+                  desc: "Hombros, codos, muÃ±ecas, manos. Rangos de movimiento, trofismo, fuerza prensil.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "miembrosInf",
                   l: "Miembros Inferiores",
-                  desc: "Caderas, rodillas, tobillos, pies. Marcha, apoyo, alineación, varices.",
+                  desc: "Caderas, rodillas, tobillos, pies. Marcha, apoyo, alineaciÃ³n, varices.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
@@ -1878,13 +1880,13 @@ export const HistoriaOcupacional = (props) => {
                 {
                   k: "articular",
                   l: "Sistema Articular",
-                  desc: "Tumefacción, calor, dolor articular. Signos inflamatorios activos.",
+                  desc: "TumefacciÃ³n, calor, dolor articular. Signos inflamatorios activos.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "postural",
-                  l: "Evaluación Postural",
-                  desc: "Postura estática y dinámica, compensaciones, dismetrías de miembros.",
+                  l: "EvaluaciÃ³n Postural",
+                  desc: "Postura estÃ¡tica y dinÃ¡mica, compensaciones, dismetrÃ­as de miembros.",
                   opts: ["Normal", "Anormal"],
                 },
               ].map((f) => (
@@ -1936,7 +1938,7 @@ export const HistoriaOcupacional = (props) => {
                 {
                   k: "phalen",
                   l: "Phalen",
-                  desc: "STC muñeca",
+                  desc: "STC muÃ±eca",
                   pos: "Positivo",
                 },
                 {
@@ -1959,8 +1961,8 @@ export const HistoriaOcupacional = (props) => {
                 },
                 {
                   k: "lasegue",
-                  l: "Lasègue",
-                  desc: "Ciática L4-S1",
+                  l: "LasÃ¨gue",
+                  desc: "CiÃ¡tica L4-S1",
                   pos: "Positivo",
                 },
                 {
@@ -2044,12 +2046,12 @@ export const HistoriaOcupacional = (props) => {
                     }))
                   }
                   className="w-full text-xs p-1 border border-violet-200 rounded outline-none resize-none"
-                  placeholder="Describir hallazgos patológicos, localización, intensidad..."
+                  placeholder="Describir hallazgos patolÃ³gicos, localizaciÃ³n, intensidad..."
                 />
               </div>
               <div>
                 <p className="text-[9px] font-black text-violet-700 mb-1">
-                  DIAGNÓSTICO FUNCIONAL / RESTRICCIONES
+                  DIAGNÃSTICO FUNCIONAL / RESTRICCIONES
                 </p>
                 <textarea
                   rows={2}
@@ -2064,21 +2066,21 @@ export const HistoriaOcupacional = (props) => {
                     }))
                   }
                   className="w-full text-xs p-1 border border-violet-200 rounded outline-none resize-none"
-                  placeholder="Ej: Síndrome del túnel carpiano bilateral. Restricción para vibración..."
+                  placeholder="Ej: SÃ­ndrome del tÃºnel carpiano bilateral. RestricciÃ³n para vibraciÃ³n..."
                 />
               </div>
             </div>
           </div>
         )}
-        {/* Énfasis Corazón / Cardiovascular */}
+        {/* Ãnfasis CorazÃ³n / Cardiovascular */}
         {data.enfasisExamen === "CORAZON" && (
           <div className="mt-2 border-2 border-rose-400 p-2 rounded-xl animate-fade-in mb-2">
             <h3 className="font-black text-rose-800 text-xs mb-1 uppercase text-center">
-              Énfasis: Cardiovascular (Res. 1843/2025 · Res. 1843/2025)
+              Ãnfasis: Cardiovascular (Res. 1843/2025 Â· Res. 1843/2025)
             </h3>
             <p className="text-[9px] text-rose-600 text-center mb-2">
-              Evaluación cardiovascular y metabólica para puestos de trabajo con
-              demanda física o riesgo cardiovascular
+              EvaluaciÃ³n cardiovascular y metabÃ³lica para puestos de trabajo con
+              demanda fÃ­sica o riesgo cardiovascular
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs mb-2">
               {[
@@ -2090,32 +2092,32 @@ export const HistoriaOcupacional = (props) => {
                 },
                 {
                   k: "presionArterial",
-                  l: "Presión Arterial",
-                  desc: "PA sistólica/diastólica. Normal: <130/80. HTA grado I/II/III (JNC-8).",
+                  l: "PresiÃ³n Arterial",
+                  desc: "PA sistÃ³lica/diastÃ³lica. Normal: <130/80. HTA grado I/II/III (JNC-8).",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "ritmoyTonos",
                   l: "Ritmo y Tonos Cardiacos",
-                  desc: "Ruidos cardiacos, soplos, S3, S4, frotes pericárdicos, thrill.",
+                  desc: "Ruidos cardiacos, soplos, S3, S4, frotes pericÃ¡rdicos, thrill.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "pulsos",
-                  l: "Pulsos Periféricos",
-                  desc: "Pulsos carotídeos, radiales, femorales, poplíteos, pedios. Simetría y amplitud.",
+                  l: "Pulsos PerifÃ©ricos",
+                  desc: "Pulsos carotÃ­deos, radiales, femorales, poplÃ­teos, pedios. SimetrÃ­a y amplitud.",
                   opts: ["Normal", "Anormal"],
                 },
                 {
                   k: "edemas",
-                  l: "Edemas / Ingurgitación",
-                  desc: "Edema de miembros, ingurgitación yugular, reflujo hepatoyugular.",
+                  l: "Edemas / IngurgitaciÃ³n",
+                  desc: "Edema de miembros, ingurgitaciÃ³n yugular, reflujo hepatoyugular.",
                   opts: ["Ausente", "Presente"],
                 },
                 {
                   k: "perfusionPeriferica",
-                  l: "Perfusión Periférica",
-                  desc: "Llenado capilar <2seg, temperatura distal, coloración, pulso capilar.",
+                  l: "PerfusiÃ³n PerifÃ©rica",
+                  desc: "Llenado capilar <2seg, temperatura distal, coloraciÃ³n, pulso capilar.",
                   opts: ["Normal", "Anormal"],
                 },
               ].map((f) => (
@@ -2175,12 +2177,12 @@ export const HistoriaOcupacional = (props) => {
                     }))
                   }
                   className="w-full text-[10px] p-1 border border-rose-200 rounded outline-none"
-                  placeholder="FC:__ PA:__/__ SpO2:__% FR:__ T:__°C"
+                  placeholder="FC:__ PA:__/__ SpO2:__% FR:__ T:__Â°C"
                 />
               </div>
               <div className="bg-white p-2 rounded border border-rose-100">
                 <p className="font-bold text-[10px] mb-1">
-                  Índice de Masa Corporal
+                  Ãndice de Masa Corporal
                 </p>
                 <input
                   value={data.examenCorazon?.imc || ""}
@@ -2194,7 +2196,7 @@ export const HistoriaOcupacional = (props) => {
                     }))
                   }
                   className="w-full text-[10px] p-1 border border-rose-200 rounded outline-none"
-                  placeholder="Peso:__kg Talla:__m IMC:__kg/m²"
+                  placeholder="Peso:__kg Talla:__m IMC:__kg/mÂ²"
                 />
               </div>
               <div className="bg-white p-2 rounded border border-rose-100">
@@ -2225,7 +2227,7 @@ export const HistoriaOcupacional = (props) => {
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <p className="text-[9px] font-black text-rose-700 mb-1">
-                  HALLAZGOS / SÍNTOMAS CARDIOVASCULARES
+                  HALLAZGOS / SÃNTOMAS CARDIOVASCULARES
                 </p>
                 <textarea
                   rows={2}
@@ -2240,7 +2242,7 @@ export const HistoriaOcupacional = (props) => {
                     }))
                   }
                   className="w-full text-xs p-1 border border-rose-200 rounded outline-none resize-none"
-                  placeholder="Ej: HTA grado I. Soplo sistólico I/VI en foco mitral. ECG: RS sin alteraciones..."
+                  placeholder="Ej: HTA grado I. Soplo sistÃ³lico I/VI en foco mitral. ECG: RS sin alteraciones..."
                 />
               </div>
               <div>
@@ -2260,7 +2262,7 @@ export const HistoriaOcupacional = (props) => {
                     }))
                   }
                   className="w-full text-xs p-1 border border-rose-200 rounded outline-none resize-none"
-                  placeholder="Ej: No esfuerzo físico mayor >6 METs. Control cardiológico en 3 meses..."
+                  placeholder="Ej: No esfuerzo fÃ­sico mayor >6 METs. Control cardiolÃ³gico en 3 meses..."
                 />
               </div>
             </div>
@@ -2269,7 +2271,7 @@ export const HistoriaOcupacional = (props) => {
         {/* Concepto y Recomendaciones */}
         <div className="print-section-break" />
         <SectionTitle
-          title="Concepto Médico y Recomendaciones"
+          title="Concepto MÃ©dico y Recomendaciones"
           icon={FileCheck}
         />
         <div className="bg-gradient-to-r from-emerald-50 to-white p-2 rounded-xl border border-emerald-200 shadow-sm">
@@ -2285,7 +2287,7 @@ export const HistoriaOcupacional = (props) => {
               ) : (
                 <Sparkles className="w-3.5 h-3.5" />
               )}{" "}
-              Análisis IA Completo
+              AnÃ¡lisis IA Completo
             </button>
             <button
               onClick={() => {
@@ -2329,11 +2331,11 @@ export const HistoriaOcupacional = (props) => {
               Restricciones
             </button>
           </div>
-          {/* NORMATIVO: CIE-10 activo + CIE-11 en transición - Res. 1442/2024 */}
+          {/* NORMATIVO: CIE-10 activo + CIE-11 en transiciÃ³n - Res. 1442/2024 */}
           <div className="mb-2">
             <div className="flex items-center justify-between mb-1">
               <label className="block text-[10px] font-black text-gray-700 uppercase">
-                Diagnósticos CIE-10 - Escriba código o nombre para buscar
+                DiagnÃ³sticos CIE-10 - Escriba cÃ³digo o nombre para buscar
               </label>
               <span
                 style={{
@@ -2346,7 +2348,7 @@ export const HistoriaOcupacional = (props) => {
                   fontWeight: "700",
                 }}
               >
-                CIE-11 en transición · Res. 1442/2024
+                CIE-11 en transiciÃ³n Â· Res. 1442/2024
               </span>
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -2360,10 +2362,10 @@ export const HistoriaOcupacional = (props) => {
                   onChange={(v) =>
                     setData((p) => ({ ...p, diagnosticoPrincipal: v }))
                   }
-                  placeholder="Buscar: Z10.0, lumbalgia, túnel carpo..."
+                  placeholder="Buscar: Z10.0, lumbalgia, tÃºnel carpo..."
                   className="w-full p-1.5 border-2 border-emerald-300 rounded-lg text-xs focus:ring-2 focus:ring-emerald-400 outline-none bg-emerald-50"
                 />
-                {/* CIE-11 equivalencia automática - Res. 1442/2024 */}
+                {/* CIE-11 equivalencia automÃ¡tica - Res. 1442/2024 */}
                 <CIE11Badge cie10value={data.diagnosticoPrincipal} />
               </div>
               <div>
@@ -2376,7 +2378,7 @@ export const HistoriaOcupacional = (props) => {
                   onChange={(v) =>
                     setData((p) => ({ ...p, diagnosticoSecundario1: v }))
                   }
-                  placeholder="Buscar diagnóstico secundario..."
+                  placeholder="Buscar diagnÃ³stico secundario..."
                   className="w-full p-1.5 border border-blue-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-400 outline-none"
                 />
               </div>
@@ -2390,7 +2392,7 @@ export const HistoriaOcupacional = (props) => {
                   onChange={(v) =>
                     setData((p) => ({ ...p, diagnosticoSecundario2: v }))
                   }
-                  placeholder="Buscar diagnóstico secundario..."
+                  placeholder="Buscar diagnÃ³stico secundario..."
                   className="w-full p-1.5 border border-purple-200 rounded-lg text-xs focus:ring-2 focus:ring-purple-400 outline-none"
                 />
               </div>
@@ -2402,16 +2404,16 @@ export const HistoriaOcupacional = (props) => {
             value={data.conceptoAptitud}
             onChange={handleChange}
             options={[
-              "Sin restricciones de salud para que el trabajador continúe desempeñando la labor.",
-              "Hallazgos clínicos que no interfieren para que el trabajador continúe desempeñando la labor.",
-              "Con recomendaciones médico-laborales para que el trabajador continúe desempeñando la labor.",
-              "Con restricciones laborales para que el trabajador continúe desempeñando la labor.",
-              "Requiere reubicación laboral.",
+              "Sin restricciones de salud para que el trabajador continÃºe desempeÃ±ando la labor.",
+              "Hallazgos clÃ­nicos que no interfieren para que el trabajador continÃºe desempeÃ±ando la labor.",
+              "Con recomendaciones mÃ©dico-laborales para que el trabajador continÃºe desempeÃ±ando la labor.",
+              "Con restricciones laborales para que el trabajador continÃºe desempeÃ±ando la labor.",
+              "Requiere reubicaciÃ³n laboral.",
               "Aplazado",
               "Egreso satisfactorio",
               "Egreso con hallazgos",
-              "Periódico satisfactorio",
-              "Periódico con hallazgos",
+              "PeriÃ³dico satisfactorio",
+              "PeriÃ³dico con hallazgos",
             ]}
             required
           />
@@ -2424,7 +2426,7 @@ export const HistoriaOcupacional = (props) => {
               rows={4}
             />
             <TextAreaGroup
-              label="Restricciones Médico-Laborales"
+              label="Restricciones MÃ©dico-Laborales"
               name="analisisRestricciones"
               value={data.analisisRestricciones}
               onChange={handleChange}
@@ -2432,16 +2434,16 @@ export const HistoriaOcupacional = (props) => {
             />
           </div>
           <InputGroup
-            label="Vigencia del Concepto ★"
+            label="Vigencia del Concepto â"
             name="vigencia"
             value={data.vigencia}
             onChange={handleChange}
             width="w-1/3"
             required={true}
-            placeholder="Ej: 1 año, 6 meses"
+            placeholder="Ej: 1 aÃ±o, 6 meses"
           />
         </div>
-        {/* Firma impresión */}
+        {/* Firma impresiÃ³n */}
         <div className="hidden print:flex mt-8 justify-between items-end px-4">
           <div className="text-center w-1/3">
             <div className="border-t border-gray-800 pt-1 text-[10px] font-bold">

@@ -1,10 +1,11 @@
 import React from 'react';
+import { DoctorSignature, BrandLogo } from '../components/ui/DoctorSignature.jsx';
 import { getSpanishDate } from '../utils/helpers.js';
 import {
   LogOut, Printer, Receipt, Save
 } from "lucide-react";
 
-// ─── Bill Page Component ─────────────────────────────────────────────
+// âââ Bill Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const Bill = (props) => {
   const {
@@ -408,7 +409,7 @@ export const Bill = (props) => {
     NotificacionModal,
     LoginForm,
     PortalPublicoTrabajador,
-    AgendaFieldF,    // ─── Role guard helpers from sharedProps ───
+    AgendaFieldF,    // âââ Role guard helpers from sharedProps âââ
   _isAdmin,
   _isAdminEmpresa,
   _secretariaPuede,
@@ -433,13 +434,13 @@ export const Bill = (props) => {
                 onClick={() => goBack()}
                 className="text-sm text-gray-500 hover:text-gray-700"
               >
-                ← Volver
+                â Volver
               </button>
             </div>
           </div>
         </div>
       );
-    // ── SECRETARIA GATE: "Cuentas de Cobro" requiere autorización del admin ──
+    // ââ SECRETARIA GATE: "Cuentas de Cobro" requiere autorizaciÃ³n del admin ââ
     if (
       currentUser?.role === "secretaria" &&
       !_secretariaPuede("bill", currentUser, usersList)
@@ -449,26 +450,26 @@ export const Bill = (props) => {
           {renderNavbar()}
           <div className="max-w-xl mx-auto px-4 py-16 text-center">
             <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-8 space-y-3">
-              <div className="text-5xl">🔐</div>
+              <div className="text-5xl">ð</div>
               <p className="font-black text-amber-800 text-xl">
-                Módulo restringido
+                MÃ³dulo restringido
               </p>
               <p className="text-amber-700 text-sm font-bold">
                 Cuentas de Cobro
               </p>
               <p className="text-amber-600 text-xs leading-relaxed">
-                Este módulo requiere autorización explícita del administrador.
+                Este mÃ³dulo requiere autorizaciÃ³n explÃ­cita del administrador.
                 <br />
                 Solicita que habilite el permiso{" "}
                 <strong>"Cuentas de Cobro"</strong> en tu perfil.
                 <br />
-                (Usuarios → tu nombre → 🔐 Permisos de secretaria)
+                (Usuarios â tu nombre â ð Permisos de secretaria)
               </p>
               <button
                 onClick={() => goBack()}
                 className="mt-3 bg-amber-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-amber-700 transition"
               >
-                ← Volver al panel
+                â Volver al panel
               </button>
             </div>
           </div>
@@ -515,7 +516,7 @@ export const Bill = (props) => {
                       _sync(`siso_saved_bills_${_bSuf}`, JSON.stringify(upd));
                     }
                     showAlert(
-                      "✅ Cuenta de cobro guardada.\nPuede verla en Módulo Financiero → 💳 Cuentas"
+                      "â Cuenta de cobro guardada.\nPuede verla en MÃ³dulo Financiero â ð³ Cuentas"
                     );
                   }}
                   className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-1 hover:bg-emerald-700"
@@ -529,7 +530,7 @@ export const Bill = (props) => {
                   }}
                   className="bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-1 hover:bg-blue-800"
                 >
-                  💳 Ver cuentas (
+                  ð³ Ver cuentas (
                   {savedBillsList.filter((b) => !b.pagada).length} pend.)
                 </button>
                 <button
@@ -542,7 +543,7 @@ export const Bill = (props) => {
                   onClick={() => {
                     if (!_canUse("dian_xml", currentUser)) {
                       showAlert(
-                        "🔒 Factura Electrónica DIAN está disponible en el plan ⭐ Pro ($79.000/mes).\n\nMenú → ⭐ Ver Planes"
+                        "ð Factura ElectrÃ³nica DIAN estÃ¡ disponible en el plan â­ Pro ($79.000/mes).\n\nMenÃº â â­ Ver Planes"
                       );
                       return;
                     }
@@ -554,14 +555,14 @@ export const Bill = (props) => {
                       : "bg-green-600 text-white hover:bg-green-700"
                   }`}
                 >
-                  🧾{" "}
+                  ð§¾{" "}
                   {showDianPanel
                     ? "Ocultar DIAN"
-                    : "⚡ Factura Electrónica DIAN"}
+                    : "â¡ Factura ElectrÃ³nica DIAN"}
                 </button>
               </div>{" "}
             </div>
-            {/* Selector de médico para secretaria */}
+            {/* Selector de mÃ©dico para secretaria */}
             {["secretaria", "administrador"].includes(currentUser?.role) &&
               (() => {
                 const medicos = usersList.filter(
@@ -575,22 +576,22 @@ export const Bill = (props) => {
                 );
                 return (
                   <>
-                    {/* FASE 2 Componente 7: Facturación mixta — Emitida por */}
+                    {/* FASE 2 Componente 7: FacturaciÃ³n mixta â Emitida por */}
                     <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 mb-3">
                       <p className="text-xs font-black text-indigo-800 mb-2">
-                        🏢 Emitida por (Facturación Mixta — Fase 2)
+                        ð¢ Emitida por (FacturaciÃ³n Mixta â Fase 2)
                       </p>
                       <div className="flex gap-2 flex-wrap mb-2">
                         {[
                           {
                             v: "organizacion",
-                            l: "🏢 Organización",
-                            desc: "Usa datos de OcupaSalud Popayán",
+                            l: "ð¢ OrganizaciÃ³n",
+                            desc: "Usa datos de OcupaSalud PopayÃ¡n",
                           },
                           {
                             v: "medico_independiente",
-                            l: "👨‍⚕️ Médico independiente",
-                            desc: "Usa datos del médico seleccionado",
+                            l: "ð¨ââï¸ MÃ©dico independiente",
+                            desc: "Usa datos del mÃ©dico seleccionado",
                           },
                         ].map(({ v, l, desc }) => (
                           <button
@@ -618,7 +619,7 @@ export const Bill = (props) => {
                               (o) =>
                                 o.orgId ===
                                 (currentUser?.orgId || ORG_DEFAULT_ID)
-                            )?.orgName || "OcupaSalud Popayán"}
+                            )?.orgName || "OcupaSalud PopayÃ¡n"}
                           </p>
                           <p className="text-gray-400">
                             NIT:{" "}
@@ -633,12 +634,12 @@ export const Bill = (props) => {
                     </div>
                     <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-3">
                       <p className="text-xs font-black text-blue-800 mb-2">
-                        👨‍⚕️ Médico que emite la cuenta de cobro
+                        ð¨ââï¸ MÃ©dico que emite la cuenta de cobro
                       </p>
                       <div className="flex gap-3 flex-wrap">
                         <div className="flex-1 min-w-[200px]">
                           <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">
-                            Seleccionar Médico
+                            Seleccionar MÃ©dico
                           </label>
                           <select
                             className="w-full p-2 border border-blue-200 rounded-lg text-sm bg-white"
@@ -667,7 +668,7 @@ export const Bill = (props) => {
                                 selDoc.user}
                             </p>
                             <p className="text-gray-500">
-                              {selDoc.doctorData?.titulo || ""} · Lic:{" "}
+                              {selDoc.doctorData?.titulo || ""} Â· Lic:{" "}
                               {selDoc.doctorData?.licencia || "--"}
                             </p>
                             <p className="text-gray-500">
@@ -676,7 +677,7 @@ export const Bill = (props) => {
                           </div>
                         )}
                       </div>
-                      {/* Estadísticas de trabajadores por empresa */}
+                      {/* EstadÃ­sticas de trabajadores por empresa */}
                       {billData.companyId &&
                         (() => {
                           const doctorId =
@@ -696,7 +697,7 @@ export const Bill = (props) => {
                           return docPatients.length > 0 ? (
                             <div className="mt-2 bg-white rounded-lg border border-blue-100 p-2">
                               <p className="text-[10px] font-black text-blue-700 mb-1">
-                                📊 Trabajadores atendidos de esta empresa:{" "}
+                                ð Trabajadores atendidos de esta empresa:{" "}
                                 <span className="text-blue-900">
                                   {docPatients.length}
                                 </span>
@@ -724,7 +725,7 @@ export const Bill = (props) => {
                                 }
                                 className="mt-1.5 text-[10px] bg-blue-600 text-white px-3 py-1 rounded-lg font-bold hover:bg-blue-700"
                               >
-                                ↑ Usar {docPatients.length} trabajadores para
+                                â Usar {docPatients.length} trabajadores para
                                 calcular valor
                               </button>
                             </div>
@@ -839,7 +840,7 @@ export const Bill = (props) => {
                     className="text-3xl font-black text-gray-800 uppercase tracking-tight"
                     contentEditable
                     suppressContentEditableWarning
-                    data-placeholder="Título"
+                    data-placeholder="TÃ­tulo"
                   >
                     Cuenta de Cobro
                   </h2>
@@ -876,7 +877,7 @@ export const Bill = (props) => {
                 </div>
                 <div className="text-right flex flex-col justify-center">
                   <p className="text-sm font-bold text-gray-400 uppercase">
-                    Fecha de Emisión
+                    Fecha de EmisiÃ³n
                   </p>
                   <p
                     contentEditable
@@ -905,7 +906,7 @@ export const Bill = (props) => {
                       contentEditable
                       suppressContentEditableWarning
                       className="text-sm font-medium text-gray-800 uppercase leading-relaxed"
-                      data-placeholder="Descripción del servicio prestado..."
+                      data-placeholder="DescripciÃ³n del servicio prestado..."
                     >
                       {billData.concept}
                     </p>
@@ -936,7 +937,7 @@ export const Bill = (props) => {
               <div className="mb-7 grid grid-cols-2 gap-6">
                 <div>
                   <p className="text-xs font-bold text-gray-400 uppercase mb-2 border-b pb-1">
-                    Información de Pago
+                    InformaciÃ³n de Pago
                   </p>
                   <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 text-xs print:bg-transparent">
                     <p
@@ -1038,8 +1039,8 @@ export const Bill = (props) => {
                     suppressContentEditableWarning
                     data-placeholder="Nota legal"
                   >
-                    Me acojo al Art. 383 E.T. Tarifa mínima 0%. No practicar
-                    retención.
+                    Me acojo al Art. 383 E.T. Tarifa mÃ­nima 0%. No practicar
+                    retenciÃ³n.
                   </p>
                 </div>
               </div>
@@ -1047,23 +1048,23 @@ export const Bill = (props) => {
           </div>
           {/* /doc-editable */}
 
-          {/* ─── B-20: PANEL FACTURACIÓN ELECTRÓNICA DIAN ─── */}
+          {/* âââ B-20: PANEL FACTURACIÃN ELECTRÃNICA DIAN âââ */}
           {showDianPanel && (
             <div className="mt-6 bg-white rounded-2xl shadow-lg border-2 border-green-300 no-print overflow-hidden">
               <div className="bg-green-700 px-5 py-3 flex items-center justify-between">
                 <div>
                   <p className="text-white font-black text-sm">
-                    🧾 Facturación Electrónica DIAN
+                    ð§¾ FacturaciÃ³n ElectrÃ³nica DIAN
                   </p>
                   <p className="text-green-200 text-[10px]">
-                    Decreto 358/2020 · Resolución DIAN 000012/2021 · UBL 2.1
+                    Decreto 358/2020 Â· ResoluciÃ³n DIAN 000012/2021 Â· UBL 2.1
                   </p>
                 </div>
                 <button
                   onClick={() => setShowDianPanel(false)}
                   className="text-green-200 hover:text-white font-black text-lg"
                 >
-                  ✕
+                  â
                 </button>
               </div>
               <div className="p-5 space-y-4">
@@ -1073,13 +1074,13 @@ export const Bill = (props) => {
                     {
                       id: "siigo",
                       label: "Siigo",
-                      desc: "Integración API REST",
+                      desc: "IntegraciÃ³n API REST",
                       color: "blue",
                     },
                     {
                       id: "alegra",
                       label: "Alegra",
-                      desc: "Integración API REST",
+                      desc: "IntegraciÃ³n API REST",
                       color: "orange",
                     },
                     {
@@ -1110,7 +1111,7 @@ export const Bill = (props) => {
                 {dianProvider === "siigo" && (
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-3">
                     <p className="text-xs font-black text-blue-800">
-                      Configuración Siigo Nube API
+                      ConfiguraciÃ³n Siigo Nube API
                     </p>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div>
@@ -1133,7 +1134,7 @@ export const Bill = (props) => {
                           onClick={async () => {
                             if (!dianApiKey) {
                               showAlert(
-                                "⚠️ Ingrese su API Key de Siigo primero."
+                                "â ï¸ Ingrese su API Key de Siigo primero."
                               );
                               return;
                             }
@@ -1143,7 +1144,7 @@ export const Bill = (props) => {
                               billData.number || "001"
                             );
                             showAlert(
-                              "⚡ Para integración real con Siigo:\n1. Ingresar al Portal Siigo Nube\n2. Ir a Facturación Electrónica → API\n3. Usar el XML descargado como payload\n\nEl XML UBL 2.1 ya fue generado y está listo para descargar."
+                              "â¡ Para integraciÃ³n real con Siigo:\n1. Ingresar al Portal Siigo Nube\n2. Ir a FacturaciÃ³n ElectrÃ³nica â API\n3. Usar el XML descargado como payload\n\nEl XML UBL 2.1 ya fue generado y estÃ¡ listo para descargar."
                             );
                           }}
                           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-lg"
@@ -1154,17 +1155,17 @@ export const Bill = (props) => {
                     </div>
                     <div className="text-[10px] text-blue-700 space-y-0.5">
                       <p>
-                        📌 Documentación:{" "}
+                        ð DocumentaciÃ³n:{" "}
                         <span className="font-bold">
                           developer.siigo.com/reference
                         </span>
                       </p>
                       <p>
-                        📌 Endpoint: POST /v1/invoices (con autenticación
+                        ð Endpoint: POST /v1/invoices (con autenticaciÃ³n
                         Bearer)
                       </p>
                       <p>
-                        📌 El XML generado cumple con el esquema UBL 2.1
+                        ð El XML generado cumple con el esquema UBL 2.1
                         requerido por DIAN
                       </p>
                     </div>
@@ -1175,7 +1176,7 @@ export const Bill = (props) => {
                 {dianProvider === "alegra" && (
                   <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 space-y-3">
                     <p className="text-xs font-black text-orange-800">
-                      Configuración Alegra API
+                      ConfiguraciÃ³n Alegra API
                     </p>
                     <div>
                       <label className="block text-[10px] font-bold text-gray-600 uppercase mb-1">
@@ -1194,18 +1195,18 @@ export const Bill = (props) => {
                     </div>
                     <div className="text-[10px] text-orange-700 space-y-0.5">
                       <p>
-                        📌 Documentación:{" "}
+                        ð DocumentaciÃ³n:{" "}
                         <span className="font-bold">developer.alegra.com</span>
                       </p>
-                      <p>📌 Endpoint: POST /api/v1/invoices</p>
+                      <p>ð Endpoint: POST /api/v1/invoices</p>
                       <p>
-                        📌 Authorization: Basic {"{"}Base64(user:token){"}"}
+                        ð Authorization: Basic {"{"}Base64(user:token){"}"}
                       </p>
                     </div>
                   </div>
                 )}
 
-                {/* Botón descarga XML UBL 2.1 */}
+                {/* BotÃ³n descarga XML UBL 2.1 */}
                 <div className="flex flex-wrap gap-3 items-center">
                   <button
                     onClick={() => {
@@ -1229,7 +1230,7 @@ export const Bill = (props) => {
                         a.click();
                         URL.revokeObjectURL(url);
                         showAlert(
-                          "✅ XML UBL 2.1 descargado. Cárguelo en su software de facturación autorizado por DIAN."
+                          "â XML UBL 2.1 descargado. CÃ¡rguelo en su software de facturaciÃ³n autorizado por DIAN."
                         );
                       } catch (e) {
                         showAlert("Error: " + e.message);
@@ -1237,7 +1238,7 @@ export const Bill = (props) => {
                     }}
                     className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-black text-sm rounded-xl flex items-center gap-2"
                   >
-                    ⬇ Descargar XML UBL 2.1
+                    â¬ Descargar XML UBL 2.1
                   </button>
                   <button
                     onClick={() => {
@@ -1249,35 +1250,35 @@ export const Bill = (props) => {
                       navigator.clipboard
                         ?.writeText(xml)
                         .then(() =>
-                          showAlert("✅ XML copiado al portapapeles.")
+                          showAlert("â XML copiado al portapapeles.")
                         )
-                        .catch(() => showAlert("Use el botón Descargar."));
+                        .catch(() => showAlert("Use el botÃ³n Descargar."));
                     }}
                     className="px-5 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-bold text-sm rounded-xl"
                   >
-                    📋 Copiar XML
+                    ð Copiar XML
                   </button>
                 </div>
 
                 {/* Nota legal */}
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-[10px] text-amber-800 space-y-1">
                   <p className="font-black">
-                    ⚖️ Marco normativo Decreto 358 de 2020
+                    âï¸ Marco normativo Decreto 358 de 2020
                   </p>
                   <p>
-                    Los profesionales de salud que presten servicios médicos y
-                    facturen más de 3.500 UVT al año están obligados a expedir
-                    factura electrónica de venta ante la DIAN. Los servicios
-                    médicos ocupacionales están <strong>exentos de IVA</strong>{" "}
+                    Los profesionales de salud que presten servicios mÃ©dicos y
+                    facturen mÃ¡s de 3.500 UVT al aÃ±o estÃ¡n obligados a expedir
+                    factura electrÃ³nica de venta ante la DIAN. Los servicios
+                    mÃ©dicos ocupacionales estÃ¡n <strong>exentos de IVA</strong>{" "}
                     (Art. 476 E.T. num. 1). El CUFE es generado por el software
-                    autorizado; el XML aquí generado es el insumo base.
+                    autorizado; el XML aquÃ­ generado es el insumo base.
                   </p>
                   <p>
-                    Obligatorio inscribirse como facturador electrónico en el{" "}
+                    Obligatorio inscribirse como facturador electrÃ³nico en el{" "}
                     <span className="font-bold">
-                      Portal DIAN → Factura Electrónica → Habilitación
+                      Portal DIAN â Factura ElectrÃ³nica â HabilitaciÃ³n
                     </span>{" "}
-                    antes de emitir facturas electrónicas.
+                    antes de emitir facturas electrÃ³nicas.
                   </p>
                 </div>
               </div>

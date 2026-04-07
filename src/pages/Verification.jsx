@@ -1,9 +1,10 @@
 import React from 'react';
+import { DoctorSignature, BrandLogo } from '../components/ui/DoctorSignature.jsx';
 import {
   FileSearch, Lock, LogOut, Printer, Search
 } from "lucide-react";
 
-// ─── Verification Page Component ─────────────────────────────────────────────
+// âââ Verification Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const Verification = (props) => {
   const {
@@ -418,10 +419,10 @@ export const Verification = (props) => {
     const search = () => {
       const q = code.trim();
       if (!q) {
-        showAlert("Ingrese un código de verificación o número de documento.");
+        showAlert("Ingrese un cÃ³digo de verificaciÃ³n o nÃºmero de documento.");
         return;
       }
-      // Verificación pública: busca en TODOS los pacientes sin importar médico ni rol
+      // VerificaciÃ³n pÃºblica: busca en TODOS los pacientes sin importar mÃ©dico ni rol
       // Cualquier perfil puede verificar un certificado cerrado
       const allPats = patientsList; // ya contiene todos los registros del usuario/sistema
       const byCode = allPats.find(
@@ -443,7 +444,7 @@ export const Verification = (props) => {
         setFound({ _multiple: byDoc });
       } else {
         showAlert(
-          "No se encontró ningún certificado cerrado con ese código o documento."
+          "No se encontrÃ³ ningÃºn certificado cerrado con ese cÃ³digo o documento."
         );
       }
     };
@@ -453,7 +454,7 @@ export const Verification = (props) => {
           <div className="bg-white shadow rounded-2xl p-6 mb-6 no-print">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-black text-indigo-900 flex items-center gap-2">
-                <FileSearch className="w-5 h-5" /> Validación de Certificados
+                <FileSearch className="w-5 h-5" /> ValidaciÃ³n de Certificados
               </h2>
               <button
                 onClick={() => goBack()}
@@ -464,8 +465,8 @@ export const Verification = (props) => {
             </div>
             <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
               <p className="text-xs text-indigo-600 font-bold mb-2">
-                Buscar por código de verificación{" "}
-                <span className="font-normal">o</span> número de documento del
+                Buscar por cÃ³digo de verificaciÃ³n{" "}
+                <span className="font-normal">o</span> nÃºmero de documento del
                 paciente:
               </p>
               <div className="flex gap-3">
@@ -474,7 +475,7 @@ export const Verification = (props) => {
                   onChange={(e) => setCode(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && search()}
                   className="flex-1 p-2.5 border border-indigo-300 rounded-xl font-mono text-lg tracking-wider focus:ring-2 focus:ring-indigo-400 outline-none"
-                  placeholder="Código de verificación Ej: CV-X9Y8Z7"
+                  placeholder="CÃ³digo de verificaciÃ³n Ej: CV-X9Y8Z7"
                 />
                 <button
                   onClick={search}
@@ -489,7 +490,7 @@ export const Verification = (props) => {
           {found?._multiple && (
             <div className="bg-white shadow rounded-2xl p-4 mb-4">
               <p className="text-sm font-black text-gray-700 mb-3">
-                📋 Se encontraron {found._multiple.length} certificados para ese
+                ð Se encontraron {found._multiple.length} certificados para ese
                 documento. Seleccione:
               </p>
               <div className="space-y-2">
@@ -503,7 +504,7 @@ export const Verification = (props) => {
                       {p.nombres}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {p.fechaExamen} · {p.conceptoAptitud || "-"} · Código:{" "}
+                      {p.fechaExamen} Â· {p.conceptoAptitud || "-"} Â· CÃ³digo:{" "}
                       {p.codigoVerificacion}
                     </p>
                   </button>
@@ -582,10 +583,10 @@ export const Verification = (props) => {
                   </div>
                   <div>
                     <p className="text-xs font-black text-emerald-800">
-                      Historia Clínica Firmada y Cerrada
+                      Historia ClÃ­nica Firmada y Cerrada
                     </p>
                     <p className="text-[10px] text-emerald-600">
-                      Código de verificación:{" "}
+                      CÃ³digo de verificaciÃ³n:{" "}
                       <span className="font-mono font-bold">
                         {found.codigoVerificacion || "--"}
                       </span>

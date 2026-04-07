@@ -1,6 +1,7 @@
 import React from 'react';
+import { DEFAULT_DOCTOR_DATA } from '../data/initialState.js';
 
-// ─── PortalEmpresa Page Component ─────────────────────────────────────────────
+// âââ PortalEmpresa Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const PortalEmpresa = (props) => {
   const {
@@ -421,7 +422,7 @@ export const PortalEmpresa = (props) => {
 
     const buscarEmpresa = () => {
       if (!codigoEmpresa.trim()) {
-        showAlert("Ingrese el NIT o código de acceso de su empresa.");
+        showAlert("Ingrese el NIT o cÃ³digo de acceso de su empresa.");
         return;
       }
       setBuscando(true);
@@ -436,14 +437,14 @@ export const PortalEmpresa = (props) => {
       );
       if (!emp) {
         showAlert(
-          "No se encontró empresa con ese código. Contacte al médico para obtener el código de acceso."
+          "No se encontrÃ³ empresa con ese cÃ³digo. Contacte al mÃ©dico para obtener el cÃ³digo de acceso."
         );
         setBuscando(false);
         return;
       }
       if (!emp.portalActivo) {
         showAlert(
-          "El portal cliente no está habilitado para esta empresa. Contacte al médico para activarlo."
+          "El portal cliente no estÃ¡ habilitado para esta empresa. Contacte al mÃ©dico para activarlo."
         );
         setBuscando(false);
         return;
@@ -474,7 +475,7 @@ export const PortalEmpresa = (props) => {
         {/* Header */}
         <div className="bg-white/10 backdrop-blur px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">🏢</span>
+            <span className="text-2xl">ð¢</span>
             <div>
               <p className="text-white font-black text-sm">Portal Empresa</p>
               <p className="text-blue-200 text-[10px]">
@@ -493,14 +494,14 @@ export const PortalEmpresa = (props) => {
                 }}
                 className="px-3 py-1.5 bg-white/20 text-white text-xs font-black rounded-lg hover:bg-white/30"
               >
-                🔄 Otra empresa
+                ð Otra empresa
               </button>
             )}
             <button
               onClick={() => goBack()}
               className="px-3 py-1.5 bg-white/20 text-white text-xs font-black rounded-lg hover:bg-white/30"
             >
-              ← Salir
+              â Salir
             </button>
           </div>
         </div>
@@ -509,19 +510,19 @@ export const PortalEmpresa = (props) => {
           {!empresaEncontrada ? (
             /* LOGIN */
             <div className="bg-white rounded-2xl shadow-2xl p-8 mt-8 max-w-md mx-auto text-center">
-              <p className="text-4xl mb-3">🔐</p>
+              <p className="text-4xl mb-3">ð</p>
               <h2 className="font-black text-gray-800 text-xl mb-1">
                 Acceso Portal Empresa
               </h2>
               <p className="text-xs text-gray-500 mb-6">
-                Ingrese el NIT de su empresa o el código de acceso proporcionado
-                por su médico ocupacional.
+                Ingrese el NIT de su empresa o el cÃ³digo de acceso proporcionado
+                por su mÃ©dico ocupacional.
               </p>
               <input
                 value={codigoEmpresa}
                 onChange={(e) => setCodigoEmpresa(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && buscarEmpresa()}
-                placeholder="NIT o código de acceso..."
+                placeholder="NIT o cÃ³digo de acceso..."
                 className="w-full p-3 border-2 border-blue-200 rounded-xl text-sm mb-4 focus:border-blue-500 focus:outline-none"
               />
               <button
@@ -529,16 +530,16 @@ export const PortalEmpresa = (props) => {
                 disabled={buscando}
                 className="w-full py-3 bg-blue-700 hover:bg-blue-800 text-white font-black rounded-xl text-sm disabled:opacity-60"
               >
-                {buscando ? "⏳ Buscando..." : "🔍 Acceder al portal"}
+                {buscando ? "â³ Buscando..." : "ð Acceder al portal"}
               </button>
               <p className="text-[10px] text-gray-400 mt-4">
-                ⚠️ Los diagnósticos clínicos son confidenciales y NO están
+                â ï¸ Los diagnÃ³sticos clÃ­nicos son confidenciales y NO estÃ¡n
                 disponibles en este portal (Art. 16 Res. 1843/2025)
               </p>
               {/* FASE 2: Login Admin de Empresa */}
               <div className="mt-6 pt-5 border-t border-gray-200">
                 <p className="text-xs text-gray-400 mb-3 font-bold">
-                  ━━ O ingresar como administrador de empresa ━━
+                  ââ O ingresar como administrador de empresa ââ
                 </p>
                 <input
                   value={portalAdminLoginUser}
@@ -575,12 +576,12 @@ export const PortalEmpresa = (props) => {
                           setPortalEmpresaAdmin(empAdmin);
                           setPortalAdminTab("medicos");
                         } else {
-                          showAlert("Contraseña incorrecta.");
+                          showAlert("ContraseÃ±a incorrecta.");
                         }
                       });
                     }
                   }}
-                  placeholder="Contraseña"
+                  placeholder="ContraseÃ±a"
                   className="w-full p-2.5 border border-purple-200 rounded-xl text-sm mb-3 focus:border-purple-500 focus:outline-none"
                 />
                 <button
@@ -609,13 +610,13 @@ export const PortalEmpresa = (props) => {
                         setPortalEmpresaAdmin(empAdmin);
                         setPortalAdminTab("medicos");
                       } else {
-                        showAlert("Contraseña incorrecta.");
+                        showAlert("ContraseÃ±a incorrecta.");
                       }
                     });
                   }}
                   className="w-full py-2.5 bg-purple-700 hover:bg-purple-800 text-white font-black rounded-xl text-sm"
                 >
-                  🔐 Entrar como Administrador
+                  ð Entrar como Administrador
                 </button>
               </div>
             </div>
@@ -629,7 +630,7 @@ export const PortalEmpresa = (props) => {
                     {empresaEncontrada.nombre}
                   </p>
                   <p className="text-purple-200 text-xs">
-                    🔐 Panel de Administración · NIT: {empresaEncontrada.nit}
+                    ð Panel de AdministraciÃ³n Â· NIT: {empresaEncontrada.nit}
                   </p>
                 </div>
                 <button
@@ -642,17 +643,17 @@ export const PortalEmpresa = (props) => {
                   }}
                   className="px-3 py-1.5 bg-white/20 text-white text-xs font-black rounded-lg hover:bg-white/30"
                 >
-                  🚪 Cerrar sesión
+                  ðª Cerrar sesiÃ³n
                 </button>
               </div>
               {/* Tabs admin */}
               <div className="flex gap-1 bg-white rounded-xl p-1 shadow-sm border border-purple-100 overflow-x-auto">
                 {[
-                  { k: "medicos", l: "👨‍⚕️ Mis Médicos" },
-                  { k: "secretarias", l: "🗂️ Secretarias" },
-                  { k: "trabajadores", l: "📋 Trabajadores" },
-                  { k: "cuentas", l: "📄 Cuentas" },
-                  { k: "sedes", l: "🏢 Sedes" },
+                  { k: "medicos", l: "ð¨ââï¸ Mis MÃ©dicos" },
+                  { k: "secretarias", l: "ðï¸ Secretarias" },
+                  { k: "trabajadores", l: "ð Trabajadores" },
+                  { k: "cuentas", l: "ð Cuentas" },
+                  { k: "sedes", l: "ð¢ Sedes" },
                 ].map((t) => (
                   <button
                     key={t.k}
@@ -667,15 +668,15 @@ export const PortalEmpresa = (props) => {
                   </button>
                 ))}
               </div>
-              {/* Tab: Médicos */}
+              {/* Tab: MÃ©dicos */}
               {portalAdminTab === "medicos" && (
                 <div className="bg-white rounded-2xl p-4 shadow-sm">
                   <div className="flex justify-between items-center mb-3">
                     <p className="font-black text-gray-800">
-                      👨‍⚕️ Médicos de {empresaEncontrada.nombre}
+                      ð¨ââï¸ MÃ©dicos de {empresaEncontrada.nombre}
                     </p>
                   </div>
-                  {/* Lista médicos existentes */}
+                  {/* Lista mÃ©dicos existentes */}
                   <div className="space-y-2 mb-4">
                     {usersList
                       .filter(
@@ -696,14 +697,14 @@ export const PortalEmpresa = (props) => {
                               {m.name || m.user}
                             </p>
                             <p className="text-[10px] text-gray-500">
-                              @{m.user} ·{" "}
+                              @{m.user} Â·{" "}
                               {m.empresaId === empresaEncontrada.id
-                                ? "Médico exclusivo"
-                                : "Médico asignado"}
+                                ? "MÃ©dico exclusivo"
+                                : "MÃ©dico asignado"}
                             </p>
                           </div>
                           <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">
-                            Médico
+                            MÃ©dico
                           </span>
                         </div>
                       ))}
@@ -714,14 +715,14 @@ export const PortalEmpresa = (props) => {
                           (empresaEncontrada.medicoIds || []).includes(u.user))
                     ).length === 0 && (
                       <p className="text-sm text-gray-400 text-center py-4">
-                        Sin médicos asignados aún.
+                        Sin mÃ©dicos asignados aÃºn.
                       </p>
                     )}
                   </div>
-                  {/* Formulario nuevo médico */}
+                  {/* Formulario nuevo mÃ©dico */}
                   <div className="border-t border-gray-100 pt-3">
                     <p className="text-xs font-black text-purple-700 mb-2">
-                      ➕ Crear nuevo médico para esta empresa
+                      â Crear nuevo mÃ©dico para esta empresa
                     </p>
                     <div className="grid grid-cols-2 gap-2 mb-2">
                       <input
@@ -755,7 +756,7 @@ export const PortalEmpresa = (props) => {
                             pass: e.target.value,
                           }))
                         }
-                        placeholder="Contraseña temporal"
+                        placeholder="ContraseÃ±a temporal"
                         className="border rounded-lg p-2 text-xs"
                       />
                       <select
@@ -768,7 +769,7 @@ export const PortalEmpresa = (props) => {
                         }
                         className="border rounded-lg p-2 text-xs"
                       >
-                        <option value="medico">Médico</option>
+                        <option value="medico">MÃ©dico</option>
                         <option value="secretaria">Secretaria</option>
                       </select>
                     </div>
@@ -779,7 +780,7 @@ export const PortalEmpresa = (props) => {
                           !nuevoMedicoEmpForm.user ||
                           !nuevoMedicoEmpForm.pass
                         ) {
-                          showAlert("Complete nombre, usuario y contraseña.");
+                          showAlert("Complete nombre, usuario y contraseÃ±a.");
                           return;
                         }
                         if (
@@ -836,27 +837,27 @@ export const PortalEmpresa = (props) => {
                           rol: "medico",
                         });
                         showAlert(
-                          `✅ ${
+                          `â ${
                             nuevoMedicoEmpForm.rol === "medico"
-                              ? "Médico"
+                              ? "MÃ©dico"
                               : "Secretaria"
                           } "${
                             nuevoMedicoEmpForm.nombre
-                          }" creado. Debe cambiar contraseña en primer acceso.`
+                          }" creado. Debe cambiar contraseÃ±a en primer acceso.`
                         );
                       }}
                       className="w-full bg-purple-700 text-white py-2 rounded-xl text-xs font-black hover:bg-purple-800"
                     >
-                      ✅ Crear perfil
+                      â Crear perfil
                     </button>
                   </div>
                 </div>
               )}
-              {/* Tab: Secretarias — misma lógica que médicos pero filtro por rol */}
+              {/* Tab: Secretarias â misma lÃ³gica que mÃ©dicos pero filtro por rol */}
               {portalAdminTab === "secretarias" && (
                 <div className="bg-white rounded-2xl p-4 shadow-sm">
                   <p className="font-black text-gray-800 mb-3">
-                    🗂️ Secretarias de {empresaEncontrada.nombre}
+                    ðï¸ Secretarias de {empresaEncontrada.nombre}
                   </p>
                   <div className="space-y-2 mb-4">
                     {usersList
@@ -895,7 +896,7 @@ export const PortalEmpresa = (props) => {
                   </div>
                   <div className="border-t pt-3">
                     <p className="text-xs font-black text-purple-700 mb-2">
-                      ➕ Crear nueva secretaria
+                      â Crear nueva secretaria
                     </p>
                     <div className="grid grid-cols-2 gap-2 mb-2">
                       <input
@@ -929,7 +930,7 @@ export const PortalEmpresa = (props) => {
                             pass: e.target.value,
                           }))
                         }
-                        placeholder="Contraseña temporal"
+                        placeholder="ContraseÃ±a temporal"
                         className="border rounded-lg p-2 text-xs col-span-2"
                       />
                     </div>
@@ -982,12 +983,12 @@ export const PortalEmpresa = (props) => {
                           rol: "medico",
                         });
                         showAlert(
-                          `✅ Secretaria "${nuevoMedicoEmpForm.nombre}" creada.`
+                          `â Secretaria "${nuevoMedicoEmpForm.nombre}" creada.`
                         );
                       }}
                       className="w-full bg-amber-600 text-white py-2 rounded-xl text-xs font-black hover:bg-amber-700"
                     >
-                      ✅ Crear secretaria
+                      â Crear secretaria
                     </button>
                   </div>
                 </div>
@@ -996,7 +997,7 @@ export const PortalEmpresa = (props) => {
               {portalAdminTab === "trabajadores" && (
                 <div className="bg-white rounded-2xl p-4 shadow-sm overflow-x-auto">
                   <p className="font-black text-gray-800 mb-3">
-                    📋 Trabajadores de {empresaEncontrada.nombre} (
+                    ð Trabajadores de {empresaEncontrada.nombre} (
                     {pacientesEmpresa.length} evaluados)
                   </p>
                   <table className="w-full text-xs">
@@ -1004,10 +1005,10 @@ export const PortalEmpresa = (props) => {
                       <tr className="bg-gray-50">
                         {[
                           "Nombre",
-                          "Cédula",
+                          "CÃ©dula",
                           "Cargo",
                           "Concepto",
-                          "Médico",
+                          "MÃ©dico",
                         ].map((h) => (
                           <th
                             key={h}
@@ -1060,7 +1061,7 @@ export const PortalEmpresa = (props) => {
               {portalAdminTab === "cuentas" && (
                 <div className="bg-white rounded-2xl p-4 shadow-sm">
                   <p className="font-black text-gray-800 mb-3">
-                    📄 Cuentas de {empresaEncontrada.nombre}
+                    ð Cuentas de {empresaEncontrada.nombre}
                   </p>
                   <div className="space-y-2">
                     {cuentasEmpresa.length === 0 && (
@@ -1094,7 +1095,7 @@ export const PortalEmpresa = (props) => {
                               b.pagada ? "text-green-600" : "text-red-600"
                             }`}
                           >
-                            {b.pagada ? "✅ Pagada" : "⏳ Pendiente"}
+                            {b.pagada ? "â Pagada" : "â³ Pendiente"}
                           </span>
                         </div>
                       </div>
@@ -1106,12 +1107,12 @@ export const PortalEmpresa = (props) => {
               {portalAdminTab === "sedes" && (
                 <div className="bg-white rounded-2xl p-4 shadow-sm">
                   <p className="font-black text-gray-800 mb-3">
-                    🏢 Sedes de {empresaEncontrada.nombre}
+                    ð¢ Sedes de {empresaEncontrada.nombre}
                   </p>
                   {(empresaEncontrada.sedes || []).length === 0 && (
                     <p className="text-gray-400 text-sm text-center py-4">
                       Sin sedes registradas. El administrador principal puede
-                      agregar sedes desde el módulo de empresas.
+                      agregar sedes desde el mÃ³dulo de empresas.
                     </p>
                   )}
                   <div className="grid gap-3">
@@ -1123,7 +1124,7 @@ export const PortalEmpresa = (props) => {
                         <p className="font-black text-blue-800">{s.nombre}</p>
                         <p className="text-xs text-blue-600">
                           {s.ciudad}
-                          {s.direccion && ` · ${s.direccion}`}
+                          {s.direccion && ` Â· ${s.direccion}`}
                         </p>
                       </div>
                     ))}
@@ -1143,7 +1144,7 @@ export const PortalEmpresa = (props) => {
                     NIT: {empresaEncontrada.nit}
                     {empresaEncontrada.dv
                       ? `-${empresaEncontrada.dv}`
-                      : ""} · {empresaEncontrada.ciudad}
+                      : ""} Â· {empresaEncontrada.ciudad}
                   </p>
                 </div>
                 <div className="text-right">
@@ -1189,7 +1190,7 @@ export const PortalEmpresa = (props) => {
                             .includes("restriccion") ||
                           p.conceptoAptitud
                             ?.toLowerCase()
-                            .includes("restricción")
+                            .includes("restricciÃ³n")
                       ).length
                     }
                   </p>
@@ -1199,9 +1200,9 @@ export const PortalEmpresa = (props) => {
               {/* Tabs */}
               <div className="flex gap-1 bg-white rounded-xl p-1 shadow-sm">
                 {[
-                  { k: "trabajadores", l: "👥 Trabajadores" },
-                  { k: "cuentas", l: "💳 Cuentas" },
-                  { k: "noAptos", l: "⛔ No Aptos / Restricciones" },
+                  { k: "trabajadores", l: "ð¥ Trabajadores" },
+                  { k: "cuentas", l: "ð³ Cuentas" },
+                  { k: "noAptos", l: "â No Aptos / Restricciones" },
                 ].map((t) => (
                   <button
                     key={t.k}
@@ -1225,15 +1226,15 @@ export const PortalEmpresa = (props) => {
                       Trabajadores evaluados - Certificados de aptitud
                     </p>
                     <p className="text-[10px] text-gray-400">
-                      Los diagnósticos clínicos no se muestran en cumplimiento
+                      Los diagnÃ³sticos clÃ­nicos no se muestran en cumplimiento
                       de la Res. 1843/2025 Art. 16
                     </p>
-                    {/* Filtro por cédula / nombre */}
+                    {/* Filtro por cÃ©dula / nombre */}
                     <div className="mt-2 flex gap-2">
                       <input
                         value={portalEmpresaFiltroDoc}
                         onChange={(e) => setPortalEmpresaFiltroDoc(e.target.value)}
-                        placeholder="🔍 Filtrar por cédula o nombre del trabajador..."
+                        placeholder="ð Filtrar por cÃ©dula o nombre del trabajador..."
                         className="flex-1 px-3 py-1.5 border border-blue-200 rounded-lg text-xs focus:border-blue-500 focus:outline-none"
                         maxLength={30}
                       />
@@ -1242,7 +1243,7 @@ export const PortalEmpresa = (props) => {
                           onClick={() => setPortalEmpresaFiltroDoc("")}
                           className="px-2 py-1 text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg font-bold"
                         >
-                          ✕ Limpiar
+                          â Limpiar
                         </button>
                       )}
                     </div>
@@ -1261,7 +1262,7 @@ export const PortalEmpresa = (props) => {
                       <tr>
                         {[
                           "Nombre",
-                          "Cédula",
+                          "CÃ©dula",
                           "Cargo",
                           "Fecha Examen",
                           "Tipo",
@@ -1364,7 +1365,7 @@ export const PortalEmpresa = (props) => {
                     <table className="w-full text-xs">
                       <thead className="bg-gray-800 text-white">
                         <tr>
-                          {["Fecha", "Descripción", "Monto", "Estado"].map(
+                          {["Fecha", "DescripciÃ³n", "Monto", "Estado"].map(
                             (h) => (
                               <th key={h} className="p-2 text-left font-black">
                                 {h}
@@ -1385,7 +1386,7 @@ export const PortalEmpresa = (props) => {
                             <td className="p-2">
                               {b.description ||
                                 b.concepto ||
-                                "Servicio médico ocupacional"}
+                                "Servicio mÃ©dico ocupacional"}
                             </td>
                             <td className="p-2 font-black">
                               $ {Number(b.amount || 0).toLocaleString("es-CO")}
@@ -1399,8 +1400,8 @@ export const PortalEmpresa = (props) => {
                                 }`}
                               >
                                 {b.pagada
-                                  ? `✅ Pagada ${b.fechaPago || ""}`
-                                  : "⏳ Pendiente"}
+                                  ? `â Pagada ${b.fechaPago || ""}`
+                                  : "â³ Pendiente"}
                               </span>
                             </td>
                           </tr>
@@ -1425,7 +1426,7 @@ export const PortalEmpresa = (props) => {
                       !p.conceptoAptitud.toUpperCase().includes("APTO SIN")
                   ).length === 0 ? (
                     <p className="p-8 text-center text-emerald-600 font-bold text-sm">
-                      ✅ Todos los trabajadores evaluados están aptos sin
+                      â Todos los trabajadores evaluados estÃ¡n aptos sin
                       restricciones.
                     </p>
                   ) : (
@@ -1485,7 +1486,7 @@ export const PortalEmpresa = (props) => {
           )}
         </div>
         <div className="text-center py-4 text-blue-300 text-[10px]">
-          SISO OcupaSalud · Portal confidencial · Art. 16 Res. 1843/2025
+          SISO OcupaSalud Â· Portal confidencial Â· Art. 16 Res. 1843/2025
         </div>
       </div>
     );

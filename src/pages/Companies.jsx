@@ -1,9 +1,11 @@
 import React from 'react';
+import { initialCompanyState } from '../data/initialState.js';
+import { ARL_LIST } from '../data/dropdowns.js';
 import {
   LogOut
 } from "lucide-react";
 
-// ─── Companies Page Component ─────────────────────────────────────────────
+// âââ Companies Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const Companies = (props) => {
   const {
@@ -420,9 +422,9 @@ export const Companies = (props) => {
           {renderNavbar()}
           <div className="max-w-xl mx-auto px-4 py-16 text-center">
             <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-8 space-y-3">
-              <div className="text-5xl">🔐</div>
+              <div className="text-5xl">ð</div>
               <p className="font-black text-amber-800 text-xl">
-                Módulo restringido
+                MÃ³dulo restringido
               </p>
               <p className="text-amber-600 text-xs leading-relaxed">
                 Solicita que el administrador habilite el permiso "Empresas" en
@@ -432,13 +434,13 @@ export const Companies = (props) => {
                 onClick={() => goBack()}
                 className="mt-3 bg-amber-600 text-white px-5 py-2 rounded-lg text-sm font-bold"
               >
-                ← Volver
+                â Volver
               </button>
             </div>
           </div>
         </div>
       );
-    // Calcular alertas de convenios próximos a vencer
+    // Calcular alertas de convenios prÃ³ximos a vencer
     const hoy = new Date();
     const en30 = new Date(hoy);
     en30.setDate(en30.getDate() + 30);
@@ -470,18 +472,18 @@ export const Companies = (props) => {
               <LogOut className="rotate-180 w-4 h-4" /> Volver
             </button>
           </div>
-          {/* Alerta convenios próximos a vencer */}
+          {/* Alerta convenios prÃ³ximos a vencer */}
           {conveniosAlerta.length > 0 && (
             <div className="bg-amber-50 border border-amber-300 rounded-xl p-3 mb-4 flex items-center gap-3">
-              <span className="text-2xl">⚠️</span>
+              <span className="text-2xl">â ï¸</span>
               <div>
                 <p className="text-xs font-black text-amber-800">
-                  {conveniosAlerta.length} convenio(s) próximo(s) a vencer:
+                  {conveniosAlerta.length} convenio(s) prÃ³ximo(s) a vencer:
                 </p>
                 <p className="text-[10px] text-amber-700">
                   {conveniosAlerta
                     .map((c) => `${c.nombre} (${c.convenioVencimiento})`)
-                    .join(" · ")}
+                    .join(" Â· ")}
                 </p>
               </div>
             </div>
@@ -489,9 +491,9 @@ export const Companies = (props) => {
           {/* Tabs */}
           <div className="flex gap-1 mb-4 bg-white rounded-xl p-1 shadow-sm border border-gray-100">
             {[
-              { k: "lista", l: "🏢 Empresas" },
-              { k: "nueva", l: "➕ Nueva Empresa" },
-              { k: "convenios", l: "🤝 Convenios" },
+              { k: "lista", l: "ð¢ Empresas" },
+              { k: "nueva", l: "â Nueva Empresa" },
+              { k: "convenios", l: "ð¤ Convenios" },
             ].map((t) => (
               <button
                 key={t.k}
@@ -512,7 +514,7 @@ export const Companies = (props) => {
             <div className="space-y-3">
               {companies.length === 0 && (
                 <div className="bg-white rounded-2xl p-8 text-center text-gray-400 text-sm">
-                  Sin empresas registradas. Use ➕ Nueva Empresa.
+                  Sin empresas registradas. Use â Nueva Empresa.
                 </div>
               )}
               {companies.map((c, i) => {
@@ -545,14 +547,14 @@ export const Companies = (props) => {
                         </p>
                         <p className="text-[10px] text-gray-500">
                           NIT: {c.nit}
-                          {c.dv ? `-${c.dv}` : ""} · {c.ciudad} ·{" "}
+                          {c.dv ? `-${c.dv}` : ""} Â· {c.ciudad} Â·{" "}
                           {c.actividad?.slice(0, 40)}
                         </p>
-                        {/* FASE 2: multi-médico badges */}
+                        {/* FASE 2: multi-mÃ©dico badges */}
                         <div className="flex flex-wrap gap-1 mt-0.5">
                           {medResp && (
                             <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">
-                              👨‍⚕️ {medResp.name} ⭐
+                              ð¨ââï¸ {medResp.name} â­
                             </span>
                           )}
                           {(c.medicoIds || [])
@@ -565,7 +567,7 @@ export const Companies = (props) => {
                                   key={id}
                                   className="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-bold"
                                 >
-                                  👨‍⚕️ {m.name || m.user}
+                                  ð¨ââï¸ {m.name || m.user}
                                 </span>
                               ) : null;
                             })}
@@ -577,12 +579,12 @@ export const Companies = (props) => {
                               {(c.medicoIds || []).filter(
                                 (id) => id !== c.medicoResponsableId
                               ).length - 2}{" "}
-                              más
+                              mÃ¡s
                             </span>
                           )}
                           {(c.sedes || []).length > 0 && (
                             <span className="text-[10px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full font-bold">
-                              🏢 {(c.sedes || []).length} sede(s)
+                              ð¢ {(c.sedes || []).length} sede(s)
                             </span>
                           )}
                         </div>
@@ -590,12 +592,12 @@ export const Companies = (props) => {
                       <div className="flex items-center gap-2">
                         {vencido && (
                           <span className="text-[10px] px-2 py-0.5 bg-red-100 text-red-700 rounded-full font-black">
-                            ⛔ Convenio vencido
+                            â Convenio vencido
                           </span>
                         )}
                         {venceProx && !vencido && (
                           <span className="text-[10px] px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-black">
-                            ⚠️ Vence pronto
+                            â ï¸ Vence pronto
                           </span>
                         )}
                         <span className="text-[10px] text-gray-500">
@@ -605,11 +607,11 @@ export const Companies = (props) => {
                           onClick={() => setEditingCompany(c)}
                           className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-[10px] font-black hover:bg-blue-200"
                         >
-                          ✏️ Editar
+                          âï¸ Editar
                         </button>
                         <button
                           onClick={() =>
-                            showConfirm("¿Eliminar empresa?", () => {
+                            showConfirm("Â¿Eliminar empresa?", () => {
                               const upd = companies.filter(
                                 (x) => x.id !== c.id
                               );
@@ -619,11 +621,11 @@ export const Companies = (props) => {
                           }
                           className="px-2 py-1 bg-red-100 text-red-600 rounded-lg text-[10px] font-black hover:bg-red-200"
                         >
-                          🗑️
+                          ðï¸
                         </button>
                       </div>
                     </div>
-                    {/* Tarifas rápidas */}
+                    {/* Tarifas rÃ¡pidas */}
                     {(c.tarifaIngreso ||
                       c.tarifaPeriodico ||
                       c.tarifaConsulta) && (
@@ -636,7 +638,7 @@ export const Companies = (props) => {
                         )}
                         {c.tarifaPeriodico && (
                           <span className="text-[10px] bg-blue-50 border border-blue-200 text-blue-700 px-2 py-0.5 rounded-full font-bold">
-                            Periódico: $
+                            PeriÃ³dico: $
                             {Number(c.tarifaPeriodico).toLocaleString("es-CO")}
                           </span>
                         )}
@@ -664,7 +666,7 @@ export const Companies = (props) => {
                       {c.portalActivo && c.portalCode ? (
                         <>
                           <span className="text-[10px] bg-indigo-100 border border-indigo-300 text-indigo-700 px-2 py-0.5 rounded-full font-black">
-                            🌐 Portal ACTIVO
+                            ð Portal ACTIVO
                           </span>
                           <span className="text-[10px] font-mono font-black text-indigo-800 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full">
                             {c.portalCode}
@@ -676,29 +678,29 @@ export const Companies = (props) => {
                                   .writeText(c.portalCode)
                                   .then(() =>
                                     showAlert(
-                                      "✅ Código " + c.portalCode + " copiado."
+                                      "â CÃ³digo " + c.portalCode + " copiado."
                                     )
                                   );
-                              } else showAlert("Código: " + c.portalCode);
+                              } else showAlert("CÃ³digo: " + c.portalCode);
                             }}
                             className="text-[10px] bg-white border border-indigo-200 text-indigo-600 px-2 py-0.5 rounded-full font-bold hover:bg-indigo-50"
                           >
-                            📋 Copiar código
+                            ð Copiar cÃ³digo
                           </button>
                           <button
                             onClick={() => setPortalActivadoInfo(c)}
                             className="text-[10px] bg-white border border-indigo-200 text-indigo-600 px-2 py-0.5 rounded-full font-bold hover:bg-indigo-50"
                           >
-                            📨 Ver instrucciones
+                            ð¨ Ver instrucciones
                           </button>
                         </>
                       ) : c.portalActivo ? (
                         <span className="text-[10px] bg-amber-100 border border-amber-300 text-amber-700 px-2 py-0.5 rounded-full font-black">
-                          🔑 Portal activo - sin código (editar para generar)
+                          ð Portal activo - sin cÃ³digo (editar para generar)
                         </span>
                       ) : (
                         <span className="text-[10px] bg-gray-100 border border-gray-200 text-gray-500 px-2 py-0.5 rounded-full font-bold">
-                          🔒 Portal desactivado
+                          ð Portal desactivado
                         </span>
                       )}
                     </div>
@@ -712,11 +714,11 @@ export const Companies = (props) => {
           {companiesTab === "nueva" && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
               <p className="text-xs font-black text-gray-700 uppercase mb-4">
-                📋 Datos de la empresa
+                ð Datos de la empresa
               </p>
               <div className="flex flex-wrap -mx-1.5">
                 <InputGroup
-                  label="Razón Social *"
+                  label="RazÃ³n Social *"
                   name="nombre"
                   value={newComp.nombre}
                   onChange={(e) =>
@@ -753,7 +755,7 @@ export const Companies = (props) => {
                   width="w-1/4"
                 />
                 <InputGroup
-                  label="Actividad Económica"
+                  label="Actividad EconÃ³mica"
                   value={newComp.actividad}
                   onChange={(e) =>
                     setNewComp((p) => ({ ...p, actividad: e.target.value }))
@@ -769,7 +771,7 @@ export const Companies = (props) => {
                   width="w-1/2"
                 />
                 <InputGroup
-                  label="Teléfono"
+                  label="TelÃ©fono"
                   value={newComp.telefono}
                   onChange={(e) =>
                     setNewComp((p) => ({ ...p, telefono: e.target.value }))
@@ -796,12 +798,12 @@ export const Companies = (props) => {
               </div>
               <div className="border-t border-gray-100 pt-4 mt-2">
                 <p className="text-xs font-black text-gray-700 uppercase mb-3">
-                  🤝 Convenio
+                  ð¤ Convenio
                 </p>
                 <div className="flex flex-wrap -mx-1.5">
                   <div className="px-1.5 mb-3 w-1/3">
                     <label className="block text-[10px] font-black text-gray-600 uppercase mb-1">
-                      Médico responsable
+                      MÃ©dico responsable
                     </label>
                     <select
                       value={newComp.medicoResponsableId}
@@ -834,7 +836,7 @@ export const Companies = (props) => {
                     type="number"
                   />
                   <InputGroup
-                    label="Tarifa Periódico"
+                    label="Tarifa PeriÃ³dico"
                     value={newComp.tarifaPeriodico}
                     onChange={(e) =>
                       setNewComp((p) => ({
@@ -871,7 +873,7 @@ export const Companies = (props) => {
                   />
                   <div className="px-1.5 mb-3 w-1/4">
                     <label className="block text-[10px] font-black text-gray-600 uppercase mb-1">
-                      Condición de pago
+                      CondiciÃ³n de pago
                     </label>
                     <select
                       value={newComp.condicionesPago}
@@ -883,7 +885,7 @@ export const Companies = (props) => {
                       }
                       className="w-full p-1.5 border rounded-lg text-xs"
                     >
-                      {["contado", "30 días", "60 días", "90 días"].map((o) => (
+                      {["contado", "30 dÃ­as", "60 dÃ­as", "90 dÃ­as"].map((o) => (
                         <option key={o} value={o}>
                           {o}
                         </option>
@@ -951,17 +953,17 @@ export const Companies = (props) => {
                       }
                       className="accent-purple-600"
                     />{" "}
-                    Facturación agrupada
+                    FacturaciÃ³n agrupada
                   </label>
                 </div>
               </div>
-              {/* ── MULTI-MÉDICO (FASE 2) ── */}
+              {/* ââ MULTI-MÃDICO (FASE 2) ââ */}
               <div className="border-t border-gray-100 pt-4 mt-2">
                 <p className="text-xs font-black text-gray-700 uppercase mb-2">
-                  👨‍⚕️ Médicos asignados a esta empresa
+                  ð¨ââï¸ MÃ©dicos asignados a esta empresa
                 </p>
                 <p className="text-[10px] text-gray-500 mb-2">
-                  El médico responsable es el principal; los adicionales también
+                  El mÃ©dico responsable es el principal; los adicionales tambiÃ©n
                   pueden atender pacientes de esta empresa.
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -999,21 +1001,21 @@ export const Companies = (props) => {
                         }
                       >
                         {m.name || m.user}
-                        {m.user === newComp.medicoResponsableId && " ⭐"}
+                        {m.user === newComp.medicoResponsableId && " â­"}
                       </span>
                     </label>
                   ))}
                   {medicos.length === 0 && (
                     <p className="text-xs text-gray-400 italic">
-                      No hay médicos registrados aún.
+                      No hay mÃ©dicos registrados aÃºn.
                     </p>
                   )}
                 </div>
               </div>
-              {/* ── SEDES (FASE 2) ── */}
+              {/* ââ SEDES (FASE 2) ââ */}
               <div className="border-t border-gray-100 pt-4 mt-2">
                 <p className="text-xs font-black text-gray-700 uppercase mb-2">
-                  🏢 Sedes de la empresa
+                  ð¢ Sedes de la empresa
                 </p>
                 <div className="space-y-1 mb-2">
                   {(newComp.sedes || []).map((s, i) => (
@@ -1022,7 +1024,7 @@ export const Companies = (props) => {
                       className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5"
                     >
                       <span className="text-xs font-bold text-blue-800">
-                        {s.nombre} — {s.ciudad}
+                        {s.nombre} â {s.ciudad}
                       </span>
                       <button
                         onClick={() =>
@@ -1033,7 +1035,7 @@ export const Companies = (props) => {
                         }
                         className="text-red-500 hover:text-red-700 text-xs font-black"
                       >
-                        ✕
+                        â
                       </button>
                     </div>
                   ))}
@@ -1056,7 +1058,7 @@ export const Companies = (props) => {
                     className="border rounded-lg p-1.5 text-xs w-28"
                   />
                   <input
-                    placeholder="Dirección"
+                    placeholder="DirecciÃ³n"
                     value={sedeForm.direccion}
                     onChange={(e) =>
                       setSedeForm((p) => ({ ...p, direccion: e.target.value }))
@@ -1078,15 +1080,15 @@ export const Companies = (props) => {
                   </button>
                 </div>
               </div>
-              {/* ── ADMIN DEL PORTAL (FASE 2) ── */}
+              {/* ââ ADMIN DEL PORTAL (FASE 2) ââ */}
               {newComp.portalActivo && (
                 <div className="border-t border-purple-100 pt-4 mt-2 bg-purple-50 rounded-xl p-3">
                   <p className="text-xs font-black text-purple-700 uppercase mb-1">
-                    🔐 Acceso Admin del Portal
+                    ð Acceso Admin del Portal
                   </p>
                   <p className="text-[10px] text-purple-600 mb-2">
-                    El admin de la empresa usará estas credenciales para
-                    ingresar al portal y gestionar sus médicos/secretarias.
+                    El admin de la empresa usarÃ¡ estas credenciales para
+                    ingresar al portal y gestionar sus mÃ©dicos/secretarias.
                   </p>
                   <div className="flex gap-2">
                     <div className="flex-1">
@@ -1107,7 +1109,7 @@ export const Companies = (props) => {
                     </div>
                     <div className="flex-1">
                       <label className="block text-[10px] font-black text-purple-700 uppercase mb-1">
-                        Contraseña temporal
+                        ContraseÃ±a temporal
                       </label>
                       <input
                         type="password"
@@ -1118,7 +1120,7 @@ export const Companies = (props) => {
                             portalAdminPassPlain: e.target.value,
                           }))
                         }
-                        placeholder="mín. 8 caracteres"
+                        placeholder="mÃ­n. 8 caracteres"
                         className="w-full border border-purple-200 rounded-lg p-1.5 text-xs"
                       />
                     </div>
@@ -1128,10 +1130,10 @@ export const Companies = (props) => {
               <button
                 onClick={async () => {
                   if (!newComp.nombre) {
-                    showAlert("Ingrese la razón social.");
+                    showAlert("Ingrese la razÃ³n social.");
                     return;
                   }
-                  // Auto-generar código de portal si está activo y no tiene código aún
+                  // Auto-generar cÃ³digo de portal si estÃ¡ activo y no tiene cÃ³digo aÃºn
                   let finalComp = {
                     ...newComp,
                     id: Date.now().toString(),
@@ -1151,7 +1153,7 @@ export const Companies = (props) => {
                       finalComp.medicoResponsableId,
                     ];
                   }
-                  // FASE 2: hashear contraseña admin portal
+                  // FASE 2: hashear contraseÃ±a admin portal
                   if (finalComp.portalAdminPassPlain) {
                     finalComp.portalAdminPassHash = await _sha256(
                       finalComp.portalAdminPassPlain
@@ -1176,13 +1178,13 @@ export const Companies = (props) => {
                     setPortalActivadoInfo(finalComp);
                     setCompaniesTab("lista");
                   } else {
-                    showAlert("✅ Empresa registrada.");
+                    showAlert("â Empresa registrada.");
                     setCompaniesTab("lista");
                   }
                 }}
                 className="w-full mt-4 bg-purple-700 hover:bg-purple-800 text-white py-2.5 rounded-xl text-sm font-black"
               >
-                💾 Guardar Empresa
+                ð¾ Guardar Empresa
               </button>
             </div>
           )}
@@ -1207,7 +1209,7 @@ export const Companies = (props) => {
                 </div>
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
                   <p className="text-xs font-black text-amber-700">
-                    Próximos a vencer (&lt;30d)
+                    PrÃ³ximos a vencer (&lt;30d)
                   </p>
                   <p className="text-2xl font-black text-amber-800">
                     {conveniosAlerta.length}
@@ -1234,7 +1236,7 @@ export const Companies = (props) => {
                     <tr>
                       {[
                         "Empresa",
-                        "Médico Resp.",
+                        "MÃ©dico Resp.",
                         "Tarifa Ingreso",
                         "Vencimiento",
                         "Estado",
@@ -1256,10 +1258,10 @@ export const Companies = (props) => {
                       const estado = !vence
                         ? "Sin fecha"
                         : vence < hoy
-                        ? "⛔ Vencido"
+                        ? "â Vencido"
                         : vence <= en30
-                        ? "⚠️ Próximo"
-                        : "✅ Vigente";
+                        ? "â ï¸ PrÃ³ximo"
+                        : "â Vigente";
                       return (
                         <tr
                           key={c.id || i}
@@ -1294,19 +1296,19 @@ export const Companies = (props) => {
               <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <div className="bg-purple-700 p-4 rounded-t-2xl flex justify-between items-center">
                   <p className="text-white font-black">
-                    ✏️ Editar: {editingCompany.nombre}
+                    âï¸ Editar: {editingCompany.nombre}
                   </p>
                   <button
                     onClick={() => setEditingCompany(null)}
                     className="text-white font-black text-xl"
                   >
-                    ✕
+                    â
                   </button>
                 </div>
                 <div className="p-4">
                   <div className="flex flex-wrap -mx-1.5">
                     <InputGroup
-                      label="Razón Social"
+                      label="RazÃ³n Social"
                       value={editingCompany.nombre}
                       onChange={(e) =>
                         setEditingCompany((p) => ({
@@ -1351,7 +1353,7 @@ export const Companies = (props) => {
                       width="w-1/2"
                     />
                     <InputGroup
-                      label="Teléfono"
+                      label="TelÃ©fono"
                       value={editingCompany.telefono || ""}
                       onChange={(e) =>
                         setEditingCompany((p) => ({
@@ -1375,12 +1377,12 @@ export const Companies = (props) => {
                   </div>
                   <div className="border-t pt-3 mt-1">
                     <p className="text-xs font-black text-gray-700 uppercase mb-2">
-                      🤝 Convenio
+                      ð¤ Convenio
                     </p>
                     <div className="flex flex-wrap -mx-1.5">
                       <div className="px-1.5 mb-2 w-1/2">
                         <label className="block text-[10px] font-black text-gray-600 uppercase mb-1">
-                          Médico responsable
+                          MÃ©dico responsable
                         </label>
                         <select
                           value={editingCompany.medicoResponsableId || ""}
@@ -1413,7 +1415,7 @@ export const Companies = (props) => {
                         type="number"
                       />
                       <InputGroup
-                        label="Tarifa Periódico"
+                        label="Tarifa PeriÃ³dico"
                         value={editingCompany.tarifaPeriodico || ""}
                         onChange={(e) =>
                           setEditingCompany((p) => ({
@@ -1462,7 +1464,7 @@ export const Companies = (props) => {
                       />
                       <div className="px-1.5 mb-2 w-1/3">
                         <label className="block text-[10px] font-black text-gray-600 uppercase mb-1">
-                          Condición pago
+                          CondiciÃ³n pago
                         </label>
                         <select
                           value={editingCompany.condicionesPago || "contado"}
@@ -1474,7 +1476,7 @@ export const Companies = (props) => {
                           }
                           className="w-full p-1.5 border rounded-lg text-xs"
                         >
-                          {["contado", "30 días", "60 días", "90 días"].map(
+                          {["contado", "30 dÃ­as", "60 dÃ­as", "90 dÃ­as"].map(
                             (o) => (
                               <option key={o} value={o}>
                                 {o}
@@ -1511,7 +1513,7 @@ export const Companies = (props) => {
                           }
                           className="accent-purple-600"
                         />{" "}
-                        Facturación agrupada
+                        FacturaciÃ³n agrupada
                       </label>
                     </div>
                   </div>
@@ -1519,7 +1521,7 @@ export const Companies = (props) => {
                   {editingCompany.portalActivo && (
                     <div className="mt-3 bg-indigo-50 border border-indigo-200 rounded-xl p-3">
                       <p className="text-[10px] font-black text-indigo-700 uppercase mb-2">
-                        🌐 Portal cliente
+                        ð Portal cliente
                       </p>
                       {editingCompany.portalCode ? (
                         <div className="flex items-center gap-2">
@@ -1543,14 +1545,14 @@ export const Companies = (props) => {
                                 portalCode: newCode,
                               }));
                               showAlert(
-                                "🔄 Código regenerado: " +
+                                "ð CÃ³digo regenerado: " +
                                   newCode +
-                                  "\n\n⚠️ Guarda los cambios y envía el nuevo código a la empresa."
+                                  "\n\nâ ï¸ Guarda los cambios y envÃ­a el nuevo cÃ³digo a la empresa."
                               );
                             }}
                             className="px-3 py-1.5 bg-amber-100 text-amber-700 text-[10px] font-black rounded-lg hover:bg-amber-200"
                           >
-                            🔄 Regenerar
+                            ð Regenerar
                           </button>
                           <button
                             onClick={() => {
@@ -1558,22 +1560,22 @@ export const Companies = (props) => {
                             }}
                             className="px-3 py-1.5 bg-indigo-100 text-indigo-700 text-[10px] font-black rounded-lg hover:bg-indigo-200"
                           >
-                            📨 Enviar
+                            ð¨ Enviar
                           </button>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
                           <p className="text-[10px] text-amber-700 flex-1">
-                            Sin código generado - se creará al guardar
+                            Sin cÃ³digo generado - se crearÃ¡ al guardar
                           </p>
                         </div>
                       )}
                     </div>
                   )}
-                  {/* FASE 2: Multi-médico en editar empresa */}
+                  {/* FASE 2: Multi-mÃ©dico en editar empresa */}
                   <div className="border-t border-gray-100 pt-3 mt-2">
                     <p className="text-xs font-black text-gray-700 uppercase mb-2">
-                      👨‍⚕️ Médicos asignados
+                      ð¨ââï¸ MÃ©dicos asignados
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {medicos.map((m) => (
@@ -1615,7 +1617,7 @@ export const Companies = (props) => {
                           >
                             {m.name || m.user}
                             {m.user === editingCompany.medicoResponsableId &&
-                              " ⭐"}
+                              " â­"}
                           </span>
                         </label>
                       ))}
@@ -1624,7 +1626,7 @@ export const Companies = (props) => {
                   {/* FASE 2: Sedes en editar empresa */}
                   <div className="border-t border-gray-100 pt-3 mt-2">
                     <p className="text-xs font-black text-gray-700 uppercase mb-2">
-                      🏢 Sedes
+                      ð¢ Sedes
                     </p>
                     <div className="space-y-1 mb-2">
                       {(editingCompany.sedes || []).map((s, i) => (
@@ -1633,8 +1635,8 @@ export const Companies = (props) => {
                           className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5"
                         >
                           <span className="text-xs font-bold text-blue-800">
-                            {s.nombre} — {s.ciudad}
-                            {s.direccion && ` · ${s.direccion}`}
+                            {s.nombre} â {s.ciudad}
+                            {s.direccion && ` Â· ${s.direccion}`}
                           </span>
                           <button
                             onClick={() =>
@@ -1647,7 +1649,7 @@ export const Companies = (props) => {
                             }
                             className="text-red-500 text-xs font-black ml-2"
                           >
-                            ✕
+                            â
                           </button>
                         </div>
                       ))}
@@ -1692,7 +1694,7 @@ export const Companies = (props) => {
                   {editingCompany.portalActivo && (
                     <div className="border-t border-purple-100 pt-3 mt-2 bg-purple-50 rounded-xl p-3">
                       <p className="text-xs font-black text-purple-700 uppercase mb-1">
-                        🔐 Admin del Portal
+                        ð Admin del Portal
                       </p>
                       <div className="flex gap-2">
                         <div className="flex-1">
@@ -1713,7 +1715,7 @@ export const Companies = (props) => {
                         </div>
                         <div className="flex-1">
                           <label className="block text-[10px] font-black text-purple-700 mb-1">
-                            Nueva contraseña (vacío = sin cambio)
+                            Nueva contraseÃ±a (vacÃ­o = sin cambio)
                           </label>
                           <input
                             type="password"
@@ -1724,7 +1726,7 @@ export const Companies = (props) => {
                                 portalAdminPassPlain: e.target.value,
                               }))
                             }
-                            placeholder="••••••••"
+                            placeholder="â¢â¢â¢â¢â¢â¢â¢â¢"
                             className="w-full border border-purple-200 rounded-lg p-1.5 text-xs"
                           />
                         </div>
@@ -1732,7 +1734,7 @@ export const Companies = (props) => {
                       {editingCompany.portalAdminPassHash &&
                         !editingCompany.portalAdminPassPlain && (
                           <p className="text-[10px] text-purple-500 mt-1">
-                            ✅ Admin configurado. Dejar vacía la contraseña para
+                            â Admin configurado. Dejar vacÃ­a la contraseÃ±a para
                             no cambiarla.
                           </p>
                         )}
@@ -1753,14 +1755,14 @@ export const Companies = (props) => {
                           saved.medicoResponsableId,
                         ];
                       }
-                      // FASE 2: hashear contraseña admin portal si se proporcionó
+                      // FASE 2: hashear contraseÃ±a admin portal si se proporcionÃ³
                       if (saved.portalAdminPassPlain) {
                         saved.portalAdminPassHash = await _sha256(
                           saved.portalAdminPassPlain
                         );
                         delete saved.portalAdminPassPlain;
                       }
-                      // Auto-generar código si portal activo y no tiene código
+                      // Auto-generar cÃ³digo si portal activo y no tiene cÃ³digo
                       if (saved.portalActivo && !saved.portalCode) {
                         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
                         const rand = (n) =>
@@ -1780,12 +1782,12 @@ export const Companies = (props) => {
                       if (saved.portalActivo) {
                         setPortalActivadoInfo(saved);
                       } else {
-                        showAlert("✅ Empresa actualizada.");
+                        showAlert("â Empresa actualizada.");
                       }
                     }}
                     className="w-full mt-4 bg-purple-700 hover:bg-purple-800 text-white py-2.5 rounded-xl text-sm font-black"
                   >
-                    💾 Guardar cambios
+                    ð¾ Guardar cambios
                   </button>
                 </div>
               </div>
@@ -1798,34 +1800,34 @@ export const Companies = (props) => {
           </datalist>
         </div>
 
-        {/* ═══ MODAL PORTAL ACTIVADO ═══ */}
+        {/* âââ MODAL PORTAL ACTIVADO âââ */}
         {portalActivadoInfo &&
           (() => {
             const baseUrl = window.location.href.split("#")[0];
             const portalUrl = `${baseUrl}#portalempresa?code=${portalActivadoInfo.portalCode}`;
             const msgWhatsapp = [
-              `🏢 *Portal SISO OcupaSalud - ${portalActivadoInfo.nombre}*`,
+              `ð¢ *Portal SISO OcupaSalud - ${portalActivadoInfo.nombre}*`,
               ``,
-              `Estimado cliente, su portal de seguimiento médico ya está disponible.`,
+              `Estimado cliente, su portal de seguimiento mÃ©dico ya estÃ¡ disponible.`,
               ``,
-              `📋 *¿Qué puede ver en su portal?*`,
-              `✅ Listado de trabajadores evaluados`,
-              `✅ Conceptos de aptitud laboral`,
-              `✅ Estado de cuentas y pagos`,
-              `✅ Trabajadores con restricciones activas`,
-              `🔒 Los diagnósticos médicos son CONFIDENCIALES y no se muestran`,
+              `ð *Â¿QuÃ© puede ver en su portal?*`,
+              `â Listado de trabajadores evaluados`,
+              `â Conceptos de aptitud laboral`,
+              `â Estado de cuentas y pagos`,
+              `â Trabajadores con restricciones activas`,
+              `ð Los diagnÃ³sticos mÃ©dicos son CONFIDENCIALES y no se muestran`,
               ``,
-              `*Opción 1 - Enlace directo (recomendado):*`,
+              `*OpciÃ³n 1 - Enlace directo (recomendado):*`,
               portalUrl,
               ``,
-              `*Opción 2 - Acceso manual:*`,
+              `*OpciÃ³n 2 - Acceso manual:*`,
               `1. Abrir SISO OcupaSalud`,
-              `2. Inicio → botón 🏢 Portal Empresa`,
-              `3. Escribir código: *${portalActivadoInfo.portalCode}*`,
+              `2. Inicio â botÃ³n ð¢ Portal Empresa`,
+              `3. Escribir cÃ³digo: *${portalActivadoInfo.portalCode}*`,
               `   (o su NIT: ${portalActivadoInfo.nit})`,
               ``,
               `Saludos,`,
-              `${currentUser?.name || "Su médico ocupacional"}`,
+              `${currentUser?.name || "Su mÃ©dico ocupacional"}`,
             ].join("\n");
             return (
               <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 overflow-y-auto">
@@ -1835,7 +1837,7 @@ export const Companies = (props) => {
                     <div className="flex justify-between items-start">
                       <div>
                         <p className="text-white font-black text-lg">
-                          🎉 ¡Portal empresa activado!
+                          ð Â¡Portal empresa activado!
                         </p>
                         <p className="text-indigo-200 text-sm font-bold">
                           {portalActivadoInfo.nombre}
@@ -1851,29 +1853,29 @@ export const Companies = (props) => {
                         onClick={() => setPortalActivadoInfo(null)}
                         className="text-indigo-200 hover:text-white text-xl font-black"
                       >
-                        ✕
+                        â
                       </button>
                     </div>
                   </div>
                   <div className="p-5 space-y-4 overflow-y-auto max-h-[75vh]">
-                    {/* ─── CÓMO FUNCIONA ─── */}
+                    {/* âââ CÃMO FUNCIONA âââ */}
                     <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
                       <p className="text-xs font-black text-blue-800 mb-1">
-                        📌 ¿Cómo funciona el portal por empresa?
+                        ð Â¿CÃ³mo funciona el portal por empresa?
                       </p>
                       <p className="text-[11px] text-blue-700 leading-relaxed">
                         SISO usa <strong>un portal inteligente</strong> que cada
-                        empresa accede con su código exclusivo. Al ingresar el
-                        código, el portal filtra y muestra{" "}
-                        <strong>únicamente los datos de esa empresa</strong>.
+                        empresa accede con su cÃ³digo exclusivo. Al ingresar el
+                        cÃ³digo, el portal filtra y muestra{" "}
+                        <strong>Ãºnicamente los datos de esa empresa</strong>.
                         Ninguna empresa puede ver datos de otra.
                       </p>
                     </div>
 
-                    {/* ─── CÓDIGO ─── */}
+                    {/* âââ CÃDIGO âââ */}
                     <div className="bg-indigo-50 border-2 border-indigo-400 rounded-xl p-4">
                       <p className="text-[10px] font-black text-indigo-600 uppercase tracking-wider mb-2 text-center">
-                        🔑 Código de acceso exclusivo
+                        ð CÃ³digo de acceso exclusivo
                       </p>
                       <div className="flex items-center gap-2 mb-2">
                         <p className="text-3xl font-black text-indigo-900 tracking-[0.25em] font-mono flex-1 text-center bg-white border border-indigo-200 rounded-lg py-2">
@@ -1884,27 +1886,27 @@ export const Companies = (props) => {
                             if (navigator.clipboard) {
                               navigator.clipboard
                                 .writeText(portalActivadoInfo.portalCode)
-                                .then(() => showAlert("✅ Código copiado"));
+                                .then(() => showAlert("â CÃ³digo copiado"));
                             } else
                               showAlert(
-                                "Código: " + portalActivadoInfo.portalCode
+                                "CÃ³digo: " + portalActivadoInfo.portalCode
                               );
                           }}
                           className="px-3 py-2 bg-indigo-600 text-white text-[10px] font-black rounded-lg hover:bg-indigo-700 whitespace-nowrap"
                         >
-                          📋 Copiar
+                          ð Copiar
                         </button>
                       </div>
                       <p className="text-[10px] text-indigo-500 text-center">
-                        Código único e intransferible para{" "}
+                        CÃ³digo Ãºnico e intransferible para{" "}
                         <strong>{portalActivadoInfo.nombre}</strong>
                       </p>
                     </div>
 
-                    {/* ─── URL DIRECTA ─── */}
+                    {/* âââ URL DIRECTA âââ */}
                     <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
                       <p className="text-[10px] font-black text-emerald-700 uppercase mb-2">
-                        🔗 Enlace directo (recomendado - 1 click para entrar)
+                        ð Enlace directo (recomendado - 1 click para entrar)
                       </p>
                       <div className="flex items-center gap-2">
                         <p className="text-[10px] text-emerald-800 font-mono bg-white border border-emerald-200 rounded-lg px-2 py-1.5 flex-1 truncate">
@@ -1917,42 +1919,42 @@ export const Companies = (props) => {
                                 .writeText(portalUrl)
                                 .then(() =>
                                   showAlert(
-                                    "✅ Enlace copiado.\nPuede pegarlo en WhatsApp o correo."
+                                    "â Enlace copiado.\nPuede pegarlo en WhatsApp o correo."
                                   )
                                 );
                             } else showAlert("Enlace: " + portalUrl);
                           }}
                           className="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-black rounded-lg hover:bg-emerald-700 whitespace-nowrap"
                         >
-                          📋 Copiar
+                          ð Copiar
                         </button>
                       </div>
                       <p className="text-[10px] text-emerald-600 mt-1">
-                        Al abrir este enlace el código se pre-carga - la empresa
+                        Al abrir este enlace el cÃ³digo se pre-carga - la empresa
                         solo presiona "Acceder"
                       </p>
                     </div>
 
-                    {/* ─── QUÉ VE ─── */}
+                    {/* âââ QUÃ VE âââ */}
                     <div>
                       <p className="text-[10px] font-black text-gray-600 uppercase mb-2">
-                        Lo que verá <strong>{portalActivadoInfo.nombre}</strong>
+                        Lo que verÃ¡ <strong>{portalActivadoInfo.nombre}</strong>
                         :
                       </p>
                       <div className="grid grid-cols-3 gap-2">
                         {[
                           {
-                            icon: "👥",
+                            icon: "ð¥",
                             label: "Trabajadores",
                             desc: "Nombres, cargos y aptitud",
                           },
                           {
-                            icon: "💳",
+                            icon: "ð³",
                             label: "Cuentas",
                             desc: "Facturas y estado de pagos",
                           },
                           {
-                            icon: "⛔",
+                            icon: "â",
                             label: "Restricciones",
                             desc: "Trabajadores no aptos",
                           },
@@ -1972,33 +1974,33 @@ export const Companies = (props) => {
                         ))}
                       </div>
                       <p className="text-[10px] text-red-600 font-bold text-center mt-2">
-                        🔒 Diagnósticos clínicos = CONFIDENCIALES - nunca
+                        ð DiagnÃ³sticos clÃ­nicos = CONFIDENCIALES - nunca
                         visibles (Art. 16 Res. 1843/2025)
                       </p>
                     </div>
 
-                    {/* ─── PRÓXIMOS PASOS ─── */}
+                    {/* âââ PRÃXIMOS PASOS âââ */}
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
                       <p className="text-[10px] font-black text-amber-800 uppercase mb-2">
-                        📌 Próximos pasos
+                        ð PrÃ³ximos pasos
                       </p>
                       <div className="space-y-2">
                         {[
                           {
                             n: "1",
-                            txt: `Copie el mensaje de abajo y envíelo al gerente o contacto de ${portalActivadoInfo.nombre} por WhatsApp o correo`,
+                            txt: `Copie el mensaje de abajo y envÃ­elo al gerente o contacto de ${portalActivadoInfo.nombre} por WhatsApp o correo`,
                           },
                           {
                             n: "2",
-                            txt: "La empresa abre el enlace directo (o ingresa el código manualmente en Portal Empresa)",
+                            txt: "La empresa abre el enlace directo (o ingresa el cÃ³digo manualmente en Portal Empresa)",
                           },
                           {
                             n: "3",
-                            txt: "Verán en tiempo real sus trabajadores evaluados, aptitudes y estado de cuentas",
+                            txt: "VerÃ¡n en tiempo real sus trabajadores evaluados, aptitudes y estado de cuentas",
                           },
                           {
                             n: "4",
-                            txt: "Cada nueva HC cerrada de esta empresa aparecerá automáticamente en su portal",
+                            txt: "Cada nueva HC cerrada de esta empresa aparecerÃ¡ automÃ¡ticamente en su portal",
                           },
                         ].map((s) => (
                           <div key={s.n} className="flex gap-2 items-start">
@@ -2013,7 +2015,7 @@ export const Companies = (props) => {
                       </div>
                     </div>
 
-                    {/* ─── BOTONES ─── */}
+                    {/* âââ BOTONES âââ */}
                     <button
                       onClick={() => {
                         if (navigator.clipboard) {
@@ -2021,7 +2023,7 @@ export const Companies = (props) => {
                             .writeText(msgWhatsapp)
                             .then(() =>
                               showAlert(
-                                "✅ Mensaje copiado.\n\nPéguelo en WhatsApp, correo o Teams."
+                                "â Mensaje copiado.\n\nPÃ©guelo en WhatsApp, correo o Teams."
                               )
                             );
                         } else {
@@ -2031,12 +2033,12 @@ export const Companies = (props) => {
                           ta.select();
                           document.execCommand("copy");
                           document.body.removeChild(ta);
-                          showAlert("✅ Copiado.");
+                          showAlert("â Copiado.");
                         }
                       }}
                       className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-black rounded-xl"
                     >
-                      📱 Copiar mensaje completo para WhatsApp / Email
+                      ð± Copiar mensaje completo para WhatsApp / Email
                     </button>
 
                     <div className="flex gap-2">
@@ -2048,13 +2050,13 @@ export const Companies = (props) => {
                         }}
                         className="flex-1 py-2.5 bg-indigo-100 text-indigo-700 text-xs font-black rounded-xl hover:bg-indigo-200"
                       >
-                        🌐 Vista previa del portal
+                        ð Vista previa del portal
                       </button>
                       <button
                         onClick={() => setPortalActivadoInfo(null)}
                         className="flex-1 py-2.5 bg-gray-100 text-gray-600 text-xs font-black rounded-xl hover:bg-gray-200"
                       >
-                        ✓ Cerrar
+                        â Cerrar
                       </button>
                     </div>
                   </div>

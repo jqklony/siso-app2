@@ -1,10 +1,11 @@
 import React from 'react';
+import { initialOccupPatientState, initialGeneralPatientState } from '../data/initialState.js';
 import { getSpanishDate } from '../utils/helpers.js';
 import {
   LogOut, UserCheck
 } from "lucide-react";
 
-// ─── Agenda Page Component ─────────────────────────────────────────────
+// âââ Agenda Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
 export const Agenda = (props) => {
   const {
@@ -408,7 +409,7 @@ export const Agenda = (props) => {
     NotificacionModal,
     LoginForm,
     PortalPublicoTrabajador,
-    AgendaFieldF,    // ─── Role guard helpers from sharedProps ───
+    AgendaFieldF,    // âââ Role guard helpers from sharedProps âââ
   _isAdmin,
   _isAdminEmpresa,
   _secretariaPuede,
@@ -433,13 +434,13 @@ export const Agenda = (props) => {
                 onClick={() => goBack()}
                 className="text-sm text-gray-500 hover:text-gray-700"
               >
-                ← Volver
+                â Volver
               </button>
             </div>
           </div>
         </div>
       );
-    // ── SECRETARIA GATE: "Agenda del Día" requiere autorización del admin ──
+    // ââ SECRETARIA GATE: "Agenda del DÃ­a" requiere autorizaciÃ³n del admin ââ
     if (
       currentUser?.role === "secretaria" &&
       !_secretariaPuede("agenda", currentUser, usersList)
@@ -449,24 +450,24 @@ export const Agenda = (props) => {
           {renderNavbar()}
           <div className="max-w-xl mx-auto px-4 py-16 text-center">
             <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-8 space-y-3">
-              <div className="text-5xl">🔐</div>
+              <div className="text-5xl">ð</div>
               <p className="font-black text-amber-800 text-xl">
-                Módulo restringido
+                MÃ³dulo restringido
               </p>
-              <p className="text-amber-700 text-sm font-bold">Agenda del Día</p>
+              <p className="text-amber-700 text-sm font-bold">Agenda del DÃ­a</p>
               <p className="text-amber-600 text-xs leading-relaxed">
-                Este módulo requiere autorización explícita del administrador.
+                Este mÃ³dulo requiere autorizaciÃ³n explÃ­cita del administrador.
                 <br />
                 Solicita que habilite el permiso{" "}
-                <strong>"Agenda del Día"</strong> en tu perfil.
+                <strong>"Agenda del DÃ­a"</strong> en tu perfil.
                 <br />
-                (Usuarios → tu nombre → 🔐 Permisos de secretaria)
+                (Usuarios â tu nombre â ð Permisos de secretaria)
               </p>
               <button
                 onClick={() => goBack()}
                 className="mt-3 bg-amber-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-amber-700 transition"
               >
-                ← Volver al panel
+                â Volver al panel
               </button>
             </div>
           </div>
@@ -478,9 +479,9 @@ export const Agenda = (props) => {
       "admin_empresa",
     ].includes(currentUser?.role);
     const today = new Date().toISOString().split("T")[0];
-    // ── IPS: scope agenda to empresa if applicable ──
+    // ââ IPS: scope agenda to empresa if applicable ââ
     const _agendaEmpresaId = currentUser?.empresaId || null;
-    // ── Duración por tipo de consulta ──────────────────────────────
+    // ââ DuraciÃ³n por tipo de consulta ââââââââââââââââââââââââââââââ
     const DURACION = {
       ingreso: 20,
       egreso: 20,
@@ -491,11 +492,11 @@ export const Agenda = (props) => {
     const TIPOS_CONSULTA = [
       { v: "ingreso", l: "Ingreso", mins: 20 },
       { v: "egreso", l: "Egreso", mins: 20 },
-      { v: "periodico", l: "Periódico", mins: 20 },
+      { v: "periodico", l: "PeriÃ³dico", mins: 20 },
       { v: "seguimiento", l: "Seguimiento", mins: 40 },
       { v: "post_incapacidad", l: "Post-Incapacidad", mins: 40 },
     ];
-    // ── Helpers de hora ────────────────────────────────────────────
+    // ââ Helpers de hora ââââââââââââââââââââââââââââââââââââââââââââ
     const addMins = (hhmm, mins) => {
       const [h, m] = hhmm.split(":").map(Number);
       const total = h * 60 + m + mins;
@@ -512,7 +513,7 @@ export const Agenda = (props) => {
         })
         .replace(".", ":");
     const nowISO = () => new Date().toISOString();
-    // ── Filtrar agenda por fecha y usuario ─────────────────────────
+    // ââ Filtrar agenda por fecha y usuario âââââââââââââââââââââââââ
     const filterAgenda = (fecha) =>
       agendados
         .filter((a) => {
@@ -535,7 +536,7 @@ export const Agenda = (props) => {
     const enEspera = miAgendaHoy.filter((a) => a.estado === "espera");
     const atendiendo = miAgendaHoy.filter((a) => a.estado === "atendiendo");
     const atendidos = miAgendaHoy.filter((a) => a.estado === "atendido");
-    // Próximas citas (fechas futuras)
+    // PrÃ³ximas citas (fechas futuras)
     const proximas = agendados
       .filter((a) => {
         if (a.fecha <= today) return false;
@@ -553,7 +554,7 @@ export const Agenda = (props) => {
           a.fecha.localeCompare(b.fecha) ||
           a.horaCita?.localeCompare(b.horaCita)
       );
-    // ── Guardar agendados ──────────────────────────────────────────
+    // ââ Guardar agendados ââââââââââââââââââââââââââââââââââââââââââ
     const saveAgendados = (upd) => {
       setAgendados(upd);
       // PASO 6: clave aislada por empresa/usuario
@@ -563,7 +564,7 @@ export const Agenda = (props) => {
       _sync(`siso_agendados_${_agSuf}`, JSON.stringify(upd));
       _sbSet(`siso_agendados_${_agSuf}`, upd);
     };
-    // ── Autocompletar desde pacientes existentes ───────────────────
+    // ââ Autocompletar desde pacientes existentes âââââââââââââââââââ
     const handleBusqueda = (val) => {
       setAgendaForm((p) => ({ ...p, nombre: val, _busquedaQuery: val }));
       if (val.length < 2) {
@@ -629,7 +630,7 @@ export const Agenda = (props) => {
       }));
       setAgendaSuggs([]);
     };
-    // ── Calcular edad automática ───────────────────────────────────
+    // ââ Calcular edad automÃ¡tica âââââââââââââââââââââââââââââââââââ
     const calcEdad = (fNac) => {
       if (!fNac) return "";
       const hoy = new Date();
@@ -639,14 +640,14 @@ export const Agenda = (props) => {
       if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) edad--;
       return String(edad);
     };
-    // ── Registrar / Agendar paciente ───────────────────────────────
+    // ââ Registrar / Agendar paciente âââââââââââââââââââââââââââââââ
     const registrarPaciente = () => {
       if (!agendaForm.nombre.trim()) {
         showAlert("Ingrese el nombre del paciente.");
         return;
       }
       if (!agendaForm.medicoId) {
-        showAlert("Seleccione el médico asignado.");
+        showAlert("Seleccione el mÃ©dico asignado.");
         return;
       }
       const fechaCita = agendaForm.fechaCita || today;
@@ -656,11 +657,11 @@ export const Agenda = (props) => {
       const esHoy = fechaCita === today;
       const nuevo = {
         id: "ag_" + Date.now(),
-        // Identificación
+        // IdentificaciÃ³n
         nombre: agendaForm.nombre.trim(),
         docTipo: agendaForm.docTipo,
         docNumero: agendaForm.docNumero.trim(),
-        // Sociodemográficos
+        // SociodemogrÃ¡ficos
         fechaNacimiento: agendaForm.fechaNacimiento,
         edad: agendaForm.edad || calcEdad(agendaForm.fechaNacimiento),
         genero: agendaForm.genero,
@@ -705,7 +706,7 @@ export const Agenda = (props) => {
         estado: esHoy ? "espera" : "programado",
         registradoPor: currentUser?.user,
         registradoEn: nowISO(),
-        // ── IPS: auto-tag con empresaId ──
+        // ââ IPS: auto-tag con empresaId ââ
         ...(currentUser?.empresaId
           ? {
               empresaId: currentUser.empresaId,
@@ -753,14 +754,14 @@ export const Agenda = (props) => {
       setAgendaSuggs([]);
       setAgendaTab("hoy");
       showAlert(
-        `✅ ${
+        `â ${
           esHoy
             ? "Paciente en sala de espera"
             : "Cita programada para " + fechaCita + " a las " + horaCita
-        }.\nMédico: ${nuevo.medicoNombre} · Duración: ${duracion} min`
+        }.\nMÃ©dico: ${nuevo.medicoNombre} Â· DuraciÃ³n: ${duracion} min`
       );
     };
-    // ── Iniciar atención ───────────────────────────────────────────
+    // ââ Iniciar atenciÃ³n âââââââââââââââââââââââââââââââââââââââââââ
     const iniciarAtencion = (ag) => {
       const upd = agendados.map((a) =>
         a.id === ag.id
@@ -768,7 +769,7 @@ export const Agenda = (props) => {
           : a
       );
       saveAgendados(upd);
-      // Mostrar modal de elección de tipo de HC
+      // Mostrar modal de elecciÃ³n de tipo de HC
       setHcChoiceAgenda(ag);
     };
     const abrirHCDesdeAgenda = (ag, tipo) => {
@@ -840,7 +841,7 @@ export const Agenda = (props) => {
       saveAgendados(upd);
     };
     const eliminarCita = (agId) => {
-      showConfirm("¿Eliminar esta cita programada?", () =>
+      showConfirm("Â¿Eliminar esta cita programada?", () =>
         saveAgendados(agendados.filter((a) => a.id !== agId))
       );
     };
@@ -856,8 +857,8 @@ export const Agenda = (props) => {
             (u.role === "admin_empresa" && u.empresaId === _agendaEmpresaId)
           : true)
     );
-    // ── Input helper: AgendaFieldF definida a nivel módulo ──
-    // ── Badge estado ──────────────────────────────────────────────
+    // ââ Input helper: AgendaFieldF definida a nivel mÃ³dulo ââ
+    // ââ Badge estado ââââââââââââââââââââââââââââââââââââââââââââââ
     const EstadoBadge = ({ ag }) => {
       const map = {
         espera: "bg-yellow-100 text-yellow-800 border-yellow-300",
@@ -866,15 +867,15 @@ export const Agenda = (props) => {
         programado: "bg-purple-100 text-purple-800 border-purple-300",
       };
       const icons = {
-        espera: "⏳",
-        atendiendo: "🔵",
-        atendido: "✅",
-        programado: "📅",
+        espera: "â³",
+        atendiendo: "ðµ",
+        atendido: "â",
+        programado: "ð",
       };
       const labels = {
         espera: "En espera",
         atendiendo: "Atendiendo",
-        atendido: "Visto ✓",
+        atendido: "Visto â",
         programado: "Programado",
       };
       return (
@@ -884,7 +885,7 @@ export const Agenda = (props) => {
           }`}
         >
           {icons[ag.estado]} {labels[ag.estado]}
-          {ag.estado === "atendido" && ag.horaFin ? " · " + ag.horaFin : ""}
+          {ag.estado === "atendido" && ag.horaFin ? " Â· " + ag.horaFin : ""}
         </span>
       );
     };
@@ -902,11 +903,11 @@ export const Agenda = (props) => {
         <span
           className={`text-[9px] font-bold px-1.5 py-0.5 rounded bg-${c}-50 text-${c}-700 border border-${c}-200`}
         >
-          {tipo?.replace("_", " ")} · {duracion}min
+          {tipo?.replace("_", " ")} Â· {duracion}min
         </span>
       );
     };
-    // ── Tarjeta de paciente agendado ──────────────────────────────
+    // ââ Tarjeta de paciente agendado ââââââââââââââââââââââââââââââ
     const CardPaciente = ({ ag, idx, showFecha = false }) => (
       <div
         className={`px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition ${
@@ -923,12 +924,12 @@ export const Agenda = (props) => {
         )}
         {ag.estado === "atendido" && (
           <div className="w-7 h-7 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ring-2 ring-emerald-400">
-            <span className="text-sm">✅</span>
+            <span className="text-sm">â</span>
           </div>
         )}
         {ag.estado === "programado" && (
           <div className="w-7 h-7 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-            <span className="text-xs">📅</span>
+            <span className="text-xs">ð</span>
           </div>
         )}
         <div className="flex-1 min-w-0">
@@ -950,7 +951,7 @@ export const Agenda = (props) => {
             </p>
             {ag.edad && (
               <p className="text-[10px] text-gray-400">
-                {ag.edad} años · {ag.genero || "-"}
+                {ag.edad} aÃ±os Â· {ag.genero || "-"}
               </p>
             )}
             {ag.eps && (
@@ -961,19 +962,19 @@ export const Agenda = (props) => {
             )}
             {showFecha ? (
               <p className="text-[10px] font-bold text-purple-600">
-                📅 {ag.fecha} {ag.horaCita} - {ag.horaFinCita}
+                ð {ag.fecha} {ag.horaCita} - {ag.horaFinCita}
               </p>
             ) : (
               <p className="text-[10px] text-gray-400">
-                🕐 {ag.horaCita || ag.hora} - {ag.horaFinCita || "-"}
+                ð {ag.horaCita || ag.hora} - {ag.horaFinCita || "-"}
               </p>
             )}
             {isAdminOrSec && ag.medicoNombre && (
-              <p className="text-[10px] text-blue-500">👨‍⚕️ {ag.medicoNombre}</p>
+              <p className="text-[10px] text-blue-500">ð¨ââï¸ {ag.medicoNombre}</p>
             )}
             {ag.estado === "atendido" && ag.horaFin && (
               <p className="text-[10px] font-bold text-emerald-600">
-                ✔ Visto a las {ag.horaFin}
+                â Visto a las {ag.horaFin}
               </p>
             )}
           </div>
@@ -991,7 +992,7 @@ export const Agenda = (props) => {
                 onClick={() => iniciarAtencion(ag)}
                 className="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black hover:bg-blue-700 whitespace-nowrap"
               >
-                ▶ Iniciar
+                â¶ Iniciar
               </button>
             )}
           {ag.estado === "atendiendo" && isAdminOrSec && (
@@ -999,7 +1000,7 @@ export const Agenda = (props) => {
               onClick={() => marcarAtendido(ag.id)}
               className="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black hover:bg-emerald-700"
             >
-              ✅ Atendido
+              â Atendido
             </button>
           )}
           {ag.estado === "programado" && isAdminOrSec && (
@@ -1007,7 +1008,7 @@ export const Agenda = (props) => {
               onClick={() => eliminarCita(ag.id)}
               className="bg-red-50 text-red-600 px-2 py-1 rounded-lg text-[10px] font-bold hover:bg-red-100"
             >
-              🗑
+              ð
             </button>
           )}
           <EstadoBadge ag={ag} />
@@ -1021,7 +1022,7 @@ export const Agenda = (props) => {
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h2 className="text-2xl font-black text-gray-800">🗓️ Agenda</h2>
+              <h2 className="text-2xl font-black text-gray-800">ðï¸ Agenda</h2>
               <p className="text-sm text-gray-500">{getSpanishDate(null)}</p>
             </div>
             <div className="flex gap-2">
@@ -1029,7 +1030,7 @@ export const Agenda = (props) => {
                 onClick={() => goTo("asistencia")}
                 className="text-blue-700 border border-blue-300 bg-blue-50 hover:bg-blue-100 font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1"
               >
-                📊 Reporte asistencia
+                ð Reporte asistencia
               </button>
               <button
                 onClick={() => goTo("dashboard")}
@@ -1042,10 +1043,10 @@ export const Agenda = (props) => {
           {/* Stats */}
           <div className="grid grid-cols-4 gap-3 mb-4">
             {[
-              { l: "En espera", v: enEspera.length, c: "yellow", e: "⏳" },
-              { l: "Atendiendo", v: atendiendo.length, c: "blue", e: "🔵" },
-              { l: "Atendidos", v: atendidos.length, c: "emerald", e: "✅" },
-              { l: "Programadas", v: proximas.length, c: "purple", e: "📅" },
+              { l: "En espera", v: enEspera.length, c: "yellow", e: "â³" },
+              { l: "Atendiendo", v: atendiendo.length, c: "blue", e: "ðµ" },
+              { l: "Atendidos", v: atendidos.length, c: "emerald", e: "â" },
+              { l: "Programadas", v: proximas.length, c: "purple", e: "ð" },
             ].map((s) => (
               <div
                 key={s.l}
@@ -1062,9 +1063,9 @@ export const Agenda = (props) => {
           {/* Tabs */}
           <div className="flex gap-1 mb-4 bg-white rounded-xl shadow-sm border border-gray-100 p-1 w-fit">
             {[
-              { k: "hoy", l: `📋 Hoy (${miAgendaHoy.length})` },
-              { k: "proximas", l: `📅 Próximas (${proximas.length})` },
-              ...(isAdminOrSec ? [{ k: "nueva", l: "➕ Nueva Cita" }] : []),
+              { k: "hoy", l: `ð Hoy (${miAgendaHoy.length})` },
+              { k: "proximas", l: `ð PrÃ³ximas (${proximas.length})` },
+              ...(isAdminOrSec ? [{ k: "nueva", l: "â Nueva Cita" }] : []),
             ].map((t) => (
               <button
                 key={t.k}
@@ -1086,14 +1087,14 @@ export const Agenda = (props) => {
                 : "grid-cols-1"
             }`}
           >
-            {/* ─── TAB: HOY ─────────────────────────────────────── */}
+            {/* âââ TAB: HOY âââââââââââââââââââââââââââââââââââââââ */}
             {agendaTab === "hoy" && (
               <div className="space-y-4">
                 {enEspera.length > 0 && (
                   <div className="bg-white rounded-2xl shadow-sm border border-yellow-100 overflow-hidden">
                     <div className="bg-yellow-50 px-5 py-2.5 border-b border-yellow-100">
                       <p className="text-sm font-black text-yellow-800">
-                        ⏳ En Espera ({enEspera.length})
+                        â³ En Espera ({enEspera.length})
                       </p>
                     </div>
                     <div className="divide-y divide-gray-50">
@@ -1107,7 +1108,7 @@ export const Agenda = (props) => {
                   <div className="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden">
                     <div className="bg-blue-50 px-5 py-2.5 border-b border-blue-100">
                       <p className="text-sm font-black text-blue-800">
-                        🔵 En Atención ({atendiendo.length})
+                        ðµ En AtenciÃ³n ({atendiendo.length})
                       </p>
                     </div>
                     <div className="divide-y divide-gray-50">
@@ -1121,7 +1122,7 @@ export const Agenda = (props) => {
                   <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
                     <div className="bg-emerald-50 px-5 py-2.5 border-b border-emerald-100">
                       <p className="text-sm font-black text-emerald-800">
-                        ✅ Atendidos hoy ({atendidos.length})
+                        â Atendidos hoy ({atendidos.length})
                       </p>
                     </div>
                     <div className="divide-y divide-gray-50">
@@ -1131,7 +1132,7 @@ export const Agenda = (props) => {
                     </div>
                   </div>
                 )}
-                {/* ── ATENCIONES RECIENTES (desde agenda) ───────────── */}
+                {/* ââ ATENCIONES RECIENTES (desde agenda) âââââââââââââ */}
                 {(() => {
                   const misAtenciones = atencionesCerradas
                     .filter((ac) =>
@@ -1143,10 +1144,10 @@ export const Agenda = (props) => {
                     <div className="bg-white rounded-2xl shadow-sm border border-violet-100 overflow-hidden">
                       <div className="bg-violet-50 px-5 py-2.5 border-b border-violet-100 flex justify-between items-center">
                         <p className="text-sm font-black text-violet-800">
-                          🕐 Atenciones Recientes ({misAtenciones.length})
+                          ð Atenciones Recientes ({misAtenciones.length})
                         </p>
                         <span className="text-[9px] text-violet-500 font-bold">
-                          Guardadas en la nube ☁️
+                          Guardadas en la nube âï¸
                         </span>
                       </div>
                       <div className="divide-y divide-gray-50">
@@ -1156,7 +1157,7 @@ export const Agenda = (props) => {
                             className="px-4 py-3 flex items-start gap-3 hover:bg-violet-50/30 transition"
                           >
                             <div className="w-7 h-7 bg-violet-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ring-2 ring-violet-300">
-                              <span className="text-sm">✅</span>
+                              <span className="text-sm">â</span>
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
@@ -1186,37 +1187,37 @@ export const Agenda = (props) => {
                                 </p>
                                 {ac.empresa && (
                                   <p className="text-[10px] text-gray-400">
-                                    🏢 {ac.empresa}
+                                    ð¢ {ac.empresa}
                                   </p>
                                 )}
                                 {ac.cargo && (
                                   <p className="text-[10px] text-gray-400">
-                                    💼 {ac.cargo}
+                                    ð¼ {ac.cargo}
                                   </p>
                                 )}
                                 <p className="text-[10px] text-gray-400">
-                                  📅 {ac.fechaAtencion}
+                                  ð {ac.fechaAtencion}
                                 </p>
                                 {ac.horaInicio && ac.horaFin && (
                                   <p className="text-[10px] text-emerald-600 font-bold">
-                                    🕐 {ac.horaInicio} → {ac.horaFin}
+                                    ð {ac.horaInicio} â {ac.horaFin}
                                   </p>
                                 )}
                                 {isAdminOrSec && ac.medicoNombre && (
                                   <p className="text-[10px] text-blue-500">
-                                    👨‍⚕️ {ac.medicoNombre}
+                                    ð¨ââï¸ {ac.medicoNombre}
                                   </p>
                                 )}
                               </div>
                               {ac.conceptoAptitud && (
                                 <p className="text-[10px] text-violet-600 font-bold mt-0.5">
-                                  📋 {ac.conceptoAptitud}
+                                  ð {ac.conceptoAptitud}
                                 </p>
                               )}
                             </div>
                             <div className="flex flex-col items-end gap-1 flex-shrink-0">
                               <span className="text-[9px] font-black px-2 py-0.5 rounded-full border bg-emerald-100 text-emerald-800 border-emerald-300">
-                                ✅ Visto ✓
+                                â Visto â
                               </span>
                               {ac.codigoVerificacion && (
                                 <span className="text-[8px] text-gray-400 font-mono">
@@ -1232,7 +1233,7 @@ export const Agenda = (props) => {
                 })()}
                 {miAgendaHoy.length === 0 && (
                   <div className="bg-white rounded-2xl shadow-sm border border-gray-100 py-16 text-center">
-                    <p className="text-4xl mb-3">🗓️</p>
+                    <p className="text-4xl mb-3">ðï¸</p>
                     <p className="font-black text-gray-400">
                       Sin pacientes para hoy
                     </p>
@@ -1241,24 +1242,24 @@ export const Agenda = (props) => {
                         onClick={() => setAgendaTab("nueva")}
                         className="mt-3 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black hover:bg-blue-700"
                       >
-                        ➕ Registrar paciente
+                        â Registrar paciente
                       </button>
                     )}
                   </div>
                 )}
               </div>
             )}
-            {/* ─── TAB: PRÓXIMAS ────────────────────────────────── */}
+            {/* âââ TAB: PRÃXIMAS ââââââââââââââââââââââââââââââââââ */}
             {agendaTab === "proximas" && (
               <div className="bg-white rounded-2xl shadow-sm border border-purple-100 overflow-hidden">
                 <div className="bg-purple-50 px-5 py-2.5 border-b border-purple-100">
                   <p className="text-sm font-black text-purple-800">
-                    📅 Citas Programadas Futuras ({proximas.length})
+                    ð Citas Programadas Futuras ({proximas.length})
                   </p>
                 </div>
                 {proximas.length === 0 ? (
                   <div className="py-16 text-center text-gray-400">
-                    <p className="text-3xl mb-2">📅</p>
+                    <p className="text-3xl mb-2">ð</p>
                     <p className="text-sm font-bold">Sin citas programadas</p>
                   </div>
                 ) : (
@@ -1297,7 +1298,7 @@ export const Agenda = (props) => {
                 )}
               </div>
             )}
-            {/* ─── TAB: NUEVA CITA ──────────────────────────────── */}
+            {/* âââ TAB: NUEVA CITA ââââââââââââââââââââââââââââââââ */}
             {agendaTab === "nueva" && isAdminOrSec && (
               <div className="grid grid-cols-5 gap-6">
                 {/* Formulario */}
@@ -1306,15 +1307,15 @@ export const Agenda = (props) => {
                     <UserCheck className="w-4 h-4 text-blue-500" /> Registrar /
                     Agendar Paciente
                   </h3>
-                  {/* Búsqueda paciente existente */}
+                  {/* BÃºsqueda paciente existente */}
                   <div className="relative mb-4">
                     <label className="block text-[9px] font-black text-gray-500 uppercase mb-1">
-                      🔍 Buscar paciente existente
+                      ð Buscar paciente existente
                     </label>
                     <input
                       value={agendaForm._busquedaQuery || agendaForm.nombre}
                       onChange={(e) => handleBusqueda(e.target.value)}
-                      placeholder="Nombre o número de documento..."
+                      placeholder="Nombre o nÃºmero de documento..."
                       className="w-full p-2 border-2 border-blue-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-300 outline-none"
                     />
                     {agendaSuggs.length > 0 && (
@@ -1329,7 +1330,7 @@ export const Agenda = (props) => {
                               {p.nombres}
                             </p>
                             <p className="text-[10px] text-gray-400">
-                              {p.docTipo}: {p.docNumero} · {p.eps || "-"} ·{" "}
+                              {p.docTipo}: {p.docNumero} Â· {p.eps || "-"} Â·{" "}
                               {p.cargo || "-"}
                             </p>
                           </div>
@@ -1337,10 +1338,10 @@ export const Agenda = (props) => {
                       </div>
                     )}
                   </div>
-                  {/* Sección: Agenda */}
+                  {/* SecciÃ³n: Agenda */}
                   <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 mb-4">
                     <p className="text-[10px] font-black text-blue-700 uppercase mb-2">
-                      📅 Datos de la Cita
+                      ð Datos de la Cita
                     </p>
                     <div className="flex flex-wrap -mx-1">
                       <AgendaFieldF
@@ -1358,7 +1359,7 @@ export const Agenda = (props) => {
                         req
                       />
                       <AgendaFieldF
-                        label="Médico Asignado *"
+                        label="MÃ©dico Asignado *"
                         name="med"
                         value={agendaForm.medicoId}
                         onChange={(v) =>
@@ -1394,8 +1395,8 @@ export const Agenda = (props) => {
                       {agendaForm.horaCita && (
                         <div className="w-full px-1 mb-1">
                           <span className="text-[10px] text-blue-600 font-bold">
-                            ⏱ Duración:{" "}
-                            {DURACION[agendaForm.tipoConsulta] || 20} min · Fin
+                            â± DuraciÃ³n:{" "}
+                            {DURACION[agendaForm.tipoConsulta] || 20} min Â· Fin
                             estimado:{" "}
                             {addMins(
                               agendaForm.horaCita,
@@ -1405,7 +1406,7 @@ export const Agenda = (props) => {
                         </div>
                       )}
                       <AgendaFieldF
-                        label="Observación / Motivo"
+                        label="ObservaciÃ³n / Motivo"
                         name="obs"
                         value={agendaForm.observacion}
                         onChange={(v) =>
@@ -1415,10 +1416,10 @@ export const Agenda = (props) => {
                       />
                     </div>
                   </div>
-                  {/* Sección: Identificación */}
+                  {/* SecciÃ³n: IdentificaciÃ³n */}
                   <div className="mb-3">
                     <p className="text-[10px] font-black text-gray-600 uppercase mb-2 border-b pb-1">
-                      👤 Identificación
+                      ð¤ IdentificaciÃ³n
                     </p>
                     <div className="flex flex-wrap -mx-1">
                       <AgendaFieldF
@@ -1475,7 +1476,7 @@ export const Agenda = (props) => {
                         placeholder="Auto"
                       />
                       <AgendaFieldF
-                        label="Género"
+                        label="GÃ©nero"
                         name="gen"
                         value={agendaForm.genero}
                         onChange={(v) =>
@@ -1499,7 +1500,7 @@ export const Agenda = (props) => {
                         opts={[
                           "Soltero(a)",
                           "Casado(a)",
-                          "Unión libre",
+                          "UniÃ³n libre",
                           "Divorciado(a)",
                           "Viudo(a)",
                         ]}
@@ -1515,8 +1516,8 @@ export const Agenda = (props) => {
                         opts={[
                           "Primaria",
                           "Bachillerato",
-                          "Técnico",
-                          "Tecnólogo",
+                          "TÃ©cnico",
+                          "TecnÃ³logo",
                           "Universitario",
                           "Posgrado",
                           "Ninguno",
@@ -1524,7 +1525,7 @@ export const Agenda = (props) => {
                         width="w-1/4"
                       />
                       <AgendaFieldF
-                        label="Grupo Sanguíneo"
+                        label="Grupo SanguÃ­neo"
                         name="gs"
                         value={agendaForm.grupoSanguineo}
                         onChange={(v) =>
@@ -1543,7 +1544,7 @@ export const Agenda = (props) => {
                         width="w-1/4"
                       />
                       <AgendaFieldF
-                        label="Grupo Étnico"
+                        label="Grupo Ãtnico"
                         name="ge"
                         value={agendaForm.grupoEtnico}
                         onChange={(v) =>
@@ -1551,7 +1552,7 @@ export const Agenda = (props) => {
                         }
                         opts={[
                           "Ninguno",
-                          "Indígena",
+                          "IndÃ­gena",
                           "Afrocolombiano",
                           "Raizal",
                           "Palenquero",
@@ -1561,15 +1562,15 @@ export const Agenda = (props) => {
                         width="w-1/4"
                       />
                       <AgendaFieldF
-                        label="Identidad Género"
+                        label="Identidad GÃ©nero"
                         name="ig"
                         value={agendaForm.identidadGenero}
                         onChange={(v) =>
                           setAgendaForm((p) => ({ ...p, identidadGenero: v }))
                         }
                         opts={[
-                          "Cisgénero",
-                          "Transgénero",
+                          "CisgÃ©nero",
+                          "TransgÃ©nero",
                           "No binario",
                           "Prefiero no decir",
                         ]}
@@ -1577,10 +1578,10 @@ export const Agenda = (props) => {
                       />
                     </div>
                   </div>
-                  {/* Sección: Contacto */}
+                  {/* SecciÃ³n: Contacto */}
                   <div className="mb-3">
                     <p className="text-[10px] font-black text-gray-600 uppercase mb-2 border-b pb-1">
-                      📞 Contacto y Residencia
+                      ð Contacto y Residencia
                     </p>
                     <div className="flex flex-wrap -mx-1">
                       <AgendaFieldF
@@ -1593,7 +1594,7 @@ export const Agenda = (props) => {
                         width="w-1/4"
                       />
                       <AgendaFieldF
-                        label="Teléfono"
+                        label="TelÃ©fono"
                         name="tel"
                         value={agendaForm.telefono}
                         onChange={(v) =>
@@ -1612,7 +1613,7 @@ export const Agenda = (props) => {
                         width="w-1/2"
                       />
                       <AgendaFieldF
-                        label="Dirección Residencia"
+                        label="DirecciÃ³n Residencia"
                         name="res"
                         value={agendaForm.residencia}
                         onChange={(v) =>
@@ -1661,10 +1662,10 @@ export const Agenda = (props) => {
                       />
                     </div>
                   </div>
-                  {/* Sección: Afiliaciones */}
+                  {/* SecciÃ³n: Afiliaciones */}
                   <div className="mb-3">
                     <p className="text-[10px] font-black text-gray-600 uppercase mb-2 border-b pb-1">
-                      🏥 Afiliaciones SGSSS
+                      ð¥ Afiliaciones SGSSS
                     </p>
                     <div className="flex flex-wrap -mx-1">
                       <AgendaFieldF
@@ -1709,10 +1710,10 @@ export const Agenda = (props) => {
                       />
                     </div>
                   </div>
-                  {/* Sección: Laboral */}
+                  {/* SecciÃ³n: Laboral */}
                   <div className="mb-4">
                     <p className="text-[10px] font-black text-gray-600 uppercase mb-2 border-b pb-1">
-                      💼 Datos Laborales
+                      ð¼ Datos Laborales
                     </p>
                     <div className="flex flex-wrap -mx-1">
                       <AgendaFieldF
@@ -1734,7 +1735,7 @@ export const Agenda = (props) => {
                         width="w-1/2"
                       />
                       <AgendaFieldF
-                        label="Área / Dependencia"
+                        label="Ãrea / Dependencia"
                         name="dep"
                         value={agendaForm.dependencia}
                         onChange={(v) =>
@@ -1750,9 +1751,9 @@ export const Agenda = (props) => {
                           setAgendaForm((p) => ({ ...p, tipoContrato: v }))
                         }
                         opts={[
-                          "Término fijo",
-                          "Término indefinido",
-                          "Prestación de servicios",
+                          "TÃ©rmino fijo",
+                          "TÃ©rmino indefinido",
+                          "PrestaciÃ³n de servicios",
                           "Obra o labor",
                           "Aprendizaje",
                         ]}
@@ -1770,13 +1771,13 @@ export const Agenda = (props) => {
                           "Nocturno",
                           "Mixto",
                           "Rotativo",
-                          "12h Día",
+                          "12h DÃ­a",
                           "12h Noche",
                         ]}
                         width="w-1/6"
                       />
                       <AgendaFieldF
-                        label="Antigüedad"
+                        label="AntigÃ¼edad"
                         name="ant"
                         value={agendaForm.antiguedadEmpresa}
                         onChange={(v) =>
@@ -1792,16 +1793,16 @@ export const Agenda = (props) => {
                   >
                     <UserCheck className="w-5 h-5" />
                     {agendaForm.fechaCita && agendaForm.fechaCita > today
-                      ? `📅 Programar cita para ${agendaForm.fechaCita}`
-                      : "✅ Registrar en sala de espera"}
+                      ? `ð Programar cita para ${agendaForm.fechaCita}`
+                      : "â Registrar en sala de espera"}
                   </button>
                 </div>
-                {/* Panel derecho: agenda del día resumida */}
+                {/* Panel derecho: agenda del dÃ­a resumida */}
                 <div className="col-span-2 space-y-4">
                   <div className="bg-white rounded-2xl shadow-sm border border-yellow-100 overflow-hidden">
                     <div className="bg-yellow-50 px-4 py-2.5 border-b border-yellow-100">
                       <p className="text-sm font-black text-yellow-800">
-                        ⏳ En espera hoy ({enEspera.length})
+                        â³ En espera hoy ({enEspera.length})
                       </p>
                     </div>
                     {enEspera.length === 0 ? (
@@ -1819,7 +1820,7 @@ export const Agenda = (props) => {
                   <div className="bg-white rounded-2xl shadow-sm border border-purple-100 overflow-hidden">
                     <div className="bg-purple-50 px-4 py-2.5 border-b border-purple-100">
                       <p className="text-sm font-black text-purple-800">
-                        📅 Próximas ({proximas.slice(0, 5).length})
+                        ð PrÃ³ximas ({proximas.slice(0, 5).length})
                       </p>
                     </div>
                     {proximas.length === 0 ? (
