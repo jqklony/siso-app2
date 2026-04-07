@@ -1,9 +1,7 @@
 import React from 'react';
 import { initialCompanyState, ORG_DEFAULT_ID } from '../data/initialState.js';
 import { ARL_LIST } from '../data/dropdowns.js';
-import {
-  LogOut
-} from "lucide-react";
+import { Building2, LogOut } from "lucide-react";
 
 // âââ Companies Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith

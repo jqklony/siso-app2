@@ -2,9 +2,7 @@ import React from 'react';
 import { PLAN_CONFIG } from '../data/planConfig.js';
 import { DEFAULT_DOCTOR_DATA } from '../data/initialState.js';
 import { getSpanishDate } from '../utils/helpers.js';
-import {
-  AlertTriangle, Clock, Eye, FileCheck, FileSearch, FileText, HardDrive, Heart, Receipt, Shield, Stethoscope, UserCheck, Users
-} from "lucide-react";
+import { AlertTriangle, Building2, Clock, Eye, FileCheck, FileSearch, FileText, HardDrive, Heart, Receipt, Shield, Stethoscope, UserCheck, Users } from "lucide-react";
 
 // âââ Dashboard Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith

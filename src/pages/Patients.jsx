@@ -1,8 +1,6 @@
 import React from 'react';
 import { initialOccupPatientState } from '../data/initialState.js';
-import {
-  Eye, FileCheck, History, LogOut, PlusCircle, Search, Users
-} from "lucide-react";
+import { Eye, FileCheck, History, LogOut, PlusCircle, Search, Users } from "lucide-react";
 
 // âââ Patients Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith

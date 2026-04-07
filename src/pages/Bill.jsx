@@ -3,9 +3,7 @@ import { PlanGate } from '../components/AppComponents.jsx';
 import { DoctorSignature, BrandLogo } from '../components/medico/DoctorSignature.jsx';
 import { ORG_DEFAULT_ID } from '../data/initialState.js';
 import { getSpanishDate } from '../utils/helpers.js';
-import {
-  LogOut, Printer, Receipt, Save
-} from "lucide-react";
+import { LogOut, Printer, Receipt, Save } from "lucide-react";
 
 // Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Bill Page Component Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 // Auto-extracted from App.jsx monolith

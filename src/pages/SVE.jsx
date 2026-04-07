@@ -1,9 +1,7 @@
 import React from 'react';
 import { PlanGate } from '../components/AppComponents.jsx';
 import { PLAN_CONFIG } from '../data/planConfig.js';
-import {
-  BrainCircuit
-} from "lucide-react";
+import { BrainCircuit, Loader2 } from "lucide-react";
 
 // ─── SVE Page Component ─────────────────────────────────────────────
 // Auto-extracted from App.jsx monolith

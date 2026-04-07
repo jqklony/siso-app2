@@ -2,9 +2,7 @@ import React from 'react';
 import { PlanGate } from '../components/AppComponents.jsx';
 import { initialOccupPatientState, initialGeneralPatientState } from '../data/initialState.js';
 import { getSpanishDate } from '../utils/helpers.js';
-import {
-  LogOut, UserCheck
-} from "lucide-react";
+import { LogOut, UserCheck } from "lucide-react";
 
 // âââ Agenda Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith

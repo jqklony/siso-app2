@@ -1,9 +1,7 @@
 import React from 'react';
 import { LicenciasTab } from '../components/AppComponents.jsx';
 import { DEFAULT_DOCTOR_DATA, ORG_DEFAULT_ID, SECRETARIA_PERMISOS_DEFAULT } from '../data/initialState.js';
-import {
-  Activity, Banknote, FileSignature, GraduationCap, HardDrive, Lock, LogOut, Pencil, Receipt, Save, Shield, UploadCloud, UserCheck, UserPlus
-} from "lucide-react";
+import { Activity, Banknote, FileSignature, GraduationCap, HardDrive, Lock, LogOut, Pencil, Receipt, Save, Shield, UploadCloud, UserCheck, UserPlus } from "lucide-react";
 
 // âââ Users Page Component âââââââââââââââââââââââââââââââââââââââââââââ
 // Auto-extracted from App.jsx monolith
