@@ -1,0 +1,77 @@
+name: Fix Lucide Round 2
+on:
+  push:
+    paths: ['.github/workflows/fix-lucide-r2.yml']
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Revert placeholder damage and fix lucide imports
+        run: |
+          python3 << 'SCRIPT'
+import re, subprocess
+
+# First restore any files that were overwritten with PLACEHOLDER content
+for fname in ["src/pages/Dashboard.jsx", "src/pages/Patients.jsx", "src/pages/Verification.jsx", "src/pages/HistoriaGeneral.jsx"]:
+  content = open(fname, encoding="utf-8").read()
+  if "PLACEHOLDER" in content:
+    # Restore from git history - get the last good version before placeholder commit
+    result = subprocess.run(["git", "show", "HEAD~1:" + fname], capture_output=True, text=True)
+    if result.returncode == 0:
+      open(fname, "w", encoding="utf-8").write(result.stdout)
+      print("Restored", fname, "from HEAD~1")
+    else:
+      print("ERROR restoring", fname, result.stderr)
+
+FIXES = {
+  "src/pages/Dashboard.jsx": ["BarChart3", "Lock", "Trash2", "Unlock"],
+  "src/pages/Patients.jsx": ["Trash2"],
+  "src/pages/Reporte.jsx": ["BarChart3"],
+  "src/pages/Users.jsx": ["Trash2"],
+  "src/pages/Verification.jsx": ["CheckCircle2"],
+  "src/components/RenderHelpers.jsx": ["Loader2"],
+  "src/pages/HistoriaGeneral.jsx": ["Activity", "AlertCircle", "FileCheck", "History", "User"],
+  "src/pages/HistoriaOcupacional.jsx": ["Activity", "FileCheck", "ShieldCheck", "Stethoscope", "User"],
+}
+
+for fname, new_icons in FIXES.items():
+  content = open(fname, encoding="utf-8").read()
+  if "PLACEHOLDER" in content:
+    print("SKIP - still placeholder:", fname)
+    continue
+  lines = content.split("\n")
+  lucide_end = -1
+  for i, line in enumerate(lines[:100]):
+    if "lucide-react" in line:
+      lucide_end = i
+  if lucide_end >= 0:
+    lucide_start = lucide_end
+    for j in range(lucide_end, max(-1, lucide_end-80), -1):
+      if "import" in lines[j] and "{" in lines[j]:
+        lucide_start = j
+        break
+    block = " ".join(lines[lucide_start:lucide_end+1])
+    existing = set(re.findall(r"[A-Z][a-zA-Z0-9]+", block)) - {"from"}
+    all_icons = sorted(existing | set(new_icons))
+    new_block = "import { " + ", ".join(all_icons) + ' } from "lucide-react";'
+    lines[lucide_start:lucide_end+1] = [new_block]
+    open(fname, "w", encoding="utf-8").write("\n".join(lines))
+    print("Fixed", fname, "added", new_icons)
+SCRIPT
+
+      - name: Commit and cleanup
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add src/pages/ src/components/
+          git diff --staged --quiet || git commit -m "fix: restore+patch - Lucide icons round 2 (Unlock, Lock, BarChart3, Trash2, CheckCircle2, Loader2, Activity, AlertCircle, History, User, Stethoscope, ShieldCheck, FileCheck)"
+          git rm .github/workflows/fix-lucide-r2.yml
+          git commit -m "chore: remove lucide r2 workflow"
+          git push
