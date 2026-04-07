@@ -1,4 +1,5 @@
 import React from 'react';
+import { PLAN_CONFIG } from '../data/planConfig.js';
 import {
   BrainCircuit
 } from "lucide-react";

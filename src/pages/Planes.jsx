@@ -1,4 +1,5 @@
 import React from 'react';
+import { PLAN_CONFIG } from '../data/planConfig.js';
 
 // ─── Planes Page Component ─────────────────────────────────────────────
 // Auto-extracted from App.jsx monolith

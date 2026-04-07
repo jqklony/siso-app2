@@ -1,4 +1,5 @@
 import React from 'react';
+import { PLAN_CONFIG } from '../data/planConfig.js';
 import { DEFAULT_DOCTOR_DATA } from '../data/initialState.js';
 import { getSpanishDate } from '../utils/helpers.js';
 import {

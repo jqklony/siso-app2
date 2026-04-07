@@ -1,4 +1,5 @@
 import React from 'react';
+import { PLAN_CONFIG } from '../data/planConfig.js';
 import { DEFAULT_DOCTOR_DATA } from '../data/initialState.js';
 
 // âââ SuperAdmin Page Component âââââââââââââââââââââââââââââââââââââââââââââ
