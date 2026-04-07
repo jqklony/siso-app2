@@ -1,0 +1,81 @@
+name: Fix Missing Lucide Icon Imports
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-lucide.yml'
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add missing Lucide imports to all affected page files
+        run: |
+          add_lucide() {
+            local file=$1
+            local icons=$2
+            python3 - "$file" "$icons" <<'PYEOF'
+import sys, re
+fname = sys.argv[1]
+new_icons = [x.strip() for x in sys.argv[2].split(',')]
+content = open(fname, encoding='utf-8').read()
+lines = content.split('\n')
+for i, line in enumerate(lines):
+    if 'lucide-react' in line:
+        start = i
+        for j in range(i, -1, -1):
+            if 'import' in lines[j] and '{' in lines[j]:
+                start = j
+                break
+        block = '\n'.join(lines[start:i+1])
+        existing = set(re.findall(r'[A-Z][a-zA-Z0-9]+', block))
+        existing -= {'from'}
+        all_icons = sorted(existing | set(new_icons))
+        new_block = "import { " + ', '.join(all_icons) + " } from \"lucide-react\";"
+        lines[start:i+1] = [new_block]
+        open(fname, 'w', encoding='utf-8').write('\n'.join(lines))
+        print(f'Fixed {fname}: added {new_icons}')
+        sys.exit(0)
+for i, line in enumerate(lines):
+    if line.startswith('import '):
+        all_icons = sorted(set(new_icons))
+        lines.insert(i+1, "import { " + ', '.join(all_icons) + " } from \"lucide-react\";") 
+        open(fname, 'w', encoding='utf-8').write('\n'.join(lines))
+        print(f'Added new lucide import to {fname}')
+        sys.exit(0)
+PYEOF
+          }
+
+          add_lucide src/pages/Agenda.jsx UserCheck
+          add_lucide src/pages/Bill.jsx "Printer,Save"
+          add_lucide src/pages/Caja.jsx Download
+          add_lucide src/pages/Certificado.jsx "FileText,Lock"
+          add_lucide src/pages/Companies.jsx Building2
+          add_lucide src/pages/Contabilidad.jsx "ChevronLeft,Download"
+          add_lucide src/pages/Dashboard.jsx "AlertTriangle,Building2,Clock,Eye,FileText,Heart,Shield,UserCheck,Users"
+          add_lucide src/pages/HabeasData.jsx Shield
+          add_lucide src/pages/HistoriaGeneral.jsx "Loader2,Plus,Search"
+          add_lucide src/pages/HistoriaOcupacional.jsx Loader2
+          add_lucide src/pages/LoginPage.jsx BrainCircuit
+          add_lucide src/pages/Patients.jsx "Eye,Search,Users"
+          add_lucide src/pages/PerfilIPS.jsx "ChevronLeft,Save,Upload"
+          add_lucide src/pages/Propuestas.jsx "FileText,Plus,Printer,Save"
+          add_lucide src/pages/Reporte.jsx "BrainCircuit,FileText,Loader2,Printer,ShieldCheck,UserCheck"
+          add_lucide src/pages/SVE.jsx "BrainCircuit,Loader2"
+          add_lucide src/pages/Users.jsx "Activity,Lock,Save,Shield,UserCheck,UserPlus"
+          add_lucide src/pages/Verification.jsx "Lock,Printer,Search"
+
+      - name: Commit and remove workflow
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add src/pages/
+          git commit -m "fix: add missing Lucide icon imports to 18 page files (Building2, UserCheck, BrainCircuit, etc.)"
+          git rm .github/workflows/fix-lucide.yml
+          git commit -m "chore: remove lucide fix workflow"
+          git push
