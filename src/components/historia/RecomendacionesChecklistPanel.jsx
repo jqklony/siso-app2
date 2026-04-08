@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  CheckSquare, ChevronRight, ClipboardList, Sparkles, Square
+  CheckSquare, ChevronRight, ClipboardList, Loader2, Sparkles, Square
 } from "lucide-react";
 import { RECOMENDACIONES_CATALOG } from '../../data/recomendaciones.js';
 

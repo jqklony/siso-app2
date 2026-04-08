@@ -1,7 +1,7 @@
 import React from 'react';
 import { DoctorSignature, BrandLogo } from '../components/medico/DoctorSignature.jsx';
 import { analyzeBP, analyzeBMI } from '../utils/helpers.js';
-import { BrainCircuit, FileText, HardDrive, Loader2, LogOut, Printer, Receipt, ShieldCheck, Sparkles, UserCheck } from "lucide-react";
+import { BarChart3, BrainCircuit, FileText, HardDrive, Loader2, LogOut, Printer, Receipt, ShieldCheck, Sparkles, UserCheck } from "lucide-react";
 
 // Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Reporte Page Component Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 // Auto-extracted from App.jsx monolith

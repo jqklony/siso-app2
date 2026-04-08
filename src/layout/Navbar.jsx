@@ -1,10 +1,11 @@
 import React from 'react';
-import { BrainCircuit, ClipboardList, Cloud, Download, FileCheck, FileSignature, HardDrive, Lock, LogOut, MessageSquare, Printer, Save, Unlock, UploadCloud, Wifi, WifiOff } from "lucide-react";
+import { BrainCircuit, ClipboardList, Cloud, Download, FileCheck, FileSignature, HardDrive, Loader2, Lock, LogOut, MessageSquare, Printer, Save, Unlock, UploadCloud, Wifi, WifiOff } from "lucide-react";
 // ============================================================
 // Navbar.jsx — Extraído del monolito App.jsx
 // Usa useApp() para acceder al estado centralizado
 // ============================================================
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { BrandLogo } from '../components/medico/DoctorSignature.jsx';
 import { useApp } from "../AppContext.jsx";
 // Globals (helpers, constantes, componentes base)
 // Los componentes base ya están disponibles via globals

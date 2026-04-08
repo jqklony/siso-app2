@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  BrainCircuit, ClipboardList, Cloud, Download, FileCheck, FileSignature, HardDrive, Lock, LogOut, MessageSquare, Plus, Printer, Save, Unlock, UploadCloud, Wifi, WifiOff
+  BrainCircuit, ClipboardList, Cloud, Download, FileCheck, FileSignature, HardDrive, Loader2, Lock, LogOut, MessageSquare, Plus, Printer, Save, Unlock, UploadCloud, Wifi, WifiOff
 } from "lucide-react";
-import { BrandLogo } from './AppComponents.jsx';
+import { BrandLogo, CIE10Input } from './AppComponents.jsx';
 // ─── Role helpers definidos localmente para evitar circular imports ───────────
 const _isAdmin = (role) => role === "administrador" || role === "super_admin";
 const _isAdminEmpresa = (role) => role === "admin_empresa";

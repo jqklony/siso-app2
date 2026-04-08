@@ -1,7 +1,3 @@
-import React from 'react';
-import {
-  Printer
-} from "lucide-react";
 // ============================================================
 // TabIncapacidadGeneral.jsx — Extraído del monolito App.jsx
 // Usa useApp() para acceder al estado centralizado
@@ -11,6 +7,7 @@ import { useApp } from "../../AppContext.jsx";
 // Globals (helpers, constantes, componentes base)
 // Los componentes base ya están disponibles via globals
 import * as G from "../../globals.jsx";
+import { CIE10Input } from '../medico/CIE10Input.jsx';
 
 export default function TabIncapacidadGeneral() {
   const app = useApp();

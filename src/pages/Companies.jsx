@@ -1,6 +1,7 @@
 import React from 'react';
 import { initialCompanyState, ORG_DEFAULT_ID } from '../data/initialState.js';
 import { ARL_LIST } from '../data/dropdowns.js';
+import { InputGroup } from '../components/AppComponents.jsx';
 import { Building2, LogOut } from "lucide-react";
 
 // âââ Companies Page Component âââââââââââââââââââââââââââââââââââââââââââââ
