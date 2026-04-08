@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrainCircuit, Stethoscope, UploadCloud } from "lucide-react";
 import { LoginForm } from '../components/AppComponents.jsx';
-import { LoginForm } from '../components/AppComponents.jsx';
 
 // ─── LoginPage Page Component ─────────────────────────────────────────────
 // Auto-extracted from App.jsx monolith
